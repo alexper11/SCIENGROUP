@@ -35,8 +35,6 @@ class ExtractorScopus:
                                                 'X-ELS-Insttoken': self.INST_TOKEN})
             result = response.json()
 
-            with open('AuthorSearch.json', 'w', encoding='utf-8') as f:
-                    json.dump(result, f, ensure_ascii=False, indent=4)
             try:
                 tempList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
                 authorIdList.extend(tempList)
