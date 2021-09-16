@@ -1,3 +1,4 @@
+from re import A
 from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.util import get_lxml, get_urls, get_gruplacList
 import pandas as pd

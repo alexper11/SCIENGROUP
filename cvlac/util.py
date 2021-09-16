@@ -35,6 +35,7 @@ def get_lxml(url):
     r = requests.get(url)
     soup = BeautifulSoup(r.content,'lxml')
     return soup
+
 def almacena(diccionario1, diccionario2):
     if list(diccionario1.keys()) not in list(diccionario2.keys()):
         temp = [item for item in diccionario1 if item not in diccionario2]
