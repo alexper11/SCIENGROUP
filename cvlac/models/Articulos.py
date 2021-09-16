@@ -9,14 +9,14 @@ class Articulos(Base):
     autores = Column(String(250), nullable=False)
     nombre = Column(String(300), nullable=False)
     lugar = Column(String(50), nullable=True)
-    revista = Column(String(240), nullable=True)
+    revista = Column(String(340), nullable=True)
     issn = Column(String(12), nullable=True)
-    editorial = Column(String(260), nullable=True)
+    editorial = Column(String(360), nullable=True)
     volumen = Column(String(10), nullable=True)
     fasciculo = Column(String(30), nullable=True)
-    doi = Column(String(150), nullable=True)
-    palabras = Column(String(500), nullable=True)
-    sectores = Column(String(500), nullable=True)
+    doi = Column(String(250), nullable=True)
+    palabras = Column(String(600), nullable=True)
+    sectores = Column(String(1000), nullable=True)
     
     def __init__(self, **kwargs):
         
