@@ -12,7 +12,7 @@ class Academica(Base):
     fecha = Column(String(100), nullable=True)
     nombre = Column(String(600), nullable=True)
     
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs):  
        
         for key, value in kwargs.items():
             setattr(self, key, value)

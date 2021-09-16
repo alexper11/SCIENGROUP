@@ -1,4 +1,3 @@
-from scopus.controllers.ArticulosScoController import ArticulosScoController
 from cvlac.ExtractorGruplac import ExtractorGruplac
 from scopus.ExtractorScopus import ExtractorScopus
 
@@ -23,7 +22,8 @@ from cvlac.controllers.AcademicaController import AcademicaController
 from cvlac.controllers.ComplementariaController import ComplementariaController
 
 from scopus.models.DBmodel import create_scopus_db
-from scopus.controllers.AutoresController import AutoresController                            
+from scopus.controllers.AutoresController import AutoresController
+from scopus.controllers.ArticulosScoController import ArticulosScoController                       
 
 
 if __name__ == '__main__':
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     #CVLAC
     ########################
     
-    '''
+    
     Extractor=ExtractorGruplac()
     tablas=Extractor.get_cvs('https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160')
     
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     
     complementaria=ComplementariaController()
     complementaria.insert_df(tablas[11])
-    '''
+    
     
     ########################
     #SCOPUS
