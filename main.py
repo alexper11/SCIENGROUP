@@ -1,3 +1,4 @@
+from scopus.controllers.ArticulosScoController import ArticulosScoController
 from cvlac.ExtractorGruplac import ExtractorGruplac
 from scopus.ExtractorScopus import ExtractorScopus
 
@@ -31,12 +32,14 @@ if __name__ == '__main__':
     sys.path.append(".")
     #######################
     
-    create_db()
+    #create_db()
     create_scopus_db()
     
     ########################
     #CVLAC
     ########################
+    
+    '''
     Extractor=ExtractorGruplac()
     tablas=Extractor.get_cvs('https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160')
     
@@ -81,6 +84,7 @@ if __name__ == '__main__':
     
     complementaria=ComplementariaController()
     complementaria.insert_df(tablas[11])
+    '''
     
     ########################
     #SCOPUS
@@ -92,7 +96,21 @@ if __name__ == '__main__':
     #Obtener lista de auid Unicauca
     #Obtener tabla de autores Unicauca
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
-    df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
+    #df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
+    list=[8568805300,
+        15135119500,
+        22941628100,
+        6507572648,
+        6701647223,
+        57195195220,
+        22333375600,
+        36603157500,
+        57101084800,
+        57214098924]
+    df_articulos=ExtractorS.get_articles_df(list)
     
     autores = AutoresController()
-    autores.insert_df(df_autores)
+    #autores.insert_df(df_autores)
+    
+    articulosSco = ArticulosScoController()
+    articulosSco.insert_df(df_articulos)
