@@ -18,5 +18,7 @@ class AutoresController:
         except:
             scopusdb.session.rollback()
             print("No se pudo insertar el dataframe en Autores")
+            df.to_csv('AutoresScopus.csv')
+            raise
         finally:
             scopusdb.session.close()

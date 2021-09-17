@@ -17,6 +17,8 @@ class ActuacionController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Actuacion")
+            df.to_csv('ActuacionCvlac.csv')
+            raise
         finally:
             db.session.close()
     

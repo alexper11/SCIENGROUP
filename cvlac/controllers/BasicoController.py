@@ -12,11 +12,13 @@ class BasicoController:
         for dic in dicList:
             basico = Basico(**dic)
             db.session.add(basico)
-        #try:
-        db.session.commit()
-        #except:
-        #    db.session.rollback()
-        #    print("No se pudo insertar el dataframe en Basico")
-        #finally:
-        db.session.close()
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            print("No se pudo insertar el dataframe en Basico")
+            df.to_csv('BasicoCvlac.csv')
+            raise
+        finally:
+            db.session.close()
     

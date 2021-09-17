@@ -4,10 +4,21 @@ from pyquery import PyQuery as pq
   
 def get_urls(url,filtro):
     dire=[]
-    r = requests.get(url)
-    soup = BeautifulSoup(r.content,'lxml')
-    
-    url_inv = soup.find_all('a', attrs={'target':'_blank'})             
+    tries=3
+    for i in range(tries):
+        try:
+            r = requests.get(url)
+            soup = BeautifulSoup(r.content,'lxml') 
+            url_inv = soup.find_all('a', attrs={'target':'_blank'})
+        except:
+            print(r)
+            if i < tries - 1:
+                continue
+            else:
+                print('Error al extraer urls')
+                raise
+        break
+                 
     for a in url_inv:
         url_in = a['href']
         if(url_in.find(filtro)!=-1):
@@ -16,9 +27,21 @@ def get_urls(url,filtro):
 
 def get_gruplacList(url,filtro):
     dire=[]
-    r = requests.get(url)        
-    soup = BeautifulSoup(r.content,'lxml')
-    div_uni = soup.find_all('div', attrs={'class':'nonblock nontext clearfix colelem'})             
+    tries=3
+    for i in range(tries):
+        try:
+            r = requests.get(url)        
+            soup = BeautifulSoup(r.content,'lxml')
+            div_uni = soup.find_all('div', attrs={'class':'nonblock nontext clearfix colelem'})  
+        except:
+            print(r)
+            if i < tries - 1:
+                continue
+            else:
+                print('Error al extraer gruplacList')
+                raise
+        break
+                   
     for a_uni in div_uni:                            
         if((str(a_uni.contents[0])).find(filtro.upper())!=-1):                
             div_grup=a_uni.parent.parent     
@@ -32,8 +55,19 @@ def get_gruplacList(url,filtro):
 
 #Es llamada desde investigador, recibe url y retorna xml
 def get_lxml(url):        
-    r = requests.get(url)
-    soup = BeautifulSoup(r.content,'lxml')
+    tries=3
+    for i in range(tries):
+        try:
+            r = requests.get(url)
+            soup = BeautifulSoup(r.content,'lxml')
+        except:
+            print(r)
+            if i < tries - 1:
+                continue
+            else:
+                print('Error al extraer url_lxml')
+                raise
+        break
     return soup
 
 def almacena(diccionario1, diccionario2):

@@ -17,5 +17,7 @@ class EstanciasController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Estancias")
+            df.to_csv('EstanciasCvlac.csv')
+            raise
         finally:
             db.session.close()

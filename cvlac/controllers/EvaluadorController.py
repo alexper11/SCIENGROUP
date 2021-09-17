@@ -17,6 +17,8 @@ class EvaluadorController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Evaluador")
+            df.to_csv('EvaluadorCvlac.csv')
+            raise
         finally:
             db.session.close()
     

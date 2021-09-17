@@ -17,6 +17,8 @@ class ReconocimientoController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Reconocimiento")
+            df.to_csv('ReconocimientoCvlac.csv')
+            raise
         finally:
             db.session.close()
     

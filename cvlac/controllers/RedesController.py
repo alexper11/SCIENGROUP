@@ -17,6 +17,8 @@ class RedesController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Redes")
+            df.to_csv('RedesCvlac.csv')
+            raise
         finally:
             db.session.close()
     

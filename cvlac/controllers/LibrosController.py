@@ -17,6 +17,8 @@ class LibrosController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Libros")
+            df.to_csv('LibrosCvlac.csv')
+            raise
         finally:
             db.session.close()
     

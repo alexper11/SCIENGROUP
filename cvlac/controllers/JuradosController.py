@@ -17,6 +17,8 @@ class JuradosController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Jurados")
+            df.to_csv('JuradosCvlac.csv')
+            raise
         finally:
             db.session.close()
     

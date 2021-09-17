@@ -17,6 +17,8 @@ class IdiomaController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Idioma")
+            df.to_csv('IdiomaCvlac.csv')
+            raise
         finally:
             db.session.close()
     
