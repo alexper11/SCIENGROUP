@@ -13,10 +13,12 @@ class ArticulosScoController:
         for dic in dicList:
             articulosSco = ArticulosSco(**dic)
             scopusdb.session.add(articulosSco)
-        #try:
-        scopusdb.session.commit()
-        #except:
-        #    scopusdb.session.rollback()
-        #    print("No se pudo insertar el dataframe en ArticulosSco")
-        #finally:
-        #    scopusdb.session.close()
+        try:
+            scopusdb.session.commit()
+        except:
+            scopusdb.session.rollback()
+            print("No se pudo insertar el dataframe en ArticulosSco")
+            df.to_csv('ArticulosScopus.csv')
+            raise
+        finally:
+            scopusdb.session.close()

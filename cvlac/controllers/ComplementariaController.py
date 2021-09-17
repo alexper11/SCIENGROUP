@@ -17,5 +17,7 @@ class ComplementariaController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Complementaria")
+            df.to_csv('ComplementariaCvlac.csv')
+            raise
         finally:
             db.session.close()

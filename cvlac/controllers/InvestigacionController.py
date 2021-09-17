@@ -17,6 +17,8 @@ class InvestigacionController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Investigacion")
+            df.to_csv('InvestigacionCvlac.csv')
+            raise
         finally:
             db.session.close()
     

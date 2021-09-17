@@ -17,5 +17,7 @@ class AcademicaController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Academica")
+            df.to_csv('AcademicaCvlac.csv')
+            raise
         finally:
             db.session.close()

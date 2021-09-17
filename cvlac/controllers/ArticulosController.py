@@ -17,6 +17,8 @@ class ArticulosController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Articulos")
+            df.to_csv('ArticulosCvlac.csv')
+            raise
         finally:
             db.session.close()
     

@@ -19,31 +19,50 @@ class ExtractorScopus:
     def get_auid_list(self, affilid):
         s=0
         url = f'https://api.elsevier.com/content/search/author?query=AF-ID({affilid})&start=0&count=200&field=dc:identifier'
-        response = requests.get(url,
-                                    headers={'Accept':'application/json',
-                                            'X-ELS-APIKey': self.API_KEY,
-                                            'X-ELS-Insttoken': self.INST_TOKEN})
-        
-        result = response.json()    
-        authorIdList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
-        TotalId= int(result['search-results']['opensearch:totalResults'])
-        s=200
+        tries=3
+        for i in range(tries):
+            try:    
+                response = requests.get(url,
+                                            headers={'Accept':'application/json',
+                                                    'X-ELS-APIKey': self.API_KEY,
+                                                    'X-ELS-Insttoken': self.INST_TOKEN})
+                
+                result = response.json()    
+                authorIdList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
+                TotalId= int(result['search-results']['opensearch:totalResults'])
+                s=200
+            except:
+                print(result)
+                if i < tries - 1:
+                    continue
+                else:
+                    print('Error al extraer auid_list')
+            break
         
         while s <= TotalId:
             time.sleep(0.5)
             url = f'https://api.elsevier.com/content/search/author?query=AF-ID({affilid})&start={s}&count=200&field=dc:identifier'
-            response = requests.get(url,
-                                        headers={'Accept':'application/json',
-                                                'X-ELS-APIKey': self.API_KEY,
-                                                'X-ELS-Insttoken': self.INST_TOKEN})
-            result = response.json()
+            tries=3
+            for i in range(tries):
+                try:    
+                    response = requests.get(url,
+                                                headers={'Accept':'application/json',
+                                                        'X-ELS-APIKey': self.API_KEY,
+                                                        'X-ELS-Insttoken': self.INST_TOKEN})
+                    result = response.json()
 
-            try:
-                tempList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
-                authorIdList.extend(tempList)
-            except:
-                print(result) 
-            s=s+200
+                    
+                    tempList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
+                    authorIdList.extend(tempList)
+                    s=s+200
+                except:
+                    print(result) 
+                    if i < tries - 1:
+                        continue
+                    else:
+                        print('Error al extraer auid_list')
+                break
+                
         
         return authorIdList
 
@@ -146,19 +165,32 @@ class ExtractorScopus:
         for author in authors:    
             time.sleep(0.3)
             url = f'https://api.elsevier.com/content/author/author_id/{author}?view=ENHANCED'
-            response = requests.get(url,
-                                    headers={'Accept':'application/json',
-                                        'X-ELS-APIKey': self.API_KEY,
-                                        'X-ELS-Insttoken': self.INST_TOKEN})
-            result = json.loads(response.text)
-            
-            try:
-                r=result['author-retrieval-response'][0]['coredata']
-                r2=result['author-retrieval-response'][0]
-                r3=result['author-retrieval-response'][0]['author-profile']
-                r4=result['author-retrieval-response'][0]['author-profile']['affiliation-current']['affiliation']#['ip-doc']
-            except:
-                print(result)
+            tries=3
+            for i in range(tries):
+                try:
+                    response = requests.get(url,
+                                            headers={'Accept':'application/json',
+                                                'X-ELS-APIKey': self.API_KEY,
+                                                'X-ELS-Insttoken': self.INST_TOKEN})
+                    
+                    result = response.json()
+                    r=result['author-retrieval-response'][0]['coredata']
+                    r2=result['author-retrieval-response'][0]
+                    r3=result['author-retrieval-response'][0]['author-profile']
+                    r4=result['author-retrieval-response'][0]['author-profile']['affiliation-current']['affiliation']
+                    flag=True
+                except:
+                    if i < tries - 1: # i is zero indexed
+                        continue
+                    else:
+                        flag=False
+                        print('Error al extraer el autor(authors_df): ',author)
+                        
+                break
+            if flag==True:
+                pass
+            else:
+                continue        
             
             self.autores['eid'].append(self.get_field('eid',r))
             self.autores['autor_id'].append(''.join(filter(str.isdigit,str(r['dc:identifier']))))
@@ -214,21 +246,39 @@ class ExtractorScopus:
         
         for author in author_list:
             cursor=0
+            tries=3
             #url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&cursor=*&count=25&view=COMPLETE'
             url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&start={cursor}&count=25&view=COMPLETE'
-            response = requests.get(url,
-                                    headers={'Accept':'application/json',
-                                                    'X-ELS-APIKey': self.API_KEY,
-                                                    'X-ELS-Insttoken': self.INST_TOKEN})
-                    
-            result = response.json()
-
-            TotalArt = int(result['search-results']['opensearch:totalResults'])
             
+            for i in range(tries):
+                try:
+                    response = requests.get(url,
+                                            headers={'Accept':'application/json',
+                                            'X-ELS-APIKey': self.API_KEY,
+                                            'X-ELS-Insttoken': self.INST_TOKEN})
+                    
+                    result = response.json()
+                    TotalArt = int(result['search-results']['opensearch:totalResults'])
+                    flag=True
+                except:
+                    print(result)
+                    if i < tries - 1:
+                        continue
+                    else:
+                        print('Error al extraer autor(articles_df):',author)
+                        flag=False
+                break
+            if flag==True:
+                pass
+            else:
+                continue          
             #cursor_next=result['search-results']['cursor']['@next']
             cursor=25
-            
-            articles=result['search-results']['entry']
+            try:
+                articles=result['search-results']['entry']
+            except KeyError:
+                print(result)
+                continue
             
             for article in articles:
                 
@@ -255,19 +305,37 @@ class ExtractorScopus:
             while cursor <= TotalArt:
                 #url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&cursor={cursor_next}&count=25&view=COMPLETE'
                 url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&start={cursor}&count=25&view=COMPLETE'
+                tries=3
+                for i in range(tries):
+                    try:
+                        response = requests.get(url,
+                                                headers={'Accept':'application/json',
+                                                'X-ELS-APIKey': self.API_KEY,
+                                                'X-ELS-Insttoken': self.INST_TOKEN})
+                        
+                        result = response.json()
+                        #cursor_next=str(result['search-results']['cursor']['@next'])
+                        cursor = cursor + 25        
+                        flag=True
+                    except:
+                        print(result)
+                        if i < tries - 1:
+                            continue
+                        else:
+                            print('Error al extraer el autor(articles_df): ',author)
+                            flag=False
+                    break
+                if flag==True:
+                    pass
+                else:
+                    continue
                 
-                response = requests.get(url,
-                                        headers={'Accept':'application/json',
-                                                    'X-ELS-APIKey': self.API_KEY,
-                                                    'X-ELS-Insttoken': self.INST_TOKEN})
-                    
-                result = response.json()
+                try:
+                    articles=result['search-results']['entry']
+                except KeyError:
+                    print(result)
+                    continue
                 
-                #cursor_next=str(result['search-results']['cursor']['@next'])
-                cursor = cursor + 25
-            
-                articles=result['search-results']['entry']
-            
                 for article in articles:
                         
                     self.articulos['scopus_id'].append(''.join(filter(str.isdigit,str(article['dc:identifier']))))

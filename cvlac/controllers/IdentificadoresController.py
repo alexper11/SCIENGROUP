@@ -17,6 +17,8 @@ class IdentificadoresController:
         except:
             db.session.rollback()
             print("No se pudo insertar el dataframe en Identificadores")
+            df.to_csv('IdentificadoresCvlac.csv')
+            raise
         finally:
             db.session.close()
     
