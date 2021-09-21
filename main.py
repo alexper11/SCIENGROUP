@@ -1,3 +1,4 @@
+from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.ExtractorGruplac import ExtractorGruplac
 from scopus.ExtractorScopus import ExtractorScopus
 
@@ -41,49 +42,49 @@ if __name__ == '__main__':
     
     '''
     Extractor=ExtractorGruplac()
-    tablas=Extractor.get_cvs('https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160')
+    dfs=Extractor.get_cvs('https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160')
     
     articulos=ArticulosController()
-    articulos.insert_df(tablas[1])
+    articulos.insert_df(dfs['articulos'])
     
-    actuacion = ActuacionController()
-    actuacion.insert_df(tablas[2])
+    actuacion = ActuacionController(dfs['actuacion'])
+    actuacion.insert_df()
     
     basico=BasicoController()
-    basico.insert_df(tablas[0])
+    basico.insert_df(dfs['basico'])
     
     evaluador=EvaluadorController()
-    evaluador.insert_df(tablas[6])
+    evaluador.insert_df(dfs['evaluador'])
     
     identificadores=IdentificadoresController()
-    identificadores.insert_df(tablas[8])
+    identificadores.insert_df(dfs['identificadores'])
     
     idioma=IdiomaController()
-    idioma.insert_df(tablas[3])
+    idioma.insert_df(dfs['idioma'])
     
     investigacion=InvestigacionController()
-    investigacion.insert_df(tablas[4])
+    investigacion.insert_df(dfs['investigacion'])
     
     jurados=JuradosController()
-    jurados.insert_df(tablas[10])
+    jurados.insert_df(dfs['jurado'])
     
     libros=LibrosController()
-    libros.insert_df(tablas[9])
+    libros.insert_df(dfs['libros'])
     
     reconocimiento=ReconocimientoController()
-    reconocimiento.insert_df(tablas[5])
+    reconocimiento.insert_df(dfs['reconocimiento'])
     
     redes=RedesController()
-    redes.insert_df(tablas[7])
+    redes.insert_df(dfs['redes'])
     
     estancias=EstanciasController()
-    estancias.insert_df(tablas[12])
+    estancias.insert_df(dfs['estancias'])
     
     academica=AcademicaController()
-    academica.insert_df(tablas[13])
+    academica.insert_df(dfs['academica'])
     
     complementaria=ComplementariaController()
-    complementaria.insert_df(tablas[11])
+    complementaria.insert_df(dfs['complementaria'])
     '''
     
     ########################
@@ -96,12 +97,15 @@ if __name__ == '__main__':
     #Obtener lista de auid Unicauca
     #Obtener tabla de autores Unicauca
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
-    #df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
+    df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
 
-    df_articulos=ExtractorS.get_articles_df(ExtractorS.get_auid_list(60051434))
+    #df_articulos=ExtractorS.get_articles_df(ExtractorS.get_auid_list(60051434))
     
     autores = AutoresController()
-    #autores.insert_df(df_autores)
+    autores.insert_df(df_autores)
     
     articulosSco = ArticulosScoController()
     #articulosSco.insert_df(df_articulos)
+    
+    
+    
