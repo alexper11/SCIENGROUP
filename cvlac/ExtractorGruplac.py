@@ -31,8 +31,10 @@ class ExtractorGruplac(ExtractorCvlac):
             df_estancias = self.get_estancias(lxml_url, url)
             df_academica = self.get_academica(lxml_url, url)
         
-        return [df_basico,df_articulos,df_actuacion,df_idioma,df_investiga,df_reconocimiento,df_evaluador,df_redes,
-                df_identifica,df_libros,df_jurado,df_complementaria,df_estancias,df_academica]
+        return {"basico":df_basico,"articulos":df_articulos,"actuacion":df_actuacion,"idioma":df_idioma,
+                "investigacion":df_investiga,"reconocimiento":df_reconocimiento,"evaluador":df_evaluador,
+                "redes":df_redes,"identificadores":df_identifica,"libros":df_libros,"jurado":df_jurado,
+                "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica}
         
 
 

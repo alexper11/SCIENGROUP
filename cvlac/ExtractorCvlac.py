@@ -298,3 +298,6 @@ class ExtractorCvlac():
             df_redes.columns = ['idcvlac','nombre','url']
             df_redes = df_redes.rename_axis('id').reset_index()    
             return df_redes   
+        
+        
+        
