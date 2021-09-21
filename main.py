@@ -95,14 +95,14 @@ if __name__ == '__main__':
     API_KEY, INST_TOKEN = read_key()
     
     #Obtener lista de auid Unicauca
-    #Obtener tabla de autores Unicauca
+    #Obtener autores Unicauca
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
     df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
 
     #df_articulos=ExtractorS.get_articles_df(ExtractorS.get_auid_list(60051434))
     
     autores = AutoresController()
-    autores.insert_df(df_autores)
+    #autores.insert_df(df_autores)
     
     articulosSco = ArticulosScoController()
     #articulosSco.insert_df(df_articulos)
