@@ -21,10 +21,12 @@ from cvlac.controllers.RedesController import RedesController
 from cvlac.controllers.EstanciasController import EstanciasController
 from cvlac.controllers.AcademicaController import AcademicaController
 from cvlac.controllers.ComplementariaController import ComplementariaController
+from cvlac.controllers.MetaDBController import MetaDBController
 
 from scopus.models.DBmodel import create_scopus_db
 from scopus.controllers.AutoresController import AutoresController
-from scopus.controllers.ArticulosScoController import ArticulosScoController                       
+from scopus.controllers.ArticulosScoController import ArticulosScoController  
+from scopus.controllers.MetaDBScoController import MetaDBScoController                     
 
 
 if __name__ == '__main__':
@@ -97,7 +99,7 @@ if __name__ == '__main__':
     #Obtener lista de auid Unicauca
     #Obtener autores Unicauca
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
-    df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
+    #df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
 
     #df_articulos=ExtractorS.get_articles_df(ExtractorS.get_auid_list(60051434))
     
@@ -106,6 +108,11 @@ if __name__ == '__main__':
     
     articulosSco = ArticulosScoController()
     #articulosSco.insert_df(df_articulos)
+    
+    #metadb= MetaDBController()
+    #metadb.insert_datetime()
+    #metadbsco=MetaDBScoController()
+    #metadbsco.insert_datetime()
     
     
     

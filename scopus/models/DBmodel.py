@@ -2,6 +2,7 @@ from scopus.scopusdb import Base, engine
 
 from scopus.models.Autores import Autores
 from scopus.models.ArticulosSco import ArticulosSco
+from scopus.models.MetaDBSco import MetaDBSco
 
 
 def create_scopus_db():
