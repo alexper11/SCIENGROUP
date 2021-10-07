@@ -11,12 +11,13 @@ class ExtractorScopus:
                      "citaciones":[],"h_index":[],"co_autores":[],"estado":[],"areas":[],"rango_publicacion":[],
                      "institucion":[],"departamento":[]}
         self.articulos={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"issn":[],"eissn":[],
-                        "volumen":[],"paginas":[],"fecha_publicacion":[],"doi":[],"citado":[],"afiliacion":[],"tipo_fuente":[],
+                        "volumen":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"doi":[],"citado":[],"afiliacion":[],"tipo_fuente":[],
                         "tipo_documento":[],"autores":[],"autores_id":[],"palabras_clave":[],"agencia_fundadora":[]}
         self.API_KEY=api_key
         self.INST_TOKEN=inst_token
         
     def get_auid_list(self, affilid):
+        result=''
         s=0
         url = f'https://api.elsevier.com/content/search/author?query=AF-ID({affilid})&start=0&count=200&field=dc:identifier'
         tries=3
@@ -215,23 +216,42 @@ class ExtractorScopus:
     
     def get_field_search(self, field,r,key=''):
         if key!='':
-            try:
-                c=0
-                aff=''
-                if isinstance(r[field], type(None)):
+            if key == 'page_start':
+                try:
+                    if isinstance(r[field], type(None)):
+                        text=''
+                    else:
+                        text = str(r[field].split('-')[0])
+                except KeyError:
+                    text =''
+                    
+            elif key == 'page_end':
+                try:
+                    if isinstance(r[field], type(None)):
+                        text=''
+                    else:
+                        text = str(r[field].split('-')[1])
+                except KeyError:
+                    text =''
+            else:
+                try:
+                    c=0
+                    aff=''
+                    if isinstance(r[field], type(None)):
+                        text=''
+                    elif isinstance(r[field], list):
+                        for rs in r[field]:
+                                if c==0:
+                                    aff=str(rs[key])
+                                else:
+                                    aff=aff+', '+str(rs[key])
+                                c=1
+                        text= aff
+                    else:
+                        text=str(r[field][key])
+                except KeyError:
                     text=''
-                elif isinstance(r[field], list):
-                    for rs in r[field]:
-                            if c==0:
-                                aff=str(rs[key])
-                            else:
-                                aff=aff+', '+str(rs[key])
-                            c=1
-                    text= aff
-                else:
-                    text=str(r[field][key])
-            except KeyError:
-                text=''
+        
         else:
             try:
                 if isinstance(r[field], type(None)):
@@ -241,9 +261,37 @@ class ExtractorScopus:
             except KeyError:
                 text =''
         return text
+    
+    def get_page_count(self,scopus_id,condition):
+        if condition=='':
+            page_count = ''
+        else:
+            result=''
+            url=f'https://api.elsevier.com/content/abstract/scopus_id/{scopus_id}?view=FULL'
+            tries=3
+            for i in range(tries):
+                try:
+                    response = requests.get(url,
+                                            headers={'Accept':'application/json',
+                                            'X-ELS-APIKey': self.API_KEY,
+                                            'X-ELS-Insttoken': self.INST_TOKEN})
+                        
+                    result = response.json()
+                    try:
+                        page_count=str(result["abstracts-retrieval-response"]["item"]["bibrecord"]["head"]["source"]["volisspag"]["pagecount"]["$"])
+                    except KeyError:
+                        page_count=''
+                except:
+                    print(result)
+                    if i < tries - 1:
+                        continue
+                    else:
+                        print('Error al extraer page_count de scopus id:',scopus_id)
+                break
+        return page_count
 
     def get_articles_df(self, author_list):
-        
+        result=''
         for author in author_list:
             cursor=0
             tries=3
@@ -290,7 +338,9 @@ class ExtractorScopus:
                 self.articulos['eissn'].append(self.get_field_search('prism:eIssn',article))
                 self.articulos['issn'].append(self.get_field_search('prism:issn',article))
                 self.articulos['volumen'].append(self.get_field_search('prism:volume',article))
-                self.articulos['paginas'].append(self.get_field_search('prism:pageRange',article))
+                self.articulos['pag_inicio'].append(self.get_field_search('prism:pageRange',article,key='page_start'))
+                self.articulos['pag_fin'].append(self.get_field_search('prism:pageRange',article,key='page_end'))
+                self.articulos['pag_count'].append(self.get_page_count(self.articulos['scopus_id'][-1],self.articulos['pag_inicio'][-1]))
                 self.articulos['fecha_publicacion'].append(self.get_field_search('prism:coverDate',article))
                 self.articulos['doi'].append(self.get_field_search('prism:doi',article))
                 self.articulos['citado'].append(self.get_field_search('citedby-count',article))
@@ -346,7 +396,9 @@ class ExtractorScopus:
                     self.articulos['eissn'].append(self.get_field_search('prism:eIssn',article))
                     self.articulos['issn'].append(self.get_field_search('prism:issn',article))
                     self.articulos['volumen'].append(self.get_field_search('prism:volume',article))
-                    self.articulos['paginas'].append(self.get_field_search('prism:pageRange',article))
+                    self.articulos['pag_inicio'].append(self.get_field_search('prism:pageRange',article,key='page_start'))
+                    self.articulos['pag_fin'].append(self.get_field_search('prism:pageRange',article,key='page_end'))
+                    self.articulos['pag_count'].append(self.get_page_count(self.articulos['scopus_id'][-1],self.articulos['pag_inicio'][-1]))
                     self.articulos['fecha_publicacion'].append(self.get_field_search('prism:coverDate',article))
                     self.articulos['doi'].append(self.get_field_search('prism:doi',article))
                     self.articulos['citado'].append(self.get_field_search('citedby-count',article))
