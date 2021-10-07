@@ -100,7 +100,6 @@ if __name__ == '__main__':
     #Obtener autores Unicauca
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
     #df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
-
     #df_articulos=ExtractorS.get_articles_df(ExtractorS.get_auid_list(60051434))
     
     autores = AutoresController()
@@ -109,6 +108,10 @@ if __name__ == '__main__':
     articulosSco = ArticulosScoController()
     #articulosSco.insert_df(df_articulos)
     
+    
+    #########################################
+    #Insertar fecha de extracción de los datos en ambos modulos
+    #########################################
     #metadb= MetaDBController()
     #metadb.insert_datetime()
     #metadbsco=MetaDBScoController()
