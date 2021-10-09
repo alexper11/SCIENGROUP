@@ -18,7 +18,7 @@ class Scientopy(ExtractorScopus):
             year=date[0:4]
         return year
     
-    def get_input_df(self,topic):
+    def scopus_input_df(self,topic):
         result=''
         cursor=0
         tries=3
