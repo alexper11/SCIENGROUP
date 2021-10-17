@@ -10,4 +10,4 @@ operaciones CRUD sobre las tablas.
 
 Los modulos 'cvlac' y 'scopus' contienen las clases, metodos, modelos y controladores con los cuales se realizan todas las funciones
 mencionadas previamente.
-(test)
+(test 1)
