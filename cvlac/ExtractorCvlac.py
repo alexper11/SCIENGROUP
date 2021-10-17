@@ -7,7 +7,7 @@ class ExtractorCvlac():
     def __init__(self):
         self.dic_academica={'idcvlac':[],'tipo':[],'institucion':[],'area':[],'fecha':[],'nombre':[]}
         self.actuacion={'idcvlac':[],'nombre':[]}
-        self.articulos={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Revista':[],'ISSN:':[],'ed:':[],'v.':[],'fasc.':[], ' DOI: ':[], 'Palabras: ':[], 'Sectores: ':[]}
+        self.articulos={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Revista':[],'ISSN:':[],'ed:':[],'v.':[],'fasc.':[], 'p.':[],'fecha.':[],' DOI: ':[], 'Palabras: ':[], 'Sectores: ':[]}
         self.dic={'IDCVLAC':[],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
         self.dic_complementaria={'idcvlac':[],'tipo':[],'institucion':[],'area':[],'fecha':[]}
         self.dic_estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[]}
@@ -73,11 +73,17 @@ class ExtractorCvlac():
             for dato in list_datos:                            
                 for key in self.articulos:                                                              
                     if(key == dato):
-                        art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()                        
+                        if(dato=="fasc."):
+                            list_fasc=(re.split('p.| ,',list_datos[list_datos.index(dato)+1]))  
+                            art_individual['fasc.']=list_fasc[0]                        
+                            art_individual['p.']=list_fasc[1]
+                            art_individual['fecha.']=list_fasc[2].replace(',','')
+                        else:
+                            art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()                                            
             self.articulos= almacena(self.articulos,art_individual)        
             art_individual={}        
         df_articulos = pd.DataFrame(self.articulos)    
-        df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'doi', 'palabras', 'sectores']
+        df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
         df_articulos = df_articulos.rename_axis('id').reset_index()  
         return df_articulos
     
