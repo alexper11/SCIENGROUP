@@ -14,6 +14,8 @@ class Articulos(Base):
     editorial = Column(String(360), nullable=True)
     volumen = Column(String(10), nullable=True)
     fasciculo = Column(String(30), nullable=True)
+    paginas = Column(String(10), nullable=True)
+    fecha = Column(String(30), nullable=True)
     doi = Column(String(250), nullable=True)
     palabras = Column(String(600), nullable=True)
     sectores = Column(String(1000), nullable=True)
