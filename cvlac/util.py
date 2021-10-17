@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from pyquery import PyQuery as pq
-  
+
 def get_urls(url,filtro):
     dire=[]
     tries=3
@@ -48,8 +48,8 @@ def get_gruplacList(url,filtro):
             page = pq(str(div_grup))                
             page.make_links_absolute(url)
             for a in page.find('a'):
-                if 'href' in a.attrib and 'sba.minciencias.gov.co/Buscador_Grupos' in a.attrib['href']:
-                    a=("".join(a.attrib['href']).replace(" ","%20"))
+                if 'href' in a.attrib and 'sba.minciencias.gov.co/tomcat/Buscador_Grupos' in a.attrib['href']:
+                    a=("".join(a.attrib['href']).replace(" ","%20").replace("-"," "))
                     dire.append(a)
     return dire
 
@@ -59,6 +59,7 @@ def get_lxml(url):
     for i in range(tries):
         try:
             r = requests.get(url)
+            #r.encoding = "UTF-8"
             soup = BeautifulSoup(r.content,'lxml')
         except:
             print(r)

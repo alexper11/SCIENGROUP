@@ -26,7 +26,7 @@ class ExtractorCvlac():
         for td_academi in b_academicas:
             info=td_academi.parent
             td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
-            td_text_clear=td_text_clear.replace('&amp;','-')                      
+            td_text_clear=td_text_clear.replace('&amp;','&')                      
             list_datos=(re.split('<br/>|</b>',td_text_clear))        
             x=0               
             for datos in list_datos:
@@ -57,11 +57,11 @@ class ExtractorCvlac():
         blocks_arts = (soup.find('a', attrs={'name':'articulos'}).parent).find_all('blockquote')
         for block_art in blocks_arts:
             quote_text_clear=re.sub('http://dx.doi.org/|http://doi.org/|https://doi.org/|<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
-            quote_text_clear=quote_text_clear.replace('&amp;','-')            
+            quote_text_clear=quote_text_clear.replace('&amp;','&')            
             list_datos=(re.split('<i>|</i>|</b>|<b>',quote_text_clear))
             list_datos.pop(0)
             bloque_string=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/|<blockquote>|</blockquote>','',(" ".join((str(block_art)).split()))) 
-            bloque_string=bloque_string.replace('&amp;','-')   
+            bloque_string=bloque_string.replace('&amp;','&')   
             fblock=bloque_string.find("<i>")
             list_string=(re.split('<br/>|, "|" . En:',bloque_string[:fblock]))        
             x=0
@@ -106,7 +106,7 @@ class ExtractorCvlac():
         for td_compl in b_compl:
             info=td_compl.parent
             td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
-            td_text_clear=td_text_clear.replace('&amp;','-')                      
+            td_text_clear=td_text_clear.replace('&amp;','&')                      
             list_datos=(re.split('<br/>|</b>',td_text_clear))
             list_datos.pop(4)
             x=0               
@@ -127,7 +127,7 @@ class ExtractorCvlac():
         for td_estancia in b_estancias:
             info=td_estancia.parent
             td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
-            td_text_clear=td_text_clear.replace('&amp;','-')                      
+            td_text_clear=td_text_clear.replace('&amp;','&')                      
             list_datos=(re.split('<br/>|</b>',td_text_clear))
             list_datos.pop(5)
             x=0               
@@ -215,7 +215,7 @@ class ExtractorCvlac():
         blocks_jurados = (soup.find('a', attrs={'name':'jurado'}).parent).find_all('blockquote')
         for block_jur in blocks_jurados:
             quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_jur)).split())))
-            quote_text_clear=quote_text_clear.replace('&amp;','-')               
+            quote_text_clear=quote_text_clear.replace('&amp;','&')               
             list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
             dic_aux['IDCVLAC'] = url[(url.find('='))+1:]
             dic_aux['Nombre'] = (list_datos[0]).strip()                   
@@ -235,11 +235,11 @@ class ExtractorCvlac():
         blocks_arts = (soup.find('a', attrs={'name':'libros'}).parent).find_all('blockquote')
         for block_art in blocks_arts:
             quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
-            quote_text_clear=quote_text_clear.replace('&amp;','-')               
+            quote_text_clear=quote_text_clear.replace('&amp;','&')               
             list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
             list_datos.pop(0)
             bloque_string = " ".join((block_art.text).split())
-            bloque_string=bloque_string.replace('&amp;','-')   
+            bloque_string=bloque_string.replace('&amp;','&')   
             fblock=bloque_string.find("ISBN:")
             list_string=(re.split('ed:|, "|" En:',bloque_string[:fblock]))        
             x=0
