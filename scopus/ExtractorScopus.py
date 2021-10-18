@@ -223,8 +223,9 @@ class ExtractorScopus:
                         text=''
                     else:
                         text = str(r[field].split('-')[0])
-                except KeyError:
+                except:
                     text =''
+                    print("page_start: ",r[field])
                     
             elif key == 'page_end':
                 try:
@@ -232,8 +233,9 @@ class ExtractorScopus:
                         text=''
                     else:
                         text = str(r[field].split('-')[1])
-                except KeyError:
+                except:
                     text =''
+                    print("page_end: ",r[field])
             else:
                 try:
                     c=0
@@ -300,6 +302,7 @@ class ExtractorScopus:
                         continue
                     else:
                         print('Error al extraer page_count de scopus id:',scopus_id)
+                        page_count=''
                 break
         return page_count
     
