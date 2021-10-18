@@ -1,6 +1,7 @@
 from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.ExtractorGruplac import ExtractorGruplac
 from scopus.ExtractorScopus import ExtractorScopus
+""" inicio
 
 import pandas as pd
 import sys
@@ -117,5 +118,10 @@ if __name__ == '__main__':
     #metadbsco=MetaDBScoController()
     #metadbsco.insert_datetime()
     
-    
-    
+fin """   
+#universidad=(input("Digite nombre de la Institución:"))
+universidad="universidad del cauca"
+url_uni="https://sba.minciencias.gov.co/tomcat/Buscador_Instituciones/busqueda?q="+(universidad.replace(" ","+"))
+Informacion=ExtractorGruplac()
+df_prueba=Informacion.get_cvs(url_uni,universidad)
+df_prueba.to_csv('prueba.csv',index=False)
