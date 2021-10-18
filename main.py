@@ -1,7 +1,8 @@
 from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.ExtractorGruplac import ExtractorGruplac
 from scopus.ExtractorScopus import ExtractorScopus
-""" inicio
+from scopus.Scientopy import Scientopy
+
 
 import pandas as pd
 import sys
@@ -88,7 +89,7 @@ if __name__ == '__main__':
     
     complementaria=ComplementariaController()
     complementaria.insert_df(dfs['complementaria'])
-    '''
+   
     
     ########################
     #SCOPUS
@@ -117,11 +118,29 @@ if __name__ == '__main__':
     #metadb.insert_datetime()
     #metadbsco=MetaDBScoController()
     #metadbsco.insert_datetime()
+     '''
+     
     
-fin """   
-#universidad=(input("Digite nombre de la Institución:"))
-universidad="universidad del cauca"
-url_uni="https://sba.minciencias.gov.co/tomcat/Buscador_Instituciones/busqueda?q="+(universidad.replace(" ","+"))
-Informacion=ExtractorGruplac()
-df_prueba=Informacion.get_cvs(url_uni,universidad)
-df_prueba.to_csv('prueba.csv',index=False)
+    ############################
+    #PRUEBAS JARBY
+    ######################
+    """
+    #universidad=(input("Digite nombre de la Institución:"))
+    universidad="universidad del cauca"
+    url_uni="https://sba.minciencias.gov.co/tomcat/Buscador_Instituciones/busqueda?q="+(universidad.replace(" ","+"))
+    Informacion=ExtractorGruplac()
+    df_prueba=Informacion.get_cvs(url_uni,universidad)
+    df_prueba.to_csv('prueba.csv',index=False)
+    """
+
+    ###############################
+    #SCIENTOPY
+    #################################
+    API_KEY=""
+    INST_TOKEN=""
+    API_KEY, INST_TOKEN = read_key()
+    scientopy = Scientopy(API_KEY,INST_TOKEN)
+    input_df = scientopy.scopus_input_df('"linked open data"')
+    input_df.to_csv('scientopy_input.csv',index=False)
+
+
