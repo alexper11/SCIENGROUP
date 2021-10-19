@@ -7,7 +7,20 @@ class ExtractorGruplac(ExtractorCvlac):
     
     def __init__(self):
         super().__init__()
-        self.basico={}        
+        self.grup_academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','area','fecha','nombre']).set_index('id')
+        self.grup_actuacion=pd.DataFrame(columns=['idcvlac','nombre']).set_index('id')
+        self.grip_articulos=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo','doi','palabras','sectores']).set_index('id')
+        self.grup_basico=pd.DataFrame(columns=['idcvlac','categoria','nombre','nombre_citaciones','nacionalidad','sexo']).set_index('id')
+        self.grup_complementaria=pd.DataFrame(columns=['idcvlac','tipo','institucion','area','fecha']).set_index('id')
+        self.grup_estancias=pd.DataFrame(columns=['idcvlac','nombre','entidad','area','fecha_inicio','fecha_fin']).set_index('id')
+        self.grup_evaluador=pd.DataFrame(columns=['idcvlac','ambito','par_evaluador','editorial','revista','institucion']).set_index('id')
+        self.grup_identificadores=pd.DataFrame(columns=['idcvlac','nombre','url']).set_index('id')
+        self.grup_idioma=pd.DataFrame(columns=['idcvlac','idioma','habla','escribe','lee','entiende']).set_index('id')
+        self.grup_investiga=pd.DataFrame(columns=['idcvlac','nombre','activa']).set_index('id')
+        self.grup_jurado=pd.DataFrame(columns=['idcvlac','nombre','titulo','tipo','lugar','programa','orientado','palabras','areas','sectores']).set_index('id')
+        self.grup_libros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas','palabras','areas','sectores']).set_index('id')
+        self.grup_reconocimiento=pd.DataFrame(columns=['idcvlac','nombre','fecha']).set_index('id')
+        self.grup_redes=pd.DataFrame(columns=['idcvlac','nombre','url']).set_index('id')
         
     #recibe url de un gruplac
     """
@@ -37,7 +50,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 "investigacion":df_investiga,"reconocimiento":df_reconocimiento,"evaluador":df_evaluador,
                 "redes":df_redes,"identificadores":df_identifica,"libros":df_libros,"jurado":df_jurado,
                 "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica}
-        """  
+    """  
     def get_cvs(self, url_uni,universidad):
         url_grup_uni=get_gruplacList(url_uni,universidad)#  lista de todos los gruplac de la institucion (links externos)
         #print(url_grup_uni)
