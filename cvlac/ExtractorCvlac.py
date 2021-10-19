@@ -49,7 +49,7 @@ class ExtractorCvlac():
             self.actuacion = almacena(self.actuacion,actuacion_individual) 
             actuacion_individual={}        
         df_actuacion = pd.DataFrame(self.actuacion)
-        df_actuacion = df_actuacion.reset_index(drop=True)  
+        df_actuacion = df_actuacion.rename_axis('id').reset_index()  
         return df_actuacion
     
     def get_articulo(self, soup, url):
