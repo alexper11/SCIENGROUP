@@ -3,7 +3,6 @@ from cvlac.ExtractorGruplac import ExtractorGruplac
 from scopus.ExtractorScopus import ExtractorScopus
 from scopus.Scientopy import Scientopy
 
-
 import pandas as pd
 import sys
 from scopus.readKey import read_key

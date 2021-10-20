@@ -32,6 +32,7 @@ class Scientopy(ExtractorScopus):
                         
                 result = response.json()
                 TotalArt = int(result['search-results']['opensearch:totalResults'])
+                print('Total articulos: ',TotalArt)
             except:
                 print(result)
                 if i < tries - 1:
