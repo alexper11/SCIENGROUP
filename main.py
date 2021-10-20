@@ -1,5 +1,6 @@
 from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.ExtractorGruplac import ExtractorGruplac
+from cvlac.util import get_gruplacList
 from scopus.ExtractorScopus import ExtractorScopus
 from scopus.Scientopy import Scientopy
 
@@ -36,60 +37,60 @@ if __name__ == '__main__':
     sys.path.append(".")
     #######################
     
-    #create_db()
-    #create_scopus_db()
+    create_db()
+    create_scopus_db()
     
     ########################
     #CVLAC
     ########################
     
-    '''
+
     Extractor=ExtractorGruplac()
-    dfs=Extractor.get_cvs('https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160')
+    Extractor.set_gruplac_attrs(get_gruplacList('UNIVERSIDAD DEL CAUCA'))
     
     articulos=ArticulosController()
-    articulos.insert_df(dfs['articulos'])
+    articulos.insert_df(Extractor.grup_articulos)
     
-    actuacion = ActuacionController(dfs['actuacion'])
-    actuacion.insert_df()
+    actuacion = ActuacionController(Extractor.grup_actuacion)
+    actuacion.insert_df(Extractor.grup_actuacion)
     
     basico=BasicoController()
-    basico.insert_df(dfs['basico'])
+    basico.insert_df(Extractor.grup_basico)
     
     evaluador=EvaluadorController()
-    evaluador.insert_df(dfs['evaluador'])
+    evaluador.insert_df(Extractor.grup_evaluador)
     
     identificadores=IdentificadoresController()
-    identificadores.insert_df(dfs['identificadores'])
+    identificadores.insert_df(Extractor.grup_identificadores)
     
     idioma=IdiomaController()
-    idioma.insert_df(dfs['idioma'])
+    idioma.insert_df(Extractor.grup_idioma)
     
     investigacion=InvestigacionController()
-    investigacion.insert_df(dfs['investigacion'])
+    investigacion.insert_df(Extractor.grup_investiga)
     
     jurados=JuradosController()
-    jurados.insert_df(dfs['jurado'])
+    jurados.insert_df(Extractor.grup_jurado)
     
     libros=LibrosController()
-    libros.insert_df(dfs['libros'])
+    libros.insert_df(Extractor.grup_libros)
     
     reconocimiento=ReconocimientoController()
-    reconocimiento.insert_df(dfs['reconocimiento'])
+    reconocimiento.insert_df(Extractor.grup_reconocimiento)
     
     redes=RedesController()
-    redes.insert_df(dfs['redes'])
+    redes.insert_df(Extractor.grup_redes)
     
     estancias=EstanciasController()
-    estancias.insert_df(dfs['estancias'])
+    estancias.insert_df(Extractor.grup_estancias)
     
     academica=AcademicaController()
-    academica.insert_df(dfs['academica'])
+    academica.insert_df(Extractor.grup_academica)
     
     complementaria=ComplementariaController()
-    complementaria.insert_df(dfs['complementaria'])
+    complementaria.insert_df(Extractor.grup_complementaria)
    
-    
+   
     ########################
     #SCOPUS
     ########################
@@ -100,46 +101,33 @@ if __name__ == '__main__':
     #Obtener lista de auid Unicauca
     #Obtener autores Unicauca
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
-    #df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
-    #df_articulos=ExtractorS.get_articles_df(ExtractorS.get_auid_list(60051434))
+    df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
+    df_articulos=ExtractorS.get_articles_df(ExtractorS.get_auid_list(60051434))
     
     autores = AutoresController()
-    #autores.insert_df(df_autores)
+    autores.insert_df(df_autores)
     
     articulosSco = ArticulosScoController()
-    #articulosSco.insert_df(df_articulos)
+    articulosSco.insert_df(df_articulos)
     
     
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
     #########################################
-    #metadb= MetaDBController()
-    #metadb.insert_datetime()
-    #metadbsco=MetaDBScoController()
-    #metadbsco.insert_datetime()
-     '''
-     
-    
-    ############################
-    #PRUEBAS JARBY
-    ######################
-    """
-    #universidad=(input("Digite nombre de la Institución:"))
-    universidad="universidad del cauca"
-    url_uni="https://sba.minciencias.gov.co/tomcat/Buscador_Instituciones/busqueda?q="+(universidad.replace(" ","+"))
-    Informacion=ExtractorGruplac()
-    df_prueba=Informacion.get_cvs(url_uni,universidad)
-    df_prueba.to_csv('prueba.csv',index=False)
-    """
+    metadb= MetaDBController()
+    metadb.insert_datetime()
+    metadbsco=MetaDBScoController()
+    metadbsco.insert_datetime()
 
     ###############################
     #SCIENTOPY
     #################################
+    """
     API_KEY=""
     INST_TOKEN=""
     API_KEY, INST_TOKEN = read_key()
     scientopy = Scientopy(API_KEY,INST_TOKEN)
     input_df = scientopy.scopus_input_df('"linked open data"')
     input_df.to_csv('scientopy_input.csv',index=False)
-
+    """
 

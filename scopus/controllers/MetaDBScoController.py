@@ -7,7 +7,7 @@ class MetaDBScoController:
     def __init__(self):
         self.__class__.count = self.__class__.count + 1
     
-    def datetime(self):
+    def insert_datetime(self):
         metadb=MetaDBSco()
         scopusdb.session.add(metadb)
         try:
