@@ -37,8 +37,8 @@ if __name__ == '__main__':
     sys.path.append(".")
     #######################
     
-    create_db()
-    create_scopus_db()
+    #create_db()
+    #create_scopus_db()
     
     ########################
     #CVLAC
@@ -47,11 +47,12 @@ if __name__ == '__main__':
 
     Extractor=ExtractorGruplac()
     Extractor.set_gruplac_attrs(get_gruplacList('UNIVERSIDAD DEL CAUCA'))
+    print('supo')
     
     articulos=ArticulosController()
     articulos.insert_df(Extractor.grup_articulos)
     
-    actuacion = ActuacionController(Extractor.grup_actuacion)
+    actuacion = ActuacionController()
     actuacion.insert_df(Extractor.grup_actuacion)
     
     basico=BasicoController()

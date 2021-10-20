@@ -9,20 +9,20 @@ class ExtractorGruplac(ExtractorCvlac):
     
     def __init__(self):
         super().__init__()
-        self.grup_academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','area','fecha','nombre']).set_index('id')
-        self.grup_actuacion=pd.DataFrame(columns=['idcvlac','nombre']).set_index('id')
-        self.grup_articulos=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo','doi','palabras','sectores']).set_index('id')
-        self.grup_basico=pd.DataFrame(columns=['idcvlac','categoria','nombre','nombre_citaciones','nacionalidad','sexo']).set_index('id')
-        self.grup_complementaria=pd.DataFrame(columns=['idcvlac','tipo','institucion','area','fecha']).set_index('id')
-        self.grup_estancias=pd.DataFrame(columns=['idcvlac','nombre','entidad','area','fecha_inicio','fecha_fin']).set_index('id')
-        self.grup_evaluador=pd.DataFrame(columns=['idcvlac','ambito','par_evaluador','editorial','revista','institucion']).set_index('id')
-        self.grup_identificadores=pd.DataFrame(columns=['idcvlac','nombre','url']).set_index('id')
-        self.grup_idioma=pd.DataFrame(columns=['idcvlac','idioma','habla','escribe','lee','entiende']).set_index('id')
-        self.grup_investiga=pd.DataFrame(columns=['idcvlac','nombre','activa']).set_index('id')
-        self.grup_jurado=pd.DataFrame(columns=['idcvlac','nombre','titulo','tipo','lugar','programa','orientado','palabras','areas','sectores']).set_index('id')
-        self.grup_libros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas','palabras','areas','sectores']).set_index('id')
-        self.grup_reconocimiento=pd.DataFrame(columns=['idcvlac','nombre','fecha']).set_index('id')
-        self.grup_redes=pd.DataFrame(columns=['idcvlac','nombre','url']).set_index('id')
+        self.grup_academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','area','fecha','nombre'])
+        self.grup_actuacion=pd.DataFrame(columns=['idcvlac','nombre'])
+        self.grup_articulos=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo','doi','palabras','sectores'])
+        self.grup_basico=pd.DataFrame(columns=['idcvlac','categoria','nombre','nombre_citaciones','nacionalidad','sexo'])
+        self.grup_complementaria=pd.DataFrame(columns=['idcvlac','tipo','institucion','area','fecha'])
+        self.grup_estancias=pd.DataFrame(columns=['idcvlac','nombre','entidad','area','fecha_inicio','fecha_fin'])
+        self.grup_evaluador=pd.DataFrame(columns=['idcvlac','ambito','par_evaluador','editorial','revista','institucion'])
+        self.grup_identificadores=pd.DataFrame(columns=['idcvlac','nombre','url'])
+        self.grup_idioma=pd.DataFrame(columns=['idcvlac','idioma','habla','escribe','lee','entiende'])
+        self.grup_investiga=pd.DataFrame(columns=['idcvlac','nombre','activa'])
+        self.grup_jurado=pd.DataFrame(columns=['idcvlac','nombre','titulo','tipo','lugar','programa','orientado','palabras','areas','sectores'])
+        self.grup_libros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas','palabras','areas','sectores'])
+        self.grup_reconocimiento=pd.DataFrame(columns=['idcvlac','nombre','fecha'])
+        self.grup_redes=pd.DataFrame(columns=['idcvlac','nombre','url'])
 
     def get_investigadoresList(self,url):
         dire=[]
@@ -51,7 +51,7 @@ class ExtractorGruplac(ExtractorCvlac):
     #recibe url de un gruplac
     def get_cvs(self, url_gruplac):
         urls=self.get_investigadoresList(url_gruplac)
-        print(urls)
+        print('Extrayendo...')
         for url in urls:
             lxml_url = get_lxml(url)            
                  

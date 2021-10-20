@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from pyquery import PyQuery as pq
 from selenium import webdriver
+import pathlib
+import platform
 import time
 
 #Recibe nombre de una institución y retorna lista de urls de cada perfil de los gruplacs
@@ -10,10 +12,18 @@ def get_gruplacList(institucion):
     linkinsti=str(institucion).replace(' ','+')
     url='https://sba.minciencias.gov.co/Buscador_Instituciones/BuscadorIFindIt/busqueda?q='+linkinsti+'&pagenum=1&start=0&type=load&lang=es&idss=KybEn3DTvayjMVm'
     tries=3
+    
+    if platform.system()=='Windows': 
+        current_path=str(pathlib.Path().resolve())+"\cvlac\WebDriver\chromedriver.exe" 
+    elif platform.system()=='Linux': 
+        current_path=str(pathlib.Path().resolve())+"/cvlac/WebDriver/chromedriver"   
+    print(current_path) 
+    
     for i in range(tries):
         try:
             #CORREGIR PATH
-            driver = webdriver.Chrome(executable_path='/home/jack/Documentos/General/General/cvlac/WebDriver/chromedriver')
+            
+            driver = webdriver.Chrome(executable_path=current_path)
             driver.get(url)
             time.sleep(3)
             soup = BeautifulSoup(driver.page_source, 'html.parser')

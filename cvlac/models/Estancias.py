@@ -7,10 +7,11 @@ class Estancias(Base):
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
     nombre = Column(String(600), nullable=True)
-    entidad = Column(String(100), nullable=True)
-    area = Column(String(300), nullable=True)
+    entidad = Column(String(200), nullable=True)
+    area = Column(String(600), nullable=True)
     fecha_inicio = Column(String(100), nullable=True)
     fecha_fin = Column(String(100), nullable=True)
+    descripcion=Column(String(2000), nullable=True)
     
     def __init__(self, **kwargs):
        
