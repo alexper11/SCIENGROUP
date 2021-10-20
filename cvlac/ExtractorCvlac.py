@@ -18,6 +18,7 @@ class ExtractorCvlac():
         self.libros={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         self.dic_reconocimiento={'idcvlac':[],'nombre':[],'fecha':[]}
         self.redes={'IDCVLAC':[],'Nombre':[],'Url':[]}
+        self.identificadores={'IDCVLAC':[],'Nombre':[],'Url':[]}
     
     def get_academica(self, soup, url):
         dic_aux={}  
@@ -298,12 +299,13 @@ class ExtractorCvlac():
         df_reconocimiento = df_reconocimiento.rename_axis('id').reset_index()       
         return df_reconocimiento
     
-    def get_redes(self, soup, url,filtro,titulo):        
+    def get_redes(self, soup, url):        
         redes_individual={}
         try:    
-            td_redes= soup.find('a', attrs={'name':'{}'.format(filtro)})            
-            if(str((td_redes.parent).find('h3').contents[0])==(titulo)):
-                child=((td_redes.parent).find('table')).find_all("a")
+            #td_redes= soup.find('a', attrs={'name':'{}'.format(filtro)})
+            tdredes=(soup.find('a', attrs={'name':'redes_identificadoes'}).parent)            
+            if(str((tdredes).find('h3').contents[0])==('Redes sociales académicas')):
+                child=((tdredes).find('table')).find_all("a")
                 for trs in child:
                     redes_individual['IDCVLAC'] = url[(url.find('='))+1:]
                     redes_individual['Nombre']=trs.text 
@@ -320,5 +322,25 @@ class ExtractorCvlac():
             df_redes = df_redes.rename_axis('id').reset_index()    
             return df_redes   
         
-        
+    def get_identificadores(self, soup, url):        
+        identificadores_individual={}
+        try:    
+            td_identificadores= (soup.find('a', attrs={'name':'red_identificadores'}).parent)           
+            if(str((td_identificadores.parent).find('h3').contents[0])=="Identificadores de autor"):
+                child=((td_identificadores.parent).find('table')).find_all("a")
+                for trs in child:
+                    identificadores_individual['IDCVLAC'] = url[(url.find('='))+1:]
+                    identificadores_individual['Nombre']=trs.text 
+                    identificadores_individual['Url']=trs['href']                   
+                    self.identificadores= almacena(self.identificadores,identificadores_individual) 
+                    identificadores_individual={}                      
+                df_identificadores = pd.DataFrame(self.identificadores)
+                df_identificadores.columns = ['idcvlac','nombre','url']
+                df_identificadores = df_identificadores.rename_axis('id').reset_index()        
+            return df_identificadores
+        except:
+            df_identificadores = pd.DataFrame(self.identificadores)      
+            df_identificadores.columns = ['idcvlac','nombre','url']
+            df_identificadores = df_identificadores.rename_axis('id').reset_index()    
+            return df_identificadores       
         
