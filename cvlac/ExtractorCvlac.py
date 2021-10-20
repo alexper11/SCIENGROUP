@@ -10,7 +10,7 @@ class ExtractorCvlac():
         self.articulos={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Revista':[],'ISSN:':[],'ed:':[],'v.':[],'fasc.':[], 'p.':[],'fecha.':[],' DOI: ':[], 'Palabras: ':[], 'Sectores: ':[]}
         self.dic={'IDCVLAC':[],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
         self.dic_complementaria={'idcvlac':[],'tipo':[],'institucion':[],'area':[],'fecha':[]}
-        self.dic_estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[]}
+        self.dic_estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
         self.dic_evaluador={'IDCVLAC':[],'Ámbito: ':[],'Par evaluador de: ':[],'Editorial: ':[],'Revista: ':[],'Institución: ':[]}
         self.dic_idioma={'IDCVLAC':[],'Idioma':[],'Habla':[],'Escribe':[],'Lee':[],'Entiende':[]}
         self.dic_investiga={'IDCVLAC':[],'Nombre':[],'Activa':[]}
@@ -21,141 +21,169 @@ class ExtractorCvlac():
         self.identificadores={'IDCVLAC':[],'Nombre':[],'Url':[]}
     
     def get_academica(self, soup, url):
-        dic_aux={}  
-        tableacad=(soup.find('a', attrs={'name':'formacion_acad'}).parent) 
-        b_academicas=tableacad.find_all('b')
-        if(str((tableacad).find('h3').contents[0])==('Formación Académica')):
-            list=['tipo', 'institucion', 'area', 'fecha', 'nombre']
-            for td_academi in b_academicas:
-                info=td_academi.parent
-                td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
-                td_text_clear=td_text_clear.replace('&amp;','&')                      
-                list_datos=(re.split('<br/>|</b>',td_text_clear))        
-                x=0               
-                for datos in list_datos:
-                    dic_aux['idcvlac'] = url[(url.find('='))+1:]
-                    dic_aux[str(list[x])]=("".join(datos)).strip()                         
-                    x=x+1
-                self.dic_academica = almacena(self.dic_academica,dic_aux)
-                dic_aux={}
+        dic_aux={}   
+        try:    
+            tableacad=(soup.find('a', attrs={'name':'formacion_acad'}).parent)
+            b_academicas=tableacad.find_all('b')
+            if(str((tableacad).find('h3').contents[0])==('Formación Académica')):
+                list=['tipo', 'institucion', 'area', 'fecha', 'nombre']
+                for td_academi in b_academicas:
+                    info=td_academi.parent
+                    td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
+                    td_text_clear=td_text_clear.replace('&amp;','&')                      
+                    list_datos=(re.split('<br/>|</b>',td_text_clear))        
+                    x=0               
+                    for datos in list_datos:
+                        dic_aux['idcvlac'] = url[(url.find('='))+1:]
+                        dic_aux[str(list[x])]=("".join(datos)).strip()                         
+                        x=x+1
+                    self.dic_academica = almacena(self.dic_academica,dic_aux)
+                    dic_aux={}
+        except AttributeError:
+            pass
         df_academica= pd.DataFrame(self.dic_academica)
-        df_academica = df_academica.rename_axis('id').reset_index()  
+        df_academica = df_academica.reset_index(drop=True)  
         return df_academica 
     
     def get_actuacion(self, soup, url):
         actuacion_individual={} 
-        tableactua=(soup.find('a', attrs={'name':'otra_info_personal'}).parent)        
-        if(str((tableactua).find('h3').contents[0])==('Áreas de actuación')):
-            li_actuacion = tableactua.find_all('li')
-            for li_actuacion in li_actuacion:
-                li_act_text = " ".join((li_actuacion.text).split())            
-                actuacion_individual['idcvlac'] = url[(url.find('=') )+1:]
-                actuacion_individual['nombre'] = li_act_text            
-                self.actuacion = almacena(self.actuacion,actuacion_individual) 
-                actuacion_individual={}        
+        try:    
+            tableactua=(soup.find('a', attrs={'name':'otra_info_personal'}).parent)
+            if(str((tableactua).find('h3').contents[0])==('Áreas de actuación')):
+                li_actuacion = tableactua.find_all('li')
+                for li_actuacion in li_actuacion:
+                    li_act_text = " ".join((li_actuacion.text).split())            
+                    actuacion_individual['idcvlac'] = url[(url.find('=') )+1:]
+                    actuacion_individual['nombre'] = li_act_text            
+                    self.actuacion = almacena(self.actuacion,actuacion_individual) 
+                    actuacion_individual={}     
+        except AttributeError:
+            pass   
         df_actuacion = pd.DataFrame(self.actuacion)
-        df_actuacion = df_actuacion.rename_axis('id').reset_index()  
+        df_actuacion = df_actuacion.reset_index(drop=True)  
         return df_actuacion
     
     def get_articulo(self, soup, url):
         art_individual={}
-        tableart=(soup.find('a', attrs={'name':'articulos'}).parent)
-        blocks_arts = tableart.find_all('blockquote')
-        if(str((tableart).find('h3').contents[0])==('Artículos')):
-            for block_art in blocks_arts:
-                quote_text_clear=re.sub('http://dx.doi.org/|http://doi.org/|https://doi.org/|<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
-                quote_text_clear=quote_text_clear.replace('&amp;','&')            
-                list_datos=(re.split('<i>|</i>|</b>|<b>',quote_text_clear))
-                list_datos.pop(0)
-                bloque_string=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/|<blockquote>|</blockquote>','',(" ".join((str(block_art)).split()))) 
-                bloque_string=bloque_string.replace('&amp;','&')   
-                fblock=bloque_string.find("<i>")
-                list_string=(re.split('<br/>|, "|" . En:',bloque_string[:fblock]))        
-                x=0
-                informacion=['Autores','Nombre','En','Revista']               
-                for dato in list_string:            
-                    art_individual['IDCVLAC'] = url[(url.find('='))+1:]
-                    art_individual[str(informacion[x])]=("".join(dato)).strip()                                      
-                    x=x+1
-                for dato in list_datos:                            
-                    for key in self.articulos:                                                              
-                        if(key == dato):
-                            if(dato=="fasc."):
-                                list_fasc=(re.split('p.| ,',list_datos[list_datos.index(dato)+1]))  
-                                art_individual['fasc.']=list_fasc[0]                        
-                                art_individual['p.']=list_fasc[1]
-                                art_individual['fecha.']=list_fasc[2].replace(',','')
-                            else:
-                                art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()                                            
-                self.articulos= almacena(self.articulos,art_individual)        
-                art_individual={}        
+        try:
+            tableart=(soup.find('a', attrs={'name':'articulos'}).parent)
+            blocks_arts = tableart.find_all('blockquote')
+            if(str((tableart).find('h3').contents[0])==('Artículos')):
+                for block_art in blocks_arts:
+                    quote_text_clear=re.sub('http://dx.doi.org/|http://doi.org/|https://doi.org/|<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
+                    quote_text_clear=quote_text_clear.replace('&amp;','&')            
+                    list_datos=(re.split('<i>|</i>|</b>|<b>',quote_text_clear))
+                    list_datos.pop(0)
+                    bloque_string=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/|<blockquote>|</blockquote>','',(" ".join((str(block_art)).split()))) 
+                    bloque_string=bloque_string.replace('&amp;','&')   
+                    fblock=bloque_string.find("<i>")
+                    list_string=(re.split('<br/>|, "|" . En:',bloque_string[:fblock]))        
+                    x=0
+                    informacion=['Autores','Nombre','En','Revista']    
+                    try:           
+                        for dato in list_string:            
+                            art_individual['IDCVLAC'] = url[(url.find('='))+1:]
+                            art_individual[str(informacion[x])]=("".join(dato)).strip()                                      
+                            x=x+1
+                    except IndexError:
+                        print('Articulos > 4: ',url)
+                    for dato in list_datos:                            
+                        for key in self.articulos:                                                              
+                            if(key == dato):
+                                if(dato=="fasc."):
+                                    list_fasc=(re.split('p.| ,',list_datos[list_datos.index(dato)+1]))  
+                                    art_individual['fasc.']=list_fasc[0]                        
+                                    art_individual['p.']=list_fasc[1]
+                                    art_individual['fecha.']=list_fasc[2].replace(',','')
+                                else:
+                                    art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()                                            
+                    self.articulos= almacena(self.articulos,art_individual)        
+                    art_individual={} 
+        except AttributeError:
+            pass       
         df_articulos = pd.DataFrame(self.articulos)    
         df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
-        df_articulos = df_articulos.rename_axis('id').reset_index()  
+        df_articulos = df_articulos.reset_index(drop=True)  
         return df_articulos
     
     def get_basico(self, soup, url):
         dic2={}         
         table = soup.find('a', attrs={'name':'datos_generales'}).parent
         rows = table.find_all('tr')
-
         for row in  rows:            
             fid = url.find('=')
             dic2['IDCVLAC'] = url[fid+1:]
             if len(row.select('td')) == 2:
                 cells = row.findChildren('td')
-                dic2[cells[0].string]= " ".join(cells[1].string.split())              
+                try:
+                    cells[1]=" ".join(cells[1].text.split())
+                    dic2[cells[0].string]= cells[1]
+                except AttributeError:
+                    print('BASICO ? : ', url)             
         self.dic = almacena(self.dic,dic2) 
         dic2={}
         df = pd.DataFrame(self.dic)
         df.columns = ['idcvlac','categoria','nombre','citaciones','nacionalidad','sexo']
-        df = df.rename_axis('id').reset_index()
+        df = df.reset_index(drop=True)
         return df
     
     def get_complementaria(self, soup, url):
         dic_aux={}  
-        tablecomp=(soup.find('a', attrs={'name':'formacion_comp'}).parent)   
-        b_compl=tablecomp.find_all('b')
-        if(str((tablecomp).find('h3').contents[0])==('Formación Complementaria')):
-            list=['tipo', 'institucion', 'area', 'fecha']
-            for td_compl in b_compl:
-                info=td_compl.parent
-                td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
-                td_text_clear=td_text_clear.replace('&amp;','&')                      
-                list_datos=(re.split('<br/>|</b>',td_text_clear))
-                list_datos.pop(4)
-                x=0               
-                for datos in list_datos:
-                    dic_aux['idcvlac'] = url[(url.find('='))+1:]
-                    dic_aux[str(list[x])]=("".join(datos)).strip()                            
-                    x=x+1
-                self.dic_complementaria = almacena(self.dic_complementaria,dic_aux)
-                dic_aux={}
+        try:
+            tablecomp=(soup.find('a', attrs={'name':'formacion_comp'}).parent)   
+            b_compl=tablecomp.find_all('b')
+            if(str((tablecomp).find('h3').contents[0])==('Formación Complementaria')):
+                list=['tipo', 'institucion', 'area', 'fecha']
+                for td_compl in b_compl:
+                    info=td_compl.parent
+                    td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
+                    td_text_clear=td_text_clear.replace('&amp;','&')                      
+                    list_datos=(re.split('<br/>|</b>',td_text_clear))
+                    list_datos.pop(-1)
+                    if len(list_datos)>4:
+                        print('Formacion complementaria > 3: ',url)
+                    
+                    x=0               
+                    for datos in list_datos:
+                        dic_aux['idcvlac'] = url[(url.find('='))+1:]
+                        dic_aux[str(list[x])]=("".join(datos)).strip()                            
+                        x=x+1
+                    self.dic_complementaria = almacena(self.dic_complementaria,dic_aux)
+                    dic_aux={}
+        except AttributeError:
+            pass
         df_complementaria= pd.DataFrame(self.dic_complementaria)
-        df_complementaria = df_complementaria.rename_axis('id').reset_index()    
+        df_complementaria = df_complementaria.reset_index(drop=True)    
         return df_complementaria
     
     def get_estancias(self, soup, url):
         dic_aux={}    
-        tablestan=(soup.find('a', attrs={'name':'estancias_posdoctorales'}).parent) 
-        b_estancias=tablestan.find_all('b')
-        if(str((tablestan).find('h3').contents[0])==('Estancias posdoctorales')):
-            list=['nombre', 'entidad', 'area', 'fecha_inicio', 'fecha_fin']
-            for td_estancia in b_estancias:
-                info=td_estancia.parent
-                td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
-                td_text_clear=td_text_clear.replace('&amp;','&')                      
-                list_datos=(re.split('<br/>|</b>',td_text_clear))
-                list_datos.pop(5)
-                x=0               
-                for datos in list_datos:
-                    dic_aux['idcvlac'] = url[(url.find('='))+1:]
-                    dic_aux[str(list[x])]=("".join(datos)).strip().replace('Desde: ','').replace('Hasta: ','')                       
-                    x=x+1
-                self.dic_estancias = almacena(self.dic_estancias,dic_aux)
-                dic_aux={}
+        try:
+            tablestan=(soup.find('a', attrs={'name':'estancias_posdoctorales'}).parent) 
+            b_estancias=tablestan.find_all('b')
+            if(str((tablestan).find('h3').contents[0])==('Estancias posdoctorales')):
+                list=['nombre', 'entidad', 'area', 'fecha_inicio', 'fecha_fin', 'descripcion']
+                for td_estancia in b_estancias:
+                    info=td_estancia.parent
+                    td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
+                    td_text_clear=td_text_clear.replace('&amp;','&')                      
+                    list_datos=(re.split('<br/>|</b>',td_text_clear))
+                    list_datos.pop(-1)
+                    #borrar
+                    if len(list_datos)>5:
+                        print('Estancias pos doctorales > 4: ',url)
+                        
+                    x=0               
+                    for datos in list_datos:
+                        dic_aux['idcvlac'] = url[(url.find('='))+1:]
+                        dic_aux[str(list[x])]=("".join(datos)).strip().replace('Desde: ','').replace('Hasta: ','')                       
+                        x=x+1
+                    self.dic_estancias = almacena(self.dic_estancias,dic_aux)
+                    dic_aux={}
+        except AttributeError:
+            pass
         df_estancias= pd.DataFrame(self.dic_estancias)    
-        df_estancias = df_estancias.rename_axis('id').reset_index()
+        df_estancias = df_estancias.reset_index(drop=True)
         return df_estancias 
     
     def get_evaluador(self, soup, url):
@@ -177,7 +205,7 @@ class ExtractorCvlac():
                         dic2={}
         df_evaluador= pd.DataFrame(self.dic_evaluador)
         df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion']
-        df_evaluador = df_evaluador.rename_axis('id').reset_index()
+        df_evaluador = df_evaluador.reset_index(drop=True)
         return df_evaluador 
     
     def get_idioma(self, soup, url):
@@ -200,7 +228,7 @@ class ExtractorCvlac():
                     dic2={}
         df_idioma = pd.DataFrame(self.dic_idioma)  
         df_idioma.columns = ['idcvlac','idioma','habla','escribe','lee','entiende']
-        df_idioma = df_idioma.rename_axis('id').reset_index()      
+        df_idioma = df_idioma.reset_index(drop=True)      
         return df_idioma
     
     def get_investiga(self, soup, url):
@@ -216,7 +244,7 @@ class ExtractorCvlac():
                         for titulo in div_i.find_all('i'):                           
                             j=((div_i.text ).split(titulo.text))                            
                             x=0 
-                            for i in j:
+                            for i in j[0:2]:
                                 dic2['IDCVLAC'] = url[(url.find('='))+1:]
                                 dic2[str(list[x])]=("".join(i)).strip()                            
                                 x=x+1                                          
@@ -224,60 +252,66 @@ class ExtractorCvlac():
                         dic2={}
         df_investiga= pd.DataFrame(self.dic_investiga) 
         df_investiga.columns = ['idcvlac','nombre','activa']
-        df_investiga = df_investiga.rename_axis('id').reset_index()             
+        df_investiga = df_investiga.reset_index(drop=True)             
         return df_investiga
     
     def get_jurado(self, soup, url):
         dic_aux={}   
-        tablejur=(soup.find('a', attrs={'name':'jurado'}).parent)     
-        blocks_jurados = tablejur.find_all('blockquote')
-        if(str((tablejur).find('h3').contents[0])==('Jurado en comités de evaluación')):
-            for block_jur in blocks_jurados:
-                quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_jur)).split())))
-                quote_text_clear=quote_text_clear.replace('&amp;','&')               
-                list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
-                dic_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                dic_aux['Nombre'] = (list_datos[0]).strip()                   
-                for dato in list_datos:                            
-                    for key in self.dic_jurado:                                                              
-                        if(key == dato):
-                            dic_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                          
-                self.dic_jurado = almacena(self.dic_jurado,dic_aux)
-                dic_aux={}
+        try:
+            tablejur=(soup.find('a', attrs={'name':'jurado'}).parent)     
+            blocks_jurados = tablejur.find_all('blockquote')
+            if(str((tablejur).find('h3').contents[0])==('Jurado en comités de evaluación')):
+                for block_jur in blocks_jurados:
+                    quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_jur)).split())))
+                    quote_text_clear=quote_text_clear.replace('&amp;','&')               
+                    list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
+                    dic_aux['IDCVLAC'] = url[(url.find('='))+1:]
+                    dic_aux['Nombre'] = (list_datos[0]).strip()                   
+                    for dato in list_datos:                            
+                        for key in self.dic_jurado:                                                              
+                            if(key == dato):
+                                dic_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                          
+                    self.dic_jurado = almacena(self.dic_jurado,dic_aux)
+                    dic_aux={}
+        except AttributeError:
+            pass
         df_jurado= pd.DataFrame(self.dic_jurado)
         df_jurado.columns = ['idcvlac','nombre','titulo','tipo','lugar','programa','orientado','palabras','areas','sectores']
-        df_jurado = df_jurado.rename_axis('id').reset_index()    
+        df_jurado = df_jurado.reset_index(drop=True)    
         return df_jurado
     
     def get_libro(self, soup, url):
         libros_aux={}
-        tablelib=(soup.find('a', attrs={'name':'libros'}).parent)
-        blocks_arts = tablelib.find_all('blockquote')
-        if(str((tablelib).find('h3').contents[0])==('Libros')):
-            for block_art in blocks_arts:
-                quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
-                quote_text_clear=quote_text_clear.replace('&amp;','&')               
-                list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
-                list_datos.pop(0)
-                bloque_string = " ".join((block_art.text).split())
-                bloque_string=bloque_string.replace('&amp;','&')   
-                fblock=bloque_string.find("ISBN:")
-                list_string=(re.split('ed:|, "|" En:',bloque_string[:fblock]))        
-                x=0
-                informacion=['Autores','Nombre','En','Editorial']               
-                for dato in list_string:            
-                    libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                    libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
-                    x=x+1
-                for dato in list_datos:                            
-                    for key in self.libros:                                                              
-                        if(key == dato):
-                            libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
-                self.libros= almacena(self.libros,libros_aux)   
-                libros_aux={}        
+        try:
+            tablelib=(soup.find('a', attrs={'name':'libros'}).parent)
+            blocks_arts = tablelib.find_all('blockquote')
+            if(str((tablelib).find('h3').contents[0])==('Libros')):
+                for block_art in blocks_arts:
+                    quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
+                    quote_text_clear=quote_text_clear.replace('&amp;','&')               
+                    list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
+                    list_datos.pop(0)
+                    bloque_string = " ".join((block_art.text).split())
+                    bloque_string=bloque_string.replace('&amp;','&')   
+                    fblock=bloque_string.find("ISBN:")
+                    list_string=(re.split('ed:|, "|" En:',bloque_string[:fblock]))        
+                    x=0
+                    informacion=['Autores','Nombre','En','Editorial']               
+                    for dato in list_string:            
+                        libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
+                        libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
+                        x=x+1
+                    for dato in list_datos:                            
+                        for key in self.libros:                                                              
+                            if(key == dato):
+                                libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
+                    self.libros= almacena(self.libros,libros_aux)   
+                    libros_aux={}   
+        except AttributeError:
+            pass     
         df_libros = pd.DataFrame(self.libros)   
         df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
-        df_libros = df_libros.rename_axis('id').reset_index()   
+        df_libros = df_libros.reset_index(drop=True)   
         return df_libros
     
     def get_reconocimiento(self, soup, url):
@@ -296,14 +330,14 @@ class ExtractorCvlac():
                         self.dic_reconocimiento = almacena(self.dic_reconocimiento,dic2)
                     dic2={}
         df_reconocimiento= pd.DataFrame(self.dic_reconocimiento)
-        df_reconocimiento = df_reconocimiento.rename_axis('id').reset_index()       
+        df_reconocimiento = df_reconocimiento.reset_index(drop=True)       
         return df_reconocimiento
     
     def get_redes(self, soup, url):        
         redes_individual={}
-        try:    
-            #td_redes= soup.find('a', attrs={'name':'{}'.format(filtro)})
-            tdredes=(soup.find('a', attrs={'name':'redes_identificadoes'}).parent)            
+        #td_redes= soup.find('a', attrs={'name':'{}'.format(filtro)})
+        try:         
+            tdredes=(soup.find('a', attrs={'name':'redes_identificadoes'}).parent)
             if(str((tdredes).find('h3').contents[0])==('Redes sociales académicas')):
                 child=((tdredes).find('table')).find_all("a")
                 for trs in child:
@@ -312,20 +346,17 @@ class ExtractorCvlac():
                     redes_individual['Url']=trs['href']                   
                     self.redes= almacena(self.redes,redes_individual) 
                     redes_individual={}                      
-                df_redes = pd.DataFrame(self.redes)
-                df_redes.columns = ['idcvlac','nombre','url']
-                df_redes = df_redes.rename_axis('id').reset_index()        
-            return df_redes
-        except:
-            df_redes = pd.DataFrame(self.redes)      
-            df_redes.columns = ['idcvlac','nombre','url']
-            df_redes = df_redes.rename_axis('id').reset_index()    
-            return df_redes   
+        except AttributeError:
+            pass
+        df_redes = pd.DataFrame(self.redes)      
+        df_redes.columns = ['idcvlac','nombre','url']
+        df_redes = df_redes.reset_index(drop=True)    
+        return df_redes   
         
     def get_identificadores(self, soup, url):        
         identificadores_individual={}
-        try:    
-            td_identificadores= (soup.find('a', attrs={'name':'red_identificadores'}).parent)           
+        try:             
+            td_identificadores= (soup.find('a', attrs={'name':'red_identificadores'}).parent)
             if(str((td_identificadores.parent).find('h3').contents[0])=="Identificadores de autor"):
                 child=((td_identificadores.parent).find('table')).find_all("a")
                 for trs in child:
@@ -334,13 +365,10 @@ class ExtractorCvlac():
                     identificadores_individual['Url']=trs['href']                   
                     self.identificadores= almacena(self.identificadores,identificadores_individual) 
                     identificadores_individual={}                      
-                df_identificadores = pd.DataFrame(self.identificadores)
-                df_identificadores.columns = ['idcvlac','nombre','url']
-                df_identificadores = df_identificadores.rename_axis('id').reset_index()        
-            return df_identificadores
-        except:
-            df_identificadores = pd.DataFrame(self.identificadores)      
-            df_identificadores.columns = ['idcvlac','nombre','url']
-            df_identificadores = df_identificadores.rename_axis('id').reset_index()    
-            return df_identificadores       
+        except AttributeError:
+            pass
+        df_identificadores = pd.DataFrame(self.identificadores)      
+        df_identificadores.columns = ['idcvlac','nombre','url']
+        df_identificadores = df_identificadores.reset_index(drop=True)    
+        return df_identificadores       
         
