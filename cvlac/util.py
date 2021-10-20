@@ -4,31 +4,6 @@ from pyquery import PyQuery as pq
 from selenium import webdriver
 import time
 
-#Recibe url de un gruplac y retorna lista de link de los investigadores
-def get_investigadoresList(url):
-    dire=[]
-    r=''
-    tries=3
-    for i in range(tries):
-        try:
-            headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-            r = requests.get(url, headers=headers)
-            soup = BeautifulSoup(r.content,'lxml') 
-            url_inv = soup.find_all('a', attrs={'target':'_blank'})
-        except:
-            print(r)
-            if i < tries - 1:
-                continue
-            else:
-                print('Error al extraer urls')
-                raise
-        break
-                 
-    for a in url_inv:
-        url_in = a['href']
-        if(url_in.find('https://scienti.minciencias.gov.co/cvlac/visualizador')!=-1):
-            dire.append(url_in) 
-    return dire
 #Recibe nombre de una institución y retorna lista de urls de cada perfil de los gruplacs
 def get_gruplacList(institucion):
     dire=[]
