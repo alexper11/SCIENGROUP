@@ -87,7 +87,7 @@ class Scientopy(ExtractorScopus):
                         if i < tries - 1:
                             continue
                         else:
-                            print('Error al extraer el autor(articles_df): ',author)
+                            print('Error al extraer el topic: ',topic)
                             flag=False
                 break
             if flag==True:

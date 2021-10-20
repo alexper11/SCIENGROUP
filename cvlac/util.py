@@ -37,6 +37,7 @@ def get_gruplacList(institucion):
     tries=3
     for i in range(tries):
         try:
+            #CORREGIR PATH
             driver = webdriver.Chrome(executable_path='/home/jack/Documentos/General/General/cvlac/WebDriver/chromedriver')
             driver.get(url)
             time.sleep(3)
