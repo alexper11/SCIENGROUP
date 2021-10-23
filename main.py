@@ -37,79 +37,78 @@ if __name__ == '__main__':
     sys.path.append(".")
     #######################
     
-    #create_db()
+    create_db()
     #create_scopus_db()
     
     ########################
     #CVLAC
     ########################
-    
-    """
 
     Extractor=ExtractorGruplac()
     Extractor.set_gruplac_attrs(get_gruplacList('UNIVERSIDAD DEL CAUCA'))
     print('supo')
     
     articulos=ArticulosController()
-    articulos.insert_df(Extractor.grup_articulos)
+    articulos.insert_df(Extractor.grup_articulos.reset_index(drop=True))
     
     actuacion = ActuacionController()
-    actuacion.insert_df(Extractor.grup_actuacion)
+    actuacion.insert_df(Extractor.grup_actuacion.reset_index(drop=True))
     
     basico=BasicoController()
-    basico.insert_df(Extractor.grup_basico)
+    basico.insert_df(Extractor.grup_basico.reset_index(drop=True))
     
     evaluador=EvaluadorController()
-    evaluador.insert_df(Extractor.grup_evaluador)
+    evaluador.insert_df(Extractor.grup_evaluador.reset_index(drop=True))
     
     identificadores=IdentificadoresController()
-    identificadores.insert_df(Extractor.grup_identificadores)
+    identificadores.insert_df(Extractor.grup_identificadores.reset_index(drop=True))
     
     idioma=IdiomaController()
-    idioma.insert_df(Extractor.grup_idioma)
+    idioma.insert_df(Extractor.grup_idioma.reset_index(drop=True))
     
     investigacion=InvestigacionController()
-    investigacion.insert_df(Extractor.grup_investiga)
+    investigacion.insert_df(Extractor.grup_investiga.reset_index(drop=True))
     
     jurados=JuradosController()
-    jurados.insert_df(Extractor.grup_jurado)
+    jurados.insert_df(Extractor.grup_jurado.reset_index(drop=True))
     
     libros=LibrosController()
-    libros.insert_df(Extractor.grup_libros)
+    libros.insert_df(Extractor.grup_libros.reset_index(drop=True))
     
     reconocimiento=ReconocimientoController()
-    reconocimiento.insert_df(Extractor.grup_reconocimiento)
+    reconocimiento.insert_df(Extractor.grup_reconocimiento.reset_index(drop=True))
     
     redes=RedesController()
-    redes.insert_df(Extractor.grup_redes)
+    redes.insert_df(Extractor.grup_redes.reset_index(drop=True))
     
     estancias=EstanciasController()
-    estancias.insert_df(Extractor.grup_estancias)
+    estancias.insert_df(Extractor.grup_estancias.reset_index(drop=True))
     
     academica=AcademicaController()
-    academica.insert_df(Extractor.grup_academica)
+    academica.insert_df(Extractor.grup_academica.reset_index(drop=True))
     
     complementaria=ComplementariaController()
-    complementaria.insert_df(Extractor.grup_complementaria)
+    complementaria.insert_df(Extractor.grup_complementaria.reset_index(drop=True))
     
     del Extractor
-   
-   """
    
     ########################
     #SCOPUS
     ########################
+    """
+    
     API_KEY=""
     INST_TOKEN=""
     API_KEY, INST_TOKEN = read_key()
     
     #Obtener lista de auid Unicauca
     #Obtener autores Unicauca
-    ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
-    #df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
     
-    #autores = AutoresController()
-    #autores.insert_df(df_autores)
+    ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
+    df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
+    
+    autores = AutoresController()
+    autores.insert_df(df_autores)
     
     df_articulos=ExtractorS.get_articles_full(ExtractorS.get_auid_list(60051434))
     
@@ -118,15 +117,17 @@ if __name__ == '__main__':
     
     del ExtractorS
     
+    """
+    
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
     #########################################
-    """
+    
     metadb= MetaDBController()
     metadb.insert_datetime()
-    """
-    metadbsco=MetaDBScoController()
-    metadbsco.insert_datetime()
+    
+    #metadbsco=MetaDBScoController()
+    #metadbsco.insert_datetime()
 
     ###############################
     #SCIENTOPY

@@ -6,8 +6,8 @@ class Reconocimiento(Base):
     __tablename__ = 'reconocimiento'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
-    nombre = Column(String(300), nullable=False)
-    fecha = Column(String(80), nullable=True)
+    nombre = Column(String(1000), nullable=False)
+    fecha = Column(String(200), nullable=True)
     
     def __init__(self, **kwargs):
     

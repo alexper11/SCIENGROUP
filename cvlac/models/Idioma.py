@@ -6,11 +6,11 @@ class Idioma(Base):
     __tablename__ = 'idioma'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
-    idioma = Column(String(30), nullable=False)
-    habla = Column(String(30), nullable=False)
-    escribe = Column(String(30), nullable=False)
-    lee = Column(String(30), nullable=False)
-    entiende = Column(String(30), nullable=False)
+    idioma = Column(String(50), nullable=False)
+    habla = Column(String(50), nullable=False)
+    escribe = Column(String(50), nullable=False)
+    lee = Column(String(50), nullable=False)
+    entiende = Column(String(50), nullable=False)
     
     def __init__(self, **kwargs):
         

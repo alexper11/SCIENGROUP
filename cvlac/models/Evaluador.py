@@ -6,11 +6,11 @@ class Evaluador(Base):
     __tablename__ = 'evaluador'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
-    ambito = Column(String(40), nullable=False)
-    par_evaluador = Column(String(50), nullable=False)
-    editorial = Column(String(200), nullable=True)
-    revista = Column(String(200), nullable=True)
-    institucion = Column(String(250), nullable=True)
+    ambito = Column(String(300), nullable=False)
+    par_evaluador = Column(String(200), nullable=False)
+    editorial = Column(String(500), nullable=True)
+    revista = Column(String(500), nullable=True)
+    institucion = Column(String(500), nullable=True)
     
     def __init__(self, **kwargs):
         

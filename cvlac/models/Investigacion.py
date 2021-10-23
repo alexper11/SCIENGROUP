@@ -6,8 +6,8 @@ class Investigacion(Base):
     __tablename__ = 'investigacion'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
-    nombre = Column(String(300), nullable=False)
-    activa = Column(String(10), nullable=False)
+    nombre = Column(String(1000), nullable=False)
+    activa = Column(String(50), nullable=False)
     
     def __init__(self, **kwargs):
         
