@@ -5,6 +5,9 @@ from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.util import get_lxml, get_gruplacList
 
 
+from IPython.display import display
+
+
 class ExtractorGruplac(ExtractorCvlac):
     
     def __init__(self):
@@ -50,13 +53,11 @@ class ExtractorGruplac(ExtractorCvlac):
         return dire 
     #recibe url de un gruplac
     def get_cvs(self, url_gruplac):
-        #limpiar atributos
-        super().__init__()
+        
         urls=self.get_investigadoresList(url_gruplac)
         print('Extrayendo...')
         for url in urls:
             lxml_url = get_lxml(url)            
-                 
             df_basico = self.get_basico(lxml_url, url)
             df_articulos = self.get_articulo(lxml_url, url)
             df_actuacion = self.get_actuacion(lxml_url, url)
@@ -71,6 +72,8 @@ class ExtractorGruplac(ExtractorCvlac):
             df_complementaria = self.get_complementaria(lxml_url, url)
             df_estancias = self.get_estancias(lxml_url, url)
             df_academica = self.get_academica(lxml_url, url)
+        #limpiar atributos
+        super().__init__()
             
         return {"basico":df_basico,"articulos":df_articulos,"actuacion":df_actuacion,"idioma":df_idioma,
                 "investigacion":df_investiga,"reconocimiento":df_reconocimiento,"evaluador":df_evaluador,
@@ -81,20 +84,20 @@ class ExtractorGruplac(ExtractorCvlac):
         for gruplac in gruplac_list:
             try:
                 dataframes=self.get_cvs(gruplac)
-                self.grup_academica.append(dataframes['academica'])
-                self.grup_actuacion.append(dataframes['actuacion'])
-                self.grup_articulos.append(dataframes['articulos'])
-                self.grup_basico.append(dataframes['basico'])
-                self.grup_complementaria.append(dataframes["complementaria"])
-                self.grup_estancias.append(dataframes["estancias"])
-                self.grup_evaluador.append(dataframes["evaluador"])
-                self.grup_identificadores.append(dataframes["identificadores"])
-                self.grup_idioma.append(dataframes["idioma"])
-                self.grup_investiga.append(dataframes["investigacion"])
-                self.grup_jurado.append(dataframes["jurado"])
-                self.grup_libros.append(dataframes["libros"])
-                self.grup_reconocimiento.append(dataframes["reconocimiento"])
-                self.grup_redes.append(dataframes["redes"])
+                self.grup_academica=self.grup_academica.append(dataframes['academica'])
+                self.grup_actuacion=self.grup_actuacion.append(dataframes['actuacion'])
+                self.grup_articulos=self.grup_articulos.append(dataframes['articulos'])
+                self.grup_basico=self.grup_basico.append(dataframes['basico'])
+                self.grup_complementaria=self.grup_complementaria.append(dataframes["complementaria"])
+                self.grup_estancias=self.grup_estancias.append(dataframes["estancias"])
+                self.grup_evaluador=self.grup_evaluador.append(dataframes["evaluador"])
+                self.grup_identificadores=self.grup_identificadores.append(dataframes["identificadores"])
+                self.grup_idioma=self.grup_idioma.append(dataframes["idioma"])
+                self.grup_investiga=self.grup_investiga.append(dataframes["investigacion"])
+                self.grup_jurado=self.grup_jurado.append(dataframes["jurado"])
+                self.grup_libros=self.grup_libros.append(dataframes["libros"])
+                self.grup_reconocimiento=self.grup_reconocimiento.append(dataframes["reconocimiento"])
+                self.grup_redes=self.grup_redes.append(dataframes["redes"])
             except:
                 print('Error estableciendo atributos del objeto')
                 raise
