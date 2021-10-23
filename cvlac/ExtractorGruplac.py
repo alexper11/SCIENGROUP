@@ -50,6 +50,8 @@ class ExtractorGruplac(ExtractorCvlac):
         return dire 
     #recibe url de un gruplac
     def get_cvs(self, url_gruplac):
+        #limpiar atributos
+        super().__init__()
         urls=self.get_investigadoresList(url_gruplac)
         print('Extrayendo...')
         for url in urls:
@@ -97,4 +99,5 @@ class ExtractorGruplac(ExtractorCvlac):
                 print('Error estableciendo atributos del objeto')
                 raise
             
-            
+    def __del__(self):
+        print('ExtractorGruplac Object Destroyed')
