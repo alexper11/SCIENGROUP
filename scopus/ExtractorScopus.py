@@ -10,10 +10,12 @@ class ExtractorScopus:
         self.autores={"nombre":[],"autor_id":[],"eid":[],"orcid":[],"documentos":[],"fecha_creacion":[],"citado":[],
                      "citaciones":[],"h_index":[],"co_autores":[],"estado":[],"areas":[],"rango_publicacion":[],
                      "institucion":[],"departamento":[]}
-        self.articulos={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"issn":[],"eissn":[],
-                        "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],
-                        "doi":[],"citado":[],"link":[],"afiliacion":[],"tipo_fuente":[],
-                        "tipo_documento":[],"etapa_publicacion":[],"autores":[],"autores_id":[],"tipo_acceso":[],"palabras_clave":[],"agencia_fundadora":[]}
+        self.articulos={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
+                        "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"idioma":[],
+                        "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],"etapa_publicacion":[],
+                        "autores":[],"autores_id":[],"tipo_acceso":[],"palabras_clave_autor":[],"palabras_clave_index":[],"agencia_fundadora":[]}
+                        #continuar en palabras_clave_autor
+        
         self.API_KEY=api_key
         self.INST_TOKEN=inst_token
         
@@ -42,7 +44,7 @@ class ExtractorScopus:
             break
         
         while s <= TotalId:
-            time.sleep(0.5)
+            time.sleep(0.4)
             url = f'https://api.elsevier.com/content/search/author?query=AF-ID({affilid})&start={s}&count=200&field=dc:identifier'
             tries=3
             for i in range(tries):
@@ -73,7 +75,9 @@ class ExtractorScopus:
             try:
                 c=0
                 areas=''
-                if isinstance(r[field], type(None)):
+                if isinstance(r, type(None)):
+                        text=''
+                elif isinstance(r[field], type(None)):
                     text=''
                 elif isinstance(r[field]['subject-area'], list):
                     for rs in r[field]['subject-area']:
@@ -86,6 +90,8 @@ class ExtractorScopus:
                 else:
                     text=str(r[field]['subject-area']['$'])
             except KeyError:
+                text=''
+            except TypeError:
                 text=''
         elif field=="date-created":
             try:
@@ -164,8 +170,9 @@ class ExtractorScopus:
         return text
     
     def get_authors_df(self, authors):    
+        self.__init__(self.API_KEY, self.INST_TOKEN)
         for author in authors:    
-            time.sleep(0.3)
+            time.sleep(0.2)
             url = f'https://api.elsevier.com/content/author/author_id/{author}?view=ENHANCED'
             tries=3
             for i in range(tries):
@@ -182,7 +189,7 @@ class ExtractorScopus:
                     r4=result['author-retrieval-response'][0]['author-profile']['affiliation-current']['affiliation']
                     flag=True
                 except:
-                    if i < tries - 1: # i is zero indexed
+                    if i < tries - 1: 
                         continue
                     else:
                         flag=False
@@ -240,7 +247,7 @@ class ExtractorScopus:
                 try:
                     c=0
                     aff=''
-                    if isinstance(r[field], type(None)):
+                    if isinstance(r, type(None)):
                         text=''
                     elif isinstance(r[field], list):
                         if field=='link':
@@ -258,23 +265,33 @@ class ExtractorScopus:
                                     c=1
                         text= aff
                     else:
-                        text=str(r[field][key])
+                        if isinstance(r[field][key], type(None)):
+                            text=''
+                        else:
+                            text=str(r[field][key])
                 except KeyError:
+                    text=''
+                except TypeError:
                     text=''
         
         else:
             try:
-                if isinstance(r[field], type(None)):
-                    text=''
+                if isinstance(r, type(None)):
+                        text=''
                 elif field=="openaccess":
                     if r[field]=="1": 
                         text='Open Access'
                     else: 
                         text='' 
                 else:
-                    text = str(r[field])
+                    if isinstance(r[field], type(None)):
+                        text=''
+                    else:
+                        text = str(r[field])
             except KeyError:
                 text =''
+            except TypeError:
+                text=''
         return text
     
     def get_page_count(self,scopus_id,condition):
@@ -331,7 +348,67 @@ class ExtractorScopus:
             break
         return stage
 
-    def get_articles_df(self, author_list):
+    def get_scopusid_list(self,author):
+        result=''
+        scopusid_list=[]
+        cursor=0
+        tries=3
+        url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&start=0&count=1&field=dc:identifier&view=STANDARD'
+        for i in range(tries):
+            try:
+                response = requests.get(url,
+                                        headers={'Accept':'application/json',
+                                        'X-ELS-APIKey': self.API_KEY,
+                                        'X-ELS-Insttoken': self.INST_TOKEN})
+                
+                result = response.json()
+                TotalArt = int(result['search-results']['opensearch:totalResults'])
+            except:
+                print(result)
+                if i < tries - 1:
+                    continue
+                else:
+                    print('Error al extraer scopus_id list:',author)
+                    TotalArt=0
+            break      
+        while cursor <= TotalArt:
+            url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&start={cursor}&count=200&field=dc:identifier&view=STANDARD'
+            tries=3
+            for i in range(tries):
+                try:
+                    response = requests.get(url,
+                                            headers={'Accept':'application/json',
+                                            'X-ELS-APIKey': self.API_KEY,
+                                            'X-ELS-Insttoken': self.INST_TOKEN})
+                    
+                    result = response.json()
+                    cursor = cursor + 200        
+                    flag=True
+                except:
+                    print(result)
+                    if i < tries - 1:
+                        continue
+                    else:
+                        print('Error al extraer el scopusid list de autor: ',author)
+                        flag=False
+                break
+            if flag==True:
+                pass
+            else:
+                continue
+            
+            try:
+                articles=result['search-results']['entry']
+            except KeyError:
+                print(result)
+                continue
+            
+            for article in articles:
+                scopusid_list.append(''.join(filter(str.isdigit,str(article['dc:identifier']))))
+
+        return scopusid_list   
+    
+    def get_articles_lite(self, author_list):
         result=''
         for author in author_list:
             cursor=0
@@ -376,7 +453,6 @@ class ExtractorScopus:
                 self.articulos['titulo'].append(self.get_field_search('dc:title',article))
                 self.articulos['creador'].append(self.get_field_search('dc:creator',article))
                 self.articulos['nombre_publicacion'].append(self.get_field_search('prism:publicationName',article))
-                self.articulos['eissn'].append(self.get_field_search('prism:eIssn',article))
                 self.articulos['issn'].append(self.get_field_search('prism:issn',article))
                 self.articulos['volumen'].append(self.get_field_search('prism:volume',article))
                 self.articulos['issue'].append(self.get_field_search('prism:issueIdentifier',article))
@@ -389,7 +465,7 @@ class ExtractorScopus:
                 self.articulos['citado'].append(self.get_field_search('citedby-count',article))
                 self.articulos['link'].append(self.get_field_search('link',article,key='@ref'))
                 self.articulos['etapa_publicacion'].append(self.get_pub_stage(self.articulos['scopus_id'][-1]))
-                self.articulos['afiliacion'].append(self.get_field_search('affiliation',article,key='affilname'))
+                self.articulos['institucion'].append(self.get_field_search('affiliation',article,key='affilname'))
                 self.articulos['tipo_fuente'].append(self.get_field_search('prism:aggregationType',article))
                 self.articulos['tipo_documento'].append(self.get_field_search('subtypeDescription',article))
                 self.articulos['autores'].append(self.get_field_search('author',article,key='authname'))
@@ -439,7 +515,6 @@ class ExtractorScopus:
                     self.articulos['titulo'].append(self.get_field_search('dc:title',article))
                     self.articulos['creador'].append(self.get_field_search('dc:creator',article))
                     self.articulos['nombre_publicacion'].append(self.get_field_search('prism:publicationName',article))
-                    self.articulos['eissn'].append(self.get_field_search('prism:eIssn',article))
                     self.articulos['issn'].append(self.get_field_search('prism:issn',article))
                     self.articulos['volumen'].append(self.get_field_search('prism:volume',article))
                     self.articulos['issue'].append(self.get_field_search('prism:issueIdentifier',article))
@@ -451,7 +526,7 @@ class ExtractorScopus:
                     self.articulos['doi'].append(self.get_field_search('prism:doi',article))
                     self.articulos['citado'].append(self.get_field_search('citedby-count',article))
                     self.articulos['link'].append(self.get_field_search('link',article,key='@ref'))
-                    self.articulos['afiliacion'].append(self.get_field_search('affiliation',article,key='affilname'))
+                    self.articulos['institucion'].append(self.get_field_search('affiliation',article,key='affilname'))
                     self.articulos['tipo_fuente'].append(self.get_field_search('prism:aggregationType',article))
                     self.articulos['tipo_documento'].append(self.get_field_search('subtypeDescription',article))
                     self.articulos['etapa_publicacion'].append(self.get_pub_stage(self.articulos['scopus_id'][-1]))
@@ -462,5 +537,163 @@ class ExtractorScopus:
                     self.articulos['agencia_fundadora'].append(self.get_field_search('fund-sponsor',article))
         
         df_articulos = pd.DataFrame(self.articulos) 
+        #PRUEBA ID:
+        df_articulos.to_csv('articulosSco.csv') #########
         df_articulos.reset_index(drop=True)
+        self.__init__(self.API_KEY, self.INST_TOKEN)
         return df_articulos
+
+    def get_field_abstract(self, field, r, key=''):
+        if key!='':
+            if key=='stage': ##################
+                try:
+                    text=str(r[field]["ait:status"]["@stage"])
+                except:
+                    text=''
+            else:
+                try:
+                    c=0
+                    aff=''
+                    if isinstance(r, type(None)):
+                        text=''
+                    elif isinstance(r[field], list):
+                        if field=='author' and key=='preferred-name': ####################
+                            for author in r[field]:
+                                #Mostrar posible excepción
+                                if c==0:
+                                    try:
+                                        aff=str(author[key]["ce:given-name"])+' '+str(author['preferred-name']["ce:surname"])
+                                    except KeyError:
+                                        aff=''
+                                        print('excepcion en texto autores con el articulo: ', self.articulos['scopus_id'][-1])
+                                else:
+                                    aff=aff+'; '+str(author[key]["ce:given-name"])+' '+str(author['preferred-name']["ce:surname"])
+                                c=1
+                        text= aff
+                    else:
+                        if isinstance(r[field][key], type(None)):
+                            text=''
+                        else:
+                            text=str(r[field][key])
+                except KeyError:
+                    text=''
+                except TypeError:
+                    text=''
+        else:
+            try:
+                if isinstance(r, type(None)):
+                        text=''
+                elif field=="dc:creator": #################
+                    if isinstance(r[field]['author'], list):
+                        #Mostrar posible excepción
+                        if len(r[field].keys()) > 1: print('dc:creator con mas de un autor en el articulo: ', self.articulos['scopus_id'][-1])
+                        for element in r[field]['author']:
+                            #Mostrar posible excepción
+                            try:
+                                text=str(element['preferred-name']["ce:given-name"])+' '+str(element['preferred-name']["ce:surname"])
+                            except KeyError:
+                                text=''
+                                print('excepcion en texto dc:creator con el articulo: ', self.articulos['scopus_id'][-1])
+                elif field=="page_count": ################
+                    text=str(r["bibrecord"]["head"]["source"]["volisspag"]["pagecount"]["$"])
+                elif field=="abstracts": #####################
+                    if isinstance(r["bibrecord"]["head"]["abstracts"], type(None)):
+                        text=''
+                    else:
+                        text=str(r["bibrecord"]["head"]["abstracts"])
+                elif field=="xocs:meta": ##################
+                    text=str(r[field]["xocs:funding-list"]["xocs:funding"]["xocs:funding-agency"])
+                else:
+                    if isinstance(r[field], type(None)):
+                        text=''
+                    else:
+                        text = str(r[field])
+            except KeyError:
+                text =''
+            except TypeError:
+                text =''
+        return text
+        
+    def get_articles_full(self, author_list):
+        result=''
+        for author in author_list:
+            tries=3
+            articles=self.get_scopusid_list(author)
+            for article in articles:
+                url=f'https://api.elsevier.com/content/abstract/scopus_id/{article}?view=FULL'
+                for i in range(tries):
+                    try:
+                        response = requests.get(url,
+                                                headers={'Accept':'application/json',
+                                                'X-ELS-APIKey': self.API_KEY,
+                                                'X-ELS-Insttoken': self.INST_TOKEN})
+                        
+                        result = response.json()
+                        flag=True
+                    except:
+                        print(result)
+                        if i < tries - 1:
+                            continue
+                        else:
+                            print('Error al extraer el articulo: ',article)
+                            flag=False
+                    break
+                if flag==True:
+                    pass
+                else:
+                    continue
+                try:
+                    coredata=result['abstracts-retrieval-response']['coredata']
+                    item=result["abstracts-retrieval-response"]["item"]
+                    language=result["abstracts-retrieval-response"]["language"]
+                    complete=result["abstracts-retrieval-response"]
+                    subject=result["abstracts-retrieval-response"]["subject-areas"]
+                    authors=result["abstracts-retrieval-response"]["authors"]
+                    keywords=result["abstracts-retrieval-response"]["authkeywords"]
+                    idxterms=result["abstracts-retrieval-response"]["idxterms"]
+                except:
+                    print('Falla del servicio API: ')
+                    
+                    print(result)
+                    raise
+                #####################METODOS PARA EXTRACCION DE CAMPOS
+                
+                self.articulos['scopus_id'].append(article)
+                self.articulos['eid'].append(self.get_field_search('eid',coredata))
+                self.articulos['titulo'].append(self.get_field_search('dc:title',coredata))
+                self.articulos['creador'].append(self.get_field_abstract('dc:creator',coredata))
+                self.articulos['nombre_publicacion'].append(self.get_field_search('prism:publicationName',coredata))
+                self.articulos['editorial'].append(self.get_field_abstract('dc:publisher',coredata))
+                self.articulos['issn'].append(self.get_field_abstract('prism:issn',coredata))
+                self.articulos['isbn'].append(self.get_field_abstract('prism:isbn',coredata))
+                self.articulos['volumen'].append(self.get_field_abstract('prism:volume',coredata))
+                self.articulos['issue'].append(self.get_field_abstract('prism:issueIdentifier',coredata))
+                self.articulos['numero_articulo'].append(self.get_field_abstract('article-number',coredata))
+                self.articulos['pag_inicio'].append(self.get_field_search('prism:pageRange',coredata,key='page_start'))
+                self.articulos['pag_fin'].append(self.get_field_search('prism:pageRange',coredata,key='page_end'))
+                self.articulos['pag_count'].append(self.get_field_abstract('page_count',item))
+                self.articulos['fecha_publicacion'].append(self.get_field_search('prism:coverDate',coredata))
+                self.articulos['idioma'].append(self.get_field_abstract('@xml:lang',language))
+                self.articulos['doi'].append(self.get_field_abstract('prism:doi',coredata))
+                self.articulos['citado'].append(self.get_field_abstract('citedby-count',coredata))
+                self.articulos['link'].append(self.get_field_search('link',coredata,key='@rel'))
+                self.articulos['institucion'].append(self.get_field_search('affiliation',complete,key='affilname'))
+                self.articulos['abstract'].append(self.get_field_abstract('abstracts',item))
+                self.articulos['tema'].append(self.get_field_search('subject-area',subject,key='$'))
+                self.articulos['tipo_fuente'].append(self.get_field_abstract('prism:aggregationType',coredata))
+                self.articulos['tipo_documento'].append(self.get_field_abstract('subtypeDescription',coredata))
+                self.articulos['etapa_publicacion'].append(self.get_field_abstract('ait:process-info',item,key='stage'))
+                self.articulos['autores'].append(self.get_field_abstract('author',authors,key='preferred-name'))
+                self.articulos['autores_id'].append(self.get_field_search('author',authors,key='@auid'))
+                self.articulos['tipo_acceso'].append(self.get_field_search('openaccess',coredata))
+                self.articulos['palabras_clave_autor'].append(self.get_field_search('author-keyword',keywords,key='$'))
+                self.articulos['palabras_clave_index'].append(self.get_field_search('mainterm',idxterms,key='$'))
+                self.articulos['agencia_fundadora'].append(self.get_field_abstract('xocs:meta',item))
+                #############################
+        df_articulos = pd.DataFrame(self.articulos) 
+        df_articulos.reset_index(drop=True)
+        self.__init__(self.API_KEY, self.INST_TOKEN)
+        return df_articulos
+    
+    def __del__(self):
+        print('ExtractorScopus Object Destroyed')
