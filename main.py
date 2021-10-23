@@ -44,6 +44,7 @@ if __name__ == '__main__':
     #CVLAC
     ########################
     
+    """
 
     Extractor=ExtractorGruplac()
     Extractor.set_gruplac_attrs(get_gruplacList('UNIVERSIDAD DEL CAUCA'))
@@ -90,7 +91,10 @@ if __name__ == '__main__':
     
     complementaria=ComplementariaController()
     complementaria.insert_df(Extractor.grup_complementaria)
+    
+    del Extractor
    
+   """
    
     ########################
     #SCOPUS
@@ -102,21 +106,25 @@ if __name__ == '__main__':
     #Obtener lista de auid Unicauca
     #Obtener autores Unicauca
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
-    df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
-    df_articulos=ExtractorS.get_articles_df(ExtractorS.get_auid_list(60051434))
+    #df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
     
-    autores = AutoresController()
-    autores.insert_df(df_autores)
+    #autores = AutoresController()
+    #autores.insert_df(df_autores)
+    
+    df_articulos=ExtractorS.get_articles_full(ExtractorS.get_auid_list(60051434))
     
     articulosSco = ArticulosScoController()
     articulosSco.insert_df(df_articulos)
     
+    del ExtractorS
     
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
     #########################################
+    """
     metadb= MetaDBController()
     metadb.insert_datetime()
+    """
     metadbsco=MetaDBScoController()
     metadbsco.insert_datetime()
 
