@@ -27,7 +27,7 @@ from cvlac.controllers.MetaDBController import MetaDBController
 
 from scopus.models.DBmodel import create_scopus_db
 from scopus.controllers.AutoresController import AutoresController
-from scopus.controllers.ArticulosScoController import ArticulosScoController  
+from scopus.controllers.ProductosController import ProductosController  
 from scopus.controllers.MetaDBScoController import MetaDBScoController                     
 
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     sys.path.append(".")
     #######################
     
-    create_db()
+    #create_db()
     #create_scopus_db()
     
     ########################
@@ -112,8 +112,8 @@ if __name__ == '__main__':
     
     df_articulos=ExtractorS.get_articles_full(ExtractorS.get_auid_list(60051434))
     
-    articulosSco = ArticulosScoController()
-    articulosSco.insert_df(df_articulos)
+    productos = ProductosController()
+    productos.insert_df(df_articulos)
     
     del ExtractorS
     

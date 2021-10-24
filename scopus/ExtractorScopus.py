@@ -10,6 +10,7 @@ class ExtractorScopus:
         self.autores={"nombre":[],"autor_id":[],"eid":[],"orcid":[],"documentos":[],"fecha_creacion":[],"citado":[],
                      "citaciones":[],"h_index":[],"co_autores":[],"estado":[],"areas":[],"rango_publicacion":[],
                      "institucion":[],"departamento":[]}
+        
         self.articulos={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
                         "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"idioma":[],
                         "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],"etapa_publicacion":[],

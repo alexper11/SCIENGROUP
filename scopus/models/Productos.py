@@ -2,9 +2,9 @@ from typing import Tuple
 from scopus.scopusdb import Base
 from sqlalchemy import Column, Integer, String
 
-class ArticulosSco(Base):
+class Productos(Base):
     
-    __tablename__ = 'articulos'
+    __tablename__ = 'productos'
     id = Column(Integer, primary_key=True)
     scopus_id = Column(String(100), nullable=False)
     eid = Column(String(200), nullable=True)
@@ -45,7 +45,7 @@ class ArticulosSco(Base):
             setattr(self, key, value)
             
     def __repr__(self):
-        return f'ArticulosSco({self.nombre}, {self.autor_id})'
+        return f'Productos({self.nombre}, {self.autor_id})'
     
     def __str__(self):
         return self.autor_id
