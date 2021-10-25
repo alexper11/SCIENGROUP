@@ -1,7 +1,7 @@
 from scopus.scopusdb import Base, engine
 
 from scopus.models.Autores import Autores
-from scopus.models.ArticulosSco import ArticulosSco
+from scopus.models.Productos import Productos
 from scopus.models.MetaDBSco import MetaDBSco
 
 
