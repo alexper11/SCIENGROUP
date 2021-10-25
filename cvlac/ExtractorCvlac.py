@@ -79,19 +79,33 @@ class ExtractorCvlac():
                     fblock=bloque_string.find("<i>")
                     list_string=(re.split('<br/>|, "|" . En:',bloque_string[:fblock]))        
                     x=0
-                    informacion=['Autores','Nombre','En','Revista']    
+                    informacion=['Autores','Nombre','En','Revista']  
+                    art_individual['IDCVLAC'] = url[(url.find('='))+1:]  
                     try:           
-                        for dato in list_string:            
-                            art_individual['IDCVLAC'] = url[(url.find('='))+1:]
+                        for dato in list_string: 
                             art_individual[str(informacion[x])]=("".join(dato)).strip()                                      
                             x=x+1
                     except IndexError:
+                        x=0
                         print('Articulos > 4: ',url)
+                        informacion=['Autores','Nombre','En']
+                        list_string2=(re.split('<br/>',bloque_string[:fblock]))
+                        list_string=(re.split(', "|" . En:',list_string2[0]))
+                        art_individual['Revista']=("".join(list_string2[1])).strip()
+                        try:
+                            for dato in list_string:
+                                art_individual[str(informacion[x])]=("".join(dato)).strip()                                      
+                                x=x+1
+                        except IndexError:
+                            art_individual['En']=("".join(list_string[-1])).strip()
+                            list_string.pop(-1)
+                            art_individual['Autores']=" - ".join(list_string).strip()
+                            art_individual['Nombre']=("".join(list_string[-1])).strip()
                     for dato in list_datos:                            
                         for key in self.articulos:                                                              
                             if(key == dato):
                                 if(dato=="fasc."):
-                                    list_fasc=(re.split('p.| ,',list_datos[list_datos.index(dato)+1]))  
+                                    list_fasc=(re.split('p\.| ,',list_datos[list_datos.index(dato)+1]))  
                                     art_individual['fasc.']=list_fasc[0]                        
                                     art_individual['p.']=list_fasc[1]
                                     art_individual['fecha.']=list_fasc[2].replace(',','')
@@ -203,6 +217,12 @@ class ExtractorCvlac():
                                     dic2[dato]=(list_datos[list_datos.index(dato)+1]).strip()                          
                         self.dic_evaluador = almacena(self.dic_evaluador,dic2)
                         dic2={}
+                    #Encuentra tabla, retorna dataframe por lo que deja de buscar
+                    df_evaluador= pd.DataFrame(self.dic_evaluador)
+                    df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion']
+                    df_evaluador = df_evaluador.reset_index(drop=True)
+                    return df_evaluador
+        #No encuentra tabla, retorna dataframe vacío (vale la pena retornar mejor un null y condicionar en el llamado?)
         df_evaluador= pd.DataFrame(self.dic_evaluador)
         df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion']
         df_evaluador = df_evaluador.reset_index(drop=True)
@@ -226,6 +246,12 @@ class ExtractorCvlac():
                             x=x+1                                          
                         self.dic_idioma = almacena(self.dic_idioma,dic2)
                     dic2={}
+                    #Encuentra tabla, retorna dataframe por lo que deja de buscar
+                    df_idioma = pd.DataFrame(self.dic_idioma)  
+                    df_idioma.columns = ['idcvlac','idioma','habla','escribe','lee','entiende']
+                    df_idioma = df_idioma.reset_index(drop=True)      
+                    return df_idioma
+        #No encuentra tabla, retorna dataframe vacío (vale la pena retornar mejor un null y condicionar en el llamado?)
         df_idioma = pd.DataFrame(self.dic_idioma)  
         df_idioma.columns = ['idcvlac','idioma','habla','escribe','lee','entiende']
         df_idioma = df_idioma.reset_index(drop=True)      
@@ -250,6 +276,10 @@ class ExtractorCvlac():
                                 x=x+1                                          
                             self.dic_investiga = almacena(self.dic_investiga,dic2)
                         dic2={}
+                    df_investiga= pd.DataFrame(self.dic_investiga) 
+                    df_investiga.columns = ['idcvlac','nombre','activa']
+                    df_investiga = df_investiga.reset_index(drop=True)             
+                    return df_investiga
         df_investiga= pd.DataFrame(self.dic_investiga) 
         df_investiga.columns = ['idcvlac','nombre','activa']
         df_investiga = df_investiga.reset_index(drop=True)             
@@ -329,6 +359,9 @@ class ExtractorCvlac():
                         dic2['fecha'] = ((div_i.text)[fecha+1:]).strip()                                
                         self.dic_reconocimiento = almacena(self.dic_reconocimiento,dic2)
                     dic2={}
+                    df_reconocimiento= pd.DataFrame(self.dic_reconocimiento)
+                    df_reconocimiento = df_reconocimiento.reset_index(drop=True)       
+                    return df_reconocimiento
         df_reconocimiento= pd.DataFrame(self.dic_reconocimiento)
         df_reconocimiento = df_reconocimiento.reset_index(drop=True)       
         return df_reconocimiento
