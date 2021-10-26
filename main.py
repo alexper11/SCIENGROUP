@@ -1,6 +1,6 @@
 from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.ExtractorGruplac import ExtractorGruplac
-from cvlac.util import get_gruplacList
+from cvlac.util import get_gruplacList, get_lxml
 from scopus.ExtractorScopus import ExtractorScopus
 from scopus.Scientopy import Scientopy
 
@@ -141,3 +141,15 @@ if __name__ == '__main__':
     input_df.to_csv('scientopy_input.csv',index=False)
     """
 
+
+
+'''
+#prueba a tablas individuales.. dentro del main
+    Extractor=ExtractorGruplac()
+    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000061344'
+    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000867837'
+    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
+    dom=get_lxml(url)
+    df_prueba=Extractor.get_articulo(dom,url)
+    df_prueba.to_csv('prueba.csv',index=False)
+'''

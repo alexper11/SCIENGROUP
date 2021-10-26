@@ -61,8 +61,8 @@ class ExtractorGruplac(ExtractorCvlac):
             df_investiga = self.get_investiga(lxml_url, url)
             df_reconocimiento = self.get_reconocimiento(lxml_url, url)
             df_evaluador = self.get_evaluador(lxml_url, url) 
-            df_redes = self.get_redes(lxml_url, url)    
-            df_identifica = self.get_redes(lxml_url, url) 
+            df_redes = self.get_redes(lxml_url, url)
+            df_identifica = self.get_redes(lxml_url, url)
             df_libros = self.get_libro(lxml_url, url)
             df_jurado = self.get_jurado(lxml_url, url)
             df_complementaria = self.get_complementaria(lxml_url, url)
@@ -97,10 +97,7 @@ class ExtractorGruplac(ExtractorCvlac):
             except:
                 print('Error estableciendo atributos del objeto')
                 raise
-        
-        #PREPROCESAMIENTO
-        #Limpiar duplicados por el titulos del producto
+        #procesamiento de datos
 
-            
     def __del__(self):
         print('ExtractorGruplac Object Destroyed')
