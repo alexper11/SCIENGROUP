@@ -139,15 +139,18 @@ if __name__ == '__main__':
     scientopy = Scientopy(API_KEY,INST_TOKEN)
     input_df = scientopy.scopus_input_df('"linked open data"')
     input_df.to_csv('scientopy_input.csv',index=False)
+
     """
 
-
-
+    
 '''
-#prueba a tablas individuales.. dentro del main
+##Pruebas para tablas individuales
+if __name__ == '__main__':
+
+    #prueba a tablas individuales.. dentro del main
     Extractor=ExtractorGruplac()
-    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000061344'
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000867837'
+    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000061344'
+    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000867837'
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
     dom=get_lxml(url)
     df_prueba=Extractor.get_articulo(dom,url)
