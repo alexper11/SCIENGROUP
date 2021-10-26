@@ -99,8 +99,9 @@ class ExtractorCvlac():
                         except IndexError:
                             art_individual['En']=("".join(list_string[-1])).strip()
                             list_string.pop(-1)
-                            art_individual['Autores']=" - ".join(list_string).strip()
                             art_individual['Nombre']=("".join(list_string[-1])).strip()
+                            list_string.pop(-1)
+                            art_individual['Autores']=" - ".join(list_string).strip()
                     for dato in list_datos:                            
                         for key in self.articulos:                                                              
                             if(key == dato):
