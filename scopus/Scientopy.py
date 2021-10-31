@@ -134,3 +134,7 @@ class Scientopy(ExtractorScopus):
         df_input.reset_index(drop=True)
         return df_input
     
+    def scopus_preproccesed_papaer(self, topic):
+        
+        
+        pass
