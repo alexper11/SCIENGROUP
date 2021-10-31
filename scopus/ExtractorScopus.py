@@ -36,12 +36,15 @@ class ExtractorScopus:
                 authorIdList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
                 TotalId= int(result['search-results']['opensearch:totalResults'])
                 s=200
+            
             except:
                 print(result)
+                print(response.headers)
                 if i < tries - 1:
                     continue
                 else:
                     print('Error al extraer auid_list')
+                    print(response.headers)
             break
         
         while s <= TotalId:
@@ -59,16 +62,21 @@ class ExtractorScopus:
                     
                     tempList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
                     authorIdList.extend(tempList)
-                    s=s+200
+                except KeyError:
+                    print(result)
+                    print('Excepcion en get_auid_list')
+                
                 except:
                     print(result) 
+                    
                     if i < tries - 1:
                         continue
                     else:
                         print('Error al extraer auid_list')
+                        print(response.headers)
                 break
+            s=s+200
                 
-        
         return authorIdList
 
     def get_field(self, field, r):

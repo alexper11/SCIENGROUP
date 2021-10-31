@@ -38,12 +38,12 @@ if __name__ == '__main__':
     #######################
     
     #create_db()
-    #create_scopus_db()
+    create_scopus_db()
     
     ########################
     #CVLAC
     ########################
-
+    """
     Extractor=ExtractorGruplac()
     Extractor.set_gruplac_attrs(get_gruplacList('UNIVERSIDAD DEL CAUCA'))
     print('supo')
@@ -92,10 +92,11 @@ if __name__ == '__main__':
     
     del Extractor
    
+   """
     ########################
     #SCOPUS
     ########################
-    """
+    
     
     API_KEY=""
     INST_TOKEN=""
@@ -110,24 +111,24 @@ if __name__ == '__main__':
     autores = AutoresController()
     autores.insert_df(df_autores)
     
-    df_articulos=ExtractorS.get_articles_full(ExtractorS.get_auid_list(60051434))
+    df_productos=ExtractorS.get_articles_full(ExtractorS.get_auid_list(60051434))
     
     productos = ProductosController()
-    productos.insert_df(df_articulos)
+    productos.insert_df(df_productos)
     
     del ExtractorS
     
-    """
+    
     
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
     #########################################
     
-    metadb= MetaDBController()
-    metadb.insert_datetime()
+    #metadb= MetaDBController()
+    #metadb.insert_datetime()
     
-    #metadbsco=MetaDBScoController()
-    #metadbsco.insert_datetime()
+    metadbsco=MetaDBScoController()
+    metadbsco.insert_datetime()
 
     ###############################
     #SCIENTOPY
