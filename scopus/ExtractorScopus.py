@@ -10,12 +10,12 @@ class ExtractorScopus:
         self.autores={"nombre":[],"autor_id":[],"eid":[],"orcid":[],"documentos":[],"fecha_creacion":[],"citado":[],
                      "citaciones":[],"h_index":[],"co_autores":[],"estado":[],"areas":[],"rango_publicacion":[],
                      "institucion":[],"departamento":[]}
-        
+            #Agregar indexed name
         self.articulos={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
                         "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"idioma":[],
                         "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],"etapa_publicacion":[],
-                        "autores":[],"autores_id":[],"tipo_acceso":[],"palabras_clave_autor":[],"palabras_clave_index":[],"agencia_fundadora":[]}
-                        #continuar en palabras_clave_autor
+                        "autores":[],"autores_id":[],"tipo_acceso":[],"palabras_clave_autor":[],"palabras_clave_index":[],"agencia_fundadora":[],"pais":[]}
+            #Agregar indexed name
         
         self.API_KEY=api_key
         self.INST_TOKEN=inst_token
@@ -58,10 +58,10 @@ class ExtractorScopus:
                                                         'X-ELS-APIKey': self.API_KEY,
                                                         'X-ELS-Insttoken': self.INST_TOKEN})
                     result = response.json()
-
                     
                     tempList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
                     authorIdList.extend(tempList)
+                    
                 except KeyError:
                     print(result)
                     print('Excepcion en get_auid_list')
@@ -241,7 +241,6 @@ class ExtractorScopus:
                         text = str(r[field].split('-')[0])
                 except:
                     text =''
-                    print("page_start: ",r[field])
                     
             elif key == 'page_end':
                 try:
@@ -251,7 +250,6 @@ class ExtractorScopus:
                         text = str(r[field].split('-')[1])
                 except:
                     text =''
-                    print("page_end: ",r[field])
             else:
                 try:
                     c=0
@@ -267,10 +265,10 @@ class ExtractorScopus:
                             for rs in r[field]:
                                     if c==0:
                                         aff=str(rs[key])
-                                    elif key=='authid':
+                                    elif key=='authid' or key=='$':
                                         aff=aff+';'+str(rs[key])
                                     else:
-                                        aff=aff+', '+str(rs[key])
+                                        aff=aff+'; '+str(rs[key])
                                     c=1
                         text= aff
                     else:
@@ -390,8 +388,7 @@ class ExtractorScopus:
                                             'X-ELS-APIKey': self.API_KEY,
                                             'X-ELS-Insttoken': self.INST_TOKEN})
                     
-                    result = response.json()
-                    cursor = cursor + 200        
+                    result = response.json()        
                     flag=True
                 except:
                     print(result)
@@ -401,6 +398,7 @@ class ExtractorScopus:
                         print('Error al extraer el scopusid list de autor: ',author)
                         flag=False
                 break
+            cursor = cursor + 200
             if flag==True:
                 pass
             else:
@@ -578,6 +576,20 @@ class ExtractorScopus:
                                 else:
                                     aff=aff+'; '+str(author[key]["ce:given-name"])+' '+str(author['preferred-name']["ce:surname"])
                                 c=1
+                        
+                        elif field=='affiliation' and key=="affiliation-country":
+                            for affil in r[field]:
+                                if c==0:
+                                    try:
+                                        aff=str(affil[key])
+                                    except KeyError:
+                                        aff=''
+                                        print('excepcion en texto pais con el articulo: ', self.articulos['scopus_id'][-1])
+                                elif str(affil[key]) in aff:
+                                    continue
+                                else:
+                                    aff=aff+';'+str(affil[key])
+                                c=1
                         text= aff
                     else:
                         if isinstance(r[field][key], type(None)):
@@ -612,6 +624,20 @@ class ExtractorScopus:
                         text=str(r["bibrecord"]["head"]["abstracts"])
                 elif field=="xocs:meta": ##################
                     text=str(r[field]["xocs:funding-list"]["xocs:funding"]["xocs:funding-agency"])
+                elif field=="prism:isbn":
+                    if isinstance(r[field], list):
+                        c=0
+                        for isbn in r[field]:
+                            if c==0:
+                                text=str(isbn['$'])
+                            else:
+                                text=text+';'+str(isbn['$'])
+                            c=1
+                    else:
+                        try:
+                            text=str(r[field]['$'])
+                        except:
+                            text=str(r[field])
                 else:
                     if isinstance(r[field], type(None)):
                         text=''
@@ -626,6 +652,7 @@ class ExtractorScopus:
     def get_articles_full(self, author_list):
         result=''
         for author in author_list:
+            count=0
             tries=3
             articles=self.get_scopusid_list(author)
             for article in articles:
@@ -661,12 +688,16 @@ class ExtractorScopus:
                     keywords=result["abstracts-retrieval-response"]["authkeywords"]
                     idxterms=result["abstracts-retrieval-response"]["idxterms"]
                 except:
-                    print('Falla del servicio API: ')
-                    
-                    print(result)
-                    raise
+                    try:
+                        msg=result['service-error']['status']['statusCode']
+                        print('ERROR DEL SERVICIO: ', msg)
+                        print('PRODUCTO SCOPUS_ID: ', article)
+                        continue
+                    except:
+                        print('Falla del servicio API: ')
+                        print(result)
                 #####################METODOS PARA EXTRACCION DE CAMPOS
-                
+                print('extrayendo...',count)
                 self.articulos['scopus_id'].append(article)
                 self.articulos['eid'].append(self.get_field_search('eid',coredata))
                 self.articulos['titulo'].append(self.get_field_search('dc:title',coredata))
@@ -698,6 +729,8 @@ class ExtractorScopus:
                 self.articulos['palabras_clave_autor'].append(self.get_field_search('author-keyword',keywords,key='$'))
                 self.articulos['palabras_clave_index'].append(self.get_field_search('mainterm',idxterms,key='$'))
                 self.articulos['agencia_fundadora'].append(self.get_field_abstract('xocs:meta',item))
+                self.articulos['pais'].append(self.get_field_abstract('affiliation',complete,key='affiliation-country'))
+                count=count+1
                 #############################
         df_articulos = pd.DataFrame(self.articulos) 
         df_articulos.reset_index(drop=True)

@@ -38,7 +38,7 @@ if __name__ == '__main__':
     #######################
     
     #create_db()
-    create_scopus_db()
+    #create_scopus_db()
     
     ########################
     #CVLAC
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     ########################
     #SCOPUS
     ########################
-    
+    """
     
     API_KEY=""
     INST_TOKEN=""
@@ -118,7 +118,7 @@ if __name__ == '__main__':
     
     del ExtractorS
     
-    
+    """
     
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
@@ -127,20 +127,20 @@ if __name__ == '__main__':
     #metadb= MetaDBController()
     #metadb.insert_datetime()
     
-    metadbsco=MetaDBScoController()
-    metadbsco.insert_datetime()
+    #metadbsco=MetaDBScoController()
+    #metadbsco.insert_datetime()
 
     ###############################
     #SCIENTOPY
     #################################
-    """
+    
     API_KEY=""
     INST_TOKEN=""
     API_KEY, INST_TOKEN = read_key()
     scientopy = Scientopy(API_KEY,INST_TOKEN)
-    input_df = scientopy.scopus_input_df('"linked open data"')
-    input_df.to_csv('scientopy_input.csv',index=False)
-    """
+    input_df = scientopy.scopus_preprocessed_df('"linked open data"')
+    input_df.to_csv('papersPreprocessed.csv',index=False)
+    
 
 
 

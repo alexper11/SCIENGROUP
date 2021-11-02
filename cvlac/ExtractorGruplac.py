@@ -39,7 +39,7 @@ class ExtractorGruplac(ExtractorCvlac):
                     continue
                 else:
                     print('Error al extraer urls')
-                    raise
+                    
             break
                     
         for a in url_inv:
@@ -96,7 +96,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 self.grup_redes=self.grup_redes.append(dataframes["redes"])
             except:
                 print('Error estableciendo atributos del objeto')
-                raise
+                
         #procesamiento de datos
 
     def __del__(self):
