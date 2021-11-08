@@ -38,7 +38,7 @@ if __name__ == '__main__':
     #######################
     
     #create_db()
-    #create_scopus_db()
+    create_scopus_db()
     
     ########################
     #CVLAC
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     ########################
     #SCOPUS
     ########################
-    """
+    
     
     API_KEY=""
     INST_TOKEN=""
@@ -106,19 +106,20 @@ if __name__ == '__main__':
     #Obtener autores Unicauca
     
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
-    df_autores=ExtractorS.get_authors_df(ExtractorS.get_auid_list(60051434)) 
+    authors_list=ExtractorS.get_auid_list(60051434)
+    
+    df_autores=ExtractorS.get_authors_df(authors_list) 
     
     autores = AutoresController()
     autores.insert_df(df_autores)
     
-    df_productos=ExtractorS.get_articles_full(ExtractorS.get_auid_list(60051434))
+    df_productos=ExtractorS.get_articles_full(authors_list)
     
     productos = ProductosController()
     productos.insert_df(df_productos)
     
     del ExtractorS
     
-    """
     
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
@@ -127,19 +128,21 @@ if __name__ == '__main__':
     #metadb= MetaDBController()
     #metadb.insert_datetime()
     
-    #metadbsco=MetaDBScoController()
-    #metadbsco.insert_datetime()
+    metadbsco=MetaDBScoController()
+    metadbsco.insert_datetime()
 
     ###############################
     #SCIENTOPY
     #################################
-    
+    """
     API_KEY=""
     INST_TOKEN=""
     API_KEY, INST_TOKEN = read_key()
     scientopy = Scientopy(API_KEY,INST_TOKEN)
     input_df = scientopy.scopus_preprocessed_df('"linked open data"')
     input_df.to_csv('papersPreprocessed.csv',index=False)
+    """
+    
     
 '''
 ##Pruebas para tablas individuales
