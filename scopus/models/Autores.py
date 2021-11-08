@@ -5,7 +5,8 @@ class Autores(Base):
     
     __tablename__ = 'autores'
     id = Column(Integer, primary_key=True)
-    nombre = Column(String(1000), nullable=False)
+    nombre = Column(String(800), nullable=False)
+    nombre_index= Column(String(500), nullable=False)
     autor_id = Column(String(500), nullable=False)
     eid = Column(String(200), nullable=True)
     orcid = Column(String(200), nullable=True)
@@ -16,7 +17,7 @@ class Autores(Base):
     h_index = Column(String(50), nullable=True)
     co_autores = Column(String(50), nullable=True)
     estado = Column(String(200), nullable=True)
-    areas = Column(String(6000), nullable=True)
+    areas = Column(String(12000), nullable=True)
     rango_publicacion = Column(String(200), nullable=True)
     institucion = Column(String(1000), nullable=True)
     departamento = Column(String(1000), nullable=True)

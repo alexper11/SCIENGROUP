@@ -7,7 +7,7 @@ import pandas as pd
 class ExtractorScopus:
     
     def __init__(self, api_key, inst_token):
-        self.autores={"nombre":[],"autor_id":[],"eid":[],"orcid":[],"documentos":[],"fecha_creacion":[],"citado":[],
+        self.autores={"nombre":[],"nombre_index":[],"autor_id":[],"eid":[],"orcid":[],"documentos":[],"fecha_creacion":[],"citado":[],
                      "citaciones":[],"h_index":[],"co_autores":[],"estado":[],"areas":[],"rango_publicacion":[],
                      "institucion":[],"departamento":[]}
             #Agregar indexed name
@@ -39,7 +39,6 @@ class ExtractorScopus:
             
             except:
                 print(result)
-                print(response.headers)
                 if i < tries - 1:
                     continue
                 else:
@@ -110,6 +109,11 @@ class ExtractorScopus:
             text=date
         elif field=="preferred-name":
             text=str(r[field]['given-name'])+' '+str(r[field]['surname'])
+        elif field=="indexed-name":
+            try:
+                text=str(r["preferred-name"][field])
+            except:
+                text=''
         
         elif field=="publication-range":
             try:
@@ -222,6 +226,7 @@ class ExtractorScopus:
             self.autores['estado'].append(self.get_field('status',r3))
             self.autores['fecha_creacion'].append(self.get_field('date-created',r3))
             self.autores['nombre'].append(self.get_field('preferred-name',r3))
+            self.autores['nombre_index'].append(self.get_field("indexed-name",r3))
             self.autores['rango_publicacion'].append(self.get_field('publication-range',r3))
             self.autores['institucion'].append(self.get_field('inst',r4))
             self.autores['departamento'].append(self.get_field('depart',r4))
@@ -569,12 +574,15 @@ class ExtractorScopus:
                                 #Mostrar posible excepción
                                 if c==0:
                                     try:
-                                        aff=str(author[key]["ce:given-name"])+' '+str(author['preferred-name']["ce:surname"])
-                                    except KeyError:
+                                        aff=str(author[key]["ce:indexed-name"])#str(author[key]["ce:given-name"])+' '+str(author['preferred-name']["ce:surname"])
+                                    except:
                                         aff=''
-                                        print('excepcion en texto autores con el articulo: ', self.articulos['scopus_id'][-1])
+                                        print('excepcion en texto autores con el articulo: ', self.articulos['eid'][-1])
                                 else:
-                                    aff=aff+'; '+str(author[key]["ce:given-name"])+' '+str(author['preferred-name']["ce:surname"])
+                                    try:
+                                        aff=aff+'; '+str(author[key]["ce:indexed-name"])#+str(author[key]["ce:given-name"])+' '+str(author['preferred-name']["ce:surname"])
+                                    except:
+                                        print('excepcion en texto autores con el articulo: ', self.articulos['eid'][-1])
                                 c=1
                         
                         elif field=='affiliation' and key=="affiliation-country":
@@ -651,8 +659,9 @@ class ExtractorScopus:
         
     def get_articles_full(self, author_list):
         result=''
+        count=0
         for author in author_list:
-            count=0
+            print('extrayendo...',count,' de ', len(author_list))
             tries=3
             articles=self.get_scopusid_list(author)
             for article in articles:
@@ -697,7 +706,7 @@ class ExtractorScopus:
                         print('Falla del servicio API: ')
                         print(result)
                 #####################METODOS PARA EXTRACCION DE CAMPOS
-                print('extrayendo...',count)
+                
                 self.articulos['scopus_id'].append(article)
                 self.articulos['eid'].append(self.get_field_search('eid',coredata))
                 self.articulos['titulo'].append(self.get_field_search('dc:title',coredata))
@@ -730,9 +739,10 @@ class ExtractorScopus:
                 self.articulos['palabras_clave_index'].append(self.get_field_search('mainterm',idxterms,key='$'))
                 self.articulos['agencia_fundadora'].append(self.get_field_abstract('xocs:meta',item))
                 self.articulos['pais'].append(self.get_field_abstract('affiliation',complete,key='affiliation-country'))
-                count=count+1
+            count=count+1
                 #############################
         df_articulos = pd.DataFrame(self.articulos) 
+        df_articulos.drop_duplicates(subset ="titulo", keep = False, inplace = True)
         df_articulos.reset_index(drop=True)
         self.__init__(self.API_KEY, self.INST_TOKEN)
         return df_articulos
