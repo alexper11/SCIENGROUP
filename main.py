@@ -38,7 +38,7 @@ if __name__ == '__main__':
     #######################
     
     #create_db()
-    create_scopus_db()
+    #create_scopus_db()
     
     ########################
     #CVLAC
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     ########################
     #SCOPUS
     ########################
-    
+    """
     
     API_KEY=""
     INST_TOKEN=""
@@ -114,12 +114,17 @@ if __name__ == '__main__':
     autores.insert_df(df_autores)
     
     df_productos=ExtractorS.get_articles_full(authors_list)
+    #df_productos=pd.read_csv ('df_productos.csv')
     
     productos = ProductosController()
-    productos.insert_df(df_productos)
-    
+    try:
+        productos.insert_df(df_productos)
+    except:
+        df_productos.to_csv('df_productos.csv',index=False)
+        raise
     del ExtractorS
     
+    """
     
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
@@ -128,8 +133,8 @@ if __name__ == '__main__':
     #metadb= MetaDBController()
     #metadb.insert_datetime()
     
-    metadbsco=MetaDBScoController()
-    metadbsco.insert_datetime()
+    #metadbsco=MetaDBScoController()
+    #metadbsco.insert_datetime()
 
     ###############################
     #SCIENTOPY

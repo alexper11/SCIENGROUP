@@ -363,6 +363,7 @@ class ExtractorScopus:
     def get_scopusid_list(self,author):
         result=''
         scopusid_list=[]
+        eid_list=[]
         cursor=0
         tries=3
         url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&start=0&count=1&field=dc:identifier&view=STANDARD'
@@ -384,7 +385,7 @@ class ExtractorScopus:
                     TotalArt=0
             break      
         while cursor <= TotalArt:
-            url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&start={cursor}&count=200&field=dc:identifier&view=STANDARD'
+            url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&start={cursor}&count=200&field=dc:identifier,eid&view=STANDARD'
             tries=3
             for i in range(tries):
                 try:
@@ -416,10 +417,11 @@ class ExtractorScopus:
                 continue
             
             for article in articles:
-                scopusid_list.append(''.join(filter(str.isdigit,str(article['dc:identifier']))))
-
-        return scopusid_list   
-    
+                #scopusid_list.append(''.join(filter(str.isdigit,str(article['dc:identifier']))))
+                eid_list.append(str(article['eid']))  #USAR EID
+        #return scopusid_list   
+        return eid_list
+        
     def get_articles_lite(self, author_list):
         result=''
         for author in author_list:
@@ -665,7 +667,8 @@ class ExtractorScopus:
             tries=3
             articles=self.get_scopusid_list(author)
             for article in articles:
-                url=f'https://api.elsevier.com/content/abstract/scopus_id/{article}?view=FULL'
+                url=f'https://api.elsevier.com/content/abstract/eid/{article}?view=FULL'  #USAR EID
+                #url=f'https://api.elsevier.com/content/abstract/scopus_id/{article}?view=FULL'   #USAR SCOPUS ID
                 for i in range(tries):
                     try:
                         response = requests.get(url,
@@ -676,6 +679,7 @@ class ExtractorScopus:
                         result = response.json()
                         flag=True
                     except:
+                        print('retrying request...')
                         print(result)
                         if i < tries - 1:
                             continue
@@ -742,7 +746,7 @@ class ExtractorScopus:
             count=count+1
                 #############################
         df_articulos = pd.DataFrame(self.articulos) 
-        df_articulos.drop_duplicates(subset ="titulo", keep = False, inplace = True)
+        df_articulos.drop_duplicates(subset ="titulo", inplace = True)
         df_articulos.reset_index(drop=True)
         self.__init__(self.API_KEY, self.INST_TOKEN)
         return df_articulos
