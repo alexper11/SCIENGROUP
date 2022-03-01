@@ -167,7 +167,14 @@ if __name__ == '__main__':
     ############################
     #DEMO CVLAC
     ############################
+    print('Ejecutando Demo cvlac...')
+    Extractor=ExtractorGruplac()
+    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000867837'
+    dom=get_lxml(url)
+    df_prueba=Extractor.get_articulo(dom,url)
+    print(df_prueba)
     pass
+
 
 
     ###########################
