@@ -162,3 +162,22 @@ if __name__ == '__main__':
     df_prueba=Extractor.get_articulo(dom,url)
     df_prueba.to_csv('prueba.csv',index=False)
 '''
+if __name__ == '__main__':
+    from IPython.display import display
+    ############################
+    #DEMO CVLAC
+    ############################
+    pass
+
+
+    ###########################
+    #DEMO SCOPUS
+    ###########################
+    
+    API_KEY=""
+    INST_TOKEN=""
+    API_KEY, INST_TOKEN = read_key()
+    print('Ejecutando Demo Scopus...')
+    ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
+    df_productos=ExtractorS.get_articles_full([7004506288])
+    display(df_productos['titulo'].to_string())

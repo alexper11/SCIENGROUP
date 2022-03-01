@@ -485,7 +485,7 @@ class ExtractorScopus:
                 self.articulos['autores'].append(self.get_field_search('author',article,key='authname'))
                 self.articulos['autores_id'].append(self.get_field_search('author',article,key='authid'))
                 self.articulos['tipo_acceso'].append(self.get_field_search('openaccess',article))
-                self.articulos['palabras_clave'].append(self.get_field_search('authkeywords',article))
+                #self.articulos['palabras_clave'].append(self.get_field_search('authkeywords',article))
                 self.articulos['agencia_fundadora'].append(self.get_field_search('fund-sponsor',article))
                 
             while cursor <= TotalArt:
