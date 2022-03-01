@@ -18,7 +18,7 @@ class ProductosController:
         except:
             scopusdb.session.rollback()
             print("No se pudo insertar el dataframe en Productos")
-            df.to_csv('Productospus.csv')
+            df.to_csv('Productoscopus.csv')
             raise
         finally:
             scopusdb.session.close()
