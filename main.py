@@ -176,11 +176,8 @@ if __name__ == '__main__':
     Extractor=ExtractorGruplac()
     url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013056'
     dom=get_lxml(url)
-    df_prueba=Extractor.get_articulo(dom,url)
-    print(df_prueba)
-    pass
-
-
+    df=Extractor.get_articulo(dom,url)
+    display(df['nombre'].head(10).to_string())
 
     ###########################
     #DEMO SCOPUS
