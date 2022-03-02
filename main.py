@@ -162,6 +162,11 @@ if __name__ == '__main__':
     df_prueba=Extractor.get_articulo(dom,url)
     df_prueba.to_csv('prueba.csv',index=False)
 '''
+
+
+
+
+
 if __name__ == '__main__':
     from IPython.display import display
     ############################
