@@ -32,15 +32,20 @@
 
 /*This document contains the styles that use the app. You can change these as you wish.*/
 
-.dash-app {
-    background-color: #F8F9F9
+.dash-app {    
+    margin-top: 100px;
+    overflow: hidden;   
+    display:grid; 
+    background-color: #F8F9F9;
 }
 
 .dash-body {
-    /*margin-left: 18rem;
-    margin-right: 2rem;*/
+    margin-left: 18rem;
+    margin-right: 2rem;
     padding: 2rem 1rem;
+    display:grid;
     background-color: #F8F9F9;
+
 }
 
 .dash-title {
@@ -61,7 +66,10 @@
     top: 0;
     left: 0;
     bottom: 0;
+    margin-top: 10rem;
+    margin-left: 1rem;
     width: 16rem;
+    height: 20rem;
     padding: 2rem 1rem;
     background-color: #082066; 
 }

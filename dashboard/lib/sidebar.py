@@ -46,7 +46,7 @@ sidebar = html.Div(
         ####################################################
         # Place the rest of Layout here
         ####################################################
-        html.H5("Select dates",className="title_white"),
+        html.H5("Seleccione fecha",className="title_white"),
         date_picker,
         html.Hr(),
         
