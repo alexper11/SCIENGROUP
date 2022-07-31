@@ -70,7 +70,7 @@ app.layout = dbc.Container(
             dbc.Row(
                 dbc.Col(dash_header,className="header")
             ),
-            dbc.Row(
+            dbc.Row(                
                 dbc.Col(dl.plugins.page_container,className="container")
             )
         ])
