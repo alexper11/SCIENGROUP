@@ -27,7 +27,7 @@ with open(states_path) as f:
 ##############################################################################
 # key Picker
 ##############################################################################
-key_picker = dcc.Dropdown(['cvlac', 'bibliometric', 'Scopus'], 'bibliometric', multi=True)
+key_picker = dcc.Dropdown(id="key_dropdown", options=[{'label':'cvlac', 'value':'cvlac'},{'label':'biblimetric','value':'biliometric'},{'label':'scopus','value':'scopus'} ], value=['biliometric'], multi=True)
 
 
 #############################################################################
