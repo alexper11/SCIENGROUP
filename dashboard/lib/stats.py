@@ -73,3 +73,15 @@ stats = html.Div(
     ],
     className="dash-body",
 )
+
+stats_sc = html.Div(
+    [
+        # Place the different graph components here.
+        dbc.Row(
+            [
+                dbc.Col(dcc.Graph(figure=Line_fig, id="Line_Scopus")),
+            ]
+        ),
+    ],
+    className="dash-body",
+)

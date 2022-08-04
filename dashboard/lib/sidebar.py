@@ -29,7 +29,7 @@ with open(states_path) as f:
 ##############################################################################
 date_picker = dcc.DatePickerRange(
     id="date_picker",
-    min_date_allowed=dt(1963, 1, 1),
+    min_date_allowed=dt(1920, 1, 1),
     max_date_allowed=dt(2022, 12, 31),
     start_date=dt(2000, 1, 1).date(),
     end_date=dt(2021, 12, 31).date(),

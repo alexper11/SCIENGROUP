@@ -9,7 +9,12 @@ import dash_bootstrap_components as dbc
 # Data
 import json
 from datetime import datetime as dt
-
+# Data
+import math
+import numpy as np
+import datetime as dt
+import pandas as pd
+import json
 
 ####################################################################################
 # Add the dash_Img
@@ -19,15 +24,19 @@ from datetime import datetime as dt
 # State Dropdown
 #############################################################################
 DATA_DIR = "data"
-states_path = os.path.join(DATA_DIR, "states.json")
-with open(states_path) as f:
-    states = json.loads(f.read())
 
+articulos_path = os.path.join(DATA_DIR, "articulos.csv")
+
+df_articulos=pd.read_csv(articulos_path, sep='|', quoting=3)
+
+df_articulos["palabras"]=df_articulos["palabras"].str.upper()
+df_articulos["palabras"]=df_articulos["palabras"].replace(np.nan,'')
 
 ##############################################################################
 # key Picker
 ##############################################################################
-key_picker = dcc.Dropdown(id="key_dropdown", options=[{'label':'cvlac', 'value':'cvlac'},{'label':'biblimetric','value':'biliometric'},{'label':'scopus','value':'scopus'} ], value=['biliometric'], multi=True)
+palabras=pd.Series([x.strip() for item in df_articulos.palabras.str.split(',') for x in item if x.strip() != '']).value_counts()
+key_picker = dcc.Dropdown(id="key_dropdown", options=[{"label": palabra, "value": palabra} for palabra in palabras.index], multi=True)
 
 
 #############################################################################
