@@ -2,7 +2,7 @@
 import pathlib
 import os
 from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
-import dash_bootstrap_components as dbc
+
 from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
 import plotly.express as px
@@ -29,8 +29,6 @@ from lib import title, sidebar, us_map, stats, selector
 
 
 import dash
-from dash import html , dcc
-import dash_bootstrap_components as dbc
 from dash_labs.plugins import register_page
 
 
