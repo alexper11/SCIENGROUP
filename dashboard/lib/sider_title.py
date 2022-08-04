@@ -28,6 +28,7 @@ with open(states_path) as f:
 # title Picker
 ##############################################################################
 title_picker = dcc.Input(
+        id='input_title',
         placeholder='Digite titulo...',
         type='text',
         value=''
