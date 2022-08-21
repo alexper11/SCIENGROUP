@@ -1,3 +1,4 @@
+from wsgiref import validate
 import requests
 from bs4 import BeautifulSoup
 from pyquery import PyQuery as pq
@@ -73,7 +74,7 @@ def get_lxml(url):
     for i in range(tries):
         try:
             headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-            r = requests.get(url, headers=headers)
+            r = requests.get(url, headers=headers, verify=False)
             #r.encoding = "UTF-8"
             soup = BeautifulSoup(r.content,'lxml')
         except:

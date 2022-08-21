@@ -7,7 +7,7 @@ from scopus.Scientopy import Scientopy
 import pandas as pd
 import sys
 from scopus.readKey import read_key
-
+'''
 from cvlac.models.DBmodel import create_db
 from cvlac.controllers.ActuacionController import ActuacionController
 from cvlac.controllers.ArticulosController import ArticulosController
@@ -148,24 +148,24 @@ if __name__ == '__main__':
     input_df.to_csv('papersPreprocessed.csv',index=False)
     """
     
-    
-'''
+'''   
+
 ##Pruebas para tablas individuales
 if __name__ == '__main__':
 
     #prueba a tablas individuales.. dentro del main
     Extractor=ExtractorGruplac()
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000061344'
-    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000867837'
+    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000826820'
+    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
     dom=get_lxml(url)
-    df_prueba=Extractor.get_articulo(dom,url)
+    df_prueba=Extractor.get_software(dom,url)
     df_prueba.to_csv('prueba.csv',index=False)
+
+
+
 '''
-
-
-
-
 
 if __name__ == '__main__':
     from IPython.display import display
@@ -190,3 +190,4 @@ if __name__ == '__main__':
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
     df_productos=ExtractorS.get_articles_full([7004506288])
     display(df_productos['titulo'].to_string())
+'''

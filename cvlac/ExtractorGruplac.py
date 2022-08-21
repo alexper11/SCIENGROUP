@@ -100,4 +100,4 @@ class ExtractorGruplac(ExtractorCvlac):
         #procesamiento de datos
 
     def __del__(self):
-        print('ExtractorGruplac Object Destroyed')
+        print('ExtractorGruplacList Object Destroyed')
