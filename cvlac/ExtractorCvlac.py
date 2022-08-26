@@ -11,7 +11,7 @@ class ExtractorCvlac():
         self.dic={'IDCVLAC':[],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
         self.dic_complementaria={'idcvlac':[],'tipo':[],'institucion':[],'area':[],'fecha':[]}
         self.dic_estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
-        self.dic_evaluador={'IDCVLAC':[],'Ámbito: ':[],'Par evaluador de: ':[],'Editorial: ':[],'Revista: ':[],'Institución: ':[]}
+        self.dic_evaluador={'IDCVLAC':[],'Ámbito: ':[],'Par evaluador de: ':[],'Editorial: ':[],'Revista: ':[],'Institución: ':[],'fecha':[]}
         self.dic_idioma={'IDCVLAC':[],'Idioma':[],'Habla':[],'Escribe':[],'Lee':[],'Entiende':[]}
         self.dic_investiga={'IDCVLAC':[],'Nombre':[],'Activa':[]}
         self.dic_jurado={'IDCVLAC':[],'Nombre':[],'Titulo: ':[],'Tipo de trabajo presentado: ':[],'en: ':[],'programa académico':[],'Nombre del orientado: ':[],'Palabras: ':[],'Areas: ':[],'Sectores: ':[]}
@@ -20,8 +20,8 @@ class ExtractorCvlac():
         self.redes={'IDCVLAC':[],'Nombre':[],'Url':[]}
         self.identificadores={'IDCVLAC':[],'Nombre':[],'Url':[]}
         #nuevas tablas
-        self.caplibros={'IDCVLAC':[],'Autores':[],'Capitulo':[],'Libro':[],'En':[],'ISBN:':[],'ed:':[],', v.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
-        self.software={'IDCVLAC':[],'Autor':[],'Nombre':[],'Nombre_comercial':[],'Contrato':[],'En:':[],'Fecha':[],'Plataforma':[], 'Ambiente':[], 'Palabras: ':[],'Areas: ':[], 'Sectores: ':[]}
+        self.caplibros={'IDCVLAC':[],'Autores':[],'Capitulo':[],'Libro':[],'En':[],'ISBN:':[],'ed:':[],', v.':[],'paginas':[],'fecha':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
+        self.software={'IDCVLAC':[],'Autor':[],'Nombre':[],'Nombre comercial:':[],'contrato/registro:':[],'lugar':[],'fecha':[],'plataforma:':[], 'ambiente:':[], 'Palabras: ':[],'Areas: ':[], 'Sectores: ':[]}
         self.prototipo={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         
     def get_academica(self, soup, url):
@@ -94,6 +94,10 @@ class ExtractorCvlac():
                         print('Articulos > 4: ',url)
                         informacion=['Autores','Nombre','En']
                         list_string2=(re.split('<br/>',bloque_string[:fblock]))
+                        """
+                        Pendiente:manejo de excepcion, separador (, ")
+                        Poner un contador
+                        """
                         list_string=(re.split(', "|" . En:',list_string2[0]))
                         art_individual['Revista']=("".join(list_string2[1])).strip()
                         try:
@@ -186,15 +190,12 @@ class ExtractorCvlac():
                     info=td_estancia.parent
                     td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
                     td_text_clear=td_text_clear.replace('&amp;','&')                      
-                    list_datos=(re.split('<br/>|</b>',td_text_clear))
-                    list_datos.pop(-1)
-                    #borrar
-                    if len(list_datos)>5:
-                        print('Estancias pos doctorales > 4: ',url)
-                        
-                    x=0               
-                    for datos in list_datos:
-                        dic_aux['idcvlac'] = url[(url.find('='))+1:]
+                    list_datos=(re.split('<br/>|</b>',td_text_clear))                    
+                    #list_datos.pop(-1) lo deje por algo, no recuerdo. daba error en descripcion (eliminar)
+                                        
+                    x=0
+                    dic_aux['idcvlac'] = url[(url.find('='))+1:]              
+                    for datos in list_datos:                        
                         dic_aux[str(list[x])]=("".join(datos)).strip().replace('Desde: ','').replace('Hasta: ','')                       
                         x=x+1
                     self.dic_estancias = almacena(self.dic_estancias,dic_aux)
@@ -217,14 +218,27 @@ class ExtractorCvlac():
                         list_datos=(re.split('<i>|</i>',quote_text_clear))
                         dic2['IDCVLAC'] = url[(url.find('='))+1:]                    
                         for dato in list_datos:                            
-                            for key in self.dic_evaluador:                                                              
+                            for key in self.dic_evaluador:  
+                                #dic2[key][0]                                                            
                                 if(key == dato):
-                                    dic2[dato]=(list_datos[list_datos.index(dato)+1]).strip()                          
+                                    if(dato=='Editorial: 'or dato=='Revista: ' or dato =='Institución: '):
+                                        dato2=((list_datos[list_datos.index(dato)+1]))
+                                        var=re.findall(r"(?s:.*), (\d{4}, \D+)",dato2)
+                                        if isinstance(var,list) and len(var)!=0:
+                                            index=dato2.rfind((var[0]))
+                                            dic2[dato]=dato2[:index]
+                                            dic2['fecha']=dato2[index:]
+                                        else:                                           
+                                            dic2[dato]=dato2
+                                            dic2['fecha']=""
+                                    else:
+                                        dic2[dato]=(list_datos[list_datos.index(dato)+1]).strip()                          
                         self.dic_evaluador = almacena(self.dic_evaluador,dic2)
                         dic2={}
                     #Encuentra tabla, retorna dataframe por lo que deja de buscar
                     df_evaluador= pd.DataFrame(self.dic_evaluador)
-                    df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion']
+                    #eliminar 
+                    df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion','fecha']
                     df_evaluador = df_evaluador.reset_index(drop=True)
                     return df_evaluador
         #No encuentra tabla, retorna dataframe vacío (vale la pena retornar mejor un null y condicionar en el llamado?)
@@ -328,13 +342,18 @@ class ExtractorCvlac():
                     list_datos.pop(0)
                     bloque_string = " ".join((block_art.text).split())
                     bloque_string=bloque_string.replace('&amp;','&')   
-                    fblock=bloque_string.find("ISBN:")
+                    fblock=bloque_string.rfind("ISBN:")
                     list_string=(re.split('ed:|, "|" En:',bloque_string[:fblock]))        
                     x=0
                     informacion=['Autores','Nombre','En','Editorial']               
                     for dato in list_string:            
                         libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                        libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
+                        if(str(informacion[x])=='En'):
+                            var=re.split('',dato)
+                            libros_aux['En']=var[0]
+                            libros_aux['fecha']=var[1]
+                        else:
+                            libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
                         x=x+1
                     for dato in list_datos:                            
                         for key in self.libros:                                                              
@@ -432,64 +451,74 @@ class ExtractorCvlac():
                     x=0
                     informacion=['Autores','Capitulo','Libro','En']               
                     for dato in list_string:            
-                        cap_libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                        cap_libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
+                        cap_libros_aux['IDCVLAC'] = url[(url.find('='))+1:]                                                                                        
+                        cap_libros_aux[str(informacion[x])]=("".join(dato)).strip()
                         x=x+1
                     for dato in list_datos:                            
                         for key in self.caplibros:                                                              
                             if(key == dato):
-                                cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
+                                if(dato==", v."):
+                                    list_fasc=(re.split(',',list_datos[list_datos.index(dato)+1]))  
+                                    cap_libros_aux[', v.']=list_fasc[0]                        
+                                    cap_libros_aux['paginas']=list_fasc[1].replace("p.","")
+                                    cap_libros_aux['fecha']=list_fasc[2]
+                                    #.replace(',','')
+                                else:
+                                    cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
                     self.libros= almacena(self.caplibros,cap_libros_aux)   
                     cap_libros_aux={}   
         except AttributeError:
             pass     
         df_libros = pd.DataFrame(self.caplibros)   
-        df_libros.columns = ['idcvlac','autores','capitulo','libro','lugar','isbn','editorial','volumen','palabras', 'areas', 'sectores']
+        df_libros.columns = ['idcvlac','autores','capitulo','libro','lugar','isbn','editorial','volumen','paginas','fecha','palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True)   
         return df_libros
     
     def get_software(self, soup, url):
-        libros_aux={}
+        soft_aux={}
         try:
             tablelib=(soup.find('a', attrs={'name':'software'}).parent)
             blocks_arts = tablelib.find_all('blockquote')
             if(str((tablelib).find('h3').contents[0])==('Softwares')):
                 for block_art in blocks_arts:
-                    print(block_art)
-                    j=str(block_art)
-                    f = open ('holamundo.txt','w')
-                    f.write(j)
-                    f.close()
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&') 
                     bloque_string = " ".join((block_art.text).split())
                     bloque_string=bloque_string.replace('&amp;','&')   
                     fblock=bloque_string.find(",")
-                    list_datos=(re.split('Nombre comercial:|contrato/registro:|. En:|</b>',bloque_string[fblock:]))
-                    libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                    libros_aux['Autor'] = bloque_string[:fblock]
-                    list_string=(re.split('ed:|, "|" En:',bloque_string[fblock:]))        
+                    list_string=(re.split('Nombre comercial:|contrato/registro:|. En:|plataforma:|ambiente:',bloque_string[fblock:]))
+                    soft_aux['IDCVLAC'] = url[(url.find('='))+1:]
+                    soft_aux['Autor'] = bloque_string[:fblock]  
+                    soft_aux['Nombre'] = list_string[0]
+                    list_string.pop(0)
+                    print(list_string)                    
                     x=0
-                    informacion=['Autores','Nombre','En','Editorial']               
-                    for dato in list_string:            
-                        libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                        libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
+                    informacion=['Nombre comercial:','contrato/registro:','lugar','plataforma:','ambiente:']                    
+                    for dato in list_string:
+                        if(dato=='. En:'):                                            
+                            dato=(re.split(',\d*\D+',list_datos[list_datos.index(dato)+1]))  
+                            soft_aux['lugar']=list_datos[0]
+                            soft_aux['fecha']=list_datos[1]
+                        else:
+                            soft_aux[str(informacion[x])]=("".join(dato)).strip()
                         x=x+1
+                    list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
+                    list_datos.pop(0)
                     for dato in list_datos:                            
                         for key in self.software:                                                              
                             if(key == dato):
-                                libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
-                    self.software= almacena(self.software,libros_aux)   
-                    libros_aux={}   
+                                soft_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
+                    self.software= almacena(self.software,soft_aux)   
+                    soft_aux={}   
         except AttributeError:
             pass     
         df_libros = pd.DataFrame(self.software)   
-        df_libros.columns = ['idcvlac','autor','nombre','nombre_comercial','contrato','lugar','fecha','plataforma','ambiente', 'palabras', 'areas', 'sectores']
+        df_libros.columns = ['idcvlac','autor','nombre_software','nombre_comercial','contrato','lugar','fecha','plataforma','ambiente', 'palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True)   
         return df_libros
     
     def get_prototipo(self, soup, url):
-        libros_aux={}
+        proto_aux={}
         try:
             tablelib=(soup.find('a', attrs={'name':'libros'}).parent)
             blocks_arts = tablelib.find_all('blockquote')
@@ -506,15 +535,15 @@ class ExtractorCvlac():
                     x=0
                     informacion=['Autores','Nombre','En','Editorial']               
                     for dato in list_string:            
-                        libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                        libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
+                        proto_aux['IDCVLAC'] = url[(url.find('='))+1:]
+                        proto_aux[str(informacion[x])]=("".join(dato)).strip()                                       
                         x=x+1
                     for dato in list_datos:                            
                         for key in self.prototipo:                                                              
                             if(key == dato):
-                                libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
-                    self.prototipo= almacena(self.prototipo,libros_aux)   
-                    libros_aux={}   
+                                proto_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
+                    self.prototipo= almacena(self.prototipo,proto_aux)   
+                    proto_aux={}   
         except AttributeError:
             pass     
         df_libros = pd.DataFrame(self.prototipo)   
