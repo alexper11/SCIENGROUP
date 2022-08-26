@@ -22,6 +22,8 @@ class ExtractorGruplac(ExtractorCvlac):
         self.grup_libros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','fecha','editorial','isbn','volumen','paginas','palabras','areas','sectores'])
         self.grup_reconocimiento=pd.DataFrame(columns=['idcvlac','nombre','fecha'])
         self.grup_redes=pd.DataFrame(columns=['idcvlac','nombre','url'])
+        self.grup_caplibros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','fecha','editorial','isbn','volumen','paginas','palabras','areas','sectores'])
+
 
     def get_investigadoresList(self,url):
         dire=[]
