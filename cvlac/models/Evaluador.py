@@ -11,7 +11,7 @@ class Evaluador(Base):
     editorial = Column(String(500), nullable=True)
     revista = Column(String(500), nullable=True)
     institucion = Column(String(500), nullable=True)
-    fecha = Column(String(50), nullable=True)
+    fecha = Column(String(60), nullable=True)
     
     def __init__(self, **kwargs):
         
