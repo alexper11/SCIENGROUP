@@ -19,7 +19,7 @@ class ExtractorGruplac(ExtractorCvlac):
         self.grup_idioma=pd.DataFrame(columns=['idcvlac','idioma','habla','escribe','lee','entiende'])
         self.grup_investiga=pd.DataFrame(columns=['idcvlac','nombre','activa'])
         self.grup_jurado=pd.DataFrame(columns=['idcvlac','nombre','titulo','tipo','lugar','programa','orientado','palabras','areas','sectores'])
-        self.grup_libros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas','palabras','areas','sectores'])
+        self.grup_libros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','fecha','editorial','isbn','volumen','paginas','palabras','areas','sectores'])
         self.grup_reconocimiento=pd.DataFrame(columns=['idcvlac','nombre','fecha'])
         self.grup_redes=pd.DataFrame(columns=['idcvlac','nombre','url'])
 
