@@ -9,6 +9,7 @@ class Libros(Base):
     autores = Column(String(4000), nullable=False)
     nombre = Column(String(1000), nullable=False)
     lugar = Column(String(200), nullable=True)
+    fecha = Column(String(20), nullable=True)
     editorial = Column(String(500), nullable=False)
     isbn = Column(String(500), nullable=True)
     volumen = Column(String(50), nullable=True)
