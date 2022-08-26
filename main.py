@@ -155,12 +155,13 @@ if __name__ == '__main__':
 
     #prueba a tablas individuales.. dentro del main
     Extractor=ExtractorGruplac()
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000061344'
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000826820'
+    
+    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000626252'
+    #perfil de cristian figueroa:
     url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
+    
     dom=get_lxml(url)
-    df_prueba=Extractor.get_software(dom,url)
+    df_prueba=Extractor.get_libro(dom,url)
     df_prueba.to_csv('prueba.csv',index=False)
 
 
