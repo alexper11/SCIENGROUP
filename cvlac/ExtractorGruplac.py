@@ -8,11 +8,11 @@ class ExtractorGruplac(ExtractorCvlac):
     
     def __init__(self):
         super().__init__()
-        self.grup_academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','area','fecha','nombre'])
-        self.grup_actuacion=pd.DataFrame(columns=['idcvlac','nombre'])
+        self.grup_academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha','proyecto'])
+        self.grup_actuacion=pd.DataFrame(columns=['idcvlac','areas'])
         self.grup_articulos=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo','doi','palabras','sectores'])
         self.grup_basico=pd.DataFrame(columns=['idcvlac','categoria','nombre','nombre_citaciones','nacionalidad','sexo'])
-        self.grup_complementaria=pd.DataFrame(columns=['idcvlac','tipo','institucion','area','fecha'])
+        self.grup_complementaria=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha'])
         self.grup_estancias=pd.DataFrame(columns=['idcvlac','nombre','entidad','area','fecha_inicio','fecha_fin'])
         self.grup_evaluador=pd.DataFrame(columns=['idcvlac','ambito','par_evaluador','editorial','revista','fecha','institucion'])
         self.grup_identificadores=pd.DataFrame(columns=['idcvlac','nombre','url'])
