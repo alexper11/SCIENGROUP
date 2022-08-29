@@ -7,7 +7,7 @@ class ExtractorCvlac():
     def __init__(self):
         self.academica={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[],'proyecto':[]}
         self.actuacion={'idcvlac':[],'areas':[]}
-        self.articulos={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Revista':[],'ISSN:':[],'ed:':[],'v.':[],'fasc.':[], 'p.':[],'fecha.':[],' DOI: ':[], 'Palabras: ':[], 'Sectores: ':[]}
+        self.articulos={'idcvlac':['IDCVLAC'],'autores':['Autores'],'nombre':['Nombre'],'lugar':['En'],'revista':['Revista'],'issn':['ISSN:'],'editorial':['ed:'],'volumen':['v.'],'fasciculo':['fasc.'], 'paginas':['p.'],'fecha':['fecha.'],'doi':[' DOI: '], 'palabras':['Palabras: '], 'sectores':['Sectores: ']}
         self.basico={'IDCVLAC':[],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
         self.complementaria={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[]}
         self.estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
@@ -349,14 +349,9 @@ class ExtractorCvlac():
                     for dato in list_string:            
                         libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
                         if(str(informacion[x])=='En'):
-                            var=(re.findall(r"(?s:.*)(\d{4})",dato))
-                            if isinstance(var,list) and len(var)!=0:                                 
-                                index=dato.rfind((var[0]))
-                                libros_aux['En']=dato[:index].strip()
-                                libros_aux['fecha']=dato[index:].replace(".","")                           
-                            else:
-                                libros_aux['En']=dato.strip()
-                                libros_aux['fecha']=""
+                            var=re.split('',dato)
+                            libros_aux['En']=var[0]
+                            libros_aux['fecha']=var[1]
                         else:
                             libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
                         x=x+1
@@ -369,7 +364,7 @@ class ExtractorCvlac():
         except AttributeError:
             pass     
         df_libros = pd.DataFrame(self.libros)   
-        df_libros.columns = ['idcvlac','autores','nombre','lugar','fecha','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
+        df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True)   
         return df_libros
     
