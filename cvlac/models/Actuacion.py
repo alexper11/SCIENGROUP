@@ -6,7 +6,7 @@ class Actuacion(Base):
     __tablename__ = 'actuacion'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
-    nombre = Column(String(1000), nullable=True)
+    areas = Column(String(1000), nullable=True)
     
     def __init__(self, **kwargs):
        

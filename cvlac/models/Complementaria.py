@@ -8,7 +8,7 @@ class Complementaria(Base):
     idcvlac = Column(String(50), nullable=False)
     tipo = Column(String(500), nullable=False)
     institucion = Column(String(800), nullable=True)
-    area = Column(String(1500), nullable=True)
+    titulo = Column(String(1500), nullable=True)
     fecha = Column(String(500), nullable=True)
     
     def __init__(self, **kwargs):
