@@ -15,7 +15,7 @@ class ExtractorCvlac():
         self.dic_idioma={'IDCVLAC':[],'Idioma':[],'Habla':[],'Escribe':[],'Lee':[],'Entiende':[]}
         self.dic_investiga={'IDCVLAC':[],'Nombre':[],'Activa':[]}
         self.dic_jurado={'IDCVLAC':[],'Nombre':[],'Titulo: ':[],'Tipo de trabajo presentado: ':[],'en: ':[],'programa académico':[],'Nombre del orientado: ':[],'Palabras: ':[],'Areas: ':[],'Sectores: ':[]}
-        self.libros={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
+        self.libros={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'fecha':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         self.dic_reconocimiento={'idcvlac':[],'nombre':[],'fecha':[]}
         self.redes={'IDCVLAC':[],'Nombre':[],'Url':[]}
         self.identificadores={'IDCVLAC':[],'Nombre':[],'Url':[]}
@@ -349,9 +349,14 @@ class ExtractorCvlac():
                     for dato in list_string:            
                         libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
                         if(str(informacion[x])=='En'):
-                            var=re.split('',dato)
-                            libros_aux['En']=var[0]
-                            libros_aux['fecha']=var[1]
+                            var=(re.findall(r"(?s:.*)(\d{4})",dato))
+                            if isinstance(var,list) and len(var)!=0:                                 
+                                index=dato.rfind((var[0]))
+                                libros_aux['En']=dato[:index].strip()
+                                libros_aux['fecha']=dato[index:].replace(".","")                           
+                            else:
+                                libros_aux['En']=dato.strip()
+                                libros_aux['fecha']=""
                         else:
                             libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
                         x=x+1
@@ -364,7 +369,7 @@ class ExtractorCvlac():
         except AttributeError:
             pass     
         df_libros = pd.DataFrame(self.libros)   
-        df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
+        df_libros.columns = ['idcvlac','autores','nombre','lugar','fecha','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True)   
         return df_libros
     
