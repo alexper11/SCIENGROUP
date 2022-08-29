@@ -64,7 +64,7 @@ class ExtractorGruplac(ExtractorCvlac):
             df_reconocimiento = self.get_reconocimiento(lxml_url, url)
             df_evaluador = self.get_evaluador(lxml_url, url) 
             df_redes = self.get_redes(lxml_url, url)
-            df_identifica = self.get_redes(lxml_url, url)
+            df_identifica = self.get_identificadores(lxml_url, url) #REVISAR
             df_libros = self.get_libro(lxml_url, url)
             df_jurado = self.get_jurado(lxml_url, url)
             df_complementaria = self.get_complementaria(lxml_url, url)
