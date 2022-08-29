@@ -7,7 +7,7 @@ class ExtractorCvlac():
     def __init__(self):
         self.academica={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[],'proyecto':[]}
         self.actuacion={'idcvlac':[],'areas':[]}
-        self.articulos={'idcvlac':['IDCVLAC'],'autores':['Autores'],'nombre':['Nombre'],'lugar':['En'],'revista':['Revista'],'issn':['ISSN:'],'editorial':['ed:'],'volumen':['v.'],'fasciculo':['fasc.'], 'paginas':['p.'],'fecha':['fecha.'],'doi':[' DOI: '], 'palabras':['Palabras: '], 'sectores':['Sectores: ']}
+        self.articulos={'idcvlac':[],'autores':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'editorial':[],'volumen':[],'fasciculo':[], 'paginas':[],'fecha':[],'doi':[], 'palabras':[], 'sectores':[]}
         self.basico={'idcvlac':['IDCVLAC'],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
         self.complementaria={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[]}
         self.estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
@@ -68,7 +68,7 @@ class ExtractorCvlac():
         return df_actuacion
     
     def get_articulo(self, soup, url):
-        art_individual={}
+        art_individual={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Revista':[],'ISSN:':[],'ed:':[],'v.':[],'fasc.':[], 'p.':[],'fecha.':[],' DOI: ':[], 'Palabras: ':[], 'Sectores: ':[]}
         try:
             tableart=(soup.find('a', attrs={'name':'articulos'}).parent)
             blocks_arts = tableart.find_all('blockquote')
