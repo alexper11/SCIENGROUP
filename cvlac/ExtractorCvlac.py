@@ -20,7 +20,7 @@ class ExtractorCvlac():
         self.redes={'IDCVLAC':[],'Nombre':[],'Url':[]}
         self.identificadores={'IDCVLAC':[],'Nombre':[],'Url':[]}
         #nuevas tablas 2git 2 no sape
-        self.caplibros={'IDCVLAC':[],'Autores':[],'Capitulo':[],'Libro':[],'En':[],'ISBN:':[],'ed:':[],', v.':[],'paginas':[],'fecha':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
+        self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.software={'IDCVLAC':[],'Autor':[],'Nombre':[],'Nombre comercial:':[],'contrato/registro:':[],'lugar':[],'fecha':[],'plataforma:':[], 'ambiente:':[], 'Palabras: ':[],'Areas: ':[], 'Sectores: ':[]}
         self.prototipo={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         
@@ -433,34 +433,33 @@ class ExtractorCvlac():
                 #Nuevas tablas
     #########################################################
     def get_caplibro(self, soup, url):
-        cap_libros_aux={}
+        cap_libros_aux={'IDCVLAC':[],'Autores':[],'Capitulo':[],'Libro':[],'En':[],'ISBN:':[],'ed:':[],', v.':[],'paginas':[],'fecha':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         try:
             table_cap_libros=(soup.find('a', attrs={'name':'capitulos'}).parent)            
             if(str((table_cap_libros).find('h3').contents[0])==('Capitulos de libro')):
                 blocks_cap = table_cap_libros.find_all('blockquote')
                 for block_cap in blocks_cap:
                     block_cap=re.sub('<blockquote>|</blockquote>','',(" ".join((str(block_cap)).split()))).replace('&amp;','&')
-                    print(block_cap)
-                    var=(re.findall(r', "',dato))
-                    index=dato.rfind((var[0]))
-                    quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_cap)).split())))
-                    quote_text_clear=quote_text_clear.replace('&amp;','&')
-                    #print((quote_text_clear))             
-                    list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
-                    list_datos.pop(0)
-                    bloque_string = " ".join((block_cap.text).split())
-                    bloque_string=bloque_string.replace('&amp;','&').replace('Tipo: Capítulo de libro ','')  
-                    fblock=bloque_string.rfind("ISBN:")
-                    list_string=(re.split(', "|. En:|" ',bloque_string[:fblock])) 
-                    #print(list_datos)       
+                    #print(block_cap)
+                    var=(re.findall(r', "',block_cap))
+                    index=block_cap.rfind(var[0])
+                    #print(block_cap[:index])
+                    list_autores=re.split('<br/>',block_cap[:index])
+                    
+                    print(list_autores)
+                    list_string=(re.split(', "|. En:|" ',block_cap[:index])) 
+                    #print(list_datos)            
+                    list_datos=(re.split('<i>|</i>|<b>|</b>',block_cap[index:]))                    
+                    fblock=block_cap[index:].rfind("ISBN:")                          
                     x=0
-                    informacion=['Autores','Capitulo','Libro','En']               
-                    for dato in list_string:            
-                        cap_libros_aux['IDCVLAC'] = url[(url.find('='))+1:]                                                                                        
+                    informacion=['Autores','Capitulo','Libro','En']
+                    cap_libros_aux['IDCVLAC'] = url[(url.find('='))+1:]             
+                    for dato in list_string:           
                         cap_libros_aux[str(informacion[x])]=("".join(dato)).strip()
                         x=x+1
                     for dato in list_datos:                            
-                        for key in self.caplibros:                                                              
+                        for key in cap_libros_aux: 
+                            #print(key)                                                             
                             if(key == dato):
                                 if(dato==", v."):
                                     list_fasc=(re.split(',',list_datos[list_datos.index(dato)+1]))  
