@@ -8,7 +8,7 @@ class ExtractorCvlac():
         self.academica={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[],'proyecto':[]}
         self.actuacion={'idcvlac':[],'areas':[]}
         self.articulos={'idcvlac':['IDCVLAC'],'autores':['Autores'],'nombre':['Nombre'],'lugar':['En'],'revista':['Revista'],'issn':['ISSN:'],'editorial':['ed:'],'volumen':['v.'],'fasciculo':['fasc.'], 'paginas':['p.'],'fecha':['fecha.'],'doi':[' DOI: '], 'palabras':['Palabras: '], 'sectores':['Sectores: ']}
-        self.basico={'IDCVLAC':[],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
+        self.basico={'idcvlac':['IDCVLAC'],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
         self.complementaria={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[]}
         self.estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
         self.evaluador={'IDCVLAC':[],'Ámbito: ':[],'Par evaluador de: ':[],'Editorial: ':[],'Revista: ':[],'Institución: ':[],'fecha':[]}
