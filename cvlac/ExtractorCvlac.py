@@ -8,14 +8,14 @@ class ExtractorCvlac():
         self.academica={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[],'proyecto':[]}
         self.actuacion={'idcvlac':[],'areas':[]}
         self.articulos={'idcvlac':[],'autores':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'editorial':[],'volumen':[],'fasciculo':[], 'paginas':[],'fecha':[],'doi':[], 'palabras':[], 'sectores':[]}
-        self.basico={'IDCVLAC':[],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
+        self.basico={'idcvlac':[],'categoria':[],'nombre':[],'citaciones':[],'nacionalidad':[],'sexo':[]}
         self.complementaria={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[]}
         self.estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
-        self.evaluador={'IDCVLAC':[],'Ámbito: ':[],'Par evaluador de: ':[],'Editorial: ':[],'Revista: ':[],'Institución: ':[],'fecha':[]}
-        self.idioma={'IDCVLAC':[],'Idioma':[],'Habla':[],'Escribe':[],'Lee':[],'Entiende':[]}
-        self.investigacion={'IDCVLAC':[],'Nombre':[],'Activa':[]}
-        self.jurados={'IDCVLAC':[],'Nombre':[],'Titulo: ':[],'Tipo de trabajo presentado: ':[],'en: ':[],'programa académico':[],'Nombre del orientado: ':[],'Palabras: ':[],'Areas: ':[],'Sectores: ':[]}
-        self.libros={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'fecha':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
+        self.evaluador={'idcvlac':[],'ambito':[],'par_evaluador':[],'editorial':[],'revista':[],'institucion':[],'fecha':[]}
+        self.idioma={'idcvlac':[],'idioma':[],'habla':[],'escribe':[],'lee':[],'entiende':[]}
+        self.investigacion={'idcvlac':[],'nombre':[],'activa':[]}
+        self.jurados={'idcvlac':[],'nombre':[],'titulo':[],'tipo':[],'lugar':[],'programa':[],'orientado':[],'palabras':[],'areas':[],'sectores':[]}
+        self.libros={'idcvlac':[],'autores':[],'nombre':[],'lugar':[],'fecha':[],'editorial':[],'isbn':[],'volumen':[],'paginas':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.reconocimiento={'idcvlac':[],'nombre':[],'fecha':[]}
         self.redes={'IDCVLAC':[],'Nombre':[],'Url':[]}
         self.identificadores={'IDCVLAC':[],'Nombre':[],'Url':[]}
@@ -134,7 +134,7 @@ class ExtractorCvlac():
         return df_articulos
     
     def get_basico(self, soup, url):
-        dic2={}         
+        dic2={'IDCVLAC':'','Categoría':'','Nombre':'','Nombre en citaciones':'','Nacionalidad':'','Sexo':''}         
         table = soup.find('a', attrs={'name':'datos_generales'}).parent
         rows = table.find_all('tr')
         for row in  rows:            
@@ -146,7 +146,8 @@ class ExtractorCvlac():
                     cells[1]=" ".join(cells[1].text.split())
                     dic2[cells[0].string]= cells[1]
                 except AttributeError:
-                    print('BASICO ? : ', url)             
+                    print('BASICO ? : ', url)           
+        dic2=dict(zip(self.basico.keys(),dic2.values()))  
         self.basico = almacena(self.basico,dic2) 
         dic2={}
         df = pd.DataFrame(self.basico)
@@ -211,18 +212,18 @@ class ExtractorCvlac():
         return df_estancias 
     
     def get_evaluador(self, soup, url):
-        dic2={}        
         child=(soup.find('table')).findChildren("tr" , recursive=False)        
         for trs in child:
             h3s=(trs.find('h3'))
             if h3s!=None:                
                 if(str(h3s.contents[0])==("Par evaluador")):
                     for div_i in ((h3s.parent.parent.parent).find_all('blockquote')):
+                        dic2={'IDCVLAC':'','Ámbito: ':'','Par evaluador de: ':'','Editorial: ':'','Revista: ':'','Institución: ':'','fecha':''}       
                         quote_text_clear=re.sub('<blockquote>|</blockquote>','',(" ".join((str(div_i)).split())))                 
                         list_datos=(re.split('<i>|</i>',quote_text_clear))
                         dic2['IDCVLAC'] = url[(url.find('='))+1:]                    
                         for dato in list_datos:                            
-                            for key in self.evaluador:  
+                            for key in dic2:  
                                 #dic2[key][0]                                                            
                                 if(key == dato):
                                     if(dato=='Editorial: 'or dato=='Revista: ' or dato =='Institución: '):
@@ -237,25 +238,27 @@ class ExtractorCvlac():
                                             dic2['fecha']=""
                                     else:
                                         dic2[dato]=(list_datos[list_datos.index(dato)+1]).strip()                          
+                        dic2=dict(zip(self.evaluador.keys(),dic2.values()))
                         self.evaluador = almacena(self.evaluador,dic2)
                         dic2={}
                     #Encuentra tabla, retorna dataframe por lo que deja de buscar
                     df_evaluador= pd.DataFrame(self.evaluador)
                     #eliminar 
-                    df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion','fecha']
+                    #df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion','fecha']
                     df_evaluador = df_evaluador.reset_index(drop=True)
                     return df_evaluador
         #No encuentra tabla, retorna dataframe vacío (vale la pena retornar mejor un null y condicionar en el llamado?)
         df_evaluador= pd.DataFrame(self.evaluador)
-        df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion']
+        #df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion']
         df_evaluador = df_evaluador.reset_index(drop=True)
         return df_evaluador 
     
-    def get_idioma(self, soup, url):
-        dic2={}       
+    def get_idioma(self, soup, url):       
+        dic2={}
         child=(soup.find('table') ).findChildren("tr" , recursive=False)
-        list=['Idioma','Habla','Escribe','Lee','Entiende']
+        list=['idioma','habla','escribe','lee','entiende']
         for trs in child:
+            
             h3s=(trs.find('h3'))
             if h3s != None:                
                 if(str(h3s.contents[0])==("Idiomas")):
@@ -264,26 +267,27 @@ class ExtractorCvlac():
                         div_info=(div_i.parent.parent).find_all('td')                        
                         x=0
                         for inf in div_info:                        
-                            dic2['IDCVLAC'] = url[(url.find('='))+1:]
+                            dic2['idcvlac'] = url[(url.find('='))+1:]
                             dic2[str(list[x])]=("".join(inf.text)).strip()                          
-                            x=x+1                                          
+                            x=x+1                                     
+                        #dic2=dict(zip(self.idioma.keys(),dic2.values()))
                         self.idioma = almacena(self.idioma,dic2)
                     dic2={}
                     #Encuentra tabla, retorna dataframe por lo que deja de buscar
                     df_idioma = pd.DataFrame(self.idioma)  
-                    df_idioma.columns = ['idcvlac','idioma','habla','escribe','lee','entiende']
+                    #df_idioma.columns = ['idcvlac','idioma','habla','escribe','lee','entiende']
                     df_idioma = df_idioma.reset_index(drop=True)      
                     return df_idioma
         #No encuentra tabla, retorna dataframe vacío (vale la pena retornar mejor un null y condicionar en el llamado?)
         df_idioma = pd.DataFrame(self.idioma)  
-        df_idioma.columns = ['idcvlac','idioma','habla','escribe','lee','entiende']
+        #df_idioma.columns = ['idcvlac','idioma','habla','escribe','lee','entiende']
         df_idioma = df_idioma.reset_index(drop=True)      
         return df_idioma
     
     def get_investiga(self, soup, url):
         dic2={}        
         child=(soup.find('table')).findChildren("tr" , recursive=False)
-        list=['Nombre','Activa']
+        list=['nombre','activa']
         for trs in child:
             h3s=(trs.find('h3'))
             if h3s != None:                
@@ -294,7 +298,7 @@ class ExtractorCvlac():
                             j=((div_i.text ).split(titulo.text))                            
                             x=0 
                             for i in j[0:2]:
-                                dic2['IDCVLAC'] = url[(url.find('='))+1:]
+                                dic2['idcvlac'] = url[(url.find('='))+1:]
                                 dic2[str(list[x])]=("".join(i)).strip()                            
                                 x=x+1                                          
                             self.investigacion = almacena(self.investigacion,dic2)
@@ -309,37 +313,39 @@ class ExtractorCvlac():
         return df_investiga
     
     def get_jurado(self, soup, url):
-        dic_aux={}   
         try:
             tablejur=(soup.find('a', attrs={'name':'jurado'}).parent)     
             blocks_jurados = tablejur.find_all('blockquote')
             if(str((tablejur).find('h3').contents[0])==('Jurado en comités de evaluación')):
                 for block_jur in blocks_jurados:
+                    dic_aux={'IDCVLAC':'','Nombre':'','Titulo: ':'','Tipo de trabajo presentado: ':'','en: ':'','programa académico':'','Nombre del orientado: ':'','Palabras: ':'','Areas: ':'','Sectores: ':''}   
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_jur)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')               
                     list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
                     dic_aux['IDCVLAC'] = url[(url.find('='))+1:]
                     dic_aux['Nombre'] = (list_datos[0]).strip()                   
                     for dato in list_datos:                            
-                        for key in self.jurados:                                                              
+                        for key in dic_aux:                                                              
                             if(key == dato):
-                                dic_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                          
+                                dic_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip() 
+                                             
+                    dic_aux=dict(zip(self.jurados.keys(),dic_aux.values())) 
                     self.jurados = almacena(self.jurados,dic_aux)
-                    dic_aux={}
+                    #dic_aux={}
         except AttributeError:
             pass
         df_jurado= pd.DataFrame(self.jurados)
-        df_jurado.columns = ['idcvlac','nombre','titulo','tipo','lugar','programa','orientado','palabras','areas','sectores']
+        #df_jurado.columns = ['idcvlac','nombre','titulo','tipo','lugar','programa','orientado','palabras','areas','sectores']
         df_jurado = df_jurado.reset_index(drop=True)    
         return df_jurado
     
     def get_libro(self, soup, url):
-        libros_aux={}
         try:
             tablelib=(soup.find('a', attrs={'name':'libros'}).parent)
             blocks_arts = tablelib.find_all('blockquote')
             if(str((tablelib).find('h3').contents[0])==('Libros')):
                 for block_art in blocks_arts:
+                    libros_aux={'IDCVLAC':'','Autores':'','Nombre':'','En':'','fecha':'','Editorial':'','ISBN:':'','v. ':'','pags.':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')               
                     list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
@@ -353,22 +359,28 @@ class ExtractorCvlac():
                     for dato in list_string:            
                         libros_aux['IDCVLAC'] = url[(url.find('='))+1:]
                         if(str(informacion[x])=='En'):
-                            var=re.split('',dato)
-                            libros_aux['En']=var[0]
-                            libros_aux['fecha']=var[1]
+                            var=(re.findall(r"(?s:.*)(\d{4})",dato))
+                            if isinstance(var,list) and len(var)!=0:
+                                index=dato.rfind((var[0]))
+                                libros_aux['En']=dato[:index].strip()
+                                libros_aux['fecha']=dato[index:]
+                            else:
+                                libros_aux['En']=dato.strip()
+                                libros_aux['fecha']=""
                         else:
                             libros_aux[str(informacion[x])]=("".join(dato)).strip()                                       
                         x=x+1
                     for dato in list_datos:                            
-                        for key in self.libros:                                                              
+                        for key in libros_aux:                                                              
                             if(key == dato):
-                                libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
+                                libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()     
+                    libros_aux=dict(zip(self.libros.keys(),libros_aux.values()))                       
                     self.libros= almacena(self.libros,libros_aux)   
-                    libros_aux={}   
+                       
         except AttributeError:
             pass     
         df_libros = pd.DataFrame(self.libros)   
-        df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
+        #df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True)   
         return df_libros
     
