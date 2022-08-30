@@ -20,7 +20,7 @@ class ExtractorCvlac():
         self.redes={'IDCVLAC':[],'Nombre':[],'Url':[]}
         self.identificadores={'IDCVLAC':[],'Nombre':[],'Url':[]}
         #nuevas tablas 2git 2 no sape
-        self.caplibros={'idcvlac':'','autores':'','capitulo':'','libro':'','lugar':'','isbn':'','editorial':'','volumen':'','paginas':'','fecha':'', 'palabras':'', 'areas':'', 'sectores':''}
+        self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.software={'IDCVLAC':[],'Autor':[],'Nombre':[],'Nombre comercial:':[],'contrato/registro:':[],'lugar':[],'fecha':[],'plataforma:':[], 'ambiente:':[], 'Palabras: ':[],'Areas: ':[], 'Sectores: ':[]}
         self.prototipo={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         
@@ -463,16 +463,16 @@ class ExtractorCvlac():
                     autores=""
                     for autor in list_autores:
                         var2=autor.split(',')[0]
-                        autores=autores+var2+","                       
+                        autores=autores+var2+","
                     cap_libros_aux['idcvlac'] = url[(url.find('='))+1:]
-                    cap_libros_aux['autores'] = autores
-                    block_name_out=block_cap[index_name+3:]
+                    cap_libros_aux['autores'] = autores.strip()
+                    block_name_out=block_cap[index_name+3:].replace("<br/>","")
                     index_lugar=block_name_out.rfind(". En:")
                     index_cap=block_name_out[:index_lugar].rfind('"')                    
                     cap_libros_aux['capitulo'] = block_name_out[:index_cap]
-                    cap_libros_aux['libro'] = block_name_out[index_cap:index_lugar]
+                    cap_libros_aux['libro'] = block_name_out[index_cap+1:index_lugar].strip()
                     index_en=block_name_out.find("<i>ISBN:")
-                    cap_libros_aux['lugar'] = block_name_out[index_lugar+5:index_en]                                
+                    cap_libros_aux['lugar'] = block_name_out[index_lugar+5:index_en].strip()                             
                     list_datos=re.split('<i>|</i>|<b>|</b>',block_name_out[index_en:])                 
                     for dato in list_datos:                            
                         for key in cap_libros_aux:                                                                                          
@@ -481,12 +481,12 @@ class ExtractorCvlac():
                                     list_fasc=(re.split(',',list_datos[list_datos.index(dato)+1]))  
                                     cap_libros_aux[', v.']=list_fasc[0]                        
                                     cap_libros_aux['paginas']=list_fasc[1].replace("p.","")
-                                    cap_libros_aux['fecha']=list_fasc[2]                                    
+                                    cap_libros_aux['fecha']=list_fasc[2].strip()                                    
                                 else:
                                     cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
                     print(cap_libros_aux)
                     cap_libros_aux=dict(zip(self.caplibros.keys(),cap_libros_aux.values()))
-                    self.libros= almacena(self.caplibros,cap_libros_aux)   
+                    self.caplibros= almacena(self.caplibros,cap_libros_aux)   
                     cap_libros_aux={}   
         except AttributeError:
             pass     
