@@ -8,7 +8,7 @@ class ExtractorCvlac():
         self.academica={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[],'proyecto':[]}
         self.actuacion={'idcvlac':[],'areas':[]}
         self.articulos={'idcvlac':[],'autores':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'editorial':[],'volumen':[],'fasciculo':[], 'paginas':[],'fecha':[],'doi':[], 'palabras':[], 'sectores':[]}
-        self.basico={'idcvlac':['IDCVLAC'],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
+        self.basico={'IDCVLAC':[],'Categoría':[],'Nombre':[],'Nombre en citaciones':[],'Nacionalidad':[],'Sexo':[]}
         self.complementaria={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[]}
         self.estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
         self.evaluador={'IDCVLAC':[],'Ámbito: ':[],'Par evaluador de: ':[],'Editorial: ':[],'Revista: ':[],'Institución: ':[],'fecha':[]}
@@ -68,12 +68,12 @@ class ExtractorCvlac():
         return df_actuacion
     
     def get_articulo(self, soup, url):
-        art_individual={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Revista':[],'ISSN:':[],'ed:':[],'v.':[],'fasc.':[], 'p.':[],'fecha.':[],' DOI: ':[], 'Palabras: ':[], 'Sectores: ':[]}
         try:
             tableart=(soup.find('a', attrs={'name':'articulos'}).parent)
             blocks_arts = tableart.find_all('blockquote')
             if(str((tableart).find('h3').contents[0])==('Artículos')):
                 for block_art in blocks_arts:
+                    art_individual={'IDCVLAC':'','Autores':'','Nombre':'','En':'','Revista':'','ISSN:':'','ed:':'','v.':'','fasc.':'', 'p.':'','fecha.':'',' DOI: ':'', 'Palabras: ':'', 'Sectores: ':''}
                     quote_text_clear=re.sub('http://dx.doi.org/|http://doi.org/|https://doi.org/|<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')            
                     list_datos=(re.split('<i>|</i>|</b>|<b>',quote_text_clear))
@@ -111,22 +111,26 @@ class ExtractorCvlac():
                             list_string.pop(-1)
                             art_individual['Autores']=";".join(list_string).strip()
                     for dato in list_datos:                            
-                        for key in self.articulos:                                                              
+                        for key in art_individual:                                                              
                             if(key == dato):
                                 if(dato=="fasc."):
-                                    list_fasc=(re.split('p\.| ,',list_datos[list_datos.index(dato)+1]))  
+                                    list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])
                                     art_individual['fasc.']=list_fasc[0]                        
                                     art_individual['p.']=list_fasc[1]
                                     art_individual['fecha.']=list_fasc[2].replace(',','')
                                 else:
-                                    art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()                                            
+                                    art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()
+                                                       
+                    art_individual=dict(zip(self.articulos.keys(),art_individual.values())) 
                     self.articulos= almacena(self.articulos,art_individual)        
-                    art_individual={} 
+                    
         except AttributeError:
             pass       
+        print(self.articulos)
         df_articulos = pd.DataFrame(self.articulos)    
         df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
         df_articulos = df_articulos.reset_index(drop=True)  
+        df_articulos=df_articulos.replace([],"")
         return df_articulos
     
     def get_basico(self, soup, url):
