@@ -433,27 +433,34 @@ class ExtractorCvlac():
                 #Nuevas tablas
     #########################################################
     def get_caplibro(self, soup, url):
-        cap_libros_aux={'IDCVLAC':[],'Autores':[],'Capitulo':[],'Libro':[],'En':[],'ISBN:':[],'ed:':[],', v.':[],'paginas':[],'fecha':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
+        cap_libros_aux={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'En':[],'ISBN:':[],'ed:':[],', v.':[],'paginas':[],'fecha':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         try:
             table_cap_libros=(soup.find('a', attrs={'name':'capitulos'}).parent)            
             if(str((table_cap_libros).find('h3').contents[0])==('Capitulos de libro')):
                 blocks_cap = table_cap_libros.find_all('blockquote')
                 for block_cap in blocks_cap:
                     block_cap=re.sub('<blockquote>|</blockquote>','',(" ".join((str(block_cap)).split()))).replace('&amp;','&')
-                    #print(block_cap)
-                    var=(re.findall(r', "',block_cap))
-                    index=block_cap.rfind(var[0])
-                    #print(block_cap[:index])
-                    list_autores=re.split('<br/>',block_cap[:index])
-                    
-                    print(list_autores)
-                    list_string=(re.split(', "|. En:|" ',block_cap[:index])) 
+                    index1=block_cap.find(', "')
+                    list_autores=block_cap[:index1].split('<br/>')
+                    list_autores.pop(0)
+                    autores=""
+                    for autor in list_autores:
+                        var2=autor.split(',')[0]
+                        autores=autores+var2+","
+                    print(autores)    
+                    cap_libros_aux['idcvlac'] = url[(url.find('='))+1:]
+                    cap_libros_aux['autores'] = autores
+                    index3=block_cap[index1:].find(". En:")
+                    index4=block_cap[index1:index3].rfind('"')
+                    cap_libros_aux['capitulo'] = block_cap[index1:index4]
+                    cap_libros_aux['libro'] = block_cap[index4:index3]
+                    list_string=(re.split('. En:',block_cap[:index])) 
                     #print(list_datos)            
                     list_datos=(re.split('<i>|</i>|<b>|</b>',block_cap[index:]))                    
-                    fblock=block_cap[index:].rfind("ISBN:")                          
+                    fblock=block_cap[index1:][index:].rfind("ISBN:")                          
                     x=0
                     informacion=['Autores','Capitulo','Libro','En']
-                    cap_libros_aux['IDCVLAC'] = url[(url.find('='))+1:]             
+                                 
                     for dato in list_string:           
                         cap_libros_aux[str(informacion[x])]=("".join(dato)).strip()
                         x=x+1
