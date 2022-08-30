@@ -21,7 +21,7 @@ class ExtractorCvlac():
         self.identificadores={'IDCVLAC':[],'Nombre':[],'Url':[]}
         #nuevas tablas 2git 2 no sape
         self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
-        self.software={'IDCVLAC':[],'Autor':[],'Nombre':[],'Nombre comercial:':[],'contrato/registro:':[],'lugar':[],'fecha':[],'plataforma:':[], 'ambiente:':[], 'Palabras: ':[],'Areas: ':[], 'Sectores: ':[]}
+        self.software={'idcvlac':[],'autor':[],'nombre':[],'nombre_comercial:':[],'contrato_registro:':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.prototipo={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         
     def get_academica(self, soup, url):
@@ -495,41 +495,42 @@ class ExtractorCvlac():
         return df_libros
     
     def get_software(self, soup, url):
-        soft_aux={}
         try:
             tablelib=(soup.find('a', attrs={'name':'software'}).parent)
             blocks_arts = tablelib.find_all('blockquote')
             if(str((tablelib).find('h3').contents[0])==('Softwares')):
                 for block_art in blocks_arts:
+                    soft_aux={'idcvlac':'','autor':'','nombre':'','Nombre comercial:':'','contrato/registro:':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras: ':'','Areas: ':'', 'Sectores: ':''}
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&') 
                     bloque_string = " ".join((block_art.text).split())
                     bloque_string=bloque_string.replace('&amp;','&')   
                     fblock=bloque_string.find(",")
                     list_string=(re.split('Nombre comercial:|contrato/registro:|. En:|plataforma:|ambiente:',bloque_string[fblock:]))
-                    soft_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                    soft_aux['Autor'] = bloque_string[:fblock]  
-                    soft_aux['Nombre'] = list_string[0]
-                    list_string.pop(0)
-                    print(list_string)                    
+                    soft_aux['idcvlac'] = url[(url.find('='))+1:]
+                    soft_aux['autor'] = bloque_string[:fblock]  
+                    soft_aux['nombre'] = list_string[0]
+                    list_string.pop(0)                    
                     x=0
                     informacion=['Nombre comercial:','contrato/registro:','lugar','plataforma:','ambiente:']                    
                     for dato in list_string:
                         if(dato=='. En:'):                                            
-                            dato=(re.split(',\d*\D+',list_datos[list_datos.index(dato)+1]))  
-                            soft_aux['lugar']=list_datos[0]
-                            soft_aux['fecha']=list_datos[1]
+                            datos=(re.split('(?s:.*),(\d{4})}',list_string[list_string.index(dato)+1]))  
+                            soft_aux['lugar']=datos[0]
+                            soft_aux['fecha']=datos[1]
                         else:
                             soft_aux[str(informacion[x])]=("".join(dato)).strip()
                         x=x+1
                     list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
                     list_datos.pop(0)
                     for dato in list_datos:                            
-                        for key in self.software:                                                              
+                        for key in soft_aux:                                                                                         
                             if(key == dato):
+                                print(key)
                                 soft_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
-                    self.software= almacena(self.software,soft_aux)   
-                    soft_aux={}   
+                    soft_aux=dict(zip(self.software.keys(),soft_aux.values()))
+                    self.software= almacena(self.software,soft_aux)  
+                       
         except AttributeError:
             pass     
         df_libros = pd.DataFrame(self.software)   
