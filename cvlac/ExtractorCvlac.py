@@ -448,56 +448,49 @@ class ExtractorCvlac():
     #########################################################
                 #Nuevas tablas
     #########################################################
+    
     def get_caplibro(self, soup, url):
-        cap_libros_aux={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'En':[],'ISBN:':[],'ed:':[],', v.':[],'paginas':[],'fecha':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         try:
             table_cap_libros=(soup.find('a', attrs={'name':'capitulos'}).parent)            
             if(str((table_cap_libros).find('h3').contents[0])==('Capitulos de libro')):
                 blocks_cap = table_cap_libros.find_all('blockquote')
                 for block_cap in blocks_cap:
+                    cap_libros_aux={'idcvlac':'','autores':'','capitulo':'','libro':'','lugar':'','ISBN:':'','ed:':'',', v.':'','paginas':'','fecha':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
                     block_cap=re.sub('<blockquote>|</blockquote>','',(" ".join((str(block_cap)).split()))).replace('&amp;','&')
-                    index1=block_cap.find(', "')
-                    list_autores=block_cap[:index1].split('<br/>')
+                    index_name=block_cap.find(', "')
+                    list_autores=block_cap[:index_name].split('<br/>')
                     list_autores.pop(0)
                     autores=""
                     for autor in list_autores:
                         var2=autor.split(',')[0]
                         autores=autores+var2+","
-                    print(autores)    
                     cap_libros_aux['idcvlac'] = url[(url.find('='))+1:]
-                    cap_libros_aux['autores'] = autores
-                    index3=block_cap[index1:].find(". En:")
-                    index4=block_cap[index1:index3].rfind('"')
-                    cap_libros_aux['capitulo'] = block_cap[index1:index4]
-                    cap_libros_aux['libro'] = block_cap[index4:index3]
-                    list_string=(re.split('. En:',block_cap[:index])) 
-                    #print(list_datos)            
-                    list_datos=(re.split('<i>|</i>|<b>|</b>',block_cap[index:]))                    
-                    fblock=block_cap[index1:][index:].rfind("ISBN:")                          
-                    x=0
-                    informacion=['Autores','Capitulo','Libro','En']
-                                 
-                    for dato in list_string:           
-                        cap_libros_aux[str(informacion[x])]=("".join(dato)).strip()
-                        x=x+1
+                    cap_libros_aux['autores'] = autores.strip()
+                    block_name_out=block_cap[index_name+3:].replace("<br/>","")
+                    index_lugar=block_name_out.rfind(". En:")
+                    index_cap=block_name_out[:index_lugar].rfind('"')                    
+                    cap_libros_aux['capitulo'] = block_name_out[:index_cap]
+                    cap_libros_aux['libro'] = block_name_out[index_cap+1:index_lugar].strip()
+                    index_en=block_name_out.find("<i>ISBN:")
+                    cap_libros_aux['lugar'] = block_name_out[index_lugar+5:index_en].strip()                             
+                    list_datos=re.split('<i>|</i>|<b>|</b>',block_name_out[index_en:])                 
                     for dato in list_datos:                            
-                        for key in cap_libros_aux: 
-                            #print(key)                                                             
+                        for key in cap_libros_aux:                                                                                          
                             if(key == dato):
                                 if(dato==", v."):
                                     list_fasc=(re.split(',',list_datos[list_datos.index(dato)+1]))  
                                     cap_libros_aux[', v.']=list_fasc[0]                        
                                     cap_libros_aux['paginas']=list_fasc[1].replace("p.","")
-                                    cap_libros_aux['fecha']=list_fasc[2]
-                                    #.replace(',','')
+                                    cap_libros_aux['fecha']=list_fasc[2].strip()                                    
                                 else:
                                     cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
-                    self.libros= almacena(self.caplibros,cap_libros_aux)   
+                    print(cap_libros_aux)
+                    cap_libros_aux=dict(zip(self.caplibros.keys(),cap_libros_aux.values()))
+                    self.caplibros= almacena(self.caplibros,cap_libros_aux)   
                     cap_libros_aux={}   
         except AttributeError:
             pass     
         df_libros = pd.DataFrame(self.caplibros)   
-        df_libros.columns = ['idcvlac','autores','capitulo','libro','lugar','isbn','editorial','volumen','paginas','fecha','palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True)   
         return df_libros
     
