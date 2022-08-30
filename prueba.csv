@@ -1,3 +1,4 @@
-idcvlac,autores,nombre,lugar,fecha,editorial,isbn,volumen,paginas,palabras,areas,sectores
-0001239368,"CRISTHIAN NICOLAS FIGUEROA MARTINEZ, JUAN CARLOS CORRALES, GUSTAVO ADOLFO RAMIREZ",Recuperación Multinivel De Procesos De Negocio Basada En Semántica Del Comportamiento.,Estados Unidos,2012. ,Research and Innovation,978-0-9833210-6-4,0,110,,"Ciencias Naturales -- Computación y Ciencias de la Información -- Ciencias de la Computación,","Desarrollo de programas (software) y prestación de servicios en informática - Desarrollo de programas (software),"
-0001239368,"JUAN CARLOS CORRALES, CRISTHIAN NICOLAS FIGUEROA MARTINEZ, MAURIZIO MORISIO",Recommender Systems based on Linked Data,Colombia,2019. ,Editorial Universidad Del Cauca,978-958-732-380-1,,,"Machine Learning, Dynamic reconfiguration, Linked Data, Recommender Systems, Semantic Categorization, Systematic Review, Web of Data,","Ingeniería y Tecnología -- Ingenierías Eléctrica, Electrónica e Informática -- Ingeniería de Sistemas y Comunicaciones, Ingeniería y Tecnología -- Otras Ingenierías y Tecnologías -- Otras Ingenierías y Tecnologías, Ciencias Naturales -- Computación y Ciencias de la Información -- Ciencias de la Computación,",
+idcvlac,nombre,url
+0001239368,ResearcherID (Thomson Reuters - WOS),https://publons.com/researcher/1482142/cristhian-figueroa/
+0001239368,Autor ID (Scopus),https://www.scopus.com/authid/detail.uri?authorId=7004506288
+0001239368,Open Researcher and Contributor ID (ORCID),https://orcid.org/0000-0001-6697-886X
