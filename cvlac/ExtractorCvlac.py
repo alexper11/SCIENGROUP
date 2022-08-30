@@ -17,8 +17,8 @@ class ExtractorCvlac():
         self.jurados={'idcvlac':[],'nombre':[],'titulo':[],'tipo':[],'lugar':[],'programa':[],'orientado':[],'palabras':[],'areas':[],'sectores':[]}
         self.libros={'idcvlac':[],'autores':[],'nombre':[],'lugar':[],'fecha':[],'editorial':[],'isbn':[],'volumen':[],'paginas':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.reconocimiento={'idcvlac':[],'nombre':[],'fecha':[]}
-        self.redes={'IDCVLAC':[],'Nombre':[],'Url':[]}
-        self.identificadores={'IDCVLAC':[],'Nombre':[],'Url':[]}
+        self.redes={'idcvlac':[],'nombre':[],'url':[]}
+        self.identificadores={'idcvlac':[],'nombre':[],'url':[]}
         #nuevas tablas 2git 2 no sape
         self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.software={'IDCVLAC':[],'Autor':[],'Nombre':[],'Nombre comercial:':[],'contrato/registro:':[],'lugar':[],'fecha':[],'plataforma:':[], 'ambiente:':[], 'Palabras: ':[],'Areas: ':[], 'Sectores: ':[]}
@@ -414,15 +414,15 @@ class ExtractorCvlac():
             if(str((tdredes).find('h3').contents[0])==('Redes sociales académicas')):
                 child=((tdredes).find('table')).find_all("a")
                 for trs in child:
-                    redes_individual['IDCVLAC'] = url[(url.find('='))+1:]
-                    redes_individual['Nombre']=trs.text 
-                    redes_individual['Url']=trs['href']                   
+                    redes_individual['idcvlac'] = url[(url.find('='))+1:]
+                    redes_individual['nombre']=trs.text 
+                    redes_individual['url']=trs['href']                   
                     self.redes= almacena(self.redes,redes_individual) 
                     redes_individual={}                      
         except AttributeError:
             pass
         df_redes = pd.DataFrame(self.redes)      
-        df_redes.columns = ['idcvlac','nombre','url']
+        #df_redes.columns = ['idcvlac','nombre','url']
         df_redes = df_redes.reset_index(drop=True)    
         return df_redes   
         
@@ -433,15 +433,15 @@ class ExtractorCvlac():
             if(str((td_identificadores.parent).find('h3').contents[0])=="Identificadores de autor"):
                 child=((td_identificadores.parent).find('table')).find_all("a")
                 for trs in child:
-                    identificadores_individual['IDCVLAC'] = url[(url.find('='))+1:]
-                    identificadores_individual['Nombre']=trs.text 
-                    identificadores_individual['Url']=trs['href']                   
+                    identificadores_individual['idcvlac'] = url[(url.find('='))+1:]
+                    identificadores_individual['nombre']=trs.text 
+                    identificadores_individual['url']=trs['href']                   
                     self.identificadores= almacena(self.identificadores,identificadores_individual) 
                     identificadores_individual={}                      
         except AttributeError:
             pass
         df_identificadores = pd.DataFrame(self.identificadores)      
-        df_identificadores.columns = ['idcvlac','nombre','url']
+        #df_identificadores.columns = ['idcvlac','nombre','url']
         df_identificadores = df_identificadores.reset_index(drop=True)    
         return df_identificadores
     
