@@ -500,34 +500,45 @@ class ExtractorCvlac():
             blocks_arts = tablelib.find_all('blockquote')
             if(str((tablelib).find('h3').contents[0])==('Softwares')):
                 for block_art in blocks_arts:
-                    soft_aux={'idcvlac':'','autor':'','nombre':'','Nombre comercial:':'','contrato/registro:':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras: ':'','Areas: ':'', 'Sectores: ':''}
+                    soft_aux={'idcvlac':'','autor':'','nombre':'','Nombre comercial:':'','contrato/registro':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras':'','Areas':'', 'Sectores':''}
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
-                    quote_text_clear=quote_text_clear.replace('&amp;','&') 
+                    quote_text_clear=quote_text_clear.replace('&amp;','&')
+                    #print(quote_text_clear)
                     bloque_string = " ".join((block_art.text).split())
-                    bloque_string=bloque_string.replace('&amp;','&')   
-                    fblock=bloque_string.find(",")
-                    list_string=(re.split('Nombre comercial:|contrato/registro:|. En:|plataforma:|ambiente:',bloque_string[fblock:]))
+                    bloque_string=bloque_string.replace('&amp;','&')                    
+                    index_name=bloque_string.find("Nombre comercial:")
+                    name=bloque_string[:index_name]
+                    #index_br=quote_text_clear.find('<b>')
+                    #################################
+                    # Pendiente: manejo de excepcion nombre software con mayuscula
+                    try:
+                        index1=re.search('(?s:.*)[A-Z],',re.sub('(?s:.*)![A-Z],','',name)).end()
+                    except:
+                        index1=0                                       
+                    
                     soft_aux['idcvlac'] = url[(url.find('='))+1:]
-                    soft_aux['autor'] = bloque_string[:fblock]  
-                    soft_aux['nombre'] = list_string[0]
-                    list_string.pop(0)                    
-                    x=0
-                    informacion=['Nombre comercial:','contrato/registro:','lugar','plataforma:','ambiente:']                    
-                    for dato in list_string:
-                        if(dato=='. En:'):                                            
-                            datos=(re.split('(?s:.*),(\d{4})}',list_string[list_string.index(dato)+1]))  
-                            soft_aux['lugar']=datos[0]
-                            soft_aux['fecha']=datos[1]
-                        else:
-                            soft_aux[str(informacion[x])]=("".join(dato)).strip()
-                        x=x+1
-                    list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
+                    soft_aux['autor'] = name[:index1]  
+                    soft_aux['nombre'] = name[index1+1:].strip()
+                   
+                    list_datos=(re.split('<i>|<b>|<br>',quote_text_clear))
                     list_datos.pop(0)
-                    for dato in list_datos:                            
-                        for key in soft_aux:                                                                                         
-                            if(key == dato):
-                                print(key)
-                                soft_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
+                    dic={'idcvlac':'','autor':'','nombre':'','Nombre comercial:':'','contrato/registro':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                    for item in list_datos:
+                        dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
+                        soft_aux['contrato/registro']=dic['contrato/registro'].split('. En:')[0] if len(dic['contrato/registro']) != 0 else ''
+                        lugg=dic['contrato/registro'].split('. En:')[1] if len(dic['contrato/registro']) != 0 else ''
+                        try:                                          
+                                index_datos=re.search(',(\d{4})',lugg).start()                              
+                        except:
+                            index_datos= -1
+                        soft_aux['lugar']=lugg[:index_datos].strip()
+                        soft_aux['fecha']=lugg[index_datos+1:]
+                        soft_aux['plataforma']=" ".join((dic['plataforma']).split())
+                        soft_aux['ambiente']=" ".join((dic['ambiente']).split())
+                        soft_aux['Palabras']=" ".join((dic['Palabras']).split())
+                        soft_aux['Areas']=" ".join((dic['Areas']).split())
+                        soft_aux['Sectores']=" ".join((dic['Sectores']).split())
+
                     soft_aux=dict(zip(self.software.keys(),soft_aux.values()))
                     self.software= almacena(self.software,soft_aux)  
                        
