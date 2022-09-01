@@ -22,7 +22,7 @@ class ExtractorCvlac():
         #nuevas tablas 2git 2 no sape
         self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.software={'idcvlac':[],'autor':[],'nombre':[],'nombre_comercial:':[],'contrato_registro:':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.prototipo={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
+        self.prototipo={'idcvlac':[],'autor':[],'nombre':[],'nombre_comercial:':[],'contrato_registro:':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
         
     def get_academica(self, soup, url):
         dic_aux={}   
@@ -550,35 +550,53 @@ class ExtractorCvlac():
         return df_libros
     
     def get_prototipo(self, soup, url):
-        proto_aux={}
         try:
-            tablelib=(soup.find('a', attrs={'name':'libros'}).parent)
-            blocks_arts = tablelib.find_all('blockquote')
-            if(str((tablelib).find('h3').contents[0])==('Libros')):
-                for block_art in blocks_arts:
-                    quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
-                    quote_text_clear=quote_text_clear.replace('&amp;','&')               
-                    list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
-                    list_datos.pop(0)
-                    bloque_string = " ".join((block_art.text).split())
-                    bloque_string=bloque_string.replace('&amp;','&')   
-                    fblock=bloque_string.find("ISBN:")
-                    list_string=(re.split('ed:|, "|" En:',bloque_string[:fblock]))        
-                    x=0
-                    informacion=['Autores','Nombre','En','Editorial']               
-                    for dato in list_string:            
-                        proto_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                        proto_aux[str(informacion[x])]=("".join(dato)).strip()                                       
-                        x=x+1
-                    for dato in list_datos:                            
-                        for key in self.prototipo:                                                              
-                            if(key == dato):
-                                proto_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
-                    self.prototipo= almacena(self.prototipo,proto_aux)   
-                    proto_aux={}   
+            child=(soup.find('table')).findChildren("tr" , recursive=False)            
+            for trs in child:
+                h3s=(trs.find('h3'))
+                if h3s != None:                
+                    if(str(h3s.contents[0])==("Prototipos")):
+                        for blockquote in ((h3s.parent.parent.parent).find_all('blockquote')):
+                            proto_aux={'idcvlac':'','autor':'','nombre':'','Nombre comercial:':'','contrato/registro':'','lugar':'','fecha':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                            quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(blockquote)).split())))
+                            quote_text_clear=quote_text_clear.replace('&amp;','&')
+                            bloque_string = " ".join((blockquote.text).split())
+                            bloque_string=bloque_string.replace('&amp;','&')
+                            index_name=bloque_string.find("Nombre comercial:")
+                            name=bloque_string[:index_name]
+                            #################################
+                            # Pendiente: manejo de excepcion nombre software con mayuscula
+                            try:
+                                index1=re.search('(?s:.*)[A-Z],',re.sub('(?s:.*)![A-Z],','',name)).end()
+                            except:
+                                index1=0                                       
+                            
+                            proto_aux['idcvlac'] = url[(url.find('='))+1:]
+                            proto_aux['autor'] = name[:index1]  
+                            proto_aux['nombre'] = name[index1+1:].strip()
+                        
+                            list_datos=(re.split('<i>|<b>',quote_text_clear))
+                            list_datos.pop(0)
+                            dic={'idcvlac':'','autor':'','nombre':'','Nombre comercial:':'','contrato/registro':'','lugar':'','fecha':'','Palabras':'','Areas':'', 'Sectores':''}
+                            for item in list_datos:
+                                dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
+                                proto_aux['contrato/registro']=dic['contrato/registro'].split('. En:')[0] if len(dic['contrato/registro']) != 0 else ''
+                                div_reg=dic['contrato/registro'].split('. En:')[1] if len(dic['contrato/registro']) != 0 else ''
+                                try:                                          
+                                        index_datos=re.search(',(\d{4})',div_reg).start()                              
+                                except:
+                                    index_datos= -1
+                                proto_aux['lugar']=div_reg[:index_datos].strip()
+                                proto_aux['fecha']=div_reg[index_datos+1:]                                
+                                proto_aux['Palabras']=" ".join((dic['Palabras']).split())
+                                proto_aux['Areas']=" ".join((dic['Areas']).split())
+                                proto_aux['Sectores']=" ".join((dic['Sectores']).split())
+
+                            proto_aux=dict(zip(self.prototipo.keys(),proto_aux.values()))
+                            self.prototipo= almacena(self.prototipo,proto_aux)  
+                            
         except AttributeError:
             pass     
-        df_libros = pd.DataFrame(self.prototipo)   
-        df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
-        df_libros = df_libros.reset_index(drop=True)   
-        return df_libros
+        df_prototipo = pd.DataFrame(self.prototipo)   
+        df_prototipo = df_prototipo.reset_index(drop=True)   
+        return df_prototipo
