@@ -21,7 +21,7 @@ class ExtractorCvlac():
         self.identificadores={'idcvlac':[],'nombre':[],'url':[]}
         #nuevas tablas 2git 2 no sape
         self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
-        self.software={'idcvlac':[],'autor':[],'nombre':[],'nombre_comercial:':[],'contrato_registro:':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
+        self.software={'idcvlac':[],'autor':[],'nombre':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.prototipo={'IDCVLAC':[],'Autores':[],'Nombre':[],'En':[],'Editorial':[],'ISBN:':[],'v. ':[],'pags.':[], 'Palabras: ':[], 'Areas: ':[], 'Sectores: ':[]}
         
     def get_academica(self, soup, url):
@@ -500,52 +500,41 @@ class ExtractorCvlac():
             blocks_arts = tablelib.find_all('blockquote')
             if(str((tablelib).find('h3').contents[0])==('Softwares')):
                 for block_art in blocks_arts:
-                    soft_aux={'idcvlac':'','autor':'','nombre':'','Nombre comercial:':'','contrato/registro':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras':'','Areas':'', 'Sectores':''}
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')
-                    #print(quote_text_clear)
                     bloque_string = " ".join((block_art.text).split())
-                    bloque_string=bloque_string.replace('&amp;','&')                    
-                    index_name=bloque_string.find("Nombre comercial:")
-                    name=bloque_string[:index_name]
-                    #index_br=quote_text_clear.find('<b>')
+                    bloque_string=bloque_string.replace('&amp;','&')                           
                     #################################
                     # Pendiente: manejo de excepcion nombre software con mayuscula
-                    try:
-                        index1=re.search('(?s:.*)[A-Z],',re.sub('(?s:.*)![A-Z],','',name)).end()
-                    except:
-                        index1=0                                       
+                    list_datos=re.split('<i>|<b>',quote_text_clear)
+                    dic={'idcvlac':'','autor':'','nombre':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                    dic['idcvlac'] = url[(url.find('='))+1:]
+                    for i,item in enumerate(list_datos):
+                        if i == 0:
+                            try:
+                                index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                            except:
+                                index1=0
+                            dic['autor'] = item[:index1].strip()
+                            dic['nombre'] = item[index1+1:].strip()
+                        else :
+                            dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
+                    cont_aux=dic['contrato/registro'].split('. En:') 
+                    dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
+                    try:     
+                            lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
+                            index_datos=re.search(',(\d{4})',lugg).start()                        
+                    except :
+                        index_datos= -1
+                    dic['lugar']=lugg[:index_datos].strip()
+                    dic['fecha']=lugg[index_datos+1:].strip()
                     
-                    soft_aux['idcvlac'] = url[(url.find('='))+1:]
-                    soft_aux['autor'] = name[:index1]  
-                    soft_aux['nombre'] = name[index1+1:].strip()
-                   
-                    list_datos=(re.split('<i>|<b>|<br>',quote_text_clear))
-                    list_datos.pop(0)
-                    dic={'idcvlac':'','autor':'','nombre':'','Nombre comercial:':'','contrato/registro':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras':'','Areas':'', 'Sectores':''}
-                    for item in list_datos:
-                        dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
-                        soft_aux['contrato/registro']=dic['contrato/registro'].split('. En:')[0] if len(dic['contrato/registro']) != 0 else ''
-                        lugg=dic['contrato/registro'].split('. En:')[1] if len(dic['contrato/registro']) != 0 else ''
-                        try:                                          
-                                index_datos=re.search(',(\d{4})',lugg).start()                              
-                        except:
-                            index_datos= -1
-                        soft_aux['lugar']=lugg[:index_datos].strip()
-                        soft_aux['fecha']=lugg[index_datos+1:]
-                        soft_aux['plataforma']=" ".join((dic['plataforma']).split())
-                        soft_aux['ambiente']=" ".join((dic['ambiente']).split())
-                        soft_aux['Palabras']=" ".join((dic['Palabras']).split())
-                        soft_aux['Areas']=" ".join((dic['Areas']).split())
-                        soft_aux['Sectores']=" ".join((dic['Sectores']).split())
-
-                    soft_aux=dict(zip(self.software.keys(),soft_aux.values()))
-                    self.software= almacena(self.software,soft_aux)  
-                       
+                    dic=dict(zip(self.software.keys(),dic.values()))
+                    self.software= almacena(self.software,dic)  
         except AttributeError:
-            pass     
+            pass
         df_libros = pd.DataFrame(self.software)   
-        df_libros.columns = ['idcvlac','autor','nombre_software','nombre_comercial','contrato','lugar','fecha','plataforma','ambiente', 'palabras', 'areas', 'sectores']
+        #df_libros.columns = ['idcvlac','autor','nombre_software','nombre_comercial','contrato','lugar','fecha','plataforma','ambiente', 'palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True)   
         return df_libros
     
