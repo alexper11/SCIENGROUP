@@ -8,6 +8,7 @@ class Libros(Base):
     idcvlac = Column(String(20), nullable=False)
     autores = Column(String(4000), nullable=False)
     nombre = Column(String(1000), nullable=False)
+    tipo = Column(String(150), nullable=True)
     lugar = Column(String(200), nullable=True)
     fecha = Column(String(20), nullable=True)
     editorial = Column(String(500), nullable=False)

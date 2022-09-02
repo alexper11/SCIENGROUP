@@ -7,7 +7,7 @@ class ExtractorCvlac():
     def __init__(self):
         self.academica={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[],'proyecto':[]}
         self.actuacion={'idcvlac':[],'areas':[]}
-        self.articulos={'idcvlac':[],'autores':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'editorial':[],'volumen':[],'fasciculo':[], 'paginas':[],'fecha':[],'doi':[], 'palabras':[], 'sectores':[]}
+        self.articulos={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'lugar':[],'revista':[],'issn':[],'editorial':[],'volumen':[],'fasciculo':[], 'paginas':[],'fecha':[],'doi':[], 'palabras':[], 'sectores':[]}
         self.basico={'idcvlac':[],'categoria':[],'nombre':[],'citaciones':[],'nacionalidad':[],'sexo':[]}
         self.complementaria={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[]}
         self.estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
@@ -15,7 +15,7 @@ class ExtractorCvlac():
         self.idioma={'idcvlac':[],'idioma':[],'habla':[],'escribe':[],'lee':[],'entiende':[]}
         self.investigacion={'idcvlac':[],'nombre':[],'activa':[]}
         self.jurados={'idcvlac':[],'nombre':[],'titulo':[],'tipo':[],'lugar':[],'programa':[],'orientado':[],'palabras':[],'areas':[],'sectores':[]}
-        self.libros={'idcvlac':[],'autores':[],'nombre':[],'lugar':[],'fecha':[],'editorial':[],'isbn':[],'volumen':[],'paginas':[], 'palabras':[], 'areas':[], 'sectores':[]}
+        self.libros={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'lugar':[],'fecha':[],'editorial':[],'isbn':[],'volumen':[],'paginas':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.reconocimiento={'idcvlac':[],'nombre':[],'fecha':[]}
         self.redes={'idcvlac':[],'nombre':[],'url':[]}
         self.identificadores={'idcvlac':[],'nombre':[],'url':[]}
@@ -72,8 +72,13 @@ class ExtractorCvlac():
             tableart=(soup.find('a', attrs={'name':'articulos'}).parent)
             blocks_arts = tableart.find_all('blockquote')
             if(str((tableart).find('h3').contents[0])==('Artículos')):
+                tbody=tableart.find_all('tr')
+                list_tipo=[]
+                for i,t in enumerate(tbody):
+                    if not (i % 2) == 0:
+                        list_tipo.append(t.find('b').text)
                 for block_art in blocks_arts:
-                    art_individual={'IDCVLAC':'','Autores':'','Nombre':'','En':'','Revista':'','ISSN:':'','ed:':'','v.':'','fasc.':'', 'p.':'','fecha.':'',' DOI: ':'', 'Palabras: ':'', 'Sectores: ':''}
+                    art_individual={'IDCVLAC':'','Autores':'','Nombre':'','tipo':'','En':'','Revista':'','ISSN:':'','ed:':'','v.':'','fasc.':'', 'p.':'','fecha.':'',' DOI: ':'', 'Palabras: ':'', 'Sectores: ':''}
                     quote_text_clear=re.sub('http://dx.doi.org/|http://doi.org/|https://doi.org/|<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')            
                     list_datos=(re.split('<i>|</i>|</b>|<b>',quote_text_clear))
@@ -123,14 +128,12 @@ class ExtractorCvlac():
                                                        
                     art_individual=dict(zip(self.articulos.keys(),art_individual.values())) 
                     self.articulos= almacena(self.articulos,art_individual)        
-                    
         except AttributeError:
             pass       
-        print(self.articulos)
+        self.articulos['tipo']=list_tipo
         df_articulos = pd.DataFrame(self.articulos)    
-        df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
+        #df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
         df_articulos = df_articulos.reset_index(drop=True)  
-        df_articulos=df_articulos.replace([],"")
         return df_articulos
     
     def get_basico(self, soup, url):
@@ -344,8 +347,13 @@ class ExtractorCvlac():
             tablelib=(soup.find('a', attrs={'name':'libros'}).parent)
             blocks_arts = tablelib.find_all('blockquote')
             if(str((tablelib).find('h3').contents[0])==('Libros')):
+                tbody=tablelib.find_all('tr')
+                list_tipo=[]
+                for i,t in enumerate(tbody):
+                    if not (i % 2) == 0:
+                        list_tipo.append(t.find('b').text)
                 for block_art in blocks_arts:
-                    libros_aux={'IDCVLAC':'','Autores':'','Nombre':'','En':'','fecha':'','Editorial':'','ISBN:':'','v. ':'','pags.':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
+                    libros_aux={'IDCVLAC':'','Autores':'','Nombre':'','tipo':'','En':'','fecha':'','Editorial':'','ISBN:':'','v. ':'','pags.':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')               
                     list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
@@ -379,6 +387,7 @@ class ExtractorCvlac():
                        
         except AttributeError:
             pass     
+        self.libros['tipo']=list_tipo
         df_libros = pd.DataFrame(self.libros)   
         #df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True)   

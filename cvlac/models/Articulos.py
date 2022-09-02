@@ -8,6 +8,7 @@ class Articulos(Base):
     idcvlac = Column(String(50), nullable=False)
     autores = Column(String(6000), nullable=False)
     nombre = Column(String(1500), nullable=False)
+    tipo = Column(String(200), nullable=True)
     lugar = Column(String(1000), nullable=True)
     revista = Column(String(1000), nullable=True)
     issn = Column(String(500), nullable=True)
