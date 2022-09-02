@@ -263,8 +263,7 @@ class ExtractorCvlac():
         dic2={}
         child=(soup.find('table') ).findChildren("tr" , recursive=False)
         list=['idioma','habla','escribe','lee','entiende']
-        for trs in child:
-            
+        for trs in child:            
             h3s=(trs.find('h3'))
             if h3s != None:                
                 if(str(h3s.contents[0])==("Idiomas")):
@@ -320,9 +319,9 @@ class ExtractorCvlac():
     
     def get_jurado(self, soup, url):
         try:
-            tablejur=(soup.find('a', attrs={'name':'jurado'}).parent)     
-            blocks_jurados = tablejur.find_all('blockquote')
+            tablejur=(soup.find('a', attrs={'name':'jurado'}).parent)
             if(str((tablejur).find('h3').contents[0])==('Jurado en comités de evaluación')):
+                blocks_jurados = tablejur.find_all('blockquote')
                 for block_jur in blocks_jurados:
                     dic_aux={'IDCVLAC':'','Nombre':'','Titulo: ':'','Tipo de trabajo presentado: ':'','en: ':'','programa académico':'','Nombre del orientado: ':'','Palabras: ':'','Areas: ':'','Sectores: ':''}   
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_jur)).split())))
@@ -347,14 +346,14 @@ class ExtractorCvlac():
     
     def get_libro(self, soup, url):
         try:
-            tablelib=(soup.find('a', attrs={'name':'libros'}).parent)
-            blocks_arts = tablelib.find_all('blockquote')
+            tablelib=(soup.find('a', attrs={'name':'libros'}).parent)            
             if(str((tablelib).find('h3').contents[0])==('Libros')):
                 tbody=tablelib.find_all('tr')
                 list_tipo=[]
                 for i,t in enumerate(tbody):
                     if not (i % 2) == 0:
                         list_tipo.append(t.find('b').text)
+                blocks_arts = tablelib.find_all('blockquote')
                 for block_art in blocks_arts:
                     libros_aux={'IDCVLAC':'','Autores':'','Nombre':'','tipo':'','En':'','fecha':'','Editorial':'','ISBN:':'','v. ':'','pags.':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
@@ -508,14 +507,14 @@ class ExtractorCvlac():
     
     def get_software(self, soup, url):
         try:
-            tablelib=(soup.find('a', attrs={'name':'software'}).parent)
-            blocks_arts = tablelib.find_all('blockquote')
+            tablelib=(soup.find('a', attrs={'name':'software'}).parent)            
             list_tipo=[]
             if(str((tablelib).find('h3').contents[0])==('Softwares')):
                 tbody=tablelib.find_all('tr')                
                 for i,t in enumerate(tbody):
                     if not (i % 2) == 0:
                         list_tipo.append(t.find('b').text)
+                blocks_arts = tablelib.find_all('blockquote')
                 for block_art in blocks_arts:
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')                                              
@@ -606,7 +605,6 @@ class ExtractorCvlac():
     def get_tecnologicos(self, soup, url):
         try:
             tablelib=(soup.find('a', attrs={'name':'tecnologicos'}).parent)
-            blocks_arts = tablelib.find_all('blockquote')
             list_tipo=[]
             if(str((tablelib).find('h3').contents[0])==('Productos tecnológicos')):
                 tbody=tablelib.find_all('tr')
@@ -614,6 +612,7 @@ class ExtractorCvlac():
                 for i,t in enumerate(tbody):
                     if not (i % 2) == 0:
                         list_tipo.append(t.find('b').text)
+                blocks_arts = tablelib.find_all('blockquote')
                 for block_art in blocks_arts:
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')                                              
