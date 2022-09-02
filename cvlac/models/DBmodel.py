@@ -15,6 +15,9 @@ from cvlac.models.Libros import Libros
 from cvlac.models.Estancias import Estancias
 from cvlac.models.Academica import Academica
 from cvlac.models.Complementaria import Complementaria
+from cvlac.models.Caplibros import Caplibros
+from cvlac.models.Software import Software
+from cvlac.models.Prototipo import Prototipo
 from cvlac.models.MetaDB import MetaDB
 
 def create_db():
