@@ -23,7 +23,8 @@ class ExtractorCvlac():
         self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.software={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.prototipo={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-                
+        self.tecnologicos={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
+                 
     def get_academica(self, soup, url):
         dic_aux={}   
         try:    
@@ -600,3 +601,51 @@ class ExtractorCvlac():
         df_prototipo = pd.DataFrame(self.prototipo)   
         df_prototipo = df_prototipo.reset_index(drop=True)   
         return df_prototipo
+
+    def get_tecnologicos(self, soup, url):
+        try:
+            tablelib=(soup.find('a', attrs={'name':'tecnologicos'}).parent)
+            blocks_arts = tablelib.find_all('blockquote')
+            if(str((tablelib).find('h3').contents[0])==('Productos tecnológicos')):
+                tbody=tablelib.find_all('tr')
+                list_tipo=[]
+                for i,t in enumerate(tbody):
+                    if not (i % 2) == 0:
+                        list_tipo.append(t.find('b').text)
+                for block_art in blocks_arts:
+                    quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
+                    quote_text_clear=quote_text_clear.replace('&amp;','&')                                              
+                    #################################
+                    # Pendiente: manejo de excepcion nombre software con mayuscula
+                    list_datos=re.split('<i>|<b>',quote_text_clear)
+                    dic={'idcvlac':'','autor':'','nombre':'','tipo':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                    dic['idcvlac'] = url[(url.find('='))+1:]
+                    for i,item in enumerate(list_datos):
+                        if i == 0:
+                            try:
+                                index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                            except:
+                                index1=0
+                            dic['autor'] = item[:index1].strip()
+                            dic['nombre'] = item[index1+1:].strip()
+                        else :
+                            dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
+                    cont_aux=dic['contrato/registro'].split('. En:') 
+                    dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
+                    try:     
+                            lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
+                            index_datos=re.search(',(\d{4})',lugg).start()                        
+                    except :
+                        index_datos= -1
+                    dic['lugar']=lugg[:index_datos].strip()
+                    dic['fecha']=lugg[index_datos+1:].strip()
+                    
+                    dic=dict(zip(self.tecnologicos.keys(),dic.values()))
+                    self.tecnologicos= almacena(self.tecnologicos,dic)  
+        except AttributeError:
+            pass
+            raise
+        self.tecnologicos['tipo']=list_tipo
+        df_tecnologicos = pd.DataFrame(self.tecnologicos)   
+        df_tecnologicos = df_tecnologicos.reset_index(drop=True)   
+        return df_tecnologicos
