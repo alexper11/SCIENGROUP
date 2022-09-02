@@ -166,7 +166,7 @@ if __name__ == '__main__':
     
     dom=get_lxml(url)
 
-    df_prueba=Extractor.get_software(dom,url)
+    df_prueba=Extractor.get_jurado(dom,url)
 
     df_prueba.to_csv('prueba.csv',index=False)
 
