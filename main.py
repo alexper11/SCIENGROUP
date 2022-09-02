@@ -162,6 +162,7 @@ if __name__ == '__main__':
     #perfil de gustavo ramirtez:
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013056'
     url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000018983'
+    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
     
     dom=get_lxml(url)
 

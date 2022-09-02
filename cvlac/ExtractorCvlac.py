@@ -21,7 +21,7 @@ class ExtractorCvlac():
         self.identificadores={'idcvlac':[],'nombre':[],'url':[]}
         #nuevas tablas 2git 2 no sape
         self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
-        self.software={'idcvlac':[],'autor':[],'nombre':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
+        self.software={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.prototipo={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
                 
     def get_academica(self, soup, url):
@@ -499,13 +499,18 @@ class ExtractorCvlac():
             tablelib=(soup.find('a', attrs={'name':'software'}).parent)
             blocks_arts = tablelib.find_all('blockquote')
             if(str((tablelib).find('h3').contents[0])==('Softwares')):
+                tbody=tablelib.find_all('tr')
+                list_tipo=[]
+                for i,t in enumerate(tbody):
+                    if not (i % 2) == 0:
+                        list_tipo.append(t.find('b').text)
                 for block_art in blocks_arts:
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')                                              
                     #################################
                     # Pendiente: manejo de excepcion nombre software con mayuscula
                     list_datos=re.split('<i>|<b>',quote_text_clear)
-                    dic={'idcvlac':'','autor':'','nombre':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                    dic={'idcvlac':'','autor':'','nombre':'','tipo':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras':'','Areas':'', 'Sectores':''}
                     dic['idcvlac'] = url[(url.find('='))+1:]
                     for i,item in enumerate(list_datos):
                         if i == 0:
@@ -531,6 +536,8 @@ class ExtractorCvlac():
                     self.software= almacena(self.software,dic)  
         except AttributeError:
             pass
+            raise
+        self.software['tipo']=list_tipo
         df_software = pd.DataFrame(self.software)   
         df_software = df_software.reset_index(drop=True)   
         return df_software
