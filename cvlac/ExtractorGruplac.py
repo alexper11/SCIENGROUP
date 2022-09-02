@@ -23,9 +23,11 @@ class ExtractorGruplac(ExtractorCvlac):
         self.grup_reconocimiento=pd.DataFrame(columns=['idcvlac','nombre','fecha'])
         self.grup_redes=pd.DataFrame(columns=['idcvlac','nombre','url'])
         self.grup_caplibros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','fecha','editorial','isbn','volumen','paginas','palabras','areas','sectores'])
-        self.grup_software=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','contrato_registro','lugar','fecha','plataforma','ambiente','palabras','areas','sectores'])
-        self.grup_prototipo=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','contrato_registro','lugar','fecha','palabras','areas','sectores'])
-        self.grup_tecnologicos=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','contrato_registro','lugar','fecha','palabras','areas','sectores'])
+        self.grup_software=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','nombre_comercial','contrato_registro','lugar','fecha','plataforma','ambiente','palabras','areas','sectores'])
+        self.grup_prototipo=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','nombre_comercial','contrato_registro','lugar','fecha','palabras','areas','sectores'])
+        self.grup_tecnologicos=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','nombre_comercial','contrato_registro','lugar','fecha','palabras','areas','sectores'])
+        self.grup_empresa_tecnologica=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','nit','registro_camara','palabras','areas','sectores'])
+        self.grup_innovacion_empresarial=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','nombre_comercial','contrato_registro','lugar','fecha','palabras','areas','sectores'])
         
 
     def get_investigadoresList(self,url):
