@@ -9,6 +9,7 @@ class Software(Base):
     autor = Column(String(4000), nullable=False)
     nombre = Column(String(1000), nullable=False)
     tipo = Column(String(500), nullable=False)
+    nombre_comercial = Column(String(1000), nullable=False)
     contrato_registro = Column(String(300), nullable=True)
     lugar = Column(String(50), nullable=True)
     fecha = Column(String(500), nullable=False)

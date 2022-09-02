@@ -1,9 +1,9 @@
 from cvlac.db import Base
 from sqlalchemy import Column, Integer, String
 
-class Tecnologicos(Base):
+class InnovacionEmpresarial(Base):
     
-    __tablename__ = 'tecnologicos'
+    __tablename__ = 'innovacion_empresarial'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
     autor = Column(String(4000), nullable=False)
@@ -23,7 +23,7 @@ class Tecnologicos(Base):
             setattr(self, key, value)
             
     def __repr__(self):
-        return f'Tecnologicos({self.nombre}, {self.idcvlac})'
+        return f'InnovacionEmpresarial({self.nombre}, {self.idcvlac})'
     
     def __str__(self):
         return self.idcvlac
