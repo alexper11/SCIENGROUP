@@ -24,15 +24,16 @@ class ExtractorCvlac():
         self.software={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.prototipo={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.tecnologicos={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        
+        self.empresa_tecnologica={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'nit':[],'registro_camara':[],'palabras':[],'areas':[],'sectores':[]}
+        self.innovacion_empresarial={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
                 
     def get_academica(self, soup, url):
         dic_aux={}   
         try:    
-            tableacad=(soup.find('a', attrs={'name':'formacion_acad'}).parent)
-            b_academicas=tableacad.find_all('b')
+            tableacad=(soup.find('a', attrs={'name':'formacion_acad'}).parent)            
             if(str((tableacad).find('h3').contents[0])==('Formación Académica')):
                 list=['tipo', 'institucion', 'titulo', 'fecha', 'proyecto']
+                b_academicas=tableacad.find_all('b')
                 for td_academi in b_academicas:
                     info=td_academi.parent
                     td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
@@ -71,14 +72,14 @@ class ExtractorCvlac():
     
     def get_articulo(self, soup, url):
         try:
-            tableart=(soup.find('a', attrs={'name':'articulos'}).parent)
-            blocks_arts = tableart.find_all('blockquote')
+            tableart=(soup.find('a', attrs={'name':'articulos'}).parent)            
             if(str((tableart).find('h3').contents[0])==('Artículos')):
                 tbody=tableart.find_all('tr')
                 list_tipo=[]
                 for i,t in enumerate(tbody):
                     if not (i % 2) == 0:
                         list_tipo.append(t.find('b').text)
+                blocks_arts = tableart.find_all('blockquote')
                 for block_art in blocks_arts:
                     art_individual={'IDCVLAC':'','Autores':'','Nombre':'','tipo':'','En':'','Revista':'','ISSN:':'','ed:':'','v.':'','fasc.':'', 'p.':'','fecha.':'',' DOI: ':'', 'Palabras: ':'', 'Sectores: ':''}
                     quote_text_clear=re.sub('http://dx.doi.org/|http://doi.org/|https://doi.org/|<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
@@ -163,10 +164,10 @@ class ExtractorCvlac():
     def get_complementaria(self, soup, url):
         dic_aux={}  
         try:
-            tablecomp=(soup.find('a', attrs={'name':'formacion_comp'}).parent)   
-            b_compl=tablecomp.find_all('b')
+            tablecomp=(soup.find('a', attrs={'name':'formacion_comp'}).parent)
             if(str((tablecomp).find('h3').contents[0])==('Formación Complementaria')):
                 list=['tipo', 'institucion', 'titulo', 'fecha']
+                b_compl=tablecomp.find_all('b')
                 for td_compl in b_compl:
                     info=td_compl.parent
                     td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
@@ -193,9 +194,9 @@ class ExtractorCvlac():
         dic_aux={}    
         try:
             tablestan=(soup.find('a', attrs={'name':'estancias_posdoctorales'}).parent) 
-            b_estancias=tablestan.find_all('b')
             if(str((tablestan).find('h3').contents[0])==('Estancias posdoctorales')):
                 list=['nombre', 'entidad', 'area', 'fecha_inicio', 'fecha_fin', 'descripcion']
+                b_estancias=tablestan.find_all('b')
                 for td_estancia in b_estancias:
                     info=td_estancia.parent
                     td_text_clear=re.sub('<b>|<td>|</td>','',(" ".join((str(info)).split())))
@@ -262,8 +263,7 @@ class ExtractorCvlac():
         dic2={}
         child=(soup.find('table') ).findChildren("tr" , recursive=False)
         list=['idioma','habla','escribe','lee','entiende']
-        for trs in child:
-            
+        for trs in child:            
             h3s=(trs.find('h3'))
             if h3s != None:                
                 if(str(h3s.contents[0])==("Idiomas")):
@@ -319,9 +319,9 @@ class ExtractorCvlac():
     
     def get_jurado(self, soup, url):
         try:
-            tablejur=(soup.find('a', attrs={'name':'jurado'}).parent)     
-            blocks_jurados = tablejur.find_all('blockquote')
+            tablejur=(soup.find('a', attrs={'name':'jurado'}).parent)
             if(str((tablejur).find('h3').contents[0])==('Jurado en comités de evaluación')):
+                blocks_jurados = tablejur.find_all('blockquote')
                 for block_jur in blocks_jurados:
                     dic_aux={'IDCVLAC':'','Nombre':'','Titulo: ':'','Tipo de trabajo presentado: ':'','en: ':'','programa académico':'','Nombre del orientado: ':'','Palabras: ':'','Areas: ':'','Sectores: ':''}   
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_jur)).split())))
@@ -346,14 +346,14 @@ class ExtractorCvlac():
     
     def get_libro(self, soup, url):
         try:
-            tablelib=(soup.find('a', attrs={'name':'libros'}).parent)
-            blocks_arts = tablelib.find_all('blockquote')
+            tablelib=(soup.find('a', attrs={'name':'libros'}).parent)            
             if(str((tablelib).find('h3').contents[0])==('Libros')):
                 tbody=tablelib.find_all('tr')
                 list_tipo=[]
                 for i,t in enumerate(tbody):
                     if not (i % 2) == 0:
                         list_tipo.append(t.find('b').text)
+                blocks_arts = tablelib.find_all('blockquote')
                 for block_art in blocks_arts:
                     libros_aux={'IDCVLAC':'','Autores':'','Nombre':'','tipo':'','En':'','fecha':'','Editorial':'','ISBN:':'','v. ':'','pags.':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
@@ -507,14 +507,14 @@ class ExtractorCvlac():
     
     def get_software(self, soup, url):
         try:
-            tablelib=(soup.find('a', attrs={'name':'software'}).parent)
-            blocks_arts = tablelib.find_all('blockquote')
+            tablelib=(soup.find('a', attrs={'name':'software'}).parent)            
+            list_tipo=[]
             if(str((tablelib).find('h3').contents[0])==('Softwares')):
-                tbody=tablelib.find_all('tr')
-                list_tipo=[]
+                tbody=tablelib.find_all('tr')                
                 for i,t in enumerate(tbody):
                     if not (i % 2) == 0:
                         list_tipo.append(t.find('b').text)
+                blocks_arts = tablelib.find_all('blockquote')
                 for block_art in blocks_arts:
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')                                              
@@ -547,7 +547,6 @@ class ExtractorCvlac():
                     self.software= almacena(self.software,dic)  
         except AttributeError:
             pass
-            raise
         self.software['tipo']=list_tipo
         df_software = pd.DataFrame(self.software)   
         df_software = df_software.reset_index(drop=True)   
@@ -602,3 +601,144 @@ class ExtractorCvlac():
         df_prototipo = pd.DataFrame(self.prototipo)   
         df_prototipo = df_prototipo.reset_index(drop=True)   
         return df_prototipo
+
+    def get_tecnologicos(self, soup, url):
+        try:
+            tablelib=(soup.find('a', attrs={'name':'tecnologicos'}).parent)
+            list_tipo=[]
+            if(str((tablelib).find('h3').contents[0])==('Productos tecnológicos')):
+                tbody=tablelib.find_all('tr')
+                
+                for i,t in enumerate(tbody):
+                    if not (i % 2) == 0:
+                        list_tipo.append(t.find('b').text)
+                blocks_arts = tablelib.find_all('blockquote')
+                for block_art in blocks_arts:
+                    quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
+                    quote_text_clear=quote_text_clear.replace('&amp;','&')                                              
+                    #################################
+                    # Pendiente: manejo de excepcion nombre software con mayuscula
+                    list_datos=re.split('<i>|<b>',quote_text_clear)
+                    dic={'idcvlac':'','autor':'','nombre':'','tipo':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                    dic['idcvlac'] = url[(url.find('='))+1:]
+                    for i,item in enumerate(list_datos):
+                        if i == 0:
+                            try:
+                                index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                            except:
+                                index1=0
+                            dic['autor'] = item[:index1].strip()
+                            dic['nombre'] = item[index1+1:].strip()
+                        else :
+                            dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
+                    cont_aux=dic['contrato/registro'].split('. En:') 
+                    dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
+                    try:     
+                            lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
+                            index_datos=re.search(',(\d{4})',lugg).start()                        
+                    except :
+                        index_datos= -1
+                    dic['lugar']=lugg[:index_datos].strip()
+                    dic['fecha']=lugg[index_datos+1:].strip()
+                    
+                    dic=dict(zip(self.tecnologicos.keys(),dic.values()))
+                    self.tecnologicos= almacena(self.tecnologicos,dic)  
+        except AttributeError:
+            pass
+        self.tecnologicos['tipo']=list_tipo
+        df_tecnologicos = pd.DataFrame(self.tecnologicos)   
+        df_tecnologicos = df_tecnologicos.reset_index(drop=True)   
+        return df_tecnologicos
+
+    def get_empresa_tecnologica(self, soup, url):
+        try:
+            tablelib=(soup.find('h3', attrs={'id':'base_tecnologica'}).parent.parent.parent)
+            list_tipo=[]
+            if(str((tablelib).find('h3').contents[0])==('Empresas de base tecnológica')):
+                tbody=tablelib.find_all('tr')                
+                for i,t in enumerate(tbody):
+                    if not (i % 2) == 0:
+                        list_tipo.append(t.find('b').text)
+                blocks_arts = tablelib.find_all('blockquote')
+                for block_art in blocks_arts:
+                    quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
+                    quote_text_clear=quote_text_clear.replace('&amp;','&')                                              
+                    #################################
+                    # Pendiente: manejo de excepcion nombre software con mayuscula
+                    list_datos=re.split('<i>|<b>',quote_text_clear)
+                    dic={'idcvlac':'','autores':'','nombre':'','tipo':'','nit':'','Registrado ante la c´mara el':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                    dic['idcvlac'] = url[(url.find('='))+1:]
+                    for i,item in enumerate(list_datos):
+                        if i == 0:
+                            try:
+                                index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                            except:
+                                index1=0
+                            dic['autores'] = item[:index1].strip()
+                            dic['nombre'] = item[index1+1:].strip()
+                        else:
+                            separador=item.find(':')
+                            if(separador!=-1):
+                                dic[item[:separador]]=re.sub('<[^<]+?>', '',item[separador:]).lstrip(':').strip()
+                            elif(item.find('Nit')!=-1):
+                                print(item)
+                                dic['nit']=re.sub('<[^<]+?>', '',item[item.rfind('Nit')+3:]).strip()         
+                            else: pass
+                    dic=dict(zip(self.empresa_tecnologica.keys(),dic.values()))
+                    self.empresa_tecnologica= almacena(self.empresa_tecnologica,dic)  
+        except AttributeError:
+            pass            
+        self.empresa_tecnologica['tipo']=list_tipo
+        df_empresa_tecnologica = pd.DataFrame(self.empresa_tecnologica)   
+        df_empresa_tecnologica = df_empresa_tecnologica.reset_index(drop=True)   
+        return df_empresa_tecnologica
+
+    def get_innovacion(self, soup, url):
+        try:
+            child=(soup.find('table')).findChildren("tr" , recursive=False)            
+            for trs in child:
+                h3s=(trs.find('h3'))
+                if h3s != None:                
+                    if(str(h3s.contents[0])==("Innovación generada en la gestión empresarial")):
+                        tbody=h3s.parent.parent.parent.find_all('tr')
+                        list_tipo=[]
+                        for i,t in enumerate(tbody):
+                            if not (i % 2) == 0:
+                                list_tipo.append(t.find('b').text)
+                        for blockquote in ((h3s.parent.parent.parent).find_all('blockquote')):
+                            quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(blockquote)).split())))
+                            quote_text_clear=quote_text_clear.replace('&amp;','&')                                                      
+                            #################################
+                            # Pendiente: manejo de excepcion nombre software con mayuscula
+                            list_datos=re.split('<i>|<b>',quote_text_clear)
+                            dic={'idcvlac':'','autor':'','nombre':'','tipo':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                            dic['idcvlac'] = url[(url.find('='))+1:]
+                            
+                            for i,item in enumerate(list_datos):
+                                if i == 0:
+                                    try:
+                                        index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                    except:
+                                        index1=0
+                                    dic['autor'] = item[:index1].strip()
+                                    dic['nombre'] = item[index1+1:].strip()
+                                else :
+                                    dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
+                            cont_aux=dic['contrato/registro'].split('. En:') 
+                            dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
+                            try:     
+                                    lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
+                                    index_datos=re.search(',(\d{4})',lugg).start()                        
+                            except :
+                                index_datos= -1
+                            dic['lugar']=lugg[:index_datos].strip()
+                            dic['fecha']=lugg[index_datos+1:].strip()
+                            
+                            dic=dict(zip(self.innovacion_empresarial.keys(),dic.values()))
+                            self.innovacion_empresarial= almacena(self.innovacion_empresarial,dic) 
+        except AttributeError:
+            pass           
+        self.innovacion_empresarial['tipo']=list_tipo
+        df_innovacion = pd.DataFrame(self.innovacion_empresarial)   
+        df_innovacion = df_innovacion.reset_index(drop=True)   
+        return df_innovacion
