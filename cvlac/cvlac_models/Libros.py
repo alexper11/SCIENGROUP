@@ -1,5 +1,5 @@
 from cvlac.db_cvlac import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 
 class Libros(Base):
     
@@ -7,11 +7,12 @@ class Libros(Base):
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
     autores = Column(String(4000), nullable=False)
-    nombre = Column(String(1000), nullable=False)
+    nombre = Column(String(1000), nullable=True)
     tipo = Column(String(150), nullable=True)
+    verificado = Column(Boolean,unique=False, default=True)
     lugar = Column(String(200), nullable=True)
     fecha = Column(String(20), nullable=True)
-    editorial = Column(String(500), nullable=False)
+    editorial = Column(String(500), nullable=True)
     isbn = Column(String(500), nullable=True)
     volumen = Column(String(50), nullable=True)
     paginas = Column(String(50), nullable=True)
