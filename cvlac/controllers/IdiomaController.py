@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.cvlac_models.Idioma import Idioma
 
@@ -11,14 +11,14 @@ class IdiomaController:
         dicList=df.to_dict(orient='records')
         for dic in dicList:
             idioma = Idioma(**dic)
-            db.session.add(idioma)
+            db_cvlac.session.add(idioma)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Idioma")
             df.to_csv('IdiomaCvlac.csv')
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
     

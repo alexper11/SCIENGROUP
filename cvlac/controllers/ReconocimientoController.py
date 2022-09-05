@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.cvlac_models.Reconocimiento import Reconocimiento
 
@@ -11,14 +11,14 @@ class ReconocimientoController:
         dicList=df.to_dict(orient='records')
         for dic in dicList:
             reconocimiento = Reconocimiento(**dic)
-            db.session.add(reconocimiento)
+            db_cvlac.session.add(reconocimiento)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Reconocimiento")
             df.to_csv('ReconocimientoCvlac.csv')
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
     

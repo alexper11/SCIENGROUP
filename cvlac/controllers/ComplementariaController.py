@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.cvlac_models.Complementaria import Complementaria
 
@@ -11,13 +11,13 @@ class ComplementariaController:
         dicList=df.to_dict(orient='records')
         for dic in dicList:
             complementaria = Complementaria(**dic)
-            db.session.add(complementaria)
+            db_cvlac.session.add(complementaria)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Complementaria")
             df.to_csv('ComplementariaCvlac.csv')
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
