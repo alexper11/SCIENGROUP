@@ -1,4 +1,4 @@
-from cvlac.db import Base
+from cvlac.db_cvlac import Base
 from sqlalchemy import Column, Integer, String
 
 class Articulos(Base):

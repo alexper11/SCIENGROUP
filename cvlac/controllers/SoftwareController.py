@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.cvlac_models.Software import Software
 
@@ -11,14 +11,14 @@ class SoftwareController:
         dicList=df.to_dict(orient='records')
         for dic in dicList:
             software = Software(**dic)
-            db.session.add(software)
+            db_cvlac.session.add(software)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Software")
             df.to_csv('SoftwareCvlac.csv')
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
     

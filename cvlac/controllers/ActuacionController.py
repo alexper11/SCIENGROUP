@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.cvlac_models.Actuacion import Actuacion
 
@@ -11,16 +11,16 @@ class ActuacionController:
         dicList=df.to_dict(orient='records')
         for dic in dicList:
             actuacion = Actuacion(**dic)
-            db.session.add(actuacion)
+            db_cvlac.session.add(actuacion)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Actuacion")
             df.to_csv('ActuacionCvlac.csv')
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
     
     
             

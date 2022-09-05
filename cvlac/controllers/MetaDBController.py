@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.cvlac_models.MetaDB import MetaDB
 
@@ -9,13 +9,13 @@ class MetaDBController:
     
     def insert_datetime(self):
         metadb=MetaDB()
-        db.session.add(metadb)
+        db_cvlac.session.add(metadb)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar datetime en MetDB")
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
     
