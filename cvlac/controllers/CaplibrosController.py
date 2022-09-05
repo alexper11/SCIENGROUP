@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.models.Caplibros import Caplibros
 
@@ -11,14 +11,14 @@ class CaplibrosController:
         dicList=df.to_dict(orient='records')
         for dic in dicList:
             caplibros = Caplibros(**dic)
-            db.session.add(caplibros)
+            db_cvlac.session.add(caplibros)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Caplibros")
             df.to_csv('CaplibrosCvlac.csv')
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
     

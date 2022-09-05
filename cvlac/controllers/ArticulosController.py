@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.models.Articulos import Articulos
 
@@ -11,14 +11,14 @@ class ArticulosController:
         dicList=df.to_dict(orient='records')
         for dic in dicList:
             articulos = Articulos(**dic)
-            db.session.add(articulos)
+            db_cvlac.session.add(articulos)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Articulos")
             df.to_csv('ArticulosCvlac.csv')
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
     
