@@ -8,6 +8,10 @@ class ExtractorGruplac(ExtractorCvlac):
     
     def __init__(self):
         super().__init__()
+        #######
+        #El prefijo grup indica un atributo referente a una tabla de cvlac, dicho atributo almacena información
+        #de un grupo de cvlacs pertenecientes a un solo gruplac.
+        #######
         self.grup_academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha','proyecto'])
         self.grup_actuacion=pd.DataFrame(columns=['idcvlac','areas'])
         self.grup_articulos=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','lugar','revista','issn','editorial','volumen','fasciculo','doi','palabras','sectores'])
@@ -28,6 +32,9 @@ class ExtractorGruplac(ExtractorCvlac):
         self.grup_tecnologicos=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','nombre_comercial','contrato_registro','lugar','fecha','palabras','areas','sectores'])
         self.grup_empresa_tecnologica=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','nit','registro_camara','palabras','areas','sectores'])
         self.grup_innovacion_empresarial=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','nombre_comercial','contrato_registro','lugar','fecha','palabras','areas','sectores'])
+        #########
+        #El prefijo perfil indica un atributo refente a una tabla especifica del perfil de un gruplac
+        #######
         
 
     def get_investigadoresList(self,url):

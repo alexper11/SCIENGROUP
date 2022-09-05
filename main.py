@@ -8,22 +8,23 @@ import pandas as pd
 import sys
 from scopus.readKey import read_key
 '''
-from cvlac.models.DBmodel import create_db
+from cvlac.cvlac_models.DBmodel import create_db
 from cvlac.controllers.ActuacionController import ActuacionController
-from cvlac.controllers.ArticulosController import ArticulosController
-from cvlac.controllers.BasicoController import BasicoController
-from cvlac.controllers.EvaluadorController import EvaluadorController
-from cvlac.controllers.IdentificadoresController import IdentificadoresController
-from cvlac.controllers.IdiomaController import IdiomaController
-from cvlac.controllers.InvestigacionController import InvestigacionController
-from cvlac.controllers.JuradosController import JuradosController
-from cvlac.controllers.LibrosController import LibrosController
-from cvlac.controllers.ReconocimientoController import ReconocimientoController
-from cvlac.controllers.RedesController import RedesController
-from cvlac.controllers.EstanciasController import EstanciasController
-from cvlac.controllers.AcademicaController import AcademicaController
-from cvlac.controllers.ComplementariaController import ComplementariaController
-from cvlac.controllers.MetaDBController import MetaDBController
+from cvlac.cvlac_controllers.ArticulosController import ArticulosController
+from cvlac.cvlac_controllers.BasicoController import BasicoController
+from cvlac.cvlac_controllers.EvaluadorController import EvaluadorController
+from cvlac.cvlac_controllers.IdentificadoresController import IdentificadoresController
+from cvlac.cvlac_controllers.IdiomaController import IdiomaController
+from cvlac.cvlac_controllers.InvestigacionController import InvestigacionController
+from cvlac.cvlac_controllers.JuradosController import JuradosController
+from cvlac.cvlac_controllers.LibrosController import LibrosController
+from cvlac.cvlac_controllers.ReconocimientoController import ReconocimientoController
+from cvlac.cvlac_controllers.RedesController import RedesController
+from cvlac.cvlac_controllers.EstanciasController import EstanciasController
+from cvlac.cvlac_controllers.AcademicaController import AcademicaController
+from cvlac.cvlac_controllers.ComplementariaController import ComplementariaController
+from cvlac.cvlac_controllers.MetaDBController import MetaDBController
+
 
 from scopus.models.DBmodel import create_scopus_db
 from scopus.controllers.AutoresController import AutoresController
