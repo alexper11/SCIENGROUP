@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Identificadores import Identificadores
+from cvlac.cvlac_models.Identificadores import Identificadores
 
 class IdentificadoresController:
     count = 0

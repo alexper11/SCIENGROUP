@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Evaluador import Evaluador
+from cvlac.cvlac_models.Evaluador import Evaluador
 
 class EvaluadorController:
     count = 0

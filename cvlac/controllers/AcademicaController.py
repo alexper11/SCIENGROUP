@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Academica import Academica
+from cvlac.cvlac_models.Academica import Academica
 
 class AcademicaController:
     count = 0

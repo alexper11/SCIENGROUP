@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Reconocimiento import Reconocimiento
+from cvlac.cvlac_models.Reconocimiento import Reconocimiento
 
 class ReconocimientoController:
     count = 0

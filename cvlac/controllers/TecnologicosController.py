@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Tecnologicos import Tecnologicos
+from cvlac.cvlac_models.Tecnologicos import Tecnologicos
 
 class TecnologicosController:
     count = 0

@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Software import Software
+from cvlac.cvlac_models.Software import Software
 
 class SoftwareController:
     count = 0
