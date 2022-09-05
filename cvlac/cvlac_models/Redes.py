@@ -1,13 +1,13 @@
-from cvlac.db import Base
+from cvlac.db_cvlac import Base
 from sqlalchemy import Column, Integer, String
 
-class Investigacion(Base):
+class Redes(Base):
     
-    __tablename__ = 'investigacion'
+    __tablename__ = 'redes'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
     nombre = Column(String(1000), nullable=False)
-    activa = Column(String(50), nullable=False)
+    url = Column(String(1000), nullable=False)
     
     def __init__(self, **kwargs):
         
@@ -15,7 +15,7 @@ class Investigacion(Base):
             setattr(self, key, value)
             
     def __repr__(self):
-        return f'Investigacion({self.nombre}, {self.idcvlac}, {self.activa})'
+        return f'Redes({self.nombre}, {self.idcvlac})'
     
     def __str__(self):
         return self.idcvlac

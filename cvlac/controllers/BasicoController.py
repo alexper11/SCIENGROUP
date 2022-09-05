@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.models.Basico import Basico
 
@@ -11,14 +11,14 @@ class BasicoController:
         dicList=df.to_dict(orient='records')
         for dic in dicList:
             basico = Basico(**dic)
-            db.session.add(basico)
+            db_cvlac.session.add(basico)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Basico")
             df.to_csv('BasicoCvlac.csv')
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
     

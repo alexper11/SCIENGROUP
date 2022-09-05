@@ -1,17 +1,18 @@
-from cvlac.db import Base
+from cvlac.db_cvlac import Base
 from sqlalchemy import Column, Integer, String
 
-class Jurados(Base):
+class Tecnologicos(Base):
     
-    __tablename__ = 'jurados'
+    __tablename__ = 'tecnologicos'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
+    autor = Column(String(4000), nullable=False)
     nombre = Column(String(1000), nullable=False)
-    titulo = Column(String(1000), nullable=False)
-    tipo = Column(String(500), nullable=True)
-    lugar = Column(String(200), nullable=True)
-    programa = Column(String(800), nullable=True)
-    orientado = Column(String(1500), nullable=True)
+    tipo = Column(String(500), nullable=False)
+    nombre_comercial = Column(String(1000), nullable=False)
+    contrato_registro = Column(String(300), nullable=True)
+    lugar = Column(String(50), nullable=True)
+    fecha = Column(String(500), nullable=False)
     palabras = Column(String(3000), nullable=True)
     areas = Column(String(3000), nullable=True)
     sectores = Column(String(3000), nullable=True)
@@ -22,7 +23,7 @@ class Jurados(Base):
             setattr(self, key, value)
             
     def __repr__(self):
-        return f'Jurados({self.nombre}, {self.idcvlac}, {self.titulo})'
+        return f'Tecnologicos({self.nombre}, {self.idcvlac})'
     
     def __str__(self):
         return self.idcvlac

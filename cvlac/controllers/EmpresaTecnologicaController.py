@@ -1,4 +1,4 @@
-from cvlac import db
+from cvlac import db_cvlac
 import pandas
 from cvlac.models.EmpresaTecnologica import EmpresaTecnologica
 
@@ -11,14 +11,14 @@ class EmpresaTecnologicaController:
         dicList=df.to_dict(orient='records')
         for dic in dicList:
             empresatecnologica = EmpresaTecnologica(**dic)
-            db.session.add(empresatecnologica)
+            db_cvlac.session.add(empresatecnologica)
         try:
-            db.session.commit()
+            db_cvlac.session.commit()
         except:
-            db.session.rollback()
+            db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en EmpresaTecnologica")
             df.to_csv('EmpresaTecnologicaCvlac.csv')
             raise
         finally:
-            db.session.close()
+            db_cvlac.session.close()
     
