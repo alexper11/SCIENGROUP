@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Libros import Libros
+from cvlac.cvlac_models.Libros import Libros
 
 class LibrosController:
     count = 0

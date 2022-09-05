@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Idioma import Idioma
+from cvlac.cvlac_models.Idioma import Idioma
 
 class IdiomaController:
     count = 0

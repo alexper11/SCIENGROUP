@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Complementaria import Complementaria
+from cvlac.cvlac_models.Complementaria import Complementaria
 
 class ComplementariaController:
     count = 0

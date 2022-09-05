@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Articulos import Articulos
+from cvlac.cvlac_models.Articulos import Articulos
 
 class ArticulosController:
     count = 0

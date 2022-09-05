@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Basico import Basico
+from cvlac.cvlac_models.Basico import Basico
 
 class BasicoController:
     count = 0

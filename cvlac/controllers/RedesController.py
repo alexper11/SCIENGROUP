@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Redes import Redes
+from cvlac.cvlac_models.Redes import Redes
 
 class RedesController:
     count = 0

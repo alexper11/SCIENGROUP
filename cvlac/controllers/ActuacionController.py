@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Actuacion import Actuacion
+from cvlac.cvlac_models.Actuacion import Actuacion
 
 class ActuacionController:
     count = 0

@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Jurados import Jurados
+from cvlac.cvlac_models.Jurados import Jurados
 
 class JuradosController:
     count = 0

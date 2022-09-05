@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Prototipo import Prototipo
+from cvlac.cvlac_models.Prototipo import Prototipo
 
 class PrototipoController:
     count = 0

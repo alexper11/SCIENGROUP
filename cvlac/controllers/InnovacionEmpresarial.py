@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.InnovacionEmpresarial import InnovacionEmpresarial
+from cvlac.cvlac_models.InnovacionEmpresarial import InnovacionEmpresarial
 
 class InnovacionEmpresarialController:
     count = 0

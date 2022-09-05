@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Investigacion import Investigacion
+from cvlac.cvlac_models.Investigacion import Investigacion
 
 class InvestigacionController:
     count = 0

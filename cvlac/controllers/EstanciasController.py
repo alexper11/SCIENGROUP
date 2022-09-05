@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.Estancias import Estancias
+from cvlac.cvlac_models.Estancias import Estancias
 
 class EstanciasController:
     count = 0

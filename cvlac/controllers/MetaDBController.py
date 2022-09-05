@@ -1,6 +1,6 @@
 from cvlac import db
 import pandas
-from cvlac.models.MetaDB import MetaDB
+from cvlac.cvlac_models.MetaDB import MetaDB
 
 class MetaDBController:
     count = 0
