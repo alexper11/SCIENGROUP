@@ -19,7 +19,7 @@ class ExtractorCvlac():
         self.reconocimiento={'idcvlac':[],'nombre':[],'fecha':[]}
         self.redes={'idcvlac':[],'nombre':[],'url':[]}
         self.identificadores={'idcvlac':[],'nombre':[],'url':[]}        
-        self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
+        self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'verificado':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.software={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.prototipo={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.tecnologicos={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
@@ -473,7 +473,11 @@ class ExtractorCvlac():
             if(str((table_cap_libros).find('h3').contents[0])==('Capitulos de libro')):
                 blocks_cap = table_cap_libros.find_all('blockquote')
                 for block_cap in blocks_cap:
-                    cap_libros_aux={'idcvlac':'','autores':'','capitulo':'','libro':'','lugar':'','ISBN:':'','ed:':'',', v.':'','paginas':'','fecha':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
+                    cap_libros_aux={'idcvlac':'','autores':'','capitulo':'','libro':'','lugar':'','verificado':'','ISBN:':'','ed:':'',', v.':'','paginas':'','fecha':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
+                    if block_cap.find('img') == None:
+                        cap_libros_aux['verificado']=False
+                    else:
+                        cap_libros_aux['verificado']=True
                     block_cap=re.sub('<blockquote>|</blockquote>','',(" ".join((str(block_cap)).split()))).replace('&amp;','&')
                     index_name=block_cap.find(', "')
                     list_autores=block_cap[:index_name].split('<br/>')
@@ -497,12 +501,11 @@ class ExtractorCvlac():
                             if(key == dato):
                                 if(dato==", v."):
                                     list_fasc=(re.split(',',list_datos[list_datos.index(dato)+1]))  
-                                    cap_libros_aux[', v.']=list_fasc[0]                      
+                                    cap_libros_aux[', v.']=list_fasc[0].strip()                   
                                     cap_libros_aux['paginas']=list_fasc[1].replace("p.","")
                                     cap_libros_aux['fecha']=list_fasc[2].strip()                                    
                                 else:
-                                    cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()                            
-                    print(cap_libros_aux)
+                                    cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()
                     cap_libros_aux=dict(zip(self.caplibros.keys(),cap_libros_aux.values()))
                     self.caplibros= almacena(self.caplibros,cap_libros_aux)   
                     cap_libros_aux={}   

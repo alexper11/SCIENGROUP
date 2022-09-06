@@ -161,7 +161,7 @@ if __name__ == '__main__':
     #perfil de cristian figueroa:
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
     #perfil de gustavo ramirtez:
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
+    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
     #perfil gruplac telematica:
     url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160'
     dom=get_lxml(url)

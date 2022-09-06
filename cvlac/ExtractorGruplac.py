@@ -11,7 +11,7 @@ class ExtractorGruplac(ExtractorCvlac):
     def __init__(self):
         super().__init__()
         #######
-        #El prefijo grup indica un atributo referente a una tabla de cvlac, dicho atributo almacena información
+        #El prefijo 'grup' indica un atributo referente a una tabla de cvlac, dicho atributo almacena información
         #de un grupo de cvlacs pertenecientes a un solo gruplac.
         #######
         self.grup_academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha','proyecto'])
@@ -28,14 +28,14 @@ class ExtractorGruplac(ExtractorCvlac):
         self.grup_libros=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','verificado','lugar','fecha','editorial','isbn','volumen','paginas','palabras','areas','sectores'])
         self.grup_reconocimiento=pd.DataFrame(columns=['idcvlac','nombre','fecha'])
         self.grup_redes=pd.DataFrame(columns=['idcvlac','nombre','url'])
-        self.grup_caplibros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','fecha','editorial','isbn','volumen','paginas','palabras','areas','sectores'])
+        self.grup_caplibros=pd.DataFrame(columns=['idcvlac','autores','nombre','lugar','verificado','fecha','editorial','isbn','volumen','paginas','palabras','areas','sectores'])
         self.grup_software=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','verificado','nombre_comercial','contrato_registro','lugar','fecha','plataforma','ambiente','palabras','areas','sectores'])
         self.grup_prototipo=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','nombre_comercial','contrato_registro','lugar','fecha','palabras','areas','sectores'])
         self.grup_tecnologicos=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','nombre_comercial','contrato_registro','lugar','fecha','palabras','areas','sectores'])
         self.grup_empresa_tecnologica=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','nit','registro_camara','palabras','areas','sectores'])
         self.grup_innovacion_empresarial=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','nombre_comercial','contrato_registro','lugar','fecha','palabras','areas','sectores'])
         #########
-        #El prefijo perfil indica un atributo refente a una tabla especifica del perfil de un gruplac
+        #El prefijo 'perfil' indica un atributo refente a una tabla especifica del perfil de un gruplac
         #######
         self.perfil_basico={'idgruplac':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
         self.perfil_intituciones={'idgruplac':[],'intituciones':[]}
