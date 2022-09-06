@@ -1,24 +1,24 @@
 
-from cvlac.db import Base, engine
+from cvlac.db_cvlac import Base, engine
 
-from cvlac.models.Articulos import Articulos
-from cvlac.models.Actuacion import Actuacion
-from cvlac.models.Basico import Basico
-from cvlac.models.Evaluador import Evaluador
-from cvlac.models.Identificadores import Identificadores
-from cvlac.models.Idioma import Idioma
-from cvlac.models.Investigacion import Investigacion
-from cvlac.models.Jurados import Jurados
-from cvlac.models.Reconocimiento import Reconocimiento
-from cvlac.models.Redes import Redes
-from cvlac.models.Libros import Libros
-from cvlac.models.Estancias import Estancias
-from cvlac.models.Academica import Academica
-from cvlac.models.Complementaria import Complementaria
-from cvlac.models.Caplibros import Caplibros
-from cvlac.models.Software import Software
-from cvlac.models.Prototipo import Prototipo
-from cvlac.models.MetaDB import MetaDB
+from cvlac.cvlac_models.Articulos import Articulos
+from cvlac.cvlac_models.Actuacion import Actuacion
+from cvlac.cvlac_models.Basico import Basico
+from cvlac.cvlac_models.Evaluador import Evaluador
+from cvlac.cvlac_models.Identificadores import Identificadores
+from cvlac.cvlac_models.Idioma import Idioma
+from cvlac.cvlac_models.Investigacion import Investigacion
+from cvlac.cvlac_models.Jurados import Jurados
+from cvlac.cvlac_models.Reconocimiento import Reconocimiento
+from cvlac.cvlac_models.Redes import Redes
+from cvlac.cvlac_models.Libros import Libros
+from cvlac.cvlac_models.Estancias import Estancias
+from cvlac.cvlac_models.Academica import Academica
+from cvlac.cvlac_models.Complementaria import Complementaria
+from cvlac.cvlac_models.Caplibros import Caplibros
+from cvlac.cvlac_models.Software import Software
+from cvlac.cvlac_models.Prototipo import Prototipo
+from cvlac.cvlac_models.MetaDB import MetaDB
 
 def create_db():
     #######################
