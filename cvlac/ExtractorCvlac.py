@@ -25,11 +25,6 @@ class ExtractorCvlac():
         self.tecnologicos={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.empresa_tecnologica={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'nit':[],'registro_camara':[],'palabras':[],'areas':[],'sectores':[]}
         self.innovacion_empresarial={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        #tablas prueba para gruplac (eliminar)
-        self.grupbasico={'idgruplac':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
-        self.grupintituciones={'idgruplac':[],'intituciones':[]}
-         
-        #fin tablas pruba para gruplac  
             
     def get_academica(self, soup, url):
         dic_aux={}   
@@ -502,7 +497,7 @@ class ExtractorCvlac():
                             if(key == dato):
                                 if(dato==", v."):
                                     list_fasc=(re.split(',',list_datos[list_datos.index(dato)+1]))  
-                                    cap_libros_aux[', v.']=list_fasc[0]                        
+                                    cap_libros_aux[', v.']=list_fasc[0]                      
                                     cap_libros_aux['paginas']=list_fasc[1].replace("p.","")
                                     cap_libros_aux['fecha']=list_fasc[2].strip()                                    
                                 else:
@@ -761,58 +756,3 @@ class ExtractorCvlac():
         df_innovacion = df_innovacion.reset_index(drop=True)   
         return df_innovacion
 
-#tablas prueba para gruplac (eliminar)
-    def get_grupbasico(self, soup, url):
-        try:
-            child=(soup.find('table')).findChildren("tr" , recursive=False) 
-            for trs in child:
-                dic2={'idgruplac':'','Año y mes de formación':'','Departamento - Ciudad':'','Líder':'','La información de este grupo se ha certificado':'','Página web':'','E-mail':'','Clasificación':'','Área de conocimiento':'','Programa nacional de ciencia y tecnología':'','Programa nacional de ciencia y tecnología (secundario)':''}           
-                td=(trs.find('td'))
-                if td != None:               
-                    if(str(td.contents[0])==("Datos básicos")):
-                        rows=td.parent.parent.find_all('tr')                        
-                        for row in  rows:            
-                            fid = url.find('=')
-                            dic2['idgruplac'] = url[fid+1:]
-                            if len(row.select('td')) == 2:
-                                cells = row.findChildren('td')
-                                try:
-                                    cells[1]=" ".join(cells[1].text.split())
-                                    dic2[re.sub('¿|\?','',cells[0].text.strip())]= cells[1]
-                                except AttributeError:
-                                    print('error gruplac basico url: : ', url)           
-                        dic2=dict(zip(self.grupbasico.keys(),dic2.values()))  
-                        self.grupbasico = almacena(self.grupbasico,dic2)
-        except AttributeError:
-            pass          
-        df_grupbasico = pd.DataFrame(self.grupbasico)   
-        df_grupbasico = df_grupbasico.reset_index(drop=True)   
-        return df_grupbasico
-
-    def get_grupintituciones(self, soup, url):
-        try:
-            child=(soup.find('table')).findChildren("tr" , recursive=False) 
-            for trs in child:
-                dic2={'idgruplac':'','Año y mes de formación':'','Departamento - Ciudad':'','Líder':'','¿La información de este grupo se ha certificado?':'','Página web':'','E-mail':'','Clasificación':'','Área de conocimiento':'','Programa nacional de ciencia y tecnología':'','Programa nacional de ciencia y tecnología (secundario)':''}           
-                td=(trs.find('td'))
-                if td != None:               
-                    if(str(td.contents[0])==("Instituciones")):
-                        rows=td.parent.parent.find_all('tr')                        
-                        for row in  rows:            
-                            fid = url.find('=')
-                            dic2['idgruplac'] = url[fid+1:]
-                            if len(row.select('td')) == 2:
-                                cells = row.findChildren('td')
-                                try:
-                                    cells[1]=" ".join(cells[1].text.split())
-                                    dic2[cells[0].string]= cells[1]
-                                except AttributeError:
-                                    print('error gruplac basico url: : ', url)           
-                        dic2=dict(zip(self.grupintituciones.keys(),dic2.values()))  
-                        self.grupintituciones = almacena(self.grupintituciones,dic2)
-        except AttributeError:
-            pass          
-        df_grupintituciones = pd.DataFrame(self.grupintituciones)   
-        df_grupintituciones = df_grupintituciones.reset_index(drop=True)   
-        return df_grupintituciones
-#fin tablas pruba para gruplac
