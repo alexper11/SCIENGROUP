@@ -161,13 +161,12 @@ if __name__ == '__main__':
     #perfil de cristian figueroa:
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
     #perfil de gustavo ramirtez:
-    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
+    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
     #perfil gruplac telematica:
-    url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160'
+    #url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160'
+    url="https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160"
     dom=get_lxml(url)
-
-    df_prueba=Extractor.get_perfil_basico(dom,url)
-
+    df_prueba=Extractor.get_perfil_lineas(dom,url)
     df_prueba.to_csv('prueba.csv',index=False)
 
 

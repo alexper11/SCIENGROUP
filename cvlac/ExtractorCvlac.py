@@ -29,7 +29,7 @@ class ExtractorCvlac():
     def get_academica(self, soup, url):
         dic_aux={}   
         try:    
-            tableacad=(soup.find('a', attrs={'name':'formacion_acad'}).parent)            
+            tableacad=soup.find('a', attrs={'name':'formacion_acad'}).parent           
             if(str((tableacad).find('h3').contents[0])==('Formación Académica')):
                 list=['tipo', 'institucion', 'titulo', 'fecha', 'proyecto']
                 b_academicas=tableacad.find_all('b')
