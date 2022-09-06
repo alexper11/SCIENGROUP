@@ -1,5 +1,5 @@
 from cvlac.db_cvlac import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 
 class EmpresaTecnologica(Base):
     
@@ -11,6 +11,7 @@ class EmpresaTecnologica(Base):
     tipo = Column(String(500), nullable=False)
     nit = Column(String(50), nullable=False)
     registro_camara = Column(String(300), nullable=True)
+    verificado = Column(Boolean,unique=False, default=True)
     palabras = Column(String(3000), nullable=True)
     areas = Column(String(3000), nullable=True)
     sectores = Column(String(3000), nullable=True)
