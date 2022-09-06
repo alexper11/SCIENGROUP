@@ -38,7 +38,8 @@ class ExtractorGruplac(ExtractorCvlac):
         #El prefijo 'perfil' indica un atributo refente a una tabla especifica del perfil de un gruplac
         #######
         self.perfil_basico={'idgruplac':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
-        self.perfil_intituciones={'idgruplac':[],'intituciones':[]}
+        self.perfil_intituciones={'idgruplac':[],'nombre':[],'aval':[]}
+        self.perfil_lineas={'idgruplac':[],'lineas':[]}
 
     def get_investigadoresList(self,url):
         dire=[]
@@ -114,16 +115,16 @@ class ExtractorGruplac(ExtractorCvlac):
             except:
                 print('Error estableciendo atributos del objeto')
                 
-#procesamiento de datos
+    #procesamiento de datos
 
     def get_perfil_basico(self, soup, url):
         try:
             child=(soup.find('table')).findChildren("tr" , recursive=False) 
             for trs in child:
-                dic2={'idgruplac':'','Año y mes de formación':'','Departamento - Ciudad':'','Líder':'','La información de este grupo se ha certificado':'','Página web':'','E-mail':'','Clasificación':'','Área de conocimiento':'','Programa nacional de ciencia y tecnología':'','Programa nacional de ciencia y tecnología (secundario)':''}           
                 td=(trs.find('td'))
                 if td != None:               
                     if(str(td.contents[0])==("Datos básicos")):
+                        dic2={'idgruplac':'','Año y mes de formación':'','Departamento - Ciudad':'','Líder':'','La información de este grupo se ha certificado':'','Página web':'','E-mail':'','Clasificación':'','Área de conocimiento':'','Programa nacional de ciencia y tecnología':'','Programa nacional de ciencia y tecnología (secundario)':''}           
                         rows=td.parent.parent.find_all('tr')                        
                         for row in  rows:            
                             fid = url.find('=')
@@ -144,34 +145,49 @@ class ExtractorGruplac(ExtractorCvlac):
         return df_perfil_basico
 
     def get_perfil_intituciones(self, soup, url):
-        try:
-            child=(soup.find('table')).findChildren("tr" , recursive=False) 
-            for trs in child:
-                dic2={'idgruplac':'','Año y mes de formación':'','Departamento - Ciudad':'','Líder':'','¿La información de este grupo se ha certificado?':'','Página web':'','E-mail':'','Clasificación':'','Área de conocimiento':'','Programa nacional de ciencia y tecnología':'','Programa nacional de ciencia y tecnología (secundario)':''}           
-                td=(trs.find('td'))
-                if td != None:               
-                    if(str(td.contents[0])==("Instituciones")):
-                        rows=td.parent.parent.find_all('tr')                        
-                        for row in  rows:            
-                            fid = url.find('=')
-                            dic2['idgruplac'] = url[fid+1:]
-                            if len(row.select('td')) == 2:
-                                cells = row.findChildren('td')
-                                try:
-                                    cells[1]=" ".join(cells[1].text.split())
-                                    dic2[cells[0].string]= cells[1]
-                                except AttributeError:
-                                    print('error gruplac basico url: : ', url)           
-                        dic2=dict(zip(self.grupintituciones.keys(),dic2.values()))  
-                        self.grupintituciones = almacena(self.grupintituciones,dic2)
+        dic={'idgruplac':[],'nombre':[],'aval':[]}
+        try:            
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Instituciones').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')
+                for i in list_tr:
+                    dic['idgruplac'].append(url[fid+1:])
+                    i_clear=i.text.strip()
+                    index=i_clear.rfind('-  (')#posible futuro error: doble espacio
+                    dic['nombre'].append(i_clear[3:index].strip())
+                    dic['aval'].append(re.sub(r'[^A-Za-z0-9 ]+','',i_clear[index:]).strip())                                     
+            else:
+                raise Exception  
         except AttributeError:
             pass          
-        df_grupintituciones = pd.DataFrame(self.grupintituciones)   
+        except:
+            pass
+        self.perfil_intituciones = dic
+        df_grupintituciones = pd.DataFrame(self.perfil_intituciones)   
         df_grupintituciones = df_grupintituciones.reset_index(drop=True)   
-        return df_grupintituciones
+        return df_grupintituciones  
 
-
-
+    def get_perfil_lineas(self, soup, url):
+        dic={'idgruplac':[],'linea':[]}
+        try:            
+            child=soup.find('td', attrs={'class':'celdaEncabezado'},string='Líneas de investigación declaradas por el grupo').find_parent('tr').find_next_siblings('tr')
+            if(child!=None):
+                fid = url.find('=')                
+                dic['idgruplac'].append(url[fid+1:])
+                linea=""
+                for i in child:                                       
+                    linea=linea+i.text.strip()[3:]+";"
+                dic['linea'].append(linea.strip())
+                
+        except AttributeError:
+            pass          
+        except:
+            pass
+        self.perfil_lineas = dic
+        print(dic)
+        df_gruplineas = pd.DataFrame(self.perfil_lineas)   
+        df_gruplineas = df_gruplineas.reset_index(drop=True)   
+        return df_gruplineas
 ##############
     def __del__(self):
         print('ExtractorGruplacList Object Destroyed')
