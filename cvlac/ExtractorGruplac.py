@@ -5,6 +5,8 @@ from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.util import almacena
 from cvlac.util import get_lxml, get_gruplacList
 import re
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 class ExtractorGruplac(ExtractorCvlac):
     
@@ -37,9 +39,10 @@ class ExtractorGruplac(ExtractorCvlac):
         #########
         #El prefijo 'perfil' indica un atributo refente a una tabla especifica del perfil de un gruplac
         #######
-        self.perfil_basico={'idgruplac':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
+        self.perfil_basico={'idgruplac':[],'nombre':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
         self.perfil_intituciones={'idgruplac':[],'nombre':[],'aval':[]}
         self.perfil_lineas={'idgruplac':[],'lineas':[]}
+        self.perfil_integrantes={'idgruplac':[],'url':[],'integrante':[],'vinculacion':[],'horas':[],'fecha_vinculacion':[]}
 
     def get_investigadoresList(self,url):
         dire=[]
@@ -124,11 +127,13 @@ class ExtractorGruplac(ExtractorCvlac):
                 td=(trs.find('td'))
                 if td != None:               
                     if(str(td.contents[0])==("Datos básicos")):
-                        dic2={'idgruplac':'','Año y mes de formación':'','Departamento - Ciudad':'','Líder':'','La información de este grupo se ha certificado':'','Página web':'','E-mail':'','Clasificación':'','Área de conocimiento':'','Programa nacional de ciencia y tecnología':'','Programa nacional de ciencia y tecnología (secundario)':''}           
-                        rows=td.parent.parent.find_all('tr')                        
+                        dic2={'idgruplac':'','nombre':'','Año y mes de formación':'','Departamento - Ciudad':'','Líder':'','La información de este grupo se ha certificado':'','Página web':'','E-mail':'','Clasificación':'','Área de conocimiento':'','Programa nacional de ciencia y tecnología':'','Programa nacional de ciencia y tecnología (secundario)':''}           
+                        rows=td.parent.parent.find_all('tr') 
+                        fid = url.find('=')
+                        dic2['idgruplac'] = url[fid+1:]
+                        dic2['nombre'] = soup.find('span').text.strip()                     
                         for row in  rows:            
-                            fid = url.find('=')
-                            dic2['idgruplac'] = url[fid+1:]
+                            
                             if len(row.select('td')) == 2:
                                 cells = row.findChildren('td')
                                 try:
@@ -188,6 +193,28 @@ class ExtractorGruplac(ExtractorCvlac):
         df_gruplineas = pd.DataFrame(self.perfil_lineas)   
         df_gruplineas = df_gruplineas.reset_index(drop=True)   
         return df_gruplineas
+    def get_perfil_integrantes(self, soup, url):
+        dfs=pd.DataFrame(columns=self.perfil_integrantes.keys())               
+        try:            
+            child=soup.find('td', attrs={'class':'celdaEncabezado'},string='Integrantes del grupo').find_parent('table')
+            if(child!=None):
+                list_url=[]
+                links=child.find_all('a', href=True)
+                dfs = pd.read_html(str(child),header=1, keep_default_na=False)[0]
+                for link in links:                    
+                    list_url.append(link['href'])                
+                dfs.insert(0, 'url', list_url)
+                fid = url.find('=')
+                dfs.insert(0, 'idgruplac', url[fid+1:])                              
+                dfs.columns=self.perfil_integrantes.keys()
+                dfs['integrante']=dfs['integrante'].str.replace(r'[^a-zA-Z\u00C0-\u017F\s]+','', regex=True).str.strip()           
+            else:
+                raise Exception
+        except AttributeError:
+            pass          
+        except:
+            pass      
+        return dfs
 ##############
     def __del__(self):
         print('ExtractorGruplacList Object Destroyed')
