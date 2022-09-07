@@ -15,7 +15,7 @@ class Instituciones(Base):
             setattr(self, key, value)
             
     def __repr__(self):
-        return f'Basico({self.nombre}, {self.idcvlac})'
+        return f'Basico({self.nombre}, {self.idgruplac})'
     
     def __str__(self):
-        return self.idcvlac
+        return self.idgruplac

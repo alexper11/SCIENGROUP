@@ -1,12 +1,16 @@
 from cvlac.db_gruplac import Base
 from sqlalchemy import Column, Integer, String
 
-class Lineas(Base):
+class Integrantes(Base):
     
-    __tablename__ = 'lineas'
+    __tablename__ = 'integrantes'
     id = Column(Integer, primary_key=True)
     idgruplac = Column(String(50), nullable=False)
-    lineas = Column(String(3000), nullable=True)
+    url = Column(String(400), nullable=True)
+    integrante = Column(String(400), nullable=True)
+    vinculacion = Column(String(50), nullable=False)
+    horas = Column(Integer(5), nullable=True)
+    fecha_vinculacion = Column(String(150), nullable=True)
     
     def __init__(self, **kwargs):
     
@@ -14,7 +18,7 @@ class Lineas(Base):
             setattr(self, key, value)
             
     def __repr__(self):
-        return f'Lineas({self.idgruplac})'
+        return f'Integrantes({self.idgruplac})'
     
     def __str__(self):
         return self.idgruplac
