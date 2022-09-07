@@ -1,10 +1,59 @@
-<<<<<<< HEAD
-idgruplac,linea
-00000000008160,Ambientes Integrados para Desarrollo de Sistemas Telemáticos; Aplicaciones Soportadas en Internet; Gestión de Ciencia y Tecnología; Gestión de Redes y Servicios de Telecomunicaciones; Ingeniería de Sistemas Telemáticos; Servicios Avanzados de Telecomunicaciones; Sistemas de Tiempo Real; Tecnologías de la Información; e-Ambiente;- eSalud;
-=======
-idcvlac,autor,nombre,tipo,verificado,nombre_comercial,contrato_registro,lugar,fecha,palabras,areas,sectores
-0000523496,GUSTAVO EDUARDO CONSTAIN MORENO,Simulador de Física General,Producción técnica - Productos tecnológicos - Otro ,False,,,Colombia,2005,,,
-0000523496,"GUSTAVO EDUARDO CONSTAIN MORENO, MANUEL JOSE SANTIAGO PAJAJOYO, PAULA ANDREA MORA PEDREROS, ANDRES FABIAN ARIAS NORENA",SISTEMA MOOC CATEDRA DE PAZ,Producción técnica - Productos tecnológicos - Otro ,False,SISTEMA MOOC CATEDRA DE PAZ,,Colombia,2020,,"Ciencias Sociales -- Ciencias de la Educación -- Educación General (Incluye Capacitación, Pedagogía)","Educación - Educación superior, Educación - Formación permanente y otras actividades de enseñanza, incluso educación a distancia y educación especial, Educación - Educación secundaria de formación técnica, Educación - Educación secundaria de formación general"
-0000523496,"GUSTAVO EDUARDO CONSTAIN MORENO, MANUEL JOSE SANTIAGO PAJAJOYO, PAULA ANDREA MORA PEDREROS, ANDRES FABIAN ARIAS NORENA",GAMOTION,Producción técnica - Productos tecnológicos - Otro ,False,GAMOTION,,Colombia,2019,,,"Educación - Educación superior, Educación - Formación permanente y otras actividades de enseñanza, incluso educación a distancia y educación especial, Educación - Educación secundaria de formación general, Educación - Educación secundaria de formación técnica, Neurociencias, Otros sectores - Informática, Salud humana - Desarrollo de productos tecnológicos para la salud humana"
-0000523496,"GUSTAVO EDUARDO CONSTAIN MORENO, MANUEL JOSE SANTIAGO PAJAJOYO, PAULA ANDREA MORA PEDREROS, ANDRES FABIAN ARIAS NORENA",PLATAFORMA SOFTWARE OBSERVATORIO FILOSÓFICO VIRTUAL,Producción técnica - Productos tecnológicos - Otro ,False,PLATAFORMA SOFTWARE OBSERVATORIO FILOSÓFICO VIRTUAL,,Colombia,2020,,"Ingeniería y Tecnología -- Ingenierías Eléctrica, Electrónica e Informática -- Ingeniería de Sistemas y Comunicaciones, Ciencias Sociales -- Ciencias de la Educación -- Educación General (Incluye Capacitación, Pedagogía)","Desarrollo de programas (software) y prestación de servicios en informática - Otras actividades de prestación de servicios en informática, Educación - Educación secundaria de formación general, Educación - Educación secundaria de formación técnica, Educación - Educación superior, Educación - Formación permanente y otras actividades de enseñanza, incluso educación a distancia y educación especial"
->>>>>>> 99464248531647b4a87f9bbf7b20140137793151
+idgruplac,url,integrante,vinculacion,horas,fecha_vinculacion
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013021,Juan Carlos Corrales Muñoz,Integrante,20,1999/3 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012904,Adolfo Plazas Tenorio,Integrante,10,1983/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001680617,Adriana Gutierrez de la Cruz,Integrante,30,2000/4 - 2002/7
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012890,Álvaro Rendón Gallón,Integrante,30,1979/7 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001427275,Angela Maria Rodríguez Vivas,Integrante,10,2011/1 - 2013/1
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001422434,Angela María Vargas Arcila,Integrante,40,2011/12 - 2012/11
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012386,Carlos Alberto Cobos Lozada,Integrante,10,1999/8 - 2000/8
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012912,Carlos Enrique Serrano Castaño,Integrante,10,1978/6 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368,Cristhian Nicolás Figueroa Martínez,Integrante,40,2008/2 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001427333,Daniel Felipe Rivas Burbano,Integrante,10,1976/6 - 2010/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001427600,David Camilo Corrales Muñoz,Integrante,40,2016/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013064,Diego Mauricio López Gutierrez,Integrante,20,2000/4 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001352316,Edgar Orlando De La Cruz Esparza,Integrante,30,2008/1 - 2010/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000474738,Eduardo ROJAS PINEDA,Integrante,10,2003/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000349887,Emigdio Andrés Lara Silva,Integrante,10,2003/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001519048,Emmanuel Gerardo Lasso Sambony,Integrante,0,2015/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000331589,Eva Juliana Maya Ortiz,Integrante,20,2007/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000948845,Fernando Aparicio Urbano Molano,Integrante,0,2014/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001191551,Fernando VÉLEZ VARELA,Integrante,10,1998/4 - 2000/3
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000352675,Francisco Orlando Martínez Pabón,Integrante,10,2004/2 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000381250,Fulvio Yesid Vivas Cantero,Integrante,0,2021/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001353314,Gabriel Elías Chanchí Golondrino,Integrante,30,2008/1 - 2016/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001387326,Gineth Magaly Cerón RIOS,Integrante,0,2014/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012670,Giovanny Arteaga Córdoba,Integrante,10,1997/8 - 2001/1
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013056,Gustavo Adolfo Ramírez González,Integrante,20,2001/4 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001365599,Gustavo Andres Uribe Gómez,Integrante,40,2010/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013072,Hector Fabio Jaramillo Ordoñez,Integrante,10,2000/4 - 2015/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012955,Iván Eduardo Hernández Delgado,Integrante,10,1995/8 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001353372,Iván Ricardo Taimal Narváez,Integrante,30,2008/1 - 2010/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000305626,Javier Alexander Hurtado Guaca,Integrante,20,2007/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001427278,Jesús David Ramírez Medina,Integrante,10,2011/1 - 2013/1
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001481137,Johan Edgar Tique Ramírez,Integrante,0,2015/3 - 2016/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000876569,Jose Armando ordonez cordoba,Integrante,40,2008/2 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012947,José Fernán Martínez Ortega,Integrante,20,1995/8 - 2004/7
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012998,José Luis Arciniegas Herrera,Integrante,20,1997/8 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013102,Juan Carlos Vidal Rojas,Integrante,10,1996/12 - 2000/8
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000082749,Juan David Rincón Patiño,Integrante,0,2017/2 - 2020/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001427280,Julián Andrés Caicedo Muñoz,Integrante,10,2011/1 - 2013/1
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000264636,Julio Ariel Hurtado Alegría,Integrante,10,1999/12 - 2000/8
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001475362,Leandro Ordóñez Ante,Integrante,40,2011/1 - 2016/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001511140,Liseth Viviana Campo Arcos,Integrante,40,2014/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001412224,Luis Antonio Rojas Potosí,Integrante,10,2011/1 - 2013/1
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001475417,Luis Javier Suárez Meza,Integrante,40,2011/2 - 2016/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013161,Mario Fernando Solarte Sarasty,Integrante,10,1999/10 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012378,Martha Eliana Mendoza Becerra,Integrante,10,1999/3 - 2000/8
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000875830,Mary Cristina Carrascal Reyes,Integrante,0,2017/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000014001,Miguel Angel Niño Zambrano,Integrante,10,2011/1 - 2016/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000643521,Natalia Carolina Maya Ortiz,Integrante,10,2005/9 - 2007/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001381007,Nilton Fernando Obando Ordoñez,Integrante,20,2010/1 - 2012/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000352683,Oscar Mauricio Caicedo Rendón,Integrante,20,2004/2 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000283860,Pablo MAGE IMBACHI,Integrante,10,1998/2 - 2000/8
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000745960,Paola Andrea Mosquera Tejada,Integrante,30,2002/2 - 2008/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013030,Rafael Rengifo Prado,Integrante,10,1990/6 - 2012/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001350321,Ricardo Adolfo Aguilar Bolaños,Integrante,40,2009/7 - 2012/12
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000384003,Ricardo Salazar Cabrera,Integrante,3,2017/6 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012963,Rodrigo Alberto Cerón Martínez,Integrante,10,1990/1 - Actual
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000253375,Victor MONDRAGON MACA,Integrante,30,2000/7 - 2002/7
+00000000008160,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000876461,Wilmar Yesid Campo Muñoz,Integrante,40,2008/2 - 2015/12
