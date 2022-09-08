@@ -48,7 +48,7 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_otro_programa={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
         self.perfil_curso_doctorado={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
         self.perfil_curso_maestria={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
-        self.perfil_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'doi':[],'autores':[]}
+        self.perfil_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'doi':[],'autores':[]}
 
     def get_investigadoresList(self,url):
         dire=[]
@@ -374,24 +374,33 @@ class ExtractorGruplac(ExtractorCvlac):
             if(list_tr!=None):
                 fid = url.find('=')                
                 for tr in list_tr:
-                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','revista':'','ISSN':'','fecha':'','vol':'','fasc':'','págs':'','DOI':'','Autores':''}
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','revista':'','issn':'','fecha':'','volumen':'','fasciculo':'','paginas':'','doi':'','autores':''}
                     dic['idgruplac']=url[fid+1:]
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
                     for i,dato in enumerate(list_datos):
-                        dato=re.sub('<[^<]+?>','',dato).strip()
-                        print(dato)                                            
+                        dato=re.sub('<[^<]+?>','',dato).strip()                                                                    
                         if i==0:
                             dic['tipo']=dato.replace(":","")
                         elif i==1:
                             dic['nombre']=dato
                         elif i==2:
-                            hardcore=0
+                            separador=re.split('ISSN:|vol:|fasc:|págs:',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')]
+                            dic['revista']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['issn']=separador[1][:separador[1].find(',')].strip()
+                            dic['fecha']=separador[1][separador[1].find(','):].lstrip(',').strip()
+                            dic['volumen']=separador[2]
+                            dic['fasciculo']=separador[3]
+                            dic['paginas']=separador[4].rstrip(',').strip()
+
+                        elif dato=='DOI:':
+                            dic['doi']=re.sub(r'http://dx.doi.org/|doi:|https://doi.org/|http://doi.org/','',list_datos[i+1]).strip()
                         else:
-                            dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
+                            dic['autores']=dato[dato.find(':'):].lstrip(':').strip()                          
                         
-                    dic=dict(zip(self.perfil_articulos.keys(),dic.values()))
+                    #dic=dict(zip(self.perfil_articulos.keys(),dic.values()))
                     self.perfil_articulos = almacena(self.perfil_articulos,dic)                                                       
             else:
                 raise Exception  
