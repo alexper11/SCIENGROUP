@@ -43,6 +43,11 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_intituciones={'idgruplac':[],'nombre':[],'aval':[]}
         self.perfil_lineas={'idgruplac':[],'lineas':[]}
         self.perfil_integrantes={'idgruplac':[],'url':[],'integrante':[],'vinculacion':[],'horas':[],'fecha_vinculacion':[]}
+        self.perfil_programa_doctorado={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
+        self.perfil_programa_maestria={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
+        self.perfil_otro_programa={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
+        self.perfil_curso_doctorado={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
+        self.perfil_curso_maestria={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
 
     def get_investigadoresList(self,url):
         dire=[]
@@ -193,6 +198,7 @@ class ExtractorGruplac(ExtractorCvlac):
         df_gruplineas = pd.DataFrame(self.perfil_lineas)   
         df_gruplineas = df_gruplineas.reset_index(drop=True)   
         return df_gruplineas
+    
     def get_perfil_integrantes(self, soup, url):
         dfs=pd.DataFrame(columns=self.perfil_integrantes.keys())               
         try:            
@@ -215,6 +221,152 @@ class ExtractorGruplac(ExtractorCvlac):
         except:
             pass      
         return dfs
+
+    def get_perfil_programa_doctorado(self, soup, url):        
+        try:            
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Programa académico de doctorado').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')                
+                for tr in list_tr:
+                    dic={'idgruplac':'','Programa académico':[],'Fecha acto administrativo programa':[],'Número acto administrativo programa':[],'Institución':[]}
+                    dic['idgruplac']=url[fid+1:]
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<br/>',tr)
+                    for i,dato in enumerate(list_datos):
+                        dato=re.sub('<[^<]+?>','',dato).strip()                     
+                        if i==0:
+                            dic[dato[4:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
+                        else:
+                            dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
+                        
+                    dic=dict(zip(self.perfil_programa_doctorado.keys(),dic.values()))
+                    self.perfil_programa_doctorado = almacena(self.perfil_programa_doctorado,dic)                                                        
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_programa_doctorado = pd.DataFrame(self.perfil_programa_doctorado)   
+        df_programa_doctorado = df_programa_doctorado.reset_index(drop=True)   
+        return df_programa_doctorado
+
+    def get_perfil_programa_maestria(self, soup, url):        
+        try:            
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Programa académico de maestría').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')                
+                for tr in list_tr:
+                    dic={'idgruplac':'','Programa académico':[],'Fecha acto administrativo programa':[],'Número acto administrativo programa':[],'Institución':[]}
+                    dic['idgruplac']=url[fid+1:]
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<br/>',tr)
+                    for i,dato in enumerate(list_datos):
+                        dato=re.sub('<[^<]+?>','',dato).strip()                     
+                        if i==0:
+                            dic[dato[4:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
+                        else:
+                            dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
+                        
+                    dic=dict(zip(self.perfil_programa_maestria.keys(),dic.values()))
+                    self.perfil_programa_maestria = almacena(self.perfil_programa_maestria,dic)                                                        
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_programa_maestria = pd.DataFrame(self.perfil_programa_maestria)   
+        df_programa_maestria = df_programa_maestria.reset_index(drop=True)   
+        return df_programa_maestria
+
+    def get_perfil_otro_programa(self, soup, url):        
+        try:            
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Otro programa académico').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')                
+                for tr in list_tr:
+                    dic={'idgruplac':'','Programa académico':[],'Fecha acto administrativo programa':[],'Número acto administrativo programa':[],'Institución':[]}
+                    dic['idgruplac']=url[fid+1:]
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<br/>',tr)
+                    for i,dato in enumerate(list_datos):
+                        dato=re.sub('<[^<]+?>','',dato).strip()                     
+                        if i==0:
+                            dic[dato[4:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
+                        else:
+                            dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
+                        
+                    dic=dict(zip(self.perfil_otro_programa.keys(),dic.values()))
+                    self.perfil_otro_programa = almacena(self.perfil_otro_programa,dic)                                                        
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_otro_programa = pd.DataFrame(self.perfil_otro_programa)   
+        df_otro_programa = df_otro_programa.reset_index(drop=True)   
+        return df_otro_programa
+
+    def get_perfil_curso_doctorado(self, soup, url):        
+        try:            
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Curso de doctorado').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')                
+                for tr in list_tr:
+                    dic={'idgruplac':'','Nombre del Curso':[],'Fecha acto administrativo curso':[],'Número acto administrativo curso':[],'Programa académico':[]}
+                    dic['idgruplac']=url[fid+1:]
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<br/>',tr)
+                    for i,dato in enumerate(list_datos):
+                        dato=re.sub('<[^<]+?>','',dato).strip()                     
+                        if i==0:
+                            dic[dato[4:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
+                        else:
+                            dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
+                        
+                    dic=dict(zip(self.perfil_curso_doctorado.keys(),dic.values()))
+                    self.perfil_curso_doctorado = almacena(self.perfil_curso_doctorado,dic)                                                        
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_curso_doctorado = pd.DataFrame(self.perfil_curso_doctorado)   
+        df_curso_doctorado = df_curso_doctorado.reset_index(drop=True)   
+        return df_curso_doctorado
+
+    def get_perfil_curso_maestria(self, soup, url):        
+        try:            
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Curso de maestría').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')                
+                for tr in list_tr:
+                    dic={'idgruplac':'','Nombre del Curso':[],'Fecha acto administrativo curso':[],'Número acto administrativo curso':[],'Programa académico':[]}
+                    dic['idgruplac']=url[fid+1:]
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<br/>',tr)
+                    for i,dato in enumerate(list_datos):
+                        dato=re.sub('<[^<]+?>','',dato).strip()                     
+                        if i==0:
+                            dic[dato[4:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
+                        else:
+                            dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
+                        
+                    dic=dict(zip(self.perfil_curso_maestria.keys(),dic.values()))
+                    self.perfil_curso_maestria = almacena(self.perfil_curso_maestria,dic)                                                        
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_curso_maestria = pd.DataFrame(self.perfil_curso_maestria)   
+        df_curso_maestria = df_curso_maestria.reset_index(drop=True)   
+        return df_curso_maestria
+
 ##############
     def __del__(self):
         print('ExtractorGruplacList Object Destroyed')
