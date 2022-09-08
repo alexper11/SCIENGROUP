@@ -48,6 +48,7 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_otro_programa={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
         self.perfil_curso_doctorado={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
         self.perfil_curso_maestria={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
+        self.perfil_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'doi':[],'autores':[]}
 
     def get_investigadoresList(self,url):
         dire=[]
@@ -228,7 +229,7 @@ class ExtractorGruplac(ExtractorCvlac):
             if(list_tr!=None):
                 fid = url.find('=')                
                 for tr in list_tr:
-                    dic={'idgruplac':'','Programa académico':[],'Fecha acto administrativo programa':[],'Número acto administrativo programa':[],'Institución':[]}
+                    dic={'idgruplac':'','Programa académico':'','Fecha acto administrativo programa':'','Número acto administrativo programa':'','Institución':''}
                     dic['idgruplac']=url[fid+1:]
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<br/>',tr)
@@ -257,7 +258,7 @@ class ExtractorGruplac(ExtractorCvlac):
             if(list_tr!=None):
                 fid = url.find('=')                
                 for tr in list_tr:
-                    dic={'idgruplac':'','Programa académico':[],'Fecha acto administrativo programa':[],'Número acto administrativo programa':[],'Institución':[]}
+                    dic={'idgruplac':'','Programa académico':'','Fecha acto administrativo programa':'','Número acto administrativo programa':'','Institución':''}
                     dic['idgruplac']=url[fid+1:]
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<br/>',tr)
@@ -286,7 +287,7 @@ class ExtractorGruplac(ExtractorCvlac):
             if(list_tr!=None):
                 fid = url.find('=')                
                 for tr in list_tr:
-                    dic={'idgruplac':'','Programa académico':[],'Fecha acto administrativo programa':[],'Número acto administrativo programa':[],'Institución':[]}
+                    dic={'idgruplac':'','Programa académico':'','Fecha acto administrativo programa':'','Número acto administrativo programa':'','Institución':''}
                     dic['idgruplac']=url[fid+1:]
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<br/>',tr)
@@ -315,7 +316,7 @@ class ExtractorGruplac(ExtractorCvlac):
             if(list_tr!=None):
                 fid = url.find('=')                
                 for tr in list_tr:
-                    dic={'idgruplac':'','Nombre del Curso':[],'Fecha acto administrativo curso':[],'Número acto administrativo curso':[],'Programa académico':[]}
+                    dic={'idgruplac':'','Nombre del Curso':'','Fecha acto administrativo curso':'','Número acto administrativo curso':'','Programa académico':''}
                     dic['idgruplac']=url[fid+1:]
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<br/>',tr)
@@ -344,7 +345,7 @@ class ExtractorGruplac(ExtractorCvlac):
             if(list_tr!=None):
                 fid = url.find('=')                
                 for tr in list_tr:
-                    dic={'idgruplac':'','Nombre del Curso':[],'Fecha acto administrativo curso':[],'Número acto administrativo curso':[],'Programa académico':[]}
+                    dic={'idgruplac':'','Nombre del Curso':'','Fecha acto administrativo curso':'','Número acto administrativo curso':'','Programa académico':''}
                     dic['idgruplac']=url[fid+1:]
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<br/>',tr)
@@ -367,6 +368,40 @@ class ExtractorGruplac(ExtractorCvlac):
         df_curso_maestria = df_curso_maestria.reset_index(drop=True)   
         return df_curso_maestria
 
+    def get_perfil_articulos(self, soup, url):        
+        try:            
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Artículos publicados').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')                
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','revista':'','ISSN':'','fecha':'','vol':'','fasc':'','págs':'','DOI':'','Autores':''}
+                    dic['idgruplac']=url[fid+1:]
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):
+                        dato=re.sub('<[^<]+?>','',dato).strip()
+                        print(dato)                                            
+                        if i==0:
+                            dic['tipo']=dato.replace(":","")
+                        elif i==1:
+                            dic['nombre']=dato
+                        elif i==2:
+                            hardcore=0
+                        else:
+                            dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
+                        
+                    dic=dict(zip(self.perfil_articulos.keys(),dic.values()))
+                    self.perfil_articulos = almacena(self.perfil_articulos,dic)                                                       
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_articulos = pd.DataFrame(self.perfil_articulos)   
+        df_articulos = df_articulos.reset_index(drop=True)   
+        return df_articulos
 ##############
     def __del__(self):
         print('ExtractorGruplacList Object Destroyed')
