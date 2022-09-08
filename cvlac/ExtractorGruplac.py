@@ -263,8 +263,8 @@ class ExtractorGruplac(ExtractorCvlac):
                     list_datos=re.split('<br/>',tr)
                     for i,dato in enumerate(list_datos):
                         dato=re.sub('<[^<]+?>','',dato).strip()                     
-                        if i==0:
-                            dic[dato[4:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
+                        if i==0:                            
+                            dic[dato[dato.find('-')+2:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
                         else:
                             dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
                         
@@ -293,7 +293,7 @@ class ExtractorGruplac(ExtractorCvlac):
                     for i,dato in enumerate(list_datos):
                         dato=re.sub('<[^<]+?>','',dato).strip()                     
                         if i==0:
-                            dic[dato[4:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
+                            dic[dato[dato.find('-')+2:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
                         else:
                             dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
                         
@@ -322,7 +322,7 @@ class ExtractorGruplac(ExtractorCvlac):
                     for i,dato in enumerate(list_datos):
                         dato=re.sub('<[^<]+?>','',dato).strip()                     
                         if i==0:
-                            dic[dato[4:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
+                            dic[dato[dato.find('-')+2:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
                         else:
                             dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
                         
@@ -351,7 +351,7 @@ class ExtractorGruplac(ExtractorCvlac):
                     for i,dato in enumerate(list_datos):
                         dato=re.sub('<[^<]+?>','',dato).strip()                     
                         if i==0:
-                            dic[dato[4:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
+                            dic[dato[dato.find('-')+2:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
                         else:
                             dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
                         
