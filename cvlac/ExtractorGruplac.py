@@ -375,7 +375,8 @@ class ExtractorGruplac(ExtractorCvlac):
                 fid = url.find('=')                
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','revista':'','issn':'','fecha':'','volumen':'','fasciculo':'','paginas':'','doi':'','autores':''}
-                    dic['idgruplac']=url[fid+1:]
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
