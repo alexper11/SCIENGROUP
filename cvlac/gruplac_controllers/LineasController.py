@@ -9,15 +9,22 @@ class LineasController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            lineas = Lineas(**dic)
-            db_gruplac.session.add(lineas)
+        db_gruplac.session.bulk_insert_mappings(Lineas, dicList)
         try:
             db_gruplac.session.commit()
         except:
             db_gruplac.session.rollback()
             print("No se pudo insertar el dataframe en Lineas")
             df.to_csv('LineasGruplac.csv')
-            raise
+        finally:
+            db_gruplac.session.close()
+            
+    def delete_idgruplac(self, idgruplac):
+        db_gruplac.session.query(Lineas).filter(Lineas.idgruplac==idgruplac).delete()
+        try:
+            db_gruplac.session.commit()
+        except:
+            db_gruplac.session.rollback()
+            print("No se pudo eliminar el idgruplac: "+idgruplac+" en Lineas")
         finally:
             db_gruplac.session.close()

@@ -9,15 +9,22 @@ class AcademicaController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            academica = Academica(**dic)
-            db_cvlac.session.add(academica)
+        db_cvlac.session.bulk_insert_mappings(Academica, dicList)
         try:
             db_cvlac.session.commit()
         except:
             db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Academica")
             df.to_csv('AcademicaCvlac.csv')
-            raise
+        finally:
+            db_cvlac.session.close()
+            
+    def delete_idcvlac(self, idcvlac):
+        db_cvlac.session.query(Academica).filter(Academica.idcvlac==idcvlac).delete()
+        try:
+            db_cvlac.session.commit()
+        except:
+            db_cvlac.session.rollback()
+            print("No se pudo eliminar el idcvlac: "+idcvlac+" en Academica")
         finally:
             db_cvlac.session.close()

@@ -9,16 +9,22 @@ class OtroProgramaController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            otro_programa = OtroPrograma(**dic)
-            db_gruplac.session.add(otro_programa)
+        db_gruplac.session.bulk_insert_mappings(OtroPrograma, dicList)
         try:
             db_gruplac.session.commit()
         except:
             db_gruplac.session.rollback()
             print("No se pudo insertar el dataframe en OtroPrograma")
             df.to_csv('OtroProgramaGruplac.csv')
-            raise
         finally:
             db_gruplac.session.close()
     
+    def delete_idgruplac(self, idgruplac):
+        db_gruplac.session.query(OtroPrograma).filter(OtroPrograma.idgruplac==idgruplac).delete()
+        try:
+            db_gruplac.session.commit()
+        except:
+            db_gruplac.session.rollback()
+            print("No se pudo eliminar el idgruplac: "+idgruplac+" en OtroPrograma")
+        finally:
+            db_gruplac.session.close()

@@ -9,16 +9,22 @@ class IdiomaController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            idioma = Idioma(**dic)
-            db_cvlac.session.add(idioma)
+        db_cvlac.session.bulk_insert_mappings(Idioma, dicList)
         try:
             db_cvlac.session.commit()
         except:
             db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Idioma")
             df.to_csv('IdiomaCvlac.csv')
-            raise
         finally:
             db_cvlac.session.close()
     
+    def delete_idcvlac(self, idcvlac):
+        db_cvlac.session.query(Idioma).filter(Idioma.idcvlac==idcvlac).delete()
+        try:
+            db_cvlac.session.commit()
+        except:
+            db_cvlac.session.rollback()
+            print("No se pudo eliminar el idcvlac: "+idcvlac+" en Idioma")
+        finally:
+            db_cvlac.session.close()
