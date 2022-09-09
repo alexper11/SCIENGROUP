@@ -9,16 +9,22 @@ class CaplibrosController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            caplibros = Caplibros(**dic)
-            db_cvlac.session.add(caplibros)
+        db_cvlac.session.bulk_insert_mappings(Caplibros, dicList)
         try:
             db_cvlac.session.commit()
         except:
             db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Caplibros")
             df.to_csv('CaplibrosCvlac.csv')
-            raise
         finally:
             db_cvlac.session.close()
     
+    def delete_idcvlac(self, idcvlac):
+        db_cvlac.session.query(Caplibros).filter(Caplibros.idcvlac==idcvlac).delete()
+        try:
+            db_cvlac.session.commit()
+        except:
+            db_cvlac.session.rollback()
+            print("No se pudo eliminar el idcvlac: "+idcvlac+" en Caplibros")
+        finally:
+            db_cvlac.session.close()

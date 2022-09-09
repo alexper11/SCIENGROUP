@@ -9,7 +9,7 @@ import sys
 from scopus.readKey import read_key
 '''
 from cvlac.cvlac_models.DBmodel import create_db
-from cvlac.controllers.ActuacionController import ActuacionController
+from cvlac.cvlac_controllers.ActuacionController import ActuacionController
 from cvlac.cvlac_controllers.ArticulosController import ArticulosController
 from cvlac.cvlac_controllers.BasicoController import BasicoController
 from cvlac.cvlac_controllers.EvaluadorController import EvaluadorController
@@ -151,6 +151,7 @@ if __name__ == '__main__':
     
 '''   
 
+
 ##Pruebas para tablas individuales
 if __name__ == '__main__':
 
@@ -178,10 +179,12 @@ if __name__ == '__main__':
    
     df_prueba.to_csv('prueba.csv',index=False)
 
-'''
+
+"""
+from cvlac.cvlac_models.DBmodel import create_db
+from cvlac.cvlac_controllers.ArticulosController import ArticulosController
 
 if __name__ == '__main__':
-    from IPython.display import display
     ############################
     #DEMO CVLAC
     ############################
@@ -190,8 +193,21 @@ if __name__ == '__main__':
     url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013056'
     dom=get_lxml(url)
     df=Extractor.get_articulo(dom,url)
-    display(df['nombre'].head(10).to_string())
-
+    print("Extracción supo")
+    ######################
+    sys.path.append(".")
+    #######################  
+    create_db()
+    print("Creacion db supo")
+    articulos=ArticulosController()
+    articulos.insert_df(df)
+    print("Inserción supo")
+    
+    #articulos.delete_idcvlac('0000013056')
+    #print('borrado supo')
+    
+    del Extractor
+    
     ###########################
     #DEMO SCOPUS
     ###########################
@@ -203,4 +219,4 @@ if __name__ == '__main__':
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
     df_productos=ExtractorS.get_articles_full([7004506288])
     display(df_productos['titulo'].to_string())
-'''
+"""
