@@ -49,6 +49,9 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_curso_doctorado={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
         self.perfil_curso_maestria={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
         self.perfil_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'doi':[],'autores':[]}
+        self.perfil_libros={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'isbn':[],'editorial':[],'autores':[]}
+        self.perfil_caplibros={'idgruplac':[],'verificado':[],'tipo':[],'capitulo':[],'lugar':[],'fecha':[],'libro':[],'isbn':[],'volumen':[],'paginas':[],'editorial':[],'autores':[]}
+        
 
     def get_investigadoresList(self,url):
         dire=[]
@@ -65,8 +68,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 if i < tries - 1:
                     continue
                 else:
-                    print('Error al extraer urls')
-                    
+                    print('Error al extraer urls')                    
             break
                     
         for a in url_inv:
@@ -395,13 +397,10 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['volumen']=separador[2]
                             dic['fasciculo']=separador[3]
                             dic['paginas']=separador[4].rstrip(',').strip()
-
                         elif dato=='DOI:':
                             dic['doi']=re.sub(r'http://dx.doi.org/|doi:|https://doi.org/|http://doi.org/','',list_datos[i+1]).strip()
                         else:
-                            dic['autores']=dato[dato.find(':'):].lstrip(':').strip()                          
-                        
-                    #dic=dict(zip(self.perfil_articulos.keys(),dic.values()))
+                            dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
                     self.perfil_articulos = almacena(self.perfil_articulos,dic)                                                       
             else:
                 raise Exception  
@@ -412,6 +411,89 @@ class ExtractorGruplac(ExtractorCvlac):
         df_articulos = pd.DataFrame(self.perfil_articulos)   
         df_articulos = df_articulos.reset_index(drop=True)   
         return df_articulos
+
+    def get_perfil_libros(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string=' Libros publicados ').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','isbn':'','editorial':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            separador=re.split('ISBN:|Ed.',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')].strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['isbn']=separador[1].strip().rstrip(',')
+                            dic['editorial']=separador[2].lstrip(',').strip()
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_libros = almacena(self.perfil_libros,dic)                                                      
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_libros = pd.DataFrame(self.perfil_libros)   
+        df_libros = df_libros.reset_index(drop=True)   
+        return df_libros
+
+    def get_perfil_caplibros(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Capítulos de libro publicados ').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')             
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','capitulo':'','lugar':'','fecha':'','libro':'','isbn':'','volumen':'','paginas':'','editorial':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['capitulo']=dato.lstrip(' : ')
+                        elif i==2:
+                            #revisar bd, calidad datos con esta separacion                            
+                            index_lugar=dato.find(',')                                                                                    
+                            dic['lugar']=dato[:index_lugar].strip()                            
+                            dato=dato[index_lugar+1:]#dato no tiene lugar
+                            index_fecha=dato.find(',')                                                        
+                            dic['fecha']=dato[:index_fecha].strip()                                                       
+                            dato=dato[index_fecha+1:]                                                      
+                            index_isbn=dato.rfind('ISBN:')                            
+                            dic['libro']=dato[:index_isbn].strip()
+                            dato=dato[index_isbn:]
+                            separador=re.split('Vol\.|págs:|Ed\.',dato)
+                            dic['isbn']=separador[0][5:].rstrip(',').strip()
+                            dic['volumen']=separador[1].rstrip(',').strip()
+                            dic['paginas']=separador[2].rstrip(',').strip() 
+                            dic['editorial']=separador[3].strip()  
+                        else:
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_caplibros = almacena(self.perfil_caplibros,dic)                                                      
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_caplibros = pd.DataFrame(self.perfil_caplibros)   
+        df_caplibros = df_caplibros.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
+        return df_caplibros
+
 ##############
     def __del__(self):
         print('ExtractorGruplacList Object Destroyed')
