@@ -9,16 +9,22 @@ class RedesController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            redes = Redes(**dic)
-            db_cvlac.session.add(redes)
+        db_cvlac.session.bulk_insert_mappings(Redes, dicList)
         try:
             db_cvlac.session.commit()
         except:
             db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Redes")
             df.to_csv('RedesCvlac.csv')
-            raise
         finally:
             db_cvlac.session.close()
     
+    def delete_idcvlac(self, idcvlac):
+        db_cvlac.session.query(Redes).filter(Redes.idcvlac==idcvlac).delete()
+        try:
+            db_cvlac.session.commit()
+        except:
+            db_cvlac.session.rollback()
+            print("No se pudo eliminar el idcvlac: "+idcvlac+" en Redes")
+        finally:
+            db_cvlac.session.close()

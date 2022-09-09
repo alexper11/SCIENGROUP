@@ -9,16 +9,22 @@ class ArticulosController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            articulos = Articulos(**dic)
-            db_gruplac.session.add(articulos)
+        db_gruplac.session.bulk_insert_mappings(Articulos, dicList)
         try:
             db_gruplac.session.commit()
         except:
             db_gruplac.session.rollback()
             print("No se pudo insertar el dataframe en Articulos")
             df.to_csv('ArticulosGruplac.csv')
-            raise
         finally:
             db_gruplac.session.close()
     
+    def delete_idgruplac(self, idgruplac):
+        db_gruplac.session.query(Articulos).filter(Articulos.idgruplac==idgruplac).delete()
+        try:
+            db_gruplac.session.commit()
+        except:
+            db_gruplac.session.rollback()
+            print("No se pudo eliminar el idgruplac: "+idgruplac+" en Articulos")
+        finally:
+            db_gruplac.session.close()

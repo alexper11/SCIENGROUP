@@ -9,16 +9,22 @@ class BasicoController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            basico = Basico(**dic)
-            db_cvlac.session.add(basico)
+        db_cvlac.session.bulk_insert_mappings(Basico, dicList)
         try:
             db_cvlac.session.commit()
         except:
             db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Basico")
             df.to_csv('BasicoCvlac.csv')
-            raise
         finally:
             db_cvlac.session.close()
     
+    def delete_idcvlac(self, idcvlac):
+        db_cvlac.session.query(Basico).filter(Basico.idcvlac==idcvlac).delete()
+        try:
+            db_cvlac.session.commit()
+        except:
+            db_cvlac.session.rollback()
+            print("No se pudo eliminar el idcvlac: "+idcvlac+" en Basico")
+        finally:
+            db_cvlac.session.close()

@@ -9,15 +9,22 @@ class TecnologicosController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            tecnologicos = Tecnologicos(**dic)
-            db_cvlac.session.add(tecnologicos)
+        db_cvlac.session.bulk_insert_mappings(Tecnologicos, dicList)
         try:
             db_cvlac.session.commit()
         except:
             db_cvlac.session.rollback()
             print("No se pudo insertar el dataframe en Tecnologicos")
             df.to_csv('TecnologicosCvlac.csv')
-            raise
+        finally:
+            db_cvlac.session.close()
+    
+    def delete_idcvlac(self, idcvlac):
+        db_cvlac.session.query(Tecnologicos).filter(Tecnologicos.idcvlac==idcvlac).delete()
+        try:
+            db_cvlac.session.commit()
+        except:
+            db_cvlac.session.rollback()
+            print("No se pudo eliminar el idcvlac: "+idcvlac+" en Tecnologicos")
         finally:
             db_cvlac.session.close()
