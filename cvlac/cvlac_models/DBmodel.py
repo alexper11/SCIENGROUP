@@ -1,5 +1,6 @@
 
 from cvlac.db_cvlac import Base, engine
+from sqlalchemy_utils import database_exists, create_database
 
 from cvlac.cvlac_models.Articulos import Articulos
 from cvlac.cvlac_models.Actuacion import Actuacion
@@ -21,7 +22,10 @@ from cvlac.cvlac_models.Prototipo import Prototipo
 from cvlac.cvlac_models.MetaDB import MetaDB
 
 def create_db():
-    #######################
-    Base.metadata.drop_all(engine)
-    Base.metadata.create_all(engine)
-    ###########################
+    
+    if not database_exists(engine.url):
+        create_database(engine.url)
+        Base.metadata.create_all(engine)
+    else:
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)

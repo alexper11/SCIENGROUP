@@ -9,16 +9,22 @@ class ProgramaDoctoradoController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            programa_doctorado = ProgramaDoctorado(**dic)
-            db_gruplac.session.add(programa_doctorado)
+        db_gruplac.session.bulk_insert_mappings(ProgramaDoctorado, dicList)
         try:
             db_gruplac.session.commit()
         except:
             db_gruplac.session.rollback()
             print("No se pudo insertar el dataframe en ProgramaDoctorado")
             df.to_csv('ProgramaDoctoradoGruplac.csv')
-            raise
         finally:
             db_gruplac.session.close()
     
+    def delete_idgruplac(self, idgruplac):
+        db_gruplac.session.query(ProgramaDoctorado).filter(ProgramaDoctorado.idgruplac==idgruplac).delete()
+        try:
+            db_gruplac.session.commit()
+        except:
+            db_gruplac.session.rollback()
+            print("No se pudo eliminar el idgruplac: "+idgruplac+" en ProgramaDoctorado")
+        finally:
+            db_gruplac.session.close()
