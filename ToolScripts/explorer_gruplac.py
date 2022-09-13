@@ -28,5 +28,5 @@ for a in links_total:
         for table in child:
             trs=table.find_all('tr')
             titulo=trs[0].find('td').text.strip()
-            if (len(trs) > 1) and (titulo=='Diseños industriales'):
+            if (len(trs) > 1) and (titulo=='Otros artículos publicados'):
                 print(url_gruplac)
