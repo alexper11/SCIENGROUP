@@ -175,7 +175,7 @@ if __name__ == '__main__':
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000373770'
   
     dom=get_lxml(url)    
-    df_prueba=Extractor.get_perfil_articulos(dom,url)
+    df_prueba=Extractor.get_perfil_otros_libros(dom,url)
    
     df_prueba.to_csv('prueba.csv',index=False)
 
