@@ -53,8 +53,10 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_caplibros={'idgruplac':[],'verificado':[],'tipo':[],'capitulo':[],'lugar':[],'fecha':[],'libro':[],'isbn':[],'volumen':[],'paginas':[],'editorial':[],'autores':[]}
         self.perfil_otros_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'autores':[]}
         self.perfil_otros_libros={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'isbn':[],'volumen':[],'paginas':[],'editorial':[],'autores':[]}
+        self.perfil_diseño_industrial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
+        self.perfil_otros_tecnologicos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
+        self.perfil_prototipos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
         
-
 
 
     def get_investigadoresList(self,url):
@@ -575,6 +577,119 @@ class ExtractorGruplac(ExtractorCvlac):
         df_otros_libros = pd.DataFrame(self.perfil_otros_libros)   
         df_otros_libros = df_otros_libros.reset_index(drop=True)   
         return df_otros_libros
+
+    def get_perfil_diseño_industrial(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Diseños industriales').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','institucion':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            #Pendiente: buscar y verificar separadores
+                            separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')].strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['disponibilidad']=separador[1].strip().rstrip(',')
+                            dic['institucion']=separador[2].strip()
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_diseño_industrial = almacena(self.perfil_diseño_industrial,dic)                                                      
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_diseño_industrial = pd.DataFrame(self.perfil_diseño_industrial)   
+        df_diseño_industrial = df_diseño_industrial.reset_index(drop=True)   
+        return df_diseño_industrial  
+
+    def get_perfil_otros_tecnologicos(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Otros productos tecnológicos').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','nombre_comercial':'','institucion':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            #Pendiente: buscar y verificar separadores
+                            separador=re.split('Disponibilidad:|Nombre comercial:',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')].strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['disponibilidad']=separador[1].strip().rstrip(',')
+                            dic['nombre_comercial']=separador[2].strip()
+                        elif i==3:
+                            dic['institucion']=dato[dato.find(':')+1:].strip()
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_otros_tecnologicos = almacena(self.perfil_otros_tecnologicos,dic)                                                      
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_otros_tecnologicos = pd.DataFrame(self.perfil_otros_tecnologicos)   
+        df_otros_tecnologicos = df_otros_tecnologicos.reset_index(drop=True)   
+        return df_otros_tecnologicos
+
+    def get_perfil_prototipos(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Prototipos').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','institucion':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            #Pendiente: buscar y verificar separadores
+                            separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')].strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['disponibilidad']=separador[1].strip().rstrip(',')
+                            dic['institucion']=separador[2].strip()
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_prototipos = almacena(self.perfil_prototipos,dic)                                                      
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_prototipos = pd.DataFrame(self.perfil_prototipos)   
+        df_prototipos = df_prototipos.reset_index(drop=True)   
+        return df_prototipos
 
 ##############
     def __del__(self):

@@ -165,7 +165,7 @@ if __name__ == '__main__':
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
     #perfil gruplac telematica:
     url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160'
-    #url="https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160"
+    #url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002153'
 
     #empresa abse tec:
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000373770'
@@ -173,9 +173,9 @@ if __name__ == '__main__':
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
     #prototipo
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000373770'
-  
+    
     dom=get_lxml(url)    
-    df_prueba=Extractor.get_perfil_otros_libros(dom,url)
+    df_prueba=Extractor.get_perfil_prototipos(dom,url)
    
     df_prueba.to_csv('prueba.csv',index=False)
 
