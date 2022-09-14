@@ -10,6 +10,7 @@ url_general="https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepart
 r_general=requests.get(url_general, verify=False)
 soup_general=BeautifulSoup(r_general.content,'lxml')
 links_total=soup_general.find_all('a', attrs={'target':'_blank'})
+count=0
 for a in links_total:
     url_gruplac=a['href']
     if(url_gruplac.find('https://scienti.minciencias.gov.co/gruplac/jsp/visualiza')!=-1):
@@ -23,10 +24,12 @@ for a in links_total:
                 continue
             break        
         soup=BeautifulSoup(r.content,'lxml')
-        dic2={}        
+       
         child=(soup.find_all('table'))
         for table in child:
             trs=table.find_all('tr')
             titulo=trs[0].find('td').text.strip()
-            if (len(trs) > 1) and (titulo=='Otros artículos publicados'):
+            if (len(trs) > 1) and (titulo=='Softwares'):
                 print(url_gruplac)
+                count=count+1
+print('count : ',count)
