@@ -1,9 +1,2 @@
-idgruplac,verificado,tipo,nombre,fecha,nit,fecha_registro,mercado,autores
-00000000007096,True,Start-up,Solmedia Digital,Septiembre 2017,1061711590 - 8,2017-09-05,Tiene productos en el mercado,ANA MARIA RIVERA MARTINEZ
-00000000007096,True,Start-up,PERCENT STUDIOS SAS,Abril 2017,901070274 - 9,2017-04-04,Tiene productos en el mercado,ANA MARIA RIVERA MARTINEZ
-00000000007096,True,Start-up,Green Fish,Noviembre 2016,1061721372-1,2016-11-26,Tiene productos en el mercado,PAOLA ANDREA OTERO CANO
-00000000007096,True,Start-up,Fundación CrediGO,Noviembre 2016,901028079-1,2016-11-17,Tiene productos en el mercado,WILFRED FABIAN RIVERA MARTINEZ
-00000000007096,True,Start-up,APPSUS SAS,Junio 2016,900977042-7,2016-06-02,Tiene productos en el mercado,EDGAR CAMILO PEDRAZA ALARCON
-00000000007096,True,Start-up,HUTEK INC,Noviembre 2015,900893882-5,2015-11-30,Tiene productos en el mercado,"YANETH PATRICIA LOPEZ MUTIS, EDGAR CAMILO PEDRAZA ALARCON, CESAR ALBERTO SARRIA VILLA"
-00000000007096,True,Start-up,BUXTAR CORP SAS,Febrero 2015,9008188691,2015-02-10,Tiene productos en el mercado,WILFRED FABIAN RIVERA MARTINEZ
-00000000007096,True,Start-up,SMARTSOFTPLAY S.A.S,Junio 2014,900714751-2,2014-06-30,Tiene productos en el mercado,WILFRED FABIAN RIVERA MARTINEZ
+idgruplac,verificado,tipo,nombre,lugar,fecha,disponibilidad,nombre_comercial,institucion,autores
+00000000015873,True,Planta piloto,Producción de abonos orgánicos en esquema comunitario en las Veredas la Yunga y Río Hondo en Popayán,Colombia,"2019,",No restringido,Abono orgánico en esquema comunitario,UNIVERSIDAD DEL CAUCA,"DAYSE DELGADO ERASO, CLARA MILENA CONCHA LOZADA, GEHOVELL JULIANA VIDAL PINILLA"
