@@ -715,10 +715,10 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['disponibilidad']=separador[1].strip()
                             dic['url']=separador[2].strip()
                         elif i==3:
-                            separador=re.split('Nombre comercial:|, Nombre del proyecto:',dato)
-                            separador.pop(0)                       
-                            dic['nombre_comercial']=separador[0].strip()
-                            dic['nombre_proyecto']=separador[1].strip()
+                            index=dato.find(', Nombre del proyecto:')                                                                             
+                            dic['nombre_comercial']=dato[dato.find(':')+1:index].lstrip(',').strip()
+                            dato=dato[index:]
+                            dic['nombre_proyecto']=dato[dato.find(':')+1:].strip()
                         elif i==4:
                             dic['institucion']=dato[dato.find(':')+1:].strip()                       
                         else:                            
