@@ -29,7 +29,7 @@ for a in links_total:
         for table in child:
             trs=table.find_all('tr')
             titulo=trs[0].find('td').text.strip()
-            if (len(trs) > 1) and (titulo=='Softwares'):
+            if (len(trs) > 1) and (titulo=='Empresas de base tecnológica'):
                 print(url_gruplac)
                 count=count+1
 print('count : ',count)

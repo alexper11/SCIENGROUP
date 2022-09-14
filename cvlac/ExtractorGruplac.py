@@ -57,7 +57,7 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_otros_tecnologicos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
         self.perfil_prototipos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
         self.perfil_software={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'url':[],'nombre_comercial':[],'nombre_proyecto':[],'institucion':[],'autores':[]}
-
+    
     def get_investigadoresList(self,url):
         dire=[]
         r=''
