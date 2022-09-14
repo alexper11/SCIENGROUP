@@ -173,9 +173,9 @@ if __name__ == '__main__':
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
     #prototipo
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000373770'
-    
+    url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000007096'
     dom=get_lxml(url)    
-    df_prueba=Extractor.get_perfil_software(dom,url)
+    df_prueba=Extractor.get_perfil_empresa_tecnologica(dom,url)
    
     df_prueba.to_csv('prueba.csv',index=False)
 
