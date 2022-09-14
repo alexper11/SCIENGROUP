@@ -840,8 +840,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=dato[dato.find(':')+1:].strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_planta_piloto = almacena(self.perfil_planta_piloto,dic)
-                    print('sape')                                                      
+                    self.perfil_planta_piloto = almacena(self.perfil_planta_piloto,dic)                                                      
             else:
                 raise Exception  
         except AttributeError:
