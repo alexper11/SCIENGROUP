@@ -58,7 +58,8 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_prototipos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
         self.perfil_software={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'url':[],'nombre_comercial':[],'nombre_proyecto':[],'institucion':[],'autores':[]}
         self.perfil_empresa_tecnologica={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'fecha':[],'nit':[],'fecha_registro':[],'mercado':[],'autores':[]}
-
+        self.perfil_innovacion_empresarial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
+        self.perfil_planta_piloto={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
 
     def get_investigadoresList(self,url):
         dire=[]
@@ -774,6 +775,82 @@ class ExtractorGruplac(ExtractorCvlac):
         df_empresa_tecnologica = df_empresa_tecnologica.reset_index(drop=True)   
         return df_empresa_tecnologica
 
+    def get_perfil_innovacion_empresarial(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Innovaciones generadas en la Gestión Empresarial').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','institucion':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            #Pendiente: buscar y verificar separadores
+                            separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')].strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['disponibilidad']=separador[1].strip().rstrip(',')
+                            dic['institucion']=separador[2].strip()
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_innovacion_empresarial = almacena(self.perfil_innovacion_empresarial,dic)                                                                         
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_innovacion_empresarial = pd.DataFrame(self.perfil_innovacion_empresarial)   
+        df_innovacion_empresarial = df_innovacion_empresarial.reset_index(drop=True)   
+        return df_innovacion_empresarial
+
+    def get_perfil_planta_piloto(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Plantas piloto').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','nombre_comercial':'','institucion':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            #Pendiente: buscar y verificar separadores
+                            separador=re.split('Disponibilidad:|Nombre comercial:',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')].strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['disponibilidad']=separador[1].strip().rstrip(',')
+                            dic['nombre_comercial']=separador[2].strip()
+                        elif i==3:
+                            dic['institucion']=dato[dato.find(':')+1:].strip()
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_planta_piloto = almacena(self.perfil_planta_piloto,dic)
+                    print('sape')                                                      
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_planta_piloto = pd.DataFrame(self.perfil_planta_piloto)   
+        df_planta_piloto = df_planta_piloto.reset_index(drop=True)   
+        return df_planta_piloto
 
 ##############
     def __del__(self):
