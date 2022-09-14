@@ -53,11 +53,14 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_caplibros={'idgruplac':[],'verificado':[],'tipo':[],'capitulo':[],'lugar':[],'fecha':[],'libro':[],'isbn':[],'volumen':[],'paginas':[],'editorial':[],'autores':[]}
         self.perfil_otros_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'autores':[]}
         self.perfil_otros_libros={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'isbn':[],'volumen':[],'paginas':[],'editorial':[],'autores':[]}
-        self.perfil_diseño_industrial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
+        self.perfil_diseno_industrial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
         self.perfil_otros_tecnologicos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
         self.perfil_prototipos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
         self.perfil_software={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'url':[],'nombre_comercial':[],'nombre_proyecto':[],'institucion':[],'autores':[]}
-    
+        self.perfil_empresa_tecnologica={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'fecha':[],'nit':[],'fecha_registro':[],'mercado':[],'autores':[]}
+        self.perfil_innovacion_empresarial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
+        self.perfil_planta_piloto={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
+
     def get_investigadoresList(self,url):
         dire=[]
         r=''
@@ -577,7 +580,7 @@ class ExtractorGruplac(ExtractorCvlac):
         df_otros_libros = df_otros_libros.reset_index(drop=True)   
         return df_otros_libros
 
-    def get_perfil_diseño_industrial(self, soup, url):        
+    def get_perfil_diseno_industrial(self, soup, url):        
         try:                       
             list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Diseños industriales').find_parent('tr').find_next_siblings('tr')
             if(list_tr!=None):
@@ -603,16 +606,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=separador[2].strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_diseño_industrial = almacena(self.perfil_diseño_industrial,dic)                                                      
+                    self.perfil_diseno_industrial = almacena(self.perfil_diseno_industrial,dic)                                                      
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_diseño_industrial = pd.DataFrame(self.perfil_diseño_industrial)   
-        df_diseño_industrial = df_diseño_industrial.reset_index(drop=True)   
-        return df_diseño_industrial  
+        df_diseno_industrial = pd.DataFrame(self.perfil_diseno_industrial)   
+        df_diseno_industrial = df_diseno_industrial.reset_index(drop=True)   
+        return df_diseno_industrial  
 
     def get_perfil_otros_tecnologicos(self, soup, url):        
         try:                       
@@ -723,8 +726,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=dato[dato.find(':')+1:].strip()                       
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_software = almacena(self.perfil_software,dic)
-                                                                       
+                    self.perfil_software = almacena(self.perfil_software,dic)                                                                       
             else:
                 raise Exception  
         except AttributeError:
@@ -734,6 +736,121 @@ class ExtractorGruplac(ExtractorCvlac):
         df_software = pd.DataFrame(self.perfil_software)   
         df_software = df_software.reset_index(drop=True)   
         return df_software
+
+    def get_perfil_empresa_tecnologica(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Empresas de base tecnológica ').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','fecha':'','nit':'','fecha_registro':'','mercado':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            #Pendiente: buscar y verificar separadores
+                            separador=re.split('NIT:|Fecha de registro ante cámara:',dato)                       
+                            dic['fecha']=separador[0].strip().rstrip(',')
+                            dic['nit']=separador[1].strip().rstrip(',')
+                            dic['fecha_registro']=separador[2].strip()
+                        elif i==3:
+                            dic['mercado']=dato.strip()
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_empresa_tecnologica = almacena(self.perfil_empresa_tecnologica,dic)                                                                        
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_empresa_tecnologica = pd.DataFrame(self.perfil_empresa_tecnologica)   
+        df_empresa_tecnologica = df_empresa_tecnologica.reset_index(drop=True)   
+        return df_empresa_tecnologica
+
+    def get_perfil_innovacion_empresarial(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Innovaciones generadas en la Gestión Empresarial').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','institucion':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            #Pendiente: buscar y verificar separadores
+                            separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')].strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['disponibilidad']=separador[1].strip().rstrip(',')
+                            dic['institucion']=separador[2].strip()
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_innovacion_empresarial = almacena(self.perfil_innovacion_empresarial,dic)                                                                         
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_innovacion_empresarial = pd.DataFrame(self.perfil_innovacion_empresarial)   
+        df_innovacion_empresarial = df_innovacion_empresarial.reset_index(drop=True)   
+        return df_innovacion_empresarial
+
+    def get_perfil_planta_piloto(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Plantas piloto').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','nombre_comercial':'','institucion':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            #Pendiente: buscar y verificar separadores
+                            separador=re.split('Disponibilidad:|Nombre comercial:',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')].strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['disponibilidad']=separador[1].strip().rstrip(',')
+                            dic['nombre_comercial']=separador[2].strip()
+                        elif i==3:
+                            dic['institucion']=dato[dato.find(':')+1:].strip()
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_planta_piloto = almacena(self.perfil_planta_piloto,dic)
+                    print('sape')                                                      
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_planta_piloto = pd.DataFrame(self.perfil_planta_piloto)   
+        df_planta_piloto = df_planta_piloto.reset_index(drop=True)   
+        return df_planta_piloto
 
 ##############
     def __del__(self):
