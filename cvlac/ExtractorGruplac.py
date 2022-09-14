@@ -56,8 +56,7 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_diseño_industrial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
         self.perfil_otros_tecnologicos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
         self.perfil_prototipos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
-        
-
+        self.perfil_software={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'url':[],'nombre_comercial':[],'nombre_proyecto':[],'institucion':[],'autores':[]}
 
     def get_investigadoresList(self,url):
         dire=[]
@@ -690,6 +689,51 @@ class ExtractorGruplac(ExtractorCvlac):
         df_prototipos = pd.DataFrame(self.perfil_prototipos)   
         df_prototipos = df_prototipos.reset_index(drop=True)   
         return df_prototipos
+
+    def get_perfil_software(self, soup, url):        
+        try:                       
+            list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Softwares ').find_parent('tr').find_next_siblings('tr')
+            if(list_tr!=None):
+                fid = url.find('=')               
+                for tr in list_tr:
+                    dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','url':'','nombre_comercial':'','nombre_proyecto':'','institucion':'','autores':''}
+                    dic['idgruplac']=url[fid+1:] 
+                    dic['verificado'] = False if tr.find('img')==None else True
+                    tr=" ".join(str(tr).split())
+                    list_datos=re.split('<strong>|</strong>|<br/>',tr)
+                    list_datos.pop(0)
+                    for i,dato in enumerate(list_datos):                                                                                            
+                        if i==0:
+                            dic['tipo']=dato
+                        elif i==1:
+                            dic['nombre']=dato.lstrip(' : ')
+                        elif i==2:
+                            #Pendiente: buscar y verificar separadores
+                            separador=re.split('Disponibilidad:|, Sitio web:',dato)                       
+                            dic['lugar']=separador[0][:separador[0].find(',')].strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['disponibilidad']=separador[1].strip()
+                            dic['url']=separador[2].strip()
+                        elif i==3:
+                            separador=re.split('Nombre comercial:|, Nombre del proyecto:',dato)
+                            separador.pop(0)                       
+                            dic['nombre_comercial']=separador[0].strip()
+                            dic['nombre_proyecto']=separador[1].strip()
+                        elif i==4:
+                            dic['institucion']=dato[dato.find(':')+1:].strip()                       
+                        else:                            
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
+                    self.perfil_software = almacena(self.perfil_software,dic)
+                                                                       
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass        
+        df_software = pd.DataFrame(self.perfil_software)   
+        df_software = df_software.reset_index(drop=True)   
+        return df_software
 
 ##############
     def __del__(self):
