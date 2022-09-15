@@ -138,8 +138,8 @@ class ExtractorCvlac():
                     self.articulos= almacena(self.articulos,art_individual)        
         except AttributeError:
             pass       
-        self.articulos['tipo']=self.articulos['tipo'].append(list_tipo)
-        self.articulos['verificado']=self.articulos['verificado'].append(list_verif)
+        self.articulos['tipo'].extend(list_tipo)
+        self.articulos['verificado'].extend(list_verif)
         df_articulos = pd.DataFrame(self.articulos)    
         #df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
         df_articulos = df_articulos.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
@@ -673,8 +673,8 @@ class ExtractorCvlac():
                     self.tecnologicos= almacena(self.tecnologicos,dic)  
         except AttributeError:
             pass
-        self.tecnologicos['tipo']=self.tecnologicos['tipo'].append(list_tipo)
-        self.tecnologicos['verificado']=self.tecnologicos['verificado'].append(list_verif)
+        self.tecnologicos['tipo'].append(list_tipo)
+        self.tecnologicos['verificado'].append(list_verif)
         df_tecnologicos = pd.DataFrame(self.tecnologicos)   
         df_tecnologicos = df_tecnologicos.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True) 
         return df_tecnologicos
@@ -721,8 +721,8 @@ class ExtractorCvlac():
                     self.empresa_tecnologica= almacena(self.empresa_tecnologica,dic)  
         except AttributeError:
             pass            
-        self.empresa_tecnologica['tipo']=self.empresa_tecnologica['tipo'].append(list_tipo)
-        self.empresa_tecnologica['verificado']=self.empresa_tecnologica['verificado'].append(list_verif)
+        self.empresa_tecnologica['tipo'].append(list_tipo)
+        self.empresa_tecnologica['verificado'].append(list_verif)
         df_empresa_tecnologica = pd.DataFrame(self.empresa_tecnologica)   
         df_empresa_tecnologica = df_empresa_tecnologica.reset_index(drop=True)   
         return df_empresa_tecnologica
@@ -777,8 +777,8 @@ class ExtractorCvlac():
                             self.innovacion_empresarial= almacena(self.innovacion_empresarial,dic) 
         except AttributeError:
             pass           
-        self.innovacion_empresarial['tipo']=self.innovacion_empresarial['tipo'].append(list_tipo)
-        self.innovacion_empresarial['verificado']=self.innovacion_empresarial['verificado'].append(list_verif)
+        self.innovacion_empresarial['tipo'].extend(list_tipo)
+        self.innovacion_empresarial['verificado'].extend(list_verif)
         df_innovacion = pd.DataFrame(self.innovacion_empresarial)   
         df_innovacion = df_innovacion.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
         return df_innovacion

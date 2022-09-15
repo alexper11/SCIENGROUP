@@ -127,7 +127,8 @@ class ExtractorGruplac(ExtractorCvlac):
                 "redes":df_redes,"identificadores":df_identifica,"libros":df_libros,"jurado":df_jurado,
                 "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica}
         
-    #def get_perfiles
+    #def get_perfiles(self, ):
+    
     
     def set_grup_attrs(self,gruplac_list):
         for gruplac in gruplac_list:
@@ -150,15 +151,8 @@ class ExtractorGruplac(ExtractorCvlac):
             except:
                 print('Error estableciendo atributos del objeto de prefijo grup')
                 
-    def set_perfil_attrs(self,gruplac_list):
-        for gruplac in gruplac_list:
-            try:
-                pass
-                        
-            except:
-                print('Error estableciendo atributos del objeto de prefijo perfil')
-                
-    #procesamiento de datos
+    #def set_perfil_attrs(self,gruplac_list):
+        
     
     def get_perfil_basico(self, soup, url):
         try:
