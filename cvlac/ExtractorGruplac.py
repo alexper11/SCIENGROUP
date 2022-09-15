@@ -40,7 +40,7 @@ class ExtractorGruplac(ExtractorCvlac):
         #El prefijo 'perfil' indica un atributo refente a una tabla especifica del perfil de un gruplac
         #######
         self.perfil_basico={'idgruplac':[],'nombre':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
-        self.perfil_intituciones={'idgruplac':[],'nombre':[],'aval':[]}
+        self.perfil_instituciones={'idgruplac':[],'nombre':[],'aval':[]}
         self.perfil_lineas={'idgruplac':[],'lineas':[]}
         self.perfil_integrantes={'idgruplac':[],'url':[],'integrante':[],'vinculacion':[],'horas':[],'fecha_vinculacion':[]}
         self.perfil_programa_doctorado={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
@@ -183,7 +183,7 @@ class ExtractorGruplac(ExtractorCvlac):
         df_perfil_basico = df_perfil_basico.reset_index(drop=True)   
         return df_perfil_basico
 
-    def get_perfil_intituciones(self, soup, url):
+    def get_perfil_instituciones(self, soup, url):
         dic={'idgruplac':[],'nombre':[],'aval':[]}
         try:            
             list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Instituciones').find_parent('tr').find_next_siblings('tr')
@@ -201,12 +201,12 @@ class ExtractorGruplac(ExtractorCvlac):
             pass          
         except:
             pass
-        ###########
+        #self.perfil_instituciones = dic
         dic=dict(zip(self.perfil_instituciones.keys(),dic.values()))  
         self.perfil_instituciones = almacena(self.perfil_instituciones,dic)
-        df_grupintituciones = pd.DataFrame(self.perfil_intituciones)   
-        df_grupintituciones = df_grupintituciones.reset_index(drop=True)   
-        return df_grupintituciones  
+        df_grupinstituciones = pd.DataFrame(self.perfil_instituciones)   
+        df_grupinstituciones = df_grupinstituciones.reset_index(drop=True)   
+        return df_grupinstituciones  
 
     def get_perfil_lineas(self, soup, url):
         dic={'idgruplac':[],'linea':[]}
