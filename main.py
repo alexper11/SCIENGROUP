@@ -46,7 +46,7 @@ if __name__ == '__main__':
     ########################
     """
     Extractor=ExtractorGruplac()
-    Extractor.set_gruplac_attrs(get_gruplacList('UNIVERSIDAD DEL CAUCA'))
+    Extractor.set_grup_attrs(get_gruplacList('UNIVERSIDAD DEL CAUCA'))
     print('supo')
     
     articulos=ArticulosController()
@@ -174,7 +174,7 @@ if __name__ == '__main__':
     #prototipo
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000373770'
     url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000015901'
-    dom=get_lxml(url)    
+    dom=get_lxml(url)
     df_prueba=Extractor.get_perfil_planta_piloto(dom,url)
    
     df_prueba.to_csv('prueba.csv',index=False)

@@ -138,8 +138,8 @@ class ExtractorCvlac():
                     self.articulos= almacena(self.articulos,art_individual)        
         except AttributeError:
             pass       
-        self.articulos['tipo']=list_tipo
-        self.articulos['verificado']=list_verif
+        self.articulos['tipo']=self.articulos['tipo'].append(list_tipo)
+        self.articulos['verificado']=self.articulos['verificado'].append(list_verif)
         df_articulos = pd.DataFrame(self.articulos)    
         #df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
         df_articulos = df_articulos.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
@@ -265,7 +265,7 @@ class ExtractorCvlac():
         df_evaluador = df_evaluador.reset_index(drop=True)
         return df_evaluador 
     
-    def get_idioma(self, soup, url):       
+    def get_idioma(self, soup, url): ############################## PROBARLO CON UNA LISTA DE CVLACS
         dic2={}
         child=(soup.find('table') ).findChildren("tr" , recursive=False)
         list=['idioma','habla','escribe','lee','entiende']
@@ -295,7 +295,7 @@ class ExtractorCvlac():
         df_idioma = df_idioma.reset_index(drop=True)      
         return df_idioma
     
-    def get_investiga(self, soup, url):
+    def get_investiga(self, soup, url): ############################## PROBARLO CON UNA LISTA DE CVLACS
         dic2={}        
         child=(soup.find('table')).findChildren("tr" , recursive=False)
         list=['nombre','activa']
@@ -400,8 +400,8 @@ class ExtractorCvlac():
                        
         except AttributeError:
             pass     
-        self.libros['tipo']=list_tipo
-        self.libros['verificado']=list_verif
+        self.libros['tipo']=self.libros['tipo'].append(list_tipo)
+        self.libros['verificado']=self.libros['verificado'].append(list_verif)
         df_libros = pd.DataFrame(self.libros)   
         #df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
@@ -563,8 +563,8 @@ class ExtractorCvlac():
                     self.software= almacena(self.software,dic)  
         except AttributeError:
             pass
-        self.software['tipo']=list_tipo
-        self.software['verificado']=list_verif
+        self.software['tipo']=self.software['tipo'].append(list_tipo)
+        self.software['verificado']=self.software['verificado'].append(list_verif)
         df_software = pd.DataFrame(self.software)   
         df_software = df_software.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)    
         return df_software
@@ -619,8 +619,8 @@ class ExtractorCvlac():
                             self.prototipo= almacena(self.prototipo,dic) 
         except AttributeError:
             pass           
-        self.prototipo['tipo']=list_tipo
-        self.prototipo['verificado']=list_verif
+        self.prototipo['tipo']=self.prototipo['tipo'].append(list_tipo)
+        self.prototipo['verificado']=self.prototipo['verificado'].append(list_verif)
         df_prototipo = pd.DataFrame(self.prototipo)   
         df_prototipo = df_prototipo.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)  
         return df_prototipo
@@ -673,8 +673,8 @@ class ExtractorCvlac():
                     self.tecnologicos= almacena(self.tecnologicos,dic)  
         except AttributeError:
             pass
-        self.tecnologicos['tipo']=list_tipo
-        self.tecnologicos['verificado']=list_verif
+        self.tecnologicos['tipo']=self.tecnologicos['tipo'].append(list_tipo)
+        self.tecnologicos['verificado']=self.tecnologicos['verificado'].append(list_verif)
         df_tecnologicos = pd.DataFrame(self.tecnologicos)   
         df_tecnologicos = df_tecnologicos.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True) 
         return df_tecnologicos
@@ -721,8 +721,8 @@ class ExtractorCvlac():
                     self.empresa_tecnologica= almacena(self.empresa_tecnologica,dic)  
         except AttributeError:
             pass            
-        self.empresa_tecnologica['tipo']=list_tipo
-        self.empresa_tecnologica['verificado']=list_verif
+        self.empresa_tecnologica['tipo']=self.empresa_tecnologica['tipo'].append(list_tipo)
+        self.empresa_tecnologica['verificado']=self.empresa_tecnologica['verificado'].append(list_verif)
         df_empresa_tecnologica = pd.DataFrame(self.empresa_tecnologica)   
         df_empresa_tecnologica = df_empresa_tecnologica.reset_index(drop=True)   
         return df_empresa_tecnologica
@@ -777,8 +777,8 @@ class ExtractorCvlac():
                             self.innovacion_empresarial= almacena(self.innovacion_empresarial,dic) 
         except AttributeError:
             pass           
-        self.innovacion_empresarial['tipo']=list_tipo
-        self.innovacion_empresarial['verificado']=list_verif
+        self.innovacion_empresarial['tipo']=self.innovacion_empresarial['tipo'].append(list_tipo)
+        self.innovacion_empresarial['verificado']=self.innovacion_empresarial['verificado'].append(list_verif)
         df_innovacion = pd.DataFrame(self.innovacion_empresarial)   
         df_innovacion = df_innovacion.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
         return df_innovacion

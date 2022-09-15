@@ -5,8 +5,9 @@ import os
 #from requests.packages.urllib3.exceptions import InsecureRequestWarning
 #requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-dire=[]
 url_general="https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=117"
+
+dire=[]
 r_general=requests.get(url_general, verify=False)
 soup_general=BeautifulSoup(r_general.content,'lxml')
 links_total=soup_general.find_all('a', attrs={'target':'_blank'})

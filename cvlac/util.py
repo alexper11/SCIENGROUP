@@ -8,6 +8,7 @@ import platform
 import time
 
 #Recibe nombre de una institución y retorna lista de urls de cada perfil de los gruplacs
+#obsoleta
 def get_gruplacList(institucion):
     dire=[]
     linkinsti=str(institucion).replace(' ','+')
