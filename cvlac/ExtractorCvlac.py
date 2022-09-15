@@ -70,23 +70,19 @@ class ExtractorCvlac():
         return df_actuacion
     
     def get_articulo(self, soup, url):
-        list_tipo=[]
-        list_verif=[]
+        
         try:
             tableart=(soup.find('a', attrs={'name':'articulos'}).parent)            
-            if(str((tableart).find('h3').contents[0])==('Artículos')):
-                tbody=tableart.find_all('tr')
-
-                for i,t in enumerate(tbody):
-                    if not (i % 2) == 0:
-                        list_tipo.append(t.find('b').text)
-                        if t.find('img') == None:
-                            list_verif.append(False)
-                        else:
-                            list_verif.append(True)
+            if(str((tableart).find('h3').contents[0])==('Artículos')):                                
                 blocks_arts = tableart.find_all('blockquote')
                 for block_art in blocks_arts:
                     art_individual={'IDCVLAC':'','Autores':'','Nombre':'','tipo':'','verificado':'','En':'','Revista':'','ISSN:':'','ed:':'','v.':'','fasc.':'', 'p.':'','fecha.':'',' DOI: ':'', 'Palabras: ':'', 'Sectores: ':''}
+                    tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
+                    if tipo.find('img') == None:
+                        art_individual['verificado']=False
+                    else:
+                        art_individual['verificado']=True
+                    art_individual['tipo']=tipo.find('b').text
                     quote_text_clear=re.sub('http://dx.doi.org/|http://doi.org/|https://doi.org/|<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')            
                     list_datos=(re.split('<i>|</i>|</b>|<b>',quote_text_clear))
@@ -138,8 +134,7 @@ class ExtractorCvlac():
                     self.articulos= almacena(self.articulos,art_individual)        
         except AttributeError:
             pass       
-        self.articulos['tipo']=self.articulos['tipo'].append(list_tipo)
-        self.articulos['verificado']=self.articulos['verificado'].append(list_verif)
+        
         df_articulos = pd.DataFrame(self.articulos)    
         #df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
         df_articulos = df_articulos.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
