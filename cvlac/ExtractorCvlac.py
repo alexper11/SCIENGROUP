@@ -70,23 +70,18 @@ class ExtractorCvlac():
         return df_actuacion
     
     def get_articulo(self, soup, url):
-        list_tipo=[]
-        list_verif=[]
         try:
             tableart=(soup.find('a', attrs={'name':'articulos'}).parent)            
-            if(str((tableart).find('h3').contents[0])==('Artículos')):
-                tbody=tableart.find_all('tr')
-
-                for i,t in enumerate(tbody):
-                    if not (i % 2) == 0:
-                        list_tipo.append(t.find('b').text)
-                        if t.find('img') == None:
-                            list_verif.append(False)
-                        else:
-                            list_verif.append(True)
+            if(str((tableart).find('h3').contents[0])==('Artículos')):                                
                 blocks_arts = tableart.find_all('blockquote')
                 for block_art in blocks_arts:
                     art_individual={'IDCVLAC':'','Autores':'','Nombre':'','tipo':'','verificado':'','En':'','Revista':'','ISSN:':'','ed:':'','v.':'','fasc.':'', 'p.':'','fecha.':'',' DOI: ':'', 'Palabras: ':'', 'Sectores: ':''}
+                    tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
+                    if tipo.find('img') == None:
+                        art_individual['verificado']=False
+                    else:
+                        art_individual['verificado']=True
+                    art_individual['tipo']=tipo.find('b').text
                     quote_text_clear=re.sub('http://dx.doi.org/|http://doi.org/|https://doi.org/|<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')            
                     list_datos=(re.split('<i>|</i>|</b>|<b>',quote_text_clear))
@@ -138,8 +133,7 @@ class ExtractorCvlac():
                     self.articulos= almacena(self.articulos,art_individual)        
         except AttributeError:
             pass       
-        self.articulos['tipo'].extend(list_tipo)
-        self.articulos['verificado'].extend(list_verif)
+        
         df_articulos = pd.DataFrame(self.articulos)    
         #df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
         df_articulos = df_articulos.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
@@ -351,22 +345,20 @@ class ExtractorCvlac():
         return df_jurado
     
     def get_libro(self, soup, url):
-        list_tipo=[]
-        list_verif=[]
         try:
             tablelib=(soup.find('a', attrs={'name':'libros'}).parent)            
             if(str((tablelib).find('h3').contents[0])==('Libros')):
-                tbody=tablelib.find_all('tr')
-                for i,t in enumerate(tbody):
-                    if not (i % 2) == 0:
-                        list_tipo.append(t.find('b').text)
-                        if t.find('img') == None:
-                            list_verif.append(False)
-                        else:
-                            list_verif.append(True)
                 blocks_arts = tablelib.find_all('blockquote')
                 for block_art in blocks_arts:
                     libros_aux={'IDCVLAC':'','Autores':'','Nombre':'','tipo':'','verificado':'','En':'','fecha':'','Editorial':'','ISBN:':'','v. ':'','pags.':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
+                    
+                    tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
+                    if tipo.find('img') == None:
+                        libros_aux['verificado']=False
+                    else:
+                        libros_aux['verificado']=True
+                    libros_aux['tipo']=tipo.find('b').text
+                    
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
                     quote_text_clear=quote_text_clear.replace('&amp;','&')               
                     list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
@@ -400,8 +392,6 @@ class ExtractorCvlac():
                        
         except AttributeError:
             pass     
-        self.libros['tipo']=self.libros['tipo'].append(list_tipo)
-        self.libros['verificado']=self.libros['verificado'].append(list_verif)
         df_libros = pd.DataFrame(self.libros)   
         #df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
         df_libros = df_libros.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
@@ -517,19 +507,9 @@ class ExtractorCvlac():
         return df_libros
     
     def get_software(self, soup, url):
-        list_tipo=[]
-        list_verif=[]
         try:
             tablelib=(soup.find('a', attrs={'name':'software'}).parent)            
             if(str((tablelib).find('h3').contents[0])==('Softwares')):
-                tbody=tablelib.find_all('tr')                
-                for i,t in enumerate(tbody):
-                    if not (i % 2) == 0:
-                        list_tipo.append(t.find('b').text)
-                        if t.find('img') == None:
-                            list_verif.append(False)
-                        else:
-                            list_verif.append(True)
                 blocks_arts = tablelib.find_all('blockquote')
                 for block_art in blocks_arts:
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
@@ -538,6 +518,12 @@ class ExtractorCvlac():
                     # Pendiente: manejo de excepcion nombre software con mayuscula
                     list_datos=re.split('<i>|<b>',quote_text_clear)
                     dic={'idcvlac':'','autor':'','nombre':'','tipo':'','verificado':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                    tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
+                    if tipo.find('img') == None:
+                        dic['verificado']=False
+                    else:
+                        dic['verificado']=True
+                    dic['tipo']=tipo.find('b').text
                     dic['idcvlac'] = url[(url.find('='))+1:]
                     for i,item in enumerate(list_datos):
                         if i == 0:
@@ -563,29 +549,17 @@ class ExtractorCvlac():
                     self.software= almacena(self.software,dic)  
         except AttributeError:
             pass
-        self.software['tipo']=self.software['tipo'].append(list_tipo)
-        self.software['verificado']=self.software['verificado'].append(list_verif)
         df_software = pd.DataFrame(self.software)   
         df_software = df_software.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)    
         return df_software
     
     def get_prototipo(self, soup, url):
-        list_tipo=[]
-        list_verif=[]
         try:
             child=(soup.find('table')).findChildren("tr" , recursive=False)            
             for trs in child:
                 h3s=(trs.find('h3'))
                 if h3s != None:                
                     if(str(h3s.contents[0])==("Prototipos")):
-                        tbody=h3s.parent.parent.parent.find_all('tr')
-                        for i,t in enumerate(tbody):
-                            if not (i % 2) == 0:
-                                list_tipo.append(t.find('b').text)
-                                if t.find('img') == None:
-                                    list_verif.append(False)
-                                else:
-                                    list_verif.append(True)
                         for blockquote in ((h3s.parent.parent.parent).find_all('blockquote')):
                             quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(blockquote)).split())))
                             quote_text_clear=quote_text_clear.replace('&amp;','&')                                                      
@@ -593,6 +567,14 @@ class ExtractorCvlac():
                             # Pendiente: manejo de excepcion nombre software con mayuscula
                             list_datos=re.split('<i>|<b>',quote_text_clear)
                             dic={'idcvlac':'','autor':'','nombre':'','tipo':'','verificado':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                            
+                            tipo=blockquote.find_parent('tr').find_previous_sibling('tr')                    
+                            if tipo.find('img') == None:
+                                dic['verificado']=False
+                            else:
+                                dic['verificado']=True
+                            dic['tipo']=tipo.find('b').text
+                            
                             dic['idcvlac'] = url[(url.find('='))+1:]
                             
                             for i,item in enumerate(list_datos):
@@ -619,27 +601,14 @@ class ExtractorCvlac():
                             self.prototipo= almacena(self.prototipo,dic) 
         except AttributeError:
             pass           
-        self.prototipo['tipo']=self.prototipo['tipo'].append(list_tipo)
-        self.prototipo['verificado']=self.prototipo['verificado'].append(list_verif)
         df_prototipo = pd.DataFrame(self.prototipo)   
         df_prototipo = df_prototipo.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)  
         return df_prototipo
 
     def get_tecnologicos(self, soup, url):
-        list_tipo=[]
-        list_verif=[]
         try:
             tablelib=(soup.find('a', attrs={'name':'tecnologicos'}).parent)
             if(str((tablelib).find('h3').contents[0])==('Productos tecnológicos')):
-                tbody=tablelib.find_all('tr')
-                
-                for i,t in enumerate(tbody):
-                    if not (i % 2) == 0:
-                        list_tipo.append(t.find('b').text)
-                        if t.find('img') == None:
-                            list_verif.append(False)
-                        else:
-                            list_verif.append(True)
                 blocks_arts = tablelib.find_all('blockquote')
                 for block_art in blocks_arts:
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
@@ -648,6 +617,13 @@ class ExtractorCvlac():
                     # Pendiente: manejo de excepcion nombre software con mayuscula
                     list_datos=re.split('<i>|<b>',quote_text_clear)
                     dic={'idcvlac':'','autor':'','nombre':'','tipo':'','verificado':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                    tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
+                    if tipo.find('img') == None:
+                        dic['verificado']=False
+                    else:
+                        dic['verificado']=True
+                    dic['tipo']=tipo.find('b').text
+                    
                     dic['idcvlac'] = url[(url.find('='))+1:]
                     for i,item in enumerate(list_datos):
                         if i == 0:
@@ -673,26 +649,14 @@ class ExtractorCvlac():
                     self.tecnologicos= almacena(self.tecnologicos,dic)  
         except AttributeError:
             pass
-        self.tecnologicos['tipo'].append(list_tipo)
-        self.tecnologicos['verificado'].append(list_verif)
         df_tecnologicos = pd.DataFrame(self.tecnologicos)   
         df_tecnologicos = df_tecnologicos.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True) 
         return df_tecnologicos
 
     def get_empresa_tecnologica(self, soup, url):
-        list_tipo=[]
-        list_verif=[]
         try:
             tablelib=(soup.find('h3', attrs={'id':'base_tecnologica'}).parent.parent.parent)
             if(str((tablelib).find('h3').contents[0])==('Empresas de base tecnológica')):
-                tbody=tablelib.find_all('tr')                
-                for i,t in enumerate(tbody):
-                    if not (i % 2) == 0:
-                        list_tipo.append(t.find('b').text)
-                        if t.find('img') == None:
-                            list_verif.append(False)
-                        else:
-                            list_verif.append(True)
                 blocks_arts = tablelib.find_all('blockquote')
                 for block_art in blocks_arts:
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
@@ -701,6 +665,13 @@ class ExtractorCvlac():
                     # Pendiente: manejo de excepcion nombre software con mayuscula
                     list_datos=re.split('<i>|<b>',quote_text_clear)
                     dic={'idcvlac':'','autores':'','nombre':'','tipo':'','nit':'','Registrado ante la c´mara el':'','verificado':'','Palabras':'','Areas':'', 'Sectores':''}
+                    tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
+                    if tipo.find('img') == None:
+                        dic['verificado']=False
+                    else:
+                        dic['verificado']=True
+                    dic['tipo']=tipo.find('b').text
+                    
                     dic['idcvlac'] = url[(url.find('='))+1:]
                     for i,item in enumerate(list_datos):
                         if i == 0:
@@ -721,29 +692,17 @@ class ExtractorCvlac():
                     self.empresa_tecnologica= almacena(self.empresa_tecnologica,dic)  
         except AttributeError:
             pass            
-        self.empresa_tecnologica['tipo'].append(list_tipo)
-        self.empresa_tecnologica['verificado'].append(list_verif)
         df_empresa_tecnologica = pd.DataFrame(self.empresa_tecnologica)   
         df_empresa_tecnologica = df_empresa_tecnologica.reset_index(drop=True)   
         return df_empresa_tecnologica
 
     def get_innovacion(self, soup, url):
-        list_tipo=[]
-        list_verif=[]
         try:
             child=(soup.find('table')).findChildren("tr" , recursive=False)            
             for trs in child:
                 h3s=(trs.find('h3'))
                 if h3s != None:                
                     if(str(h3s.contents[0])==("Innovación generada en la gestión empresarial")):
-                        tbody=h3s.parent.parent.parent.find_all('tr')
-                        for i,t in enumerate(tbody):
-                            if not (i % 2) == 0:
-                                list_tipo.append(t.find('b').text)
-                                if t.find('img') == None:
-                                    list_verif.append(False)
-                                else:
-                                    list_verif.append(True)
                         for blockquote in ((h3s.parent.parent.parent).find_all('blockquote')):
                             quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(blockquote)).split())))
                             quote_text_clear=quote_text_clear.replace('&amp;','&')                                                      
@@ -751,6 +710,12 @@ class ExtractorCvlac():
                             # Pendiente: manejo de excepcion nombre software con mayuscula
                             list_datos=re.split('<i>|<b>',quote_text_clear)
                             dic={'idcvlac':'','autor':'','nombre':'','tipo':'','verificado':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'', 'Palabras':'','Areas':'', 'Sectores':''}
+                            tipo=blockquote.find_parent('tr').find_previous_sibling('tr')                    
+                            if tipo.find('img') == None:
+                                dic['verificado']=False
+                            else:
+                                dic['verificado']=True
+                            dic['tipo']=tipo.find('b').text
                             dic['idcvlac'] = url[(url.find('='))+1:]
                             
                             for i,item in enumerate(list_datos):
@@ -777,8 +742,6 @@ class ExtractorCvlac():
                             self.innovacion_empresarial= almacena(self.innovacion_empresarial,dic) 
         except AttributeError:
             pass           
-        self.innovacion_empresarial['tipo'].extend(list_tipo)
-        self.innovacion_empresarial['verificado'].extend(list_verif)
         df_innovacion = pd.DataFrame(self.innovacion_empresarial)   
         df_innovacion = df_innovacion.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
         return df_innovacion
