@@ -61,7 +61,8 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_innovacion_empresarial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
         self.perfil_planta_piloto={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
 
-    def get_investigadoresList(self,url):
+    def get_members_list(self,url):
+        #recibe url de un gruplac y retorna la lista de cvlacs que contiene
         dire=[]
         r=''
         tries=3
@@ -84,10 +85,23 @@ class ExtractorGruplac(ExtractorCvlac):
             if(url_in.find('https://scienti.minciencias.gov.co/cvlac/visualizador')!=-1):
                 dire.append(url_in) 
         return dire 
-    #recibe url de un gruplac
+    
+    def get_gruplac_list(self, url):
+        #recibe url del buscador scienti que contiene la lista de gruplacs de un departamento
+        gruplac_list=[]
+        r=requests.get(url, verify=False) #Prescindir de Verify=False
+        soup=BeautifulSoup(r.content,'lxml')
+        links=soup.find_all('a', attrs={'target':'_blank'})
+        for a in links:
+            url_gruplac=a['href']
+            if(url_gruplac.find('https://scienti.minciencias.gov.co/gruplac/jsp/visualiza')!=-1):
+                gruplac_list.append(url_gruplac)
+        print(len(gruplac_list))
+        return gruplac_list
+    
     def get_cvs(self, url_gruplac):
-        
-        urls=self.get_investigadoresList(url_gruplac)
+        #recibe url de un gruplac y extrae los cvlacs que contiene
+        urls=self.get_members_list(url_gruplac)
         print('Extrayendo...')
         for url in urls:
             lxml_url = get_lxml(url)            
@@ -112,8 +126,10 @@ class ExtractorGruplac(ExtractorCvlac):
                 "investigacion":df_investiga,"reconocimiento":df_reconocimiento,"evaluador":df_evaluador,
                 "redes":df_redes,"identificadores":df_identifica,"libros":df_libros,"jurado":df_jurado,
                 "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica}
+        
+    #def get_perfiles
     
-    def set_gruplac_attrs(self,gruplac_list):
+    def set_grup_attrs(self,gruplac_list):
         for gruplac in gruplac_list:
             try:
                 dataframes=self.get_cvs(gruplac)
@@ -132,10 +148,18 @@ class ExtractorGruplac(ExtractorCvlac):
                 self.grup_reconocimiento=self.grup_reconocimiento.append(dataframes["reconocimiento"])
                 self.grup_redes=self.grup_redes.append(dataframes["redes"])
             except:
-                print('Error estableciendo atributos del objeto')
+                print('Error estableciendo atributos del objeto de prefijo grup')
+                
+    def set_perfil_attrs(self,gruplac_list):
+        for gruplac in gruplac_list:
+            try:
+                pass
+                        
+            except:
+                print('Error estableciendo atributos del objeto de prefijo perfil')
                 
     #procesamiento de datos
-
+    
     def get_perfil_basico(self, soup, url):
         try:
             child=(soup.find('table')).findChildren("tr" , recursive=False) 
