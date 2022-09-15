@@ -173,9 +173,13 @@ if __name__ == '__main__':
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
     #prototipo
     #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000373770'
-    url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000015901'
-    dom=get_lxml(url)
-    df_prueba=Extractor.get_perfil_planta_piloto(dom,url)
+    list_url=['https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013021',
+    'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368',
+    'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013056',
+    'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012963']
+    for url in list_url:
+        dom=get_lxml(url)
+        df_prueba=Extractor.get_articulo(dom,url)
    
     df_prueba.to_csv('prueba.csv',index=False)
 
