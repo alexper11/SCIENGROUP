@@ -304,8 +304,9 @@ class ExtractorGruplac(ExtractorCvlac):
                 dfs.insert(0, 'url', list_url)
                 fid = url.find('=')
                 dfs.insert(0, 'idgruplac', url[fid+1:])                              
-                dfs.columns=self.perfil_integrantes.keys()
+                dfs.columns=list(self.perfil_integrantes.columns)
                 dfs['integrante']=dfs['integrante'].str.replace(r'[^a-zA-Z\u00C0-\u017F\s]+','', regex=True).str.strip()           
+                self.perfil_integrantes= almacena_df(self.perfil_integrantes,dfs)
             else:
                 raise Exception
         except AttributeError:
