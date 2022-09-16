@@ -182,13 +182,12 @@ if __name__ == '__main__':
     #urls gruplac:
     
     list_url=['https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160',
-    'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008705']
+    'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000015570']
     
 
     for url in list_url:
         dom=get_lxml(url)
-        df_prueba=Extractor.get_perfil_planta_piloto(dom,url)
-   
+        df_prueba=Extractor.get_perfil_integrantes(dom,url)   
     df_prueba.to_csv('prueba.csv',index=False)
 
 

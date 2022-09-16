@@ -1,1 +1,16 @@
+<<<<<<< HEAD
 idgruplac,verificado,tipo,nombre,lugar,fecha,disponibilidad,nombre_comercial,institucion,autores
+=======
+idgruplac,url,integrante,vinculacion,horas,fecha_vinculacion
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001237276,MABEL CRISTINA CALVACHE MUÑOZ,Integrante,14,2014/5 - Actual
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000771546,Sandra Faisuler Potosi Rodríguez,Integrante,14,2014/8 - Actual
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001309463,Alejandra Maria RODRIGUEZ GUARIN,Integrante,20,2014/5 - Actual
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000078303,César Ricardo Montilla Muñoz,Integrante,10,2016/9 - 2016/10
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000047468,ERVIN JOSE MUÑOZ ASTAIZA,Integrante,4,2015/8 - 2016/1
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001520249,German Antonio Arboleda Muñoz,Integrante,0,2020/2 - 2021/12
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001386238,Julio Eduardo Mejía Manzano,Integrante,3,2022/1 - Actual
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001674199,Monica Alejandra Moreno Ruano,Integrante,8,2017/2 - Actual
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001377643,salomon rodriguez guarin,Integrante,2,2017/2 - 2021/5
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001162721,VICKY MABEL DELGADO ZAMBRANO,Integrante,6,2017/10 - Actual
+00000000015570,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001545638,Zoila Rosa Nieto Galvan,Integrante,14,2021/8 - Actual
+>>>>>>> 02444f92f48d2a2ff44e664766ce12950184b1fb

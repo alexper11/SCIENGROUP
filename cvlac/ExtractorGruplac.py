@@ -196,8 +196,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         fid = url.find('=')
                         dic2['idgruplac'] = url[fid+1:]
                         dic2['nombre'] = soup.find('span').text.strip()                     
-                        for row in  rows:            
-                            
+                        for row in  rows:
                             if len(row.select('td')) == 2:
                                 cells = row.findChildren('td')
                                 try:
@@ -213,48 +212,46 @@ class ExtractorGruplac(ExtractorCvlac):
         df_perfil_basico = self.perfil_basico
         return df_perfil_basico
 
-    def get_perfil_instituciones(self, soup, url):
-        dic={'idgruplac':[],'nombre':[],'aval':[]}
+    def get_perfil_instituciones(self, soup, url):        
         try:            
             list_tr=soup.find('td', attrs={'class':'celdaEncabezado'},string='Instituciones').find_parent('tr').find_next_siblings('tr')
             if(list_tr!=None):
-                fid = url.find('=')
+                fid = url.find('=')                
                 for i in list_tr:
-                    dic['idgruplac'].append(url[fid+1:])
+                    dic={'idgruplac':'','nombre':'','aval':''}
+                    dic['idgruplac']=(url[fid+1:])                  
                     i_clear=i.text.strip()
                     index=i_clear.rfind('-  (')#posible futuro error: doble espacio
-                    dic['nombre'].append(i_clear[3:index].strip())
-                    dic['aval'].append(re.sub(r'[^A-Za-z0-9 ]+','',i_clear[index:]).strip())                                     
+                    dic['nombre']=(i_clear[3:index].strip())
+                    dic['aval']=(re.sub(r'[^A-Za-z0-9 ]+','',i_clear[index:]).strip())
+                    dic=dict(zip(self.perfil_instituciones.keys(),dic.values()))  
+                    self.perfil_instituciones = almacena(self.perfil_instituciones,dic)                                    
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
-            pass
-        #self.perfil_instituciones = dic
-        dic=dict(zip(self.perfil_instituciones.keys(),dic.values()))  
-        self.perfil_instituciones = almacena(self.perfil_instituciones,dic)
+            pass               
         df_grupintituciones = pd.DataFrame(self.perfil_instituciones)   
         df_grupintituciones = df_grupintituciones.reset_index(drop=True)   
         return df_grupintituciones  
 
-    def get_perfil_lineas(self, soup, url):
-        dic={'idgruplac':[],'linea':[]}
+    def get_perfil_lineas(self, soup, url):        
         try:            
             child=soup.find('td', attrs={'class':'celdaEncabezado'},string='Líneas de investigación declaradas por el grupo').find_parent('tr').find_next_siblings('tr')
             if(child!=None):
+                dic={'idgruplac':'','lineas':''}
                 fid = url.find('=')                
-                dic['idgruplac'].append(url[fid+1:])
+                dic['idgruplac']=(url[fid+1:])
                 linea=""
                 for i in child:                                       
                     linea=linea+i.text.strip()[3:]+";"
-                dic['linea'].append(linea.strip())
-                
+                dic['lineas']=(linea.strip())
+                self.perfil_lineas = almacena(self.perfil_lineas,dic)               
         except AttributeError:
             pass          
         except:
-            pass
-        self.perfil_lineas = dic
+            pass        
         df_gruplineas = pd.DataFrame(self.perfil_lineas)   
         df_gruplineas = df_gruplineas.reset_index(drop=True)   
         return df_gruplineas
@@ -279,8 +276,9 @@ class ExtractorGruplac(ExtractorCvlac):
         except AttributeError:
             pass          
         except:
-            pass      
-        return dfs
+            pass
+        #self.perfil_integrantes= almacena(self.perfil_integrantes,dfs)   
+        return self.perfil_integrantes
 
     def get_perfil_programa_doctorado(self, soup, url):        
         try:            
