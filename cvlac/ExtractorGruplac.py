@@ -61,6 +61,12 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_innovacion_empresarial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
         self.perfil_planta_piloto={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
 
+        ####
+        #self.perfil_basico=pd.DataFrame(columns=['idgruplac','nombre','fecha_formacion','lugar','lider','certificacion','pagina_web','email','clasificacion','areas','programas','programas_secundario'])
+        
+
+        
+        
     def get_members_list(self,url):
         #recibe url de un gruplac y retorna la lista de cvlacs que contiene
         dire=[]
@@ -200,11 +206,13 @@ class ExtractorGruplac(ExtractorCvlac):
                                 except AttributeError:
                                     print('error gruplac basico url: : ', url)           
                         dic2=dict(zip(self.perfil_basico.keys(),dic2.values()))  
+                        #dic2=pd.DataFrame([dict(zip(list(self.perfil_basico.columns),dic2.values()))])
                         self.perfil_basico = almacena(self.perfil_basico,dic2)
+                        #self.perfil_basico = almacena_df(self.perfil_basico,dic2)
         except AttributeError:
             pass          
         df_perfil_basico = pd.DataFrame(self.perfil_basico)   
-        df_perfil_basico = df_perfil_basico.reset_index(drop=True)   
+        df_perfil_basico = df_perfil_basico.reset_index(drop=True)
         return df_perfil_basico
 
     def get_perfil_instituciones(self, soup, url):
