@@ -21,10 +21,10 @@ class ExtractorCvlac():
         self.identificadores={'idcvlac':[],'nombre':[],'url':[]}        
         self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'verificado':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
         self.software={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.prototipo={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.tecnologicos={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.empresa_tecnologica={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'nit':[],'registro_camara':[],'palabras':[],'areas':[],'sectores':[]}
-        self.innovacion_empresarial={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
+        self.prototipo={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
+        self.tecnologicos={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
+        self.empresa_tecnologica={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'verificado':[],'nit':[],'registro_camara':[],'palabras':[],'areas':[],'sectores':[]}
+        self.innovacion_empresarial={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
             
     def get_academica(self, soup, url):
         dic_aux={}   
@@ -203,7 +203,6 @@ class ExtractorCvlac():
                     td_text_clear=td_text_clear.replace('&amp;','&')                      
                     list_datos=(re.split('<br/>|</b>',td_text_clear))                    
                     #list_datos.pop(-1) lo deje por algo, no recuerdo. daba error en descripcion (eliminar)
-                                        
                     x=0
                     dic_aux['idcvlac'] = url[(url.find('='))+1:]              
                     for datos in list_datos:                        
