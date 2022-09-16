@@ -201,7 +201,7 @@ class ExtractorGruplac(ExtractorCvlac):
             pass          
         except:
             pass
-        ###########
+        #self.perfil_instituciones = dic
         dic=dict(zip(self.perfil_instituciones.keys(),dic.values()))  
         self.perfil_instituciones = almacena(self.perfil_instituciones,dic)
         df_grupintituciones = pd.DataFrame(self.perfil_instituciones)   
@@ -225,7 +225,6 @@ class ExtractorGruplac(ExtractorCvlac):
         except:
             pass
         self.perfil_lineas = dic
-        print(dic)
         df_gruplineas = pd.DataFrame(self.perfil_lineas)   
         df_gruplineas = df_gruplineas.reset_index(drop=True)   
         return df_gruplineas

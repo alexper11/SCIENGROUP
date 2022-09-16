@@ -180,11 +180,14 @@ if __name__ == '__main__':
     'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013056',
     'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012963']
     #urls gruplac:
+    
     list_url=['https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008705']
+    
+
     for url in list_url:
         dom=get_lxml(url)
-        df_prueba=Extractor.get_perfil_instituciones(dom,url)
+        df_prueba=Extractor.get_perfil_lineas(dom,url)
    
     df_prueba.to_csv('prueba.csv',index=False)
 
