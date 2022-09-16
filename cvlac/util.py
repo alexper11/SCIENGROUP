@@ -6,6 +6,7 @@ from selenium import webdriver
 import pathlib
 import platform
 import time
+import pandas as pd
 
 #Recibe nombre de una institución y retorna lista de urls de cada perfil de los gruplacs
 #obsoleta
@@ -96,3 +97,7 @@ def almacena(diccionario1, diccionario2):
     for data in diccionario2.keys():
         diccionario1[data].append(diccionario2[data])   
     return diccionario1    
+
+def almacena_df(df1, df2):
+    df= pd.concat([df1,df2]).reset_index(drop=True) 
+    return df
