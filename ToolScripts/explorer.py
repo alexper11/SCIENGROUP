@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 from pyquery import PyQuery as pq
 import os
 
-#from requests.packages.urllib3.exceptions import InsecureRequestWarning
-#requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 dire=[]
@@ -58,7 +58,7 @@ for a in links_total:
                         pass
                     if h3s!=None:                
                         titulo_c=str(h3s.contents[0]).strip()
-                        if titulo_c == "Reconocimientos":
+                        if titulo_c == "Innovación generada en la gestión empresarial":
                             print(url_cvlac)
                         if titulo_c in lista_cvlacs:
                             pass

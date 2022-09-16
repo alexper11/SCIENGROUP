@@ -144,13 +144,21 @@ class ExtractorGruplac(ExtractorCvlac):
             df_complementaria = self.get_complementaria(lxml_url, url)
             df_estancias = self.get_estancias(lxml_url, url)
             df_academica = self.get_academica(lxml_url, url)
+            df_caplibros = self.get_caplibro(lxml_url, url)
+            df_software = self.get_software(lxml_url, url)
+            df_prototipo = self.get_prototipos(lxml_url, url)
+            df_tecnologicos = self.get_tecnologicos(lxml_url, url)
+            df_empresa = self.get_empresa_tecnologica(lxml_url, url)
+            df_innovacion = self.get_innovacion(lxml_url, url)
         #limpiar atributos
         super().__init__()
             
         return {"basico":df_basico,"articulos":df_articulos,"actuacion":df_actuacion,"idioma":df_idioma,
                 "investigacion":df_investiga,"reconocimiento":df_reconocimiento,"evaluador":df_evaluador,
                 "redes":df_redes,"identificadores":df_identifica,"libros":df_libros,"jurado":df_jurado,
-                "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica}
+                "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica,
+                "caplibros":df_caplibros,"software":df_software,"prototipo":df_prototipo,"tecnologicos":df_tecnologicos,
+                "empresa_tecnologica":df_empresa,"innovacion_empresarial":df_innovacion}
     
     
     def set_grup_attrs(self,gruplac_list):
@@ -171,37 +179,44 @@ class ExtractorGruplac(ExtractorCvlac):
                 self.grup_libros=self.grup_libros.append(dataframes["libros"])
                 self.grup_reconocimiento=self.grup_reconocimiento.append(dataframes["reconocimiento"])
                 self.grup_redes=self.grup_redes.append(dataframes["redes"])
+                self.grup_caplibros=self.grup_caplibros.append(dataframes["caplibros"])
+                self.grup_software=self.grup_software.append(dataframes["software"])
+                self.grup_prototipo=self.grup_prototipo.append(dataframes["prototipo"])
+                self.grup_tecnologicos=self.grup_tecnologicos.append(dataframes["tecnologicos"])
+                self.grup_empresa_tecnologica=self.grup_empresa_tecnologica.append(dataframes["empresa_tecnologica"])
+                self.grup_innovacion_empresarial=self.grup_innovacion_empresarial.append(dataframes["innovacion_empresarial"])
             except:
-                print('Error estableciendo atributos del objeto de prefijo grup')
-       
-    """
+                print('Error estableciendo atributos de prefijo grup del objeto ')
+    
     def set_perfil_attrs(self, gruplac_list):
         #recibe una lista de urls de grupos de investigación y rellena los valores de los atributos de forma
         #acumulativa 
         for url in gruplac_list:
-            lxml_url = get_lxml(url)
-            self.get_perfil_articulos(lxml_url,url)
-            self.get_perfil_basico(lxml_url,url)
-            self.get_perfil_caplibros(lxml_url,url)
-            self.get_perfil_curso_doctorado(lxml_url,url)
-            self.get_perfil_curso_maestria(lxml_url,url)
-            self.get_perfil_diseno_industrial(lxml_url,url)
-            self.get_perfil_empresa_tecnologica(lxml_url,url)
-            self.get_perfil_innovacion_empresarial(lxml_url,url)
-            self.get_perfil_instituciones(lxml_url,url)
-            self.get_perfil_integrantes(lxml_url,url)
-            self.get_perfil_lineas(lxml_url,url)
-            self.get_perfil_libros(lxml_url,url)
-            self.get_perfil_otro_programa(lxml_url,url)
-            self.get_perfil_planta_piloto(lxml_url,url)
-            self.get_perfil_programa_maestria(lxml_url,url)
-            self.get_perfil_programa_doctorado(lxml_url,url)
-            self.get_perfil_otros_articulos(lxml_url,url)
-            self.get_perfil_software(lxml_url,url)
-            self.get_perfil_otros_libros(lxml_url,url)
-            self.get_perfil_otros_tecnologicos(lxml_url,url)
-            self.get_perfil_prototipos(lxml_url,url)
-    """    
+            try:    
+                lxml_url = get_lxml(url)
+                self.get_perfil_articulos(lxml_url,url)
+                self.get_perfil_basico(lxml_url,url)
+                self.get_perfil_caplibros(lxml_url,url)
+                self.get_perfil_curso_doctorado(lxml_url,url)
+                self.get_perfil_curso_maestria(lxml_url,url)
+                self.get_perfil_diseno_industrial(lxml_url,url)
+                self.get_perfil_empresa_tecnologica(lxml_url,url)
+                self.get_perfil_innovacion_empresarial(lxml_url,url)
+                self.get_perfil_instituciones(lxml_url,url)
+                self.get_perfil_integrantes(lxml_url,url)
+                self.get_perfil_lineas(lxml_url,url)
+                self.get_perfil_libros(lxml_url,url)
+                self.get_perfil_otro_programa(lxml_url,url)
+                self.get_perfil_planta_piloto(lxml_url,url)
+                self.get_perfil_programa_maestria(lxml_url,url)
+                self.get_perfil_programa_doctorado(lxml_url,url)
+                self.get_perfil_otros_articulos(lxml_url,url)
+                self.get_perfil_software(lxml_url,url)
+                self.get_perfil_otros_libros(lxml_url,url)
+                self.get_perfil_otros_tecnologicos(lxml_url,url)
+                self.get_perfil_prototipos(lxml_url,url)
+            except:
+                print('Error estableciendo atributos de prefijo perfil del objeto')
     
     def get_perfil_basico(self, soup, url):
         try:
@@ -222,8 +237,7 @@ class ExtractorGruplac(ExtractorCvlac):
                                     cells[1]=" ".join(cells[1].text.split())
                                     dic2[re.sub('¿|\?','',cells[0].text.strip())]= cells[1]
                                 except AttributeError:
-                                    print('error gruplac basico url: : ', url)           
-                        #dic2=dict(zip(self.perfil_basico.keys(),dic2.values()))  
+                                    print('error gruplac basico url: : ', url)        
                         dic2=pd.DataFrame([dict(zip(list(self.perfil_basico.columns),dic2.values()))])
                         self.perfil_basico = almacena_df(self.perfil_basico,dic2)
         except AttributeError:
