@@ -54,7 +54,7 @@ class ExtractorCvlac():
         try:    
             tableacad=soup.find('a', attrs={'name':'formacion_acad'}).parent           
             if(str((tableacad).find('h3').contents[0])==('Formación Académica')):
-                list=['tipo', 'institucion', 'titulo', 'fecha', 'proyecto']
+                list1=['tipo', 'institucion', 'titulo', 'fecha', 'proyecto']
                 b_academicas=tableacad.find_all('b')
                 for td_academi in b_academicas:
                     info=td_academi.parent
@@ -64,8 +64,9 @@ class ExtractorCvlac():
                     x=0               
                     for datos in list_datos:
                         dic_aux['idcvlac'] = url[(url.find('='))+1:]
-                        dic_aux[str(list[x])]=("".join(datos)).strip()                         
+                        dic_aux[str(list1[x])]=("".join(datos)).strip()                         
                         x=x+1
+                    dic_aux=pd.DataFrame([dic_aux])
                     self.academica = almacena_df(self.academica,dic_aux)
                     dic_aux={}
         except AttributeError:
@@ -82,13 +83,13 @@ class ExtractorCvlac():
                 for li_actuacion in li_actuacion:
                     li_act_text = " ".join((li_actuacion.text).split())            
                     actuacion_individual['idcvlac'] = url[(url.find('=') )+1:]
-                    actuacion_individual['areas'] = li_act_text            
-                    self.actuacion = almacena_df(self.actuacion,actuacion_individual)
+                    actuacion_individual['areas'] = li_act_text  
+                    actuacion_individual=pd.DataFrame([actuacion_individual])          
+                    self.actuacion = almacena_df(self.actuacion,actuacion_individual)                    
                     actuacion_individual={}     
         except AttributeError:
-            pass   
-        df_actuacion = self.actuacion
-        return df_actuacion
+            pass  
+        return self.actuacion
     
     def get_articulo(self, soup, url):
         try:
@@ -183,7 +184,7 @@ class ExtractorCvlac():
         try:
             tablecomp=(soup.find('a', attrs={'name':'formacion_comp'}).parent)
             if(str((tablecomp).find('h3').contents[0])==('Formación Complementaria')):
-                list=['tipo', 'institucion', 'titulo', 'fecha']
+                list1=['tipo', 'institucion', 'titulo', 'fecha']
                 b_compl=tablecomp.find_all('b')
                 for td_compl in b_compl:
                     info=td_compl.parent
@@ -192,14 +193,12 @@ class ExtractorCvlac():
                     list_datos=(re.split('<br/>|</b>',td_text_clear))
                     list_datos.pop(-1)
                     if len(list_datos)>4:
-                        print('Formacion complementaria > 3: ',url)
-                    
+                        print('Formacion complementaria > 3: ',url)                    
                     x=0               
                     for datos in list_datos:
                         dic_aux['idcvlac'] = url[(url.find('='))+1:]
-                        dic_aux[str(list[x])]=("".join(datos)).strip()                            
-                        x=x+1
-    
+                        dic_aux[str(list1[x])]=("".join(datos)).strip()                            
+                        x=x+1    
                     dic_aux=pd.DataFrame([dict(zip(list(self.complementaria.columns),dic_aux.values()))])
                     self.complementaria = almacena_df(self.complementaria,dic_aux)
                     dic_aux={}
@@ -213,7 +212,7 @@ class ExtractorCvlac():
         try:
             tablestan=(soup.find('a', attrs={'name':'estancias_posdoctorales'}).parent) 
             if(str((tablestan).find('h3').contents[0])==('Estancias posdoctorales')):
-                list=['nombre', 'entidad', 'area', 'fecha_inicio', 'fecha_fin', 'descripcion']
+                list1=['nombre', 'entidad', 'area', 'fecha_inicio', 'fecha_fin', 'descripcion']
                 b_estancias=tablestan.find_all('b')
                 for td_estancia in b_estancias:
                     info=td_estancia.parent
@@ -224,9 +223,9 @@ class ExtractorCvlac():
                     x=0
                     dic_aux['idcvlac'] = url[(url.find('='))+1:]              
                     for datos in list_datos:                        
-                        dic_aux[str(list[x])]=("".join(datos)).strip().replace('Desde: ','').replace('Hasta: ','')                       
+                        dic_aux[str(list1[x])]=("".join(datos)).strip().replace('Desde: ','').replace('Hasta: ','')                       
                         x=x+1
-                        
+                    dic_aux=pd.DataFrame([dic_aux])   
                     self.estancias = almacena_df(self.estancias,dic_aux)
                     dic_aux={}
         except AttributeError:
@@ -273,23 +272,25 @@ class ExtractorCvlac():
         return df_evaluador 
     
     def get_idioma(self, soup, url): ############################## PROBARLO CON UNA LISTA DE CVLACS
-        dic2={}
-        child=(soup.find('table') ).findChildren("tr" , recursive=False)
-        list=['idioma','habla','escribe','lee','entiende']
+        
+        child=(soup.find('table') ).findChildren("tr" , recursive=False)        
         for trs in child:            
             h3s=(trs.find('h3'))
             if h3s != None:                
-                if(str(h3s.contents[0])==("Idiomas")):
+                if(str(h3s.contents[0])==("Idiomas")):                    
+                    list1=['idioma','habla','escribe','lee','entiende']
                     li_idioma=(h3s.parent.parent.parent).find_all('li')
-                    for div_i in li_idioma:                        
+                    for div_i in li_idioma:  
+                        dic2={'idcvlac':'','idioma':'','habla':'','escribe':'','lee':'','entiende':''}                     
                         div_info=(div_i.parent.parent).find_all('td')                        
                         x=0
                         for inf in div_info:                        
                             dic2['idcvlac'] = url[(url.find('='))+1:]
-                            dic2[str(list[x])]=("".join(inf.text)).strip()                          
-                            x=x+1                                     
+                            dic2[str(list1[x])]=("".join(inf.text)).strip()                          
+                            x=x+1 
+                        dic2=pd.DataFrame([dic2])                                    
                         self.idioma = almacena_df(self.idioma,dic2)
-                    dic2={}
+                        dic2={}
                     #Encuentra tabla, retorna dataframe por lo que deja de buscar
                     df_idioma = self.idioma    
                     return df_idioma
@@ -299,12 +300,12 @@ class ExtractorCvlac():
     
     def get_investiga(self, soup, url): ############################## PROBARLO CON UNA LISTA DE CVLACS
         dic2={}        
-        child=(soup.find('table')).findChildren("tr" , recursive=False)
-        list=['nombre','activa']
+        child=(soup.find('table')).findChildren("tr" , recursive=False)        
         for trs in child:
             h3s=(trs.find('h3'))
             if h3s != None:                
                 if(str(h3s.contents[0])==("Líneas de investigación")):
+                    list1=['nombre','activa']
                     li_idioma=(h3s.parent.parent.parent).find_all('li')
                     for div_i in li_idioma:                                         
                         for titulo in div_i.find_all('i'):                           
@@ -312,13 +313,12 @@ class ExtractorCvlac():
                             x=0 
                             for i in j[0:2]:
                                 dic2['idcvlac'] = url[(url.find('='))+1:]
-                                dic2[str(list[x])]=("".join(i)).strip()                            
-                                x=x+1      
+                                dic2[str(list1[x])]=("".join(i)).strip()                            
+                                x=x+1     
+                            dic2=pd.DataFrame([dic2]) 
                             self.investigacion = almacena_df(self.investigacion,dic2)
-                            
-                        dic2={}
-                    df_investiga= self.investigacion             
-                    return df_investiga
+                            dic2={}                            
+                                            
         df_investiga= self.investigacion            
         return df_investiga
     
@@ -410,11 +410,10 @@ class ExtractorCvlac():
                         fecha=(div_i.text).rfind("-")
                         dic2['idcvlac'] = url[(url.find('='))+1:]
                         dic2['nombre'] = ((div_i.text)[:fecha]).strip() 
-                        dic2['fecha'] = ((div_i.text)[fecha+1:]).strip()                       
+                        dic2['fecha'] = ((div_i.text)[fecha+1:]).strip() 
+                        dic2=pd.DataFrame([dic2])                      
                         self.reconocimiento = almacena_df(self.reconocimiento,dic2)
-                    dic2={}
-                    df_reconocimiento= self.reconocimiento       
-                    return df_reconocimiento
+                        dic2={}
         df_reconocimiento= self.reconocimiento      
         return df_reconocimiento
     
@@ -428,7 +427,8 @@ class ExtractorCvlac():
                 for trs in child:
                     redes_individual['idcvlac'] = url[(url.find('='))+1:]
                     redes_individual['nombre']=trs.text 
-                    redes_individual['url']=trs['href']                
+                    redes_individual['url']=trs['href']
+                    redes_individual=pd.DataFrame([redes_individual])               
                     self.redes = almacena_df( self.redes,redes_individual)
                     redes_individual={}                      
         except AttributeError:
@@ -445,7 +445,8 @@ class ExtractorCvlac():
                 for trs in child:
                     identificadores_individual['idcvlac'] = url[(url.find('='))+1:]
                     identificadores_individual['nombre']=trs.text 
-                    identificadores_individual['url']=trs['href']                   
+                    identificadores_individual['url']=trs['href']  
+                    identificadores_individual=pd.DataFrame([identificadores_individual])                 
                     self.identificadores = almacena_df(self.identificadores,identificadores_individual) 
                     identificadores_individual={}                      
         except AttributeError:
@@ -492,7 +493,6 @@ class ExtractorCvlac():
                                     cap_libros_aux['fecha']=list_fasc[2].strip()                                    
                                 else:
                                     cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()
-
                     cap_libros_aux=pd.DataFrame([dict(zip(list(self.caplibros.columns),cap_libros_aux.values()))])
                     self.caplibros = almacena_df(self.caplibros,cap_libros_aux)
                     cap_libros_aux={}   
@@ -659,7 +659,7 @@ class ExtractorCvlac():
                     #################################
                     # Pendiente: manejo de excepcion nombre software con mayuscula
                     list_datos=re.split('<i>|<b>',quote_text_clear)
-                    dic={'idcvlac':'','autores':'','nombre':'','tipo':'','nit':'','Registrado ante la c´mara el':'','verificado':'','Palabras':'','Areas':'', 'Sectores':''}
+                    dic={'idcvlac':'','autores':'','nombre':'','tipo':'','verificado':'','nit':'','Registrado ante la c´mara el':'','verificado':'','Palabras':'','Areas':'', 'Sectores':''}
                     tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
                     if tipo.find('img') == None:
                         dic['verificado']=False
