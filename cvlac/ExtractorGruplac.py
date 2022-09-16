@@ -271,13 +271,14 @@ class ExtractorGruplac(ExtractorCvlac):
                 dfs.insert(0, 'idgruplac', url[fid+1:])                              
                 dfs.columns=self.perfil_integrantes.keys()
                 dfs['integrante']=dfs['integrante'].str.replace(r'[^a-zA-Z\u00C0-\u017F\s]+','', regex=True).str.strip()           
+                self.perfil_integrantes= almacena_df(self.perfil_integrantes,dfs)
             else:
                 raise Exception
         except AttributeError:
             pass          
         except:
             pass
-        #self.perfil_integrantes= almacena(self.perfil_integrantes,dfs)   
+        print(type(self.perfil_integrantes))
         return self.perfil_integrantes
 
     def get_perfil_programa_doctorado(self, soup, url):        

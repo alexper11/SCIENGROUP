@@ -66,6 +66,7 @@ class ExtractorCvlac():
                         dic_aux['idcvlac'] = url[(url.find('='))+1:]
                         dic_aux[str(list[x])]=("".join(datos)).strip()                         
                         x=x+1
+                    dic_aux=pd.DataFrame([dic_aux])
                     self.academica = almacena_df(self.academica,dic_aux)
                     dic_aux={}
         except AttributeError:
@@ -82,13 +83,13 @@ class ExtractorCvlac():
                 for li_actuacion in li_actuacion:
                     li_act_text = " ".join((li_actuacion.text).split())            
                     actuacion_individual['idcvlac'] = url[(url.find('=') )+1:]
-                    actuacion_individual['areas'] = li_act_text            
-                    self.actuacion = almacena_df(self.actuacion,actuacion_individual)
+                    actuacion_individual['areas'] = li_act_text  
+                    actuacion_individual=pd.DataFrame([actuacion_individual])          
+                    self.actuacion = almacena_df(self.actuacion,actuacion_individual)                    
                     actuacion_individual={}     
         except AttributeError:
-            pass   
-        df_actuacion = self.actuacion
-        return df_actuacion
+            pass  
+        return self.actuacion
     
     def get_articulo(self, soup, url):
         try:
@@ -183,7 +184,7 @@ class ExtractorCvlac():
         try:
             tablecomp=(soup.find('a', attrs={'name':'formacion_comp'}).parent)
             if(str((tablecomp).find('h3').contents[0])==('Formación Complementaria')):
-                list=['tipo', 'institucion', 'titulo', 'fecha']
+                list1=['tipo', 'institucion', 'titulo', 'fecha']
                 b_compl=tablecomp.find_all('b')
                 for td_compl in b_compl:
                     info=td_compl.parent
@@ -192,14 +193,12 @@ class ExtractorCvlac():
                     list_datos=(re.split('<br/>|</b>',td_text_clear))
                     list_datos.pop(-1)
                     if len(list_datos)>4:
-                        print('Formacion complementaria > 3: ',url)
-                    
+                        print('Formacion complementaria > 3: ',url)                    
                     x=0               
                     for datos in list_datos:
                         dic_aux['idcvlac'] = url[(url.find('='))+1:]
-                        dic_aux[str(list[x])]=("".join(datos)).strip()                            
-                        x=x+1
-    
+                        dic_aux[str(list1[x])]=("".join(datos)).strip()                            
+                        x=x+1    
                     dic_aux=pd.DataFrame([dict(zip(list(self.complementaria.columns),dic_aux.values()))])
                     self.complementaria = almacena_df(self.complementaria,dic_aux)
                     dic_aux={}
@@ -492,7 +491,6 @@ class ExtractorCvlac():
                                     cap_libros_aux['fecha']=list_fasc[2].strip()                                    
                                 else:
                                     cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()
-
                     cap_libros_aux=pd.DataFrame([dict(zip(list(self.caplibros.columns),cap_libros_aux.values()))])
                     self.caplibros = almacena_df(self.caplibros,cap_libros_aux)
                     cap_libros_aux={}   
