@@ -1,26 +1,3 @@
-idcvlac,tipo,institucion,titulo,fecha
-0001427333,Extensión,UNIVERSIDAD DEL CAUCA,Arquitecturas para Despliegue de Servicios,Agostode2010 - Diciembrede 2010
-0001427333,Extensión,UNIVERSIDAD DEL CAUCA,Gestión de la Tecnología y la Innovación,Febrerode2010 - Juniode 2010
-0001427333,Extensión,UNIVERSIDAD DEL CAUCA,Introducción a la Investigación Científica,Febrerode2010 - Juniode 2010
-0001427333,Extensión,UNIVERSIDAD DEL CAUCA,Fundamentos Matemáticos,Agostode2010 - Diciembrede 2010
-0001239368,Cursos de corta duración,Correlation One,Datascience for all - DS4A,Agostode2020 - Noviembrede 2020
-0001239368,Cursos de corta duración,Asociación de Pilotos Profesionales de Drones de Colombia,Curso Piloto y Observador de Sistemas de Aeronaves No Tripuladas UAS/RPA/DRONE,Juliode2019 - Octubrede 2019
-0001239368,Extensión,UNIVERSIDAD DEL CAUCA,Diplomado en Innovaciones Educativas,Marzode2019 - Juliode 2019
-0000013056,Cursos de corta duración,DoCoMo Labs,Toward a Next Generation Internet Architecture,Juniode2007 - Juniode 2007
-0000013056,Cursos de corta duración,Fraunhofer Institute for Applied Information Technology,"Semantic web, web2.0 and usage metadata",Abrilde2009 - Abrilde 2009
-0000013056,Cursos de corta duración,Harvard Medical School,Computer Supported Cooperative Work in Medicine with a focus on Social Networking and Collective Intelligence Tools,Juniode2009 - Juniode 2009
-0000013056,Cursos de corta duración,UNIVERSIDAD CARLOS III DE MADRID,Tecnologías de Futuro en Telecomunicaciones,Enerode2007 - de 2007
-0000013056,Cursos de corta duración,Instituto de Formación Tecnológica Alhambra Eidos,Catedra Nokia,Enerode2007 - de 2007
-0000013056,Cursos de corta duración,Universidad De Alicante,Gestión de Relaciones Universidad ¿ Empresa,Enerode2006 - de 2006
-0000013056,Cursos de corta duración,UNIVERSIDAD DEL CAUCA,Curso Sistema Axe Dictado Por Ericsson de Colombia,Enerode2002 - de 2002
-0000013056,Extensión,UNIVERSIDAD CARLOS III DE MADRID,Arquitecturas E-business & Entornos Virtuales,Febrerode2007 - Mayode 2007
-0000013056,Extensión,UNIVERSIDAD CARLOS III DE MADRID,Computación Ubicua,Febrerode2007 - Mayode 2007
-0000013056,Extensión,UNIVERSIDAD DEL CAUCA,Diplomado En Docencia Universitaria,Enerode2003 - de 2004
-0000013056,Extensión,Colegio Mayor Del Cauca - Institución Universitaria,Curso de Ingles,Enerode1987 - de 1992
-0000012963,Cursos de corta duración,UNIVERSIDAD DEL CAUCA,Métodos de Modelado Para Análisis y Diseño Orienta,Enerode1999 - de 1999
-0000012963,Cursos de corta duración,UNIVERSIDAD DEL VALLE,Procesos de Transferencia Tecnológica Universidad,Enerode1994 - de 1994
-0000012963,Cursos de corta duración,UNIVERSIDAD DE LOS ANDES,Diseño Digital Utilizando Fpga,Enerode1993 - de 1993
-0000012963,Cursos de corta duración,UNIVERSIDAD DEL CAUCA,Sistema Operativo Unix Xenix,Noviembrede1989 - Noviembrede 1989
-0000012963,Cursos de corta duración,UNIVERSIDAD DEL CAUCA,El Lenguaje y Las Disciplinas Académicas,Enerode1990 - de 1990
-0000012963,Cursos de corta duración,UNIVERSIDAD DEL CAUCA,Metodologías y Ambientes de Desarrollo Para Proyec,Noviembrede1990 - Noviembrede 1990
-0000012963,Cursos de corta duración,UNIVERSIDAD DEL CAUCA,Lenguajes Declarativos Aplicados a Los Sistemas de,Enerode1991 - de 1991
+idcvlac,autor,nombre,tipo,verificado,nombre_comercial,contrato_registro,lugar,fecha,palabras,areas,sectores
+0000004900,INGRID SELENE TORRES ROJAS,Ecoestación,Producción técnica - Innovaciones generadas de producción empresarial - Organizacional,False,,,Colombia,2017,,,
+0000004900,INGRID SELENE TORRES ROJAS,Reconocimiento del MEN de la Renovación de registro calificado del Programa de Licenciatura en Educación Infantil,Producción técnica - Innovaciones generadas de producción empresarial - Organizacional,False,,,Colombia,2018,,,

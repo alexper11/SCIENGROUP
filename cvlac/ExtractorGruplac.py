@@ -39,7 +39,8 @@ class ExtractorGruplac(ExtractorCvlac):
         #########
         #El prefijo 'perfil' indica un atributo refente a una tabla especifica del perfil de un gruplac
         #######
-        #self.perfil_basico={'idgruplac':[],'nombre':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
+        """
+        self.perfil_basico={'idgruplac':[],'nombre':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
         self.perfil_instituciones={'idgruplac':[],'nombre':[],'aval':[]}
         self.perfil_lineas={'idgruplac':[],'lineas':[]}
         self.perfil_integrantes={'idgruplac':[],'url':[],'integrante':[],'vinculacion':[],'horas':[],'fecha_vinculacion':[]}
@@ -60,12 +61,30 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_empresa_tecnologica={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'fecha':[],'nit':[],'fecha_registro':[],'mercado':[],'autores':[]}
         self.perfil_innovacion_empresarial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
         self.perfil_planta_piloto={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
-
+        """
         ####
         self.perfil_basico=pd.DataFrame(columns=['idgruplac','nombre','fecha_formacion','lugar','lider','certificacion','pagina_web','email','clasificacion','areas','programas','programas_secundario'])
-        
+        self.perfil_instituciones=pd.DataFrame(columns=['idgruplac','nombre','aval'])
+        self.perfil_lineas=pd.DataFrame(columns=['idgruplac','lineas'])
+        self.perfil_integrantes=pd.DataFrame(columns=['idgruplac','url','integrante','vinculacion','horas','fecha_vinculacion'])
+        self.perfil_programa_doctorado=pd.DataFrame(columns=['idgruplac','programa','fecha','acto','institucion'])
+        self.perfil_programa_maestria=pd.DataFrame(columns=['idgruplac','programa','fecha','acto','institucion'])
+        self.perfil_otro_programa=pd.DataFrame(columns=['idgruplac','programa','fecha','acto','institucion'])
+        self.perfil_curso_doctorado=pd.DataFrame(columns=['idgruplac','curso','fecha','acto','programa'])
+        self.perfil_curso_maestria=pd.DataFrame(columns=['idgruplac','curso','fecha','acto','programa'])
+        self.perfil_articulos=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','revista','issn','fecha','volumen','fasciculo','paginas','doi','autores'])
+        self.perfil_libros=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','fecha','isbn','editorial','autores'])
+        self.perfil_caplibros=pd.DataFrame(columns=['idgruplac','verificado','tipo','capitulo','lugar','fecha','libro','isbn','volumen','paginas','editorial','autores'])
+        self.perfil_otros_articulos=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','revista','issn','fecha','volumen','fasciculo','paginas','autores'])
+        self.perfil_otros_libros=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','fecha','isbn','volumen','paginas','editorial','autores'])
+        self.perfil_diseno_industrial=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','fecha','disponibilidad','institucion','autores'])
+        self.perfil_otros_tecnologicos=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','fecha','disponibilidad','nombre_comercial','institucion','autores'])
+        self.perfil_prototipos=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','fecha','disponibilidad','institucion','autores'])
+        self.perfil_software=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','fecha','disponibilidad','url','nombre_comercial','nombre_proyecto','institucion','autores'])
+        self.perfil_empresa_tecnologica=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','fecha','nit','fecha_registro','mercado','autores'])
+        self.perfil_innovacion_empresarial=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','fecha','disponibilidad','institucion','autores'])
+        self.perfil_planta_piloto=pd.DataFrame(columns=['idgruplac','verificado','tipo','nombre','lugar','fecha','disponibilidad','nombre_comercial','institucion','autores'])
 
-        
         
     def get_members_list(self,url):
         #recibe url de un gruplac y retorna la lista de cvlacs que contiene
@@ -224,16 +243,16 @@ class ExtractorGruplac(ExtractorCvlac):
                     index=i_clear.rfind('-  (')#posible futuro error: doble espacio
                     dic['nombre']=(i_clear[3:index].strip())
                     dic['aval']=(re.sub(r'[^A-Za-z0-9 ]+','',i_clear[index:]).strip())
-                    dic=dict(zip(self.perfil_instituciones.keys(),dic.values()))  
-                    self.perfil_instituciones = almacena(self.perfil_instituciones,dic)                                    
+
+                    dic=pd.DataFrame([dict(zip(list(self.perfil_instituciones.columns),dic.values()))])
+                    self.perfil_instituciones = almacena_df(self.perfil_instituciones,dic)                                            
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass               
-        df_grupintituciones = pd.DataFrame(self.perfil_instituciones)   
-        df_grupintituciones = df_grupintituciones.reset_index(drop=True)   
+        df_grupintituciones = self.perfil_instituciones     
         return df_grupintituciones  
 
     def get_perfil_lineas(self, soup, url):        
@@ -247,13 +266,15 @@ class ExtractorGruplac(ExtractorCvlac):
                 for i in child:                                       
                     linea=linea+i.text.strip()[3:]+";"
                 dic['lineas']=(linea.strip())
-                self.perfil_lineas = almacena(self.perfil_lineas,dic)               
+                
+                dic=pd.Dataframe([dic])
+                self.perfil_lineas = almacena_df(self.perfil_lineas,dic)
+                           
         except AttributeError:
             pass          
         except:
             pass        
-        df_gruplineas = pd.DataFrame(self.perfil_lineas)   
-        df_gruplineas = df_gruplineas.reset_index(drop=True)   
+        df_gruplineas = self.perfil_lineas  
         return df_gruplineas
     
     def get_perfil_integrantes(self, soup, url):
@@ -269,7 +290,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 dfs.insert(0, 'url', list_url)
                 fid = url.find('=')
                 dfs.insert(0, 'idgruplac', url[fid+1:])                              
-                dfs.columns=self.perfil_integrantes.keys()
+                dfs.columns=list(self.perfil_integrantes.columns)
                 dfs['integrante']=dfs['integrante'].str.replace(r'[^a-zA-Z\u00C0-\u017F\s]+','', regex=True).str.strip()           
                 self.perfil_integrantes= almacena_df(self.perfil_integrantes,dfs)
             else:
@@ -278,7 +299,7 @@ class ExtractorGruplac(ExtractorCvlac):
             pass          
         except:
             pass
-        print(type(self.perfil_integrantes))
+        self.perfil_integrantes= almacena_df(self.perfil_integrantes,dfs)   
         return self.perfil_integrantes
 
     def get_perfil_programa_doctorado(self, soup, url):        
@@ -297,17 +318,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic[dato[dato.find('-')+2:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
                         else:
                             dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
-                        
-                    dic=dict(zip(self.perfil_programa_doctorado.keys(),dic.values()))
-                    self.perfil_programa_doctorado = almacena(self.perfil_programa_doctorado,dic)                                                        
+
+                    dic=pd.DataFrame([dict(zip(list(self.perfil_programa_doctorado.columns),dic.values()))])
+                    self.perfil_programa_doctorado = almacena_df(self.perfil_programa_doctorado,dic)                                                         
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_programa_doctorado = pd.DataFrame(self.perfil_programa_doctorado)   
-        df_programa_doctorado = df_programa_doctorado.reset_index(drop=True)   
+        df_programa_doctorado = self.perfil_programa_doctorado     
         return df_programa_doctorado
 
     def get_perfil_programa_maestria(self, soup, url):        
@@ -326,17 +346,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic[dato[dato.find('-')+2:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
                         else:
                             dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
-                        
-                    dic=dict(zip(self.perfil_programa_maestria.keys(),dic.values()))
-                    self.perfil_programa_maestria = almacena(self.perfil_programa_maestria,dic)                                                        
+
+                    dic=pd.DataFrame([dict(zip(list(self.perfil_programa_maestria.columns),dic.values()))])
+                    self.perfil_programa_maestria = almacena_df(self.perfil_programa_maestria,dic)                                                              
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_programa_maestria = pd.DataFrame(self.perfil_programa_maestria)   
-        df_programa_maestria = df_programa_maestria.reset_index(drop=True)   
+        df_programa_maestria = self.perfil_programa_maestria    
         return df_programa_maestria
 
     def get_perfil_otro_programa(self, soup, url):        
@@ -355,17 +374,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic[dato[dato.find('-')+2:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
                         else:
                             dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
-                        
-                    dic=dict(zip(self.perfil_otro_programa.keys(),dic.values()))
-                    self.perfil_otro_programa = almacena(self.perfil_otro_programa,dic)                                                        
+  
+                    dic=pd.DataFrame([dict(zip(list(self.perfil_otro_programa.columns),dic.values()))])
+                    self.perfil_otro_programa = almacena_df(self.perfil_otro_programa,dic)                                                                           
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_otro_programa = pd.DataFrame(self.perfil_otro_programa)   
-        df_otro_programa = df_otro_programa.reset_index(drop=True)   
+        df_otro_programa = self.perfil_otro_programa    
         return df_otro_programa
 
     def get_perfil_curso_doctorado(self, soup, url):        
@@ -384,17 +402,15 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic[dato[dato.find('-')+2:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
                         else:
                             dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
-                        
-                    dic=dict(zip(self.perfil_curso_doctorado.keys(),dic.values()))
-                    self.perfil_curso_doctorado = almacena(self.perfil_curso_doctorado,dic)                                                        
+                    dic=pd.DataFrame([dict(zip(list(self.perfil_curso_doctorado.columns),dic.values()))])
+                    self.perfil_curso_doctorado = almacena_df(self.perfil_curso_doctorado,dic)                                                              
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_curso_doctorado = pd.DataFrame(self.perfil_curso_doctorado)   
-        df_curso_doctorado = df_curso_doctorado.reset_index(drop=True)   
+        df_curso_doctorado = self.perfil_curso_doctorado     
         return df_curso_doctorado
 
     def get_perfil_curso_maestria(self, soup, url):        
@@ -413,17 +429,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic[dato[dato.find('-')+2:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip() 
                         else:
                             dic[dato[:dato.find(':')]]=dato[dato.find(':'):].lstrip(':').strip()                          
-                        
-                    dic=dict(zip(self.perfil_curso_maestria.keys(),dic.values()))
-                    self.perfil_curso_maestria = almacena(self.perfil_curso_maestria,dic)                                                        
+
+                    dic=pd.DataFrame([dict(zip(list(self.perfil_curso_maestria.columns),dic.values()))])
+                    self.perfil_curso_maestria = almacena_df(self.perfil_curso_maestria,dic)                                                                       
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_curso_maestria = pd.DataFrame(self.perfil_curso_maestria)   
-        df_curso_maestria = df_curso_maestria.reset_index(drop=True)   
+        df_curso_maestria = self.perfil_curso_maestria      
         return df_curso_maestria
 
     def get_perfil_articulos(self, soup, url):        
@@ -457,15 +472,17 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['doi']=re.sub(r'http://dx.doi.org/|doi:|https://doi.org/|http://doi.org/','',list_datos[i+1]).strip()
                         else:
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_articulos = almacena(self.perfil_articulos,dic)                                                       
+                           
+                    dic=pd.Dataframe([dic])
+                    self.perfil_articulos = almacena_df(self.perfil_articulos,dic) 
+                                                                  
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_articulos = pd.DataFrame(self.perfil_articulos)   
-        df_articulos = df_articulos.reset_index(drop=True)   
+        df_articulos = self.perfil_articulos      
         return df_articulos
 
     def get_perfil_libros(self, soup, url):        
@@ -493,15 +510,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['editorial']=separador[2].lstrip(',').strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_libros = almacena(self.perfil_libros,dic)                                                      
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_libros = almacena_df(self.perfil_libros,dic) 
+                                         
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_libros = pd.DataFrame(self.perfil_libros)   
-        df_libros = df_libros.reset_index(drop=True)   
+        df_libros = self.perfil_libros     
         return df_libros
 
     def get_perfil_caplibros(self, soup, url):        
@@ -539,15 +557,17 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['editorial']=separador[3].strip()  
                         else:
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_caplibros = almacena(self.perfil_caplibros,dic)                                                      
+
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_caplibros = almacena_df(self.perfil_caplibros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
+                                                                         
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_caplibros = pd.DataFrame(self.perfil_caplibros)   
-        df_caplibros = df_caplibros.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
+        df_caplibros = self.perfil_caplibros   
         return df_caplibros
 
     def get_perfil_otros_articulos(self, soup, url):        
@@ -579,15 +599,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['paginas']=separador[4].rstrip(',').strip()                       
                         else:
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_otros_articulos = almacena(self.perfil_otros_articulos,dic)                                                       
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_otros_articulos = almacena_df( self.perfil_otros_articulos,dic)
+                                                                         
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_otros_articulos = pd.DataFrame(self.perfil_otros_articulos)   
-        df_otros_articulos = df_otros_articulos.reset_index(drop=True)   
+        df_otros_articulos = self.perfil_otros_articulos   
         return df_otros_articulos
 
     def get_perfil_otros_libros(self, soup, url):        
@@ -617,15 +638,17 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['editorial']=separador[4].lstrip(',').strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_otros_libros = almacena(self.perfil_otros_libros,dic)                                                      
+
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_otros_libros = almacena_df( self.perfil_otros_libros,dic)
+                                                                         
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_otros_libros = pd.DataFrame(self.perfil_otros_libros)   
-        df_otros_libros = df_otros_libros.reset_index(drop=True)   
+        df_otros_libros = self.perfil_otros_libros   
         return df_otros_libros
 
     def get_perfil_diseno_industrial(self, soup, url):        
@@ -653,16 +676,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['institucion']=separador[2].strip()
                         else:                            
-                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_diseno_industrial = almacena(self.perfil_diseno_industrial,dic)                                                      
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()      
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_diseno_industrial = almacena_df( self.perfil_diseno_industrial,dic)                                                         
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_diseno_industrial = pd.DataFrame(self.perfil_diseno_industrial)   
-        df_diseno_industrial = df_diseno_industrial.reset_index(drop=True)   
+        df_diseno_industrial = self.perfil_diseno_industrial   
         return df_diseno_industrial  
 
     def get_perfil_otros_tecnologicos(self, soup, url):        
@@ -693,15 +716,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=dato[dato.find(':')+1:].strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_otros_tecnologicos = almacena(self.perfil_otros_tecnologicos,dic)                                                      
+
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_otros_tecnologicos = almacena_df( self.perfil_otros_tecnologicos,dic)                                                                
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_otros_tecnologicos = pd.DataFrame(self.perfil_otros_tecnologicos)   
-        df_otros_tecnologicos = df_otros_tecnologicos.reset_index(drop=True)   
+        df_otros_tecnologicos = self.perfil_otros_tecnologicos    
         return df_otros_tecnologicos
 
     def get_perfil_prototipos(self, soup, url):        
@@ -730,15 +754,15 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=separador[2].strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_prototipos = almacena(self.perfil_prototipos,dic)                                                      
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_prototipos = almacena_df( self.perfil_prototipos,dic)                                                    
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_prototipos = pd.DataFrame(self.perfil_prototipos)   
-        df_prototipos = df_prototipos.reset_index(drop=True)   
+        df_prototipos = self.perfil_prototipos      
         return df_prototipos
 
     def get_perfil_software(self, soup, url):        
@@ -773,16 +797,16 @@ class ExtractorGruplac(ExtractorCvlac):
                         elif i==4:
                             dic['institucion']=dato[dato.find(':')+1:].strip()                       
                         else:                            
-                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_software = almacena(self.perfil_software,dic)                                                                       
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()       
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_software = almacena_df( self.perfil_software,dic)                                                                 
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_software = pd.DataFrame(self.perfil_software)   
-        df_software = df_software.reset_index(drop=True)   
+        df_software = self.perfil_software     
         return df_software
 
     def get_perfil_empresa_tecnologica(self, soup, url):        
@@ -812,15 +836,15 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['mercado']=dato.strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_empresa_tecnologica = almacena(self.perfil_empresa_tecnologica,dic)                                                                        
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_empresa_tecnologica = almacena_df( self.perfil_empresa_tecnologica,dic)                                                                                       
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_empresa_tecnologica = pd.DataFrame(self.perfil_empresa_tecnologica)   
-        df_empresa_tecnologica = df_empresa_tecnologica.reset_index(drop=True)   
+        df_empresa_tecnologica = self.perfil_empresa_tecnologica   
         return df_empresa_tecnologica
 
     def get_perfil_innovacion_empresarial(self, soup, url):        
@@ -848,16 +872,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['institucion']=separador[2].strip()
                         else:                            
-                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_innovacion_empresarial = almacena(self.perfil_innovacion_empresarial,dic)                                                                         
+                            dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()   
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_innovacion_empresarial = almacena_df( self.perfil_innovacion_empresarial,dic)                                                                              
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_innovacion_empresarial = pd.DataFrame(self.perfil_innovacion_empresarial)   
-        df_innovacion_empresarial = df_innovacion_empresarial.reset_index(drop=True)   
+        df_innovacion_empresarial = self.perfil_innovacion_empresarial     
         return df_innovacion_empresarial
 
     def get_perfil_planta_piloto(self, soup, url):        
@@ -888,15 +912,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=dato[dato.find(':')+1:].strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    self.perfil_planta_piloto = almacena(self.perfil_planta_piloto,dic)                                                      
+                    dic=pd.DataFrame([dic])                                 
+                    self.perfil_planta_piloto = almacena_df( self.perfil_planta_piloto,dic) 
+                                                                     
             else:
                 raise Exception  
         except AttributeError:
             pass          
         except:
             pass        
-        df_planta_piloto = pd.DataFrame(self.perfil_planta_piloto)   
-        df_planta_piloto = df_planta_piloto.reset_index(drop=True)   
+        df_planta_piloto = self.perfil_planta_piloto     
         return df_planta_piloto
 
 ##############
