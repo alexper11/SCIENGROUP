@@ -8,8 +8,8 @@ import platform
 import time
 import pandas as pd
 ############# Quitar msj alertas certificado en consola
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+#from requests.packages.urllib3.exceptions import InsecureRequestWarning
+#requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 ###########
 
 #Recibe nombre de una institución y retorna lista de urls de cada perfil de los gruplacs
