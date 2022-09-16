@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from cvlac.ExtractorCvlac import ExtractorCvlac
-from cvlac.util import almacena
+from cvlac.util import almacena, almacena_df
 from cvlac.util import get_lxml, get_gruplacList
 import re
 import ssl
@@ -39,7 +39,7 @@ class ExtractorGruplac(ExtractorCvlac):
         #########
         #El prefijo 'perfil' indica un atributo refente a una tabla especifica del perfil de un gruplac
         #######
-        self.perfil_basico={'idgruplac':[],'nombre':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
+        #self.perfil_basico={'idgruplac':[],'nombre':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
         self.perfil_instituciones={'idgruplac':[],'nombre':[],'aval':[]}
         self.perfil_lineas={'idgruplac':[],'lineas':[]}
         self.perfil_integrantes={'idgruplac':[],'url':[],'integrante':[],'vinculacion':[],'horas':[],'fecha_vinculacion':[]}
@@ -62,7 +62,7 @@ class ExtractorGruplac(ExtractorCvlac):
         self.perfil_planta_piloto={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
 
         ####
-        #self.perfil_basico=pd.DataFrame(columns=['idgruplac','nombre','fecha_formacion','lugar','lider','certificacion','pagina_web','email','clasificacion','areas','programas','programas_secundario'])
+        self.perfil_basico=pd.DataFrame(columns=['idgruplac','nombre','fecha_formacion','lugar','lider','certificacion','pagina_web','email','clasificacion','areas','programas','programas_secundario'])
         
 
         
@@ -205,14 +205,12 @@ class ExtractorGruplac(ExtractorCvlac):
                                     dic2[re.sub('¿|\?','',cells[0].text.strip())]= cells[1]
                                 except AttributeError:
                                     print('error gruplac basico url: : ', url)           
-                        dic2=dict(zip(self.perfil_basico.keys(),dic2.values()))  
-                        #dic2=pd.DataFrame([dict(zip(list(self.perfil_basico.columns),dic2.values()))])
-                        self.perfil_basico = almacena(self.perfil_basico,dic2)
-                        #self.perfil_basico = almacena_df(self.perfil_basico,dic2)
+                        #dic2=dict(zip(self.perfil_basico.keys(),dic2.values()))  
+                        dic2=pd.DataFrame([dict(zip(list(self.perfil_basico.columns),dic2.values()))])
+                        self.perfil_basico = almacena_df(self.perfil_basico,dic2)
         except AttributeError:
             pass          
-        df_perfil_basico = pd.DataFrame(self.perfil_basico)   
-        df_perfil_basico = df_perfil_basico.reset_index(drop=True)
+        df_perfil_basico = self.perfil_basico
         return df_perfil_basico
 
     def get_perfil_instituciones(self, soup, url):
