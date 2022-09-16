@@ -126,8 +126,6 @@ class ExtractorGruplac(ExtractorCvlac):
                 "investigacion":df_investiga,"reconocimiento":df_reconocimiento,"evaluador":df_evaluador,
                 "redes":df_redes,"identificadores":df_identifica,"libros":df_libros,"jurado":df_jurado,
                 "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica}
-        
-    #def get_perfiles(self, ):
     
     
     def set_grup_attrs(self,gruplac_list):
@@ -150,9 +148,35 @@ class ExtractorGruplac(ExtractorCvlac):
                 self.grup_redes=self.grup_redes.append(dataframes["redes"])
             except:
                 print('Error estableciendo atributos del objeto de prefijo grup')
-                
-    #def set_perfil_attrs(self,gruplac_list):
-        
+       
+    """
+    def set_perfil_attrs(self, gruplac_list):
+        #recibe una lista de urls de grupos de investigación y rellena los valores de los atributos de forma
+        #acumulativa 
+        for url in gruplac_list:
+            lxml_url = get_lxml(url)
+            self.get_perfil_articulos(lxml_url,url)
+            self.get_perfil_basico(lxml_url,url)
+            self.get_perfil_caplibros(lxml_url,url)
+            self.get_perfil_curso_doctorado(lxml_url,url)
+            self.get_perfil_curso_maestria(lxml_url,url)
+            self.get_perfil_diseno_industrial(lxml_url,url)
+            self.get_perfil_empresa_tecnologica(lxml_url,url)
+            self.get_perfil_innovacion_empresarial(lxml_url,url)
+            self.get_perfil_instituciones(lxml_url,url)
+            self.get_perfil_integrantes(lxml_url,url)
+            self.get_perfil_lineas(lxml_url,url)
+            self.get_perfil_libros(lxml_url,url)
+            self.get_perfil_otro_programa(lxml_url,url)
+            self.get_perfil_planta_piloto(lxml_url,url)
+            self.get_perfil_programa_maestria(lxml_url,url)
+            self.get_perfil_programa_doctorado(lxml_url,url)
+            self.get_perfil_otros_articulos(lxml_url,url)
+            self.get_perfil_software(lxml_url,url)
+            self.get_perfil_otros_libros(lxml_url,url)
+            self.get_perfil_otros_tecnologicos(lxml_url,url)
+            self.get_perfil_prototipos(lxml_url,url)
+    """    
     
     def get_perfil_basico(self, soup, url):
         try:
