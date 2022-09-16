@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
     for url in list_url:
         dom=get_lxml(url)
-        df_prueba=Extractor.get_perfil_lineas(dom,url)
+        df_prueba=Extractor.get_perfil_planta_piloto(dom,url)
    
     df_prueba.to_csv('prueba.csv',index=False)
 

@@ -1,10 +1,11 @@
 import pandas as pd
-from cvlac.util import almacena
+from cvlac.util import almacena, almacena_df
 import re
 
 class ExtractorCvlac():
     
     def __init__(self):
+        """
         self.academica={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[],'proyecto':[]}
         self.actuacion={'idcvlac':[],'areas':[]}
         self.articulos={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'verificado':[],'lugar':[],'revista':[],'issn':[],'editorial':[],'volumen':[],'fasciculo':[], 'paginas':[],'fecha':[],'doi':[], 'palabras':[], 'sectores':[]}
@@ -25,7 +26,29 @@ class ExtractorCvlac():
         self.tecnologicos={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
         self.empresa_tecnologica={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'verificado':[],'nit':[],'registro_camara':[],'palabras':[],'areas':[],'sectores':[]}
         self.innovacion_empresarial={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-            
+        """
+        ###################3
+        self.academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha','proyecto'])
+        self.actuacion=pd.DataFrame(columns=['idcvlac','areas'])
+        self.articulos=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','verificado','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas','fecha','doi', 'palabras', 'sectores'])
+        self.basico=pd.DataFrame(columns=['idcvlac','categoria','nombre','citaciones','nacionalidad','sexo'])
+        self.complementaria=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha'])
+        self.estancias=pd.DataFrame(columns=['idcvlac','nombre','entidad','area','fecha_inicio','fecha_fin','descripcion'])
+        self.evaluador=pd.DataFrame(columns=['idcvlac','ambito','par_evaluador','editorial','revista','institucion','fecha'])
+        self.idioma=pd.DataFrame(columns=['idcvlac','idioma','habla','escribe','lee','entiende'])
+        self.investigacion=pd.DataFrame(columns=['idcvlac','nombre','activa'])
+        self.jurados=pd.DataFrame(columns=['idcvlac','nombre','titulo','tipo','lugar','programa','orientado','palabras','areas','sectores'])
+        self.libros=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','verificado','lugar','fecha','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores'])
+        self.reconocimiento=pd.DataFrame(columns=['idcvlac','nombre','fecha'])
+        self.redes=pd.DataFrame(columns=['idcvlac','nombre','url'])
+        self.identificadores=pd.DataFrame(columns=['idcvlac','nombre','url'])        
+        self.caplibros=pd.DataFrame(columns=['idcvlac','autores','capitulo','libro','lugar','verificado','isbn','editorial','volumen','paginas','fecha', 'palabras', 'areas', 'sectores'])
+        self.software=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','verificado','nombre_comercial','contrato_registro','lugar','fecha','plataforma', 'ambiente', 'palabras','areas', 'sectores'])
+        self.prototipo=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','verificado','nombre_comercial','contrato_registro','lugar','fecha', 'palabras','areas', 'sectores'])
+        self.tecnologicos=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','verificado','nombre_comercial','contrato_registro','lugar','fecha', 'palabras','areas', 'sectores'])
+        self.empresa_tecnologica=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','verificado','nit','registro_camara','palabras','areas','sectores'])
+        self.innovacion_empresarial=pd.DataFrame(columns=['idcvlac','autor','nombre','tipo','verificado','nombre_comercial','contrato_registro','lugar','fecha', 'palabras','areas', 'sectores'])
+
     def get_academica(self, soup, url):
         dic_aux={}   
         try:    
@@ -43,12 +66,11 @@ class ExtractorCvlac():
                         dic_aux['idcvlac'] = url[(url.find('='))+1:]
                         dic_aux[str(list[x])]=("".join(datos)).strip()                         
                         x=x+1
-                    self.academica = almacena(self.academica,dic_aux)
+                    self.academica = almacena_df(self.academica,dic_aux)
                     dic_aux={}
         except AttributeError:
             pass
-        df_academica= pd.DataFrame(self.academica)
-        df_academica = df_academica.reset_index(drop=True) 
+        df_academica= self.academica
         return df_academica
     
     def get_actuacion(self, soup, url):
@@ -61,12 +83,11 @@ class ExtractorCvlac():
                     li_act_text = " ".join((li_actuacion.text).split())            
                     actuacion_individual['idcvlac'] = url[(url.find('=') )+1:]
                     actuacion_individual['areas'] = li_act_text            
-                    self.actuacion = almacena(self.actuacion,actuacion_individual) 
+                    self.actuacion = almacena_df(self.actuacion,actuacion_individual)
                     actuacion_individual={}     
         except AttributeError:
             pass   
-        df_actuacion = pd.DataFrame(self.actuacion)
-        df_actuacion = df_actuacion.reset_index(drop=True)  
+        df_actuacion = self.actuacion
         return df_actuacion
     
     def get_articulo(self, soup, url):
@@ -128,15 +149,13 @@ class ExtractorCvlac():
                                     art_individual['fecha.']=list_fasc[2].replace(',','')
                                 else:
                                     art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()
-                                                       
-                    art_individual=dict(zip(self.articulos.keys(),art_individual.values())) 
-                    self.articulos= almacena(self.articulos,art_individual)        
+                    
+                    art_individual=pd.DataFrame([dict(zip(list(self.articulos.columns),art_individual.values()))])
+                    self.articulos = almacena_df(self.articulos,art_individual).reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)     
         except AttributeError:
             pass       
         
-        df_articulos = pd.DataFrame(self.articulos)    
-        #df_articulos.columns = ['idcvlac','autores','nombre','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas', 'fecha', 'doi', 'palabras', 'sectores']
-        df_articulos = df_articulos.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
+        df_articulos = self.articulos
         return df_articulos
     
     def get_basico(self, soup, url):
@@ -153,12 +172,10 @@ class ExtractorCvlac():
                     dic2[cells[0].string]= cells[1]
                 except AttributeError:
                     print('BASICO ? : ', url)           
-        dic2=dict(zip(self.basico.keys(),dic2.values()))  
-        self.basico = almacena(self.basico,dic2) 
-        dic2={}
-        df = pd.DataFrame(self.basico)
-        df.columns = ['idcvlac','categoria','nombre','citaciones','nacionalidad','sexo']
-        df = df.reset_index(drop=True)
+        
+        dic2=pd.DataFrame([dict(zip(list(self.basico.columns),dic2.values()))])
+        self.basico = almacena_df(self.basico,dic2)
+        df = self.basico
         return df
     
     def get_complementaria(self, soup, url):
@@ -182,12 +199,13 @@ class ExtractorCvlac():
                         dic_aux['idcvlac'] = url[(url.find('='))+1:]
                         dic_aux[str(list[x])]=("".join(datos)).strip()                            
                         x=x+1
-                    self.complementaria = almacena(self.complementaria,dic_aux)
+    
+                    dic_aux=pd.DataFrame([dict(zip(list(self.complementaria.columns),dic_aux.values()))])
+                    self.complementaria = almacena_df(self.complementaria,dic_aux)
                     dic_aux={}
         except AttributeError:
             pass
-        df_complementaria= pd.DataFrame(self.complementaria)
-        df_complementaria = df_complementaria.reset_index(drop=True)    
+        df_complementaria= self.complementaria  
         return df_complementaria
     
     def get_estancias(self, soup, url):
@@ -208,12 +226,12 @@ class ExtractorCvlac():
                     for datos in list_datos:                        
                         dic_aux[str(list[x])]=("".join(datos)).strip().replace('Desde: ','').replace('Hasta: ','')                       
                         x=x+1
-                    self.estancias = almacena(self.estancias,dic_aux)
+                        
+                    self.estancias = almacena_df(self.estancias,dic_aux)
                     dic_aux={}
         except AttributeError:
             pass
-        df_estancias= pd.DataFrame(self.estancias)    
-        df_estancias = df_estancias.reset_index(drop=True)
+        df_estancias= self.estancias 
         return df_estancias 
     
     def get_evaluador(self, soup, url):
@@ -242,20 +260,16 @@ class ExtractorCvlac():
                                             dic2[dato]=dato2
                                             dic2['fecha']=""
                                     else:
-                                        dic2[dato]=(list_datos[list_datos.index(dato)+1]).strip()                          
-                        dic2=dict(zip(self.evaluador.keys(),dic2.values()))
-                        self.evaluador = almacena(self.evaluador,dic2)
+                                        dic2[dato]=(list_datos[list_datos.index(dato)+1]).strip()   
+                                        
+                        dic2=pd.DataFrame([dict(zip(list(self.evaluador.columns),dic2.values()))])
+                        self.evaluador = almacena_df(self.evaluador,dic2)                 
                         dic2={}
                     #Encuentra tabla, retorna dataframe por lo que deja de buscar
-                    df_evaluador= pd.DataFrame(self.evaluador)
-                    #eliminar 
-                    #df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion','fecha']
-                    df_evaluador = df_evaluador.reset_index(drop=True)
+                    df_evaluador= self.evaluador
                     return df_evaluador
         #No encuentra tabla, retorna dataframe vacío (vale la pena retornar mejor un null y condicionar en el llamado?)
-        df_evaluador= pd.DataFrame(self.evaluador)
-        #df_evaluador.columns = ['idcvlac','ambito','par_evaluador','editorial','revista','institucion']
-        df_evaluador = df_evaluador.reset_index(drop=True)
+        df_evaluador= self.evaluador
         return df_evaluador 
     
     def get_idioma(self, soup, url): ############################## PROBARLO CON UNA LISTA DE CVLACS
@@ -274,18 +288,13 @@ class ExtractorCvlac():
                             dic2['idcvlac'] = url[(url.find('='))+1:]
                             dic2[str(list[x])]=("".join(inf.text)).strip()                          
                             x=x+1                                     
-                        #dic2=dict(zip(self.idioma.keys(),dic2.values()))
-                        self.idioma = almacena(self.idioma,dic2)
+                        self.idioma = almacena_df(self.idioma,dic2)
                     dic2={}
                     #Encuentra tabla, retorna dataframe por lo que deja de buscar
-                    df_idioma = pd.DataFrame(self.idioma)  
-                    #df_idioma.columns = ['idcvlac','idioma','habla','escribe','lee','entiende']
-                    df_idioma = df_idioma.reset_index(drop=True)      
+                    df_idioma = self.idioma    
                     return df_idioma
         #No encuentra tabla, retorna dataframe vacío (vale la pena retornar mejor un null y condicionar en el llamado?)
-        df_idioma = pd.DataFrame(self.idioma)  
-        #df_idioma.columns = ['idcvlac','idioma','habla','escribe','lee','entiende']
-        df_idioma = df_idioma.reset_index(drop=True)      
+        df_idioma = self.idioma   
         return df_idioma
     
     def get_investiga(self, soup, url): ############################## PROBARLO CON UNA LISTA DE CVLACS
@@ -304,16 +313,13 @@ class ExtractorCvlac():
                             for i in j[0:2]:
                                 dic2['idcvlac'] = url[(url.find('='))+1:]
                                 dic2[str(list[x])]=("".join(i)).strip()                            
-                                x=x+1                                          
-                            self.investigacion = almacena(self.investigacion,dic2)
+                                x=x+1      
+                            self.investigacion = almacena_df(self.investigacion,dic2)
+                            
                         dic2={}
-                    df_investiga= pd.DataFrame(self.investigacion) 
-                    df_investiga.columns = ['idcvlac','nombre','activa']
-                    df_investiga = df_investiga.reset_index(drop=True)             
+                    df_investiga= self.investigacion             
                     return df_investiga
-        df_investiga= pd.DataFrame(self.investigacion) 
-        df_investiga.columns = ['idcvlac','nombre','activa']
-        df_investiga = df_investiga.reset_index(drop=True)             
+        df_investiga= self.investigacion            
         return df_investiga
     
     def get_jurado(self, soup, url):
@@ -332,15 +338,14 @@ class ExtractorCvlac():
                         for key in dic_aux:                                                              
                             if(key == dato):
                                 dic_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip() 
-                                             
-                    dic_aux=dict(zip(self.jurados.keys(),dic_aux.values())) 
-                    self.jurados = almacena(self.jurados,dic_aux)
+                    
+                    dic_aux=pd.DataFrame([dict(zip(list(self.jurados.columns),dic_aux.values()))])
+                    self.jurados = almacena_df(self.jurados,dic_aux)
+                    
                     #dic_aux={}
         except AttributeError:
             pass
-        df_jurado= pd.DataFrame(self.jurados)
-        #df_jurado.columns = ['idcvlac','nombre','titulo','tipo','lugar','programa','orientado','palabras','areas','sectores']
-        df_jurado = df_jurado.reset_index(drop=True)    
+        df_jurado= self.jurados
         return df_jurado
     
     def get_libro(self, soup, url):
@@ -385,15 +390,12 @@ class ExtractorCvlac():
                     for dato in list_datos:                            
                         for key in libros_aux:                                                              
                             if(key == dato):
-                                libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()     
-                    libros_aux=dict(zip(self.libros.keys(),libros_aux.values()))                       
-                    self.libros= almacena(self.libros,libros_aux)   
-                       
+                                libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()  
+                    libros_aux=pd.DataFrame([dict(zip(list(self.libros.columns),libros_aux.values()))])
+                    self.libros = almacena_df(self.libros,libros_aux).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
         except AttributeError:
             pass     
-        df_libros = pd.DataFrame(self.libros)   
-        #df_libros.columns = ['idcvlac','autores','nombre','lugar','editorial','isbn','volumen','paginas', 'palabras', 'areas', 'sectores']
-        df_libros = df_libros.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
+        df_libros = self.libros 
         return df_libros
     
     def get_reconocimiento(self, soup, url):
@@ -408,14 +410,12 @@ class ExtractorCvlac():
                         fecha=(div_i.text).rfind("-")
                         dic2['idcvlac'] = url[(url.find('='))+1:]
                         dic2['nombre'] = ((div_i.text)[:fecha]).strip() 
-                        dic2['fecha'] = ((div_i.text)[fecha+1:]).strip()                                
-                        self.reconocimiento = almacena(self.reconocimiento,dic2)
+                        dic2['fecha'] = ((div_i.text)[fecha+1:]).strip()                       
+                        self.reconocimiento = almacena_df(self.reconocimiento,dic2)
                     dic2={}
-                    df_reconocimiento= pd.DataFrame(self.reconocimiento)
-                    df_reconocimiento = df_reconocimiento.reset_index(drop=True)       
+                    df_reconocimiento= self.reconocimiento       
                     return df_reconocimiento
-        df_reconocimiento= pd.DataFrame(self.reconocimiento)
-        df_reconocimiento = df_reconocimiento.reset_index(drop=True)       
+        df_reconocimiento= self.reconocimiento      
         return df_reconocimiento
     
     def get_redes(self, soup, url):        
@@ -428,14 +428,12 @@ class ExtractorCvlac():
                 for trs in child:
                     redes_individual['idcvlac'] = url[(url.find('='))+1:]
                     redes_individual['nombre']=trs.text 
-                    redes_individual['url']=trs['href']                   
-                    self.redes= almacena(self.redes,redes_individual) 
+                    redes_individual['url']=trs['href']                
+                    self.redes = almacena_df( self.redes,redes_individual)
                     redes_individual={}                      
         except AttributeError:
             pass
-        df_redes = pd.DataFrame(self.redes)      
-        #df_redes.columns = ['idcvlac','nombre','url']
-        df_redes = df_redes.reset_index(drop=True)    
+        df_redes = self.redes    
         return df_redes   
         
     def get_identificadores(self, soup, url):        
@@ -448,13 +446,11 @@ class ExtractorCvlac():
                     identificadores_individual['idcvlac'] = url[(url.find('='))+1:]
                     identificadores_individual['nombre']=trs.text 
                     identificadores_individual['url']=trs['href']                   
-                    self.identificadores= almacena(self.identificadores,identificadores_individual) 
+                    self.identificadores = almacena_df(self.identificadores,identificadores_individual) 
                     identificadores_individual={}                      
         except AttributeError:
             pass
-        df_identificadores = pd.DataFrame(self.identificadores)      
-        #df_identificadores.columns = ['idcvlac','nombre','url']
-        df_identificadores = df_identificadores.reset_index(drop=True)    
+        df_identificadores = self.identificadores         
         return df_identificadores
     
     def get_caplibro(self, soup, url):
@@ -496,13 +492,13 @@ class ExtractorCvlac():
                                     cap_libros_aux['fecha']=list_fasc[2].strip()                                    
                                 else:
                                     cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()
-                    cap_libros_aux=dict(zip(self.caplibros.keys(),cap_libros_aux.values()))
-                    self.caplibros= almacena(self.caplibros,cap_libros_aux)   
+
+                    cap_libros_aux=pd.DataFrame([dict(zip(list(self.caplibros.columns),cap_libros_aux.values()))])
+                    self.caplibros = almacena_df(self.caplibros,cap_libros_aux)
                     cap_libros_aux={}   
         except AttributeError:
             pass     
-        df_libros = pd.DataFrame(self.caplibros)   
-        df_libros = df_libros.reset_index(drop=True)   
+        df_libros = self.caplibros    
         return df_libros
     
     def get_software(self, soup, url):
@@ -544,12 +540,12 @@ class ExtractorCvlac():
                     dic['lugar']=lugg[:index_datos].strip()
                     dic['fecha']=lugg[index_datos+1:].strip()
                     
-                    dic=dict(zip(self.software.keys(),dic.values()))
-                    self.software= almacena(self.software,dic)  
+                    dic=pd.DataFrame([dict(zip(list(self.software.columns),dic.values()))])
+                    self.software = almacena_df(self.software,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)
+                    
         except AttributeError:
             pass
-        df_software = pd.DataFrame(self.software)   
-        df_software = df_software.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)    
+        df_software = self.software  
         return df_software
     
     def get_prototipo(self, soup, url):
@@ -595,13 +591,13 @@ class ExtractorCvlac():
                                 index_datos= -1
                             dic['lugar']=lugg[:index_datos].strip()
                             dic['fecha']=lugg[index_datos+1:].strip()
+
+                            dic=pd.DataFrame([dict(zip(list(self.prototipo.columns),dic.values()))])
+                            self.prototipo = almacena_df(self.prototipo,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)
                             
-                            dic=dict(zip(self.prototipo.keys(),dic.values()))
-                            self.prototipo= almacena(self.prototipo,dic) 
         except AttributeError:
             pass           
-        df_prototipo = pd.DataFrame(self.prototipo)   
-        df_prototipo = df_prototipo.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)  
+        df_prototipo = self.prototipo    
         return df_prototipo
 
     def get_tecnologicos(self, soup, url):
@@ -643,13 +639,13 @@ class ExtractorCvlac():
                         index_datos= -1
                     dic['lugar']=lugg[:index_datos].strip()
                     dic['fecha']=lugg[index_datos+1:].strip()
-                    
-                    dic=dict(zip(self.tecnologicos.keys(),dic.values()))
-                    self.tecnologicos= almacena(self.tecnologicos,dic)  
+          
+                    dic=pd.DataFrame([dict(zip(list(self.tecnologicos.columns),dic.values()))])
+                    self.tecnologicos = almacena_df(self.tecnologicos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True) 
+                     
         except AttributeError:
             pass
-        df_tecnologicos = pd.DataFrame(self.tecnologicos)   
-        df_tecnologicos = df_tecnologicos.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True) 
+        df_tecnologicos = self.tecnologicos   
         return df_tecnologicos
 
     def get_empresa_tecnologica(self, soup, url):
@@ -687,12 +683,13 @@ class ExtractorCvlac():
                             elif(item.find('Nit')!=-1):
                                 dic['nit']=re.sub('<[^<]+?>', '',item[item.rfind('Nit')+3:]).strip()         
                             else: pass
-                    dic=dict(zip(self.empresa_tecnologica.keys(),dic.values()))
-                    self.empresa_tecnologica= almacena(self.empresa_tecnologica,dic)  
+
+                    dic=pd.DataFrame([dict(zip(list(self.empresa_tecnologica.columns),dic.values()))])
+                    self.empresa_tecnologica = almacena_df(self.empresa_tecnologica,dic)
+                      
         except AttributeError:
             pass            
-        df_empresa_tecnologica = pd.DataFrame(self.empresa_tecnologica)   
-        df_empresa_tecnologica = df_empresa_tecnologica.reset_index(drop=True)   
+        df_empresa_tecnologica = self.empresa_tecnologica     
         return df_empresa_tecnologica
 
     def get_innovacion(self, soup, url):
@@ -736,12 +733,12 @@ class ExtractorCvlac():
                                 index_datos= -1
                             dic['lugar']=lugg[:index_datos].strip()
                             dic['fecha']=lugg[index_datos+1:].strip()
+
+                            dic=pd.DataFrame([dict(zip(list(self.innovacion_empresarial.columns),dic.values()))])
+                            self.innovacion_empresarial = almacena_df(self.innovacion_empresarial,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
                             
-                            dic=dict(zip(self.innovacion_empresarial.keys(),dic.values()))
-                            self.innovacion_empresarial= almacena(self.innovacion_empresarial,dic) 
         except AttributeError:
             pass           
-        df_innovacion = pd.DataFrame(self.innovacion_empresarial)   
-        df_innovacion = df_innovacion.reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
+        df_innovacion = self.innovacion_empresarial  
         return df_innovacion
 
