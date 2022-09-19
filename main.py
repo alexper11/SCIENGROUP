@@ -5,10 +5,8 @@ from scopus.ExtractorScopus import ExtractorScopus
 from scopus.Scientopy import Scientopy
 from scopus.readKey import read_key
 
-
 import pandas as pd
 import sys
-
 
 from cvlac.cvlac_models.DBmodel import create_cvlac_db
 from cvlac.cvlac_controllers.ActuacionController import ActuacionController
@@ -58,7 +56,6 @@ from cvlac.gruplac_controllers.PrototiposGController import PrototiposGControlle
 from cvlac.gruplac_controllers.SoftwareGController import SoftwareGController
 from cvlac.gruplac_controllers.MetaGruplacDBController import MetaGruplacDBController
 
-
 from scopus.models.DBmodel import create_scopus_db
 from scopus.controllers.AutoresController import AutoresController
 from scopus.controllers.ProductosController import ProductosController  
@@ -70,7 +67,6 @@ if __name__ == '__main__':
     #######################
     sys.path.append(".")
     #######################
-    
     create_cvlac_db()
     create_gruplac_db()
     #create_scopus_db()
