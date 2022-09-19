@@ -1,14 +1,16 @@
 from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.ExtractorGruplac import ExtractorGruplac
-from cvlac.util import get_gruplacList, get_lxml
+from cvlac.util import get_lxml
 from scopus.ExtractorScopus import ExtractorScopus
 from scopus.Scientopy import Scientopy
+from scopus.readKey import read_key
+
 
 import pandas as pd
 import sys
-from scopus.readKey import read_key
-'''
-from cvlac.cvlac_models.DBmodel import create_db
+
+
+from cvlac.cvlac_models.DBmodel import create_cvlac_db
 from cvlac.cvlac_controllers.ActuacionController import ActuacionController
 from cvlac.cvlac_controllers.ArticulosController import ArticulosController
 from cvlac.cvlac_controllers.BasicoController import BasicoController
@@ -23,7 +25,38 @@ from cvlac.cvlac_controllers.RedesController import RedesController
 from cvlac.cvlac_controllers.EstanciasController import EstanciasController
 from cvlac.cvlac_controllers.AcademicaController import AcademicaController
 from cvlac.cvlac_controllers.ComplementariaController import ComplementariaController
-from cvlac.cvlac_controllers.MetaDBController import MetaDBController
+from cvlac.cvlac_controllers.EmpresaTecnologicaController import EmpresaTecnologicaController
+from cvlac.cvlac_controllers.InnovacionEmpresarialController import InnovacionEmpresarialController
+from cvlac.cvlac_controllers.CaplibrosController import CaplibrosController
+from cvlac.cvlac_controllers.PrototipoController import PrototipoController
+from cvlac.cvlac_controllers.SoftwareController import SoftwareController
+from cvlac.cvlac_controllers.TecnologicosController import TecnologicosController
+from cvlac.cvlac_controllers.MetaCvlacDBController import MetaCvlacDBController
+
+
+from cvlac.gruplac_models.DBmodel import create_gruplac_db
+from cvlac.gruplac_controllers.ArticulosGController import ArticulosGController
+from cvlac.gruplac_controllers.BasicoGController import BasicoGController
+from cvlac.gruplac_controllers.CaplibrosGController import CaplibrosGController
+from cvlac.gruplac_controllers.CursoDoctoradoController import CursoDoctoradoController
+from cvlac.gruplac_controllers.CursoMaestriaController import CursoMaestriaController
+from cvlac.gruplac_controllers.DisenoIndustrialGController import DisenoIndustrialGController
+from cvlac.gruplac_controllers.EmpresaTecnologicaGController import EmpresaTecnologicaGController
+from cvlac.gruplac_controllers.InnovacionEmpresarialGController import InnovacionEmpresarialGController
+from cvlac.gruplac_controllers.InstitucionesController import InstitucionesController
+from cvlac.gruplac_controllers.IntegrantesController import IntegrantesController
+from cvlac.gruplac_controllers.LibrosGController import LibrosGController
+from cvlac.gruplac_controllers.LineasGController import LineasGController
+from cvlac.gruplac_controllers.OtroProgramaController import OtroProgramaController
+from cvlac.gruplac_controllers.OtrosArticulosController import OtrosArticulosController
+from cvlac.gruplac_controllers.OtrosLibrosController import OtrosLibrosController
+from cvlac.gruplac_controllers.OtrosTecnologicosController import OtrosTecnologicosController
+from cvlac.gruplac_controllers.PlantaPilotoGController import PlantaPilotoGController
+from cvlac.gruplac_controllers.ProgramaDoctoradoController import ProgramaDoctoradoController
+from cvlac.gruplac_controllers.ProgramaMaestriaController import ProgramaMaestriaController
+from cvlac.gruplac_controllers.PrototiposGController import PrototiposGController
+from cvlac.gruplac_controllers.SoftwareGController import SoftwareGController
+from cvlac.gruplac_controllers.MetaGruplacDBController import MetaGruplacDBController
 
 
 from scopus.models.DBmodel import create_scopus_db
@@ -38,16 +71,23 @@ if __name__ == '__main__':
     sys.path.append(".")
     #######################
     
-    #create_db()
+    create_cvlac_db()
+    create_gruplac_db()
     #create_scopus_db()
     
     ########################
     #CVLAC
     ########################
-    """
+    
     Extractor=ExtractorGruplac()
-    Extractor.set_grup_attrs(get_gruplacList('UNIVERSIDAD DEL CAUCA'))
-    print('supo')
+    #para este caso el parametro de entrada es la url del buscador scienti para el departamento del Cauca
+    lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=117')
+    
+    ######################
+    #Extraccion de tablas CVLAC
+    ######################
+    print('setting grup attributes')
+    Extractor.set_grup_attrs(lista_gruplac)
     
     articulos=ArticulosController()
     articulos.insert_df(Extractor.grup_articulos.reset_index(drop=True))
@@ -91,9 +131,96 @@ if __name__ == '__main__':
     complementaria=ComplementariaController()
     complementaria.insert_df(Extractor.grup_complementaria.reset_index(drop=True))
     
+    caplibros=CaplibrosController()
+    caplibros.insert_df(Extractor.grup_caplibros.reset_index(drop=True))
+    
+    empresatec=EmpresaTecnologicaController()
+    empresatec.insert_df(Extractor.grup_empresa_tecnologica.reset_index(drop=True))
+    
+    innovaempresa=InnovacionEmpresarialController()
+    innovaempresa.insert_df(Extractor.grup_innovacion_empresarial.reset_index(drop=True))
+    
+    prototipo=PrototipoController()
+    prototipo.insert_df(Extractor.grup_prototipo.reset_index(drop=True))
+    
+    software=SoftwareController()
+    software.insert_df(Extractor.grup_software.reset_index(drop=True))
+    
+    tecnologicos=TecnologicosController()
+    tecnologicos.insert_df(Extractor.grup_tecnologicos.reset_index(drop=True))
+    
+    ######################
+    #Extraccion de tablas GRUPLAC
+    ######################
+    print('setting perfil attributes')
+    Extractor.set_perfil_attrs(lista_gruplac)
+    
+    articulosg=ArticulosGController()
+    articulosg.insert_df(Extractor.perfil_articulos)
+    
+    basicog=BasicoGController()
+    basicog.insert_df(Extractor.perfil_basico)
+    
+    instituciones=InstitucionesController()
+    instituciones.insert_df(Extractor.perfil_instituciones)
+    
+    lineasg=LineasGController()
+    lineasg.insert_df(Extractor.perfil_lineas)
+    
+    integrantes=IntegrantesController()
+    integrantes.insert_df(Extractor.perfil_integrantes)
+    
+    pdoctorado=ProgramaDoctoradoController()
+    pdoctorado.insert_df(Extractor.perfil_programa_doctorado)
+    
+    pmaestria=ProgramaMaestriaController()
+    pmaestria.insert_df(Extractor.perfil_programa_maestria)
+    
+    oprograma=OtroProgramaController()
+    oprograma.insert_df(Extractor.perfil_otro_programa)
+    
+    cdoctorado=CursoDoctoradoController()
+    cdoctorado.insert_df(Extractor.perfil_curso_doctorado)
+    
+    cmaestria=CursoMaestriaController()
+    cmaestria.insert_df(Extractor.perfil_curso_maestria)
+    
+    librosg=LibrosGController()
+    librosg.insert_df(Extractor.perfil_libros)
+    
+    caplibrosg=CaplibrosGController()
+    caplibrosg.insert_df(Extractor.perfil_caplibros)
+    
+    oarticulos=OtrosArticulosController()
+    oarticulos.insert_df(Extractor.perfil_otros_articulos)
+    
+    olibros=OtrosLibrosController()
+    olibros.insert_df(Extractor.perfil_otros_libros)
+    
+    disenoind=DisenoIndustrialGController()
+    disenoind.insert_df(Extractor.perfil_diseno_industrial)
+    
+    otecnologicos=OtrosTecnologicosController()
+    otecnologicos.insert_df(Extractor.perfil_otros_tecnologicos)
+    
+    prototiposg=PrototiposGController()
+    prototiposg.insert_df(Extractor.perfil_prototipos)
+    
+    softwareg=SoftwareGController()
+    softwareg.insert_df(Extractor.perfil_software)
+    
+    empresatecg=EmpresaTecnologicaGController()
+    empresatecg.insert_df(Extractor.perfil_empresa_tecnologica)
+    
+    innovaempresag=InnovacionEmpresarialGController()
+    innovaempresag.insert_df(Extractor.perfil_innovacion_empresarial)
+    
+    plantapilotog=PlantaPilotoGController()
+    plantapilotog.insert_df(Extractor.perfil_planta_piloto)
+
+    
     del Extractor
    
-   """
     ########################
     #SCOPUS
     ########################
@@ -131,9 +258,11 @@ if __name__ == '__main__':
     #Insertar fecha de extracción de los datos en ambos modulos
     #########################################
     
-    #metadb= MetaDBController()
-    #metadb.insert_datetime()
+    metadb= MetaCvlacDBController()
+    metadb.insert_datetime()
     
+    metadb1= MetaGruplacDBController()
+    metadb1.insert_datetime()
     #metadbsco=MetaDBScoController()
     #metadbsco.insert_datetime()
 
@@ -149,8 +278,7 @@ if __name__ == '__main__':
     input_df.to_csv('papersPreprocessed.csv',index=False)
     """
     
-'''   
-
+"""
 
 ##Pruebas para tablas individuales
 if __name__ == '__main__':
@@ -197,7 +325,7 @@ if __name__ == '__main__':
         df_prueba=Extractor.get_perfil_prototipos(dom,url)  
     
     df_prueba.to_csv('prueba.csv',index=False)
-
+"""
 
 """
 from cvlac.cvlac_models.DBmodel import create_db

@@ -217,6 +217,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 self.get_perfil_prototipos(lxml_url,url)
             except:
                 print('Error estableciendo atributos de prefijo perfil del objeto')
+        print('Atributos de perfil configurados con exito')
     
     def get_perfil_basico(self, soup, url):
         try:

@@ -2,7 +2,7 @@ from cvlac import db_gruplac
 import pandas
 from cvlac.gruplac_models.Basico import Basico
 
-class BasicoController:
+class BasicoGController:
     count = 0
     def __init__(self):
         self.__class__.count = self.__class__.count + 1
