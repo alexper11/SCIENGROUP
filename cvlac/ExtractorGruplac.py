@@ -121,7 +121,7 @@ class ExtractorGruplac(ExtractorCvlac):
             url_gruplac=a['href']
             if(url_gruplac.find('https://scienti.minciencias.gov.co/gruplac/jsp/visualiza')!=-1):
                 gruplac_list.append(url_gruplac)
-        print(len(gruplac_list))
+        print('gruplacs: ',len(gruplac_list))
         return gruplac_list
     
     def get_cvs(self, url_gruplac):

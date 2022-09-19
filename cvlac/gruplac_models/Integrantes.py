@@ -8,8 +8,8 @@ class Integrantes(Base):
     idgruplac = Column(String(50), nullable=False)
     url = Column(String(400), nullable=True)
     integrante = Column(String(400), nullable=True)
-    vinculacion = Column(String(50), nullable=False)
-    horas = Column(Integer(5), nullable=True)
+    vinculacion = Column(String(50), nullable=True)
+    horas = Column(String(10), nullable=True)
     fecha_vinculacion = Column(String(150), nullable=True)
     
     def __init__(self, **kwargs):
