@@ -13,7 +13,7 @@ from cvlac.gruplac_models.ProgramaDoctorado import ProgramaDoctorado
 from cvlac.gruplac_models.ProgramaMaestria import ProgramaMaestria
 from cvlac.gruplac_models.MetaDB import MetaDB
 
-def create_db():
+def create_gruplac_db():
     if not database_exists(engine.url):
         create_database(engine.url)
         Base.metadata.create_all(engine)
