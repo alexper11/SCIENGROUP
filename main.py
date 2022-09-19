@@ -77,7 +77,7 @@ if __name__ == '__main__':
     
     Extractor=ExtractorGruplac()
     #para este caso el parametro de entrada es la url del buscador scienti para el departamento del Cauca
-    lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=117')
+    lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')
     
     ######################
     #Extraccion de tablas CVLAC

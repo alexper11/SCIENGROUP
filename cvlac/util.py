@@ -88,7 +88,7 @@ def get_lxml(url):
             if i < tries - 1:
                 continue
             else:
-                print('Error al extraer url_lxml')
+                print('Error al extraer url_lxml:',url)
                 raise
         break
     return soup
