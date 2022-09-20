@@ -6,12 +6,12 @@ class Evaluador(Base):
     __tablename__ = 'evaluador'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
-    ambito = Column(String(300), nullable=False)
-    par_evaluador = Column(String(200), nullable=False)
+    ambito = Column(String(300), nullable=True)
+    par_evaluador = Column(String(200), nullable=True)
     editorial = Column(String(500), nullable=True)
     revista = Column(String(500), nullable=True)
     institucion = Column(String(500), nullable=True)
-    fecha = Column(String(60), nullable=True)
+    fecha = Column(String(100), nullable=True)
     
     def __init__(self, **kwargs):
         

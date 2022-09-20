@@ -6,11 +6,11 @@ class Integrantes(Base):
     __tablename__ = 'integrantes'
     id = Column(Integer, primary_key=True)
     idgruplac = Column(String(50), nullable=False)
-    url = Column(String(400), nullable=True)
+    url = Column(String(1000), nullable=True)
     integrante = Column(String(400), nullable=True)
-    vinculacion = Column(String(50), nullable=True)
-    horas = Column(String(10), nullable=True)
-    fecha_vinculacion = Column(String(150), nullable=True)
+    vinculacion = Column(String(80), nullable=True)
+    horas = Column(String(20), nullable=True)
+    fecha_vinculacion = Column(String(250), nullable=True)
     
     def __init__(self, **kwargs):
     

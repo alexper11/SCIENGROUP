@@ -23,7 +23,7 @@ def get_lxml(url):
             #r.encoding = "UTF-8"
             soup = BeautifulSoup(r.content,'lxml')
         except:
-            print(r)
+            print('request...',r)
             if i < tries - 1:
                 continue
             else:

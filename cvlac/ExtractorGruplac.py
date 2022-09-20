@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.util import almacena, almacena_df
-from cvlac.util import get_lxml, get_gruplacList
+from cvlac.util import get_lxml
 import re
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -74,11 +74,11 @@ class ExtractorGruplac(ExtractorCvlac):
                 soup = BeautifulSoup(r.content,'lxml') 
                 url_inv = soup.find_all('a', attrs={'target':'_blank'})
             except:
-                print(r)
+                print('request...',r)
                 if i < tries - 1:
                     continue
                 else:
-                    print('Error al extraer urls')                    
+                    print('Error al extraer urls de miembros',url)                    
             break
                     
         for a in url_inv:
@@ -114,7 +114,7 @@ class ExtractorGruplac(ExtractorCvlac):
             df_reconocimiento = self.get_reconocimiento(lxml_url, url)
             df_evaluador = self.get_evaluador(lxml_url, url) 
             df_redes = self.get_redes(lxml_url, url)
-            df_identifica = self.get_identificadores(lxml_url, url) #REVISAR
+            df_identifica = self.get_identificadores(lxml_url, url)
             df_libros = self.get_libro(lxml_url, url)
             df_jurado = self.get_jurado(lxml_url, url)
             df_complementaria = self.get_complementaria(lxml_url, url)
@@ -443,8 +443,8 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['revista']=separador[0][separador[0].find(','):].lstrip(',').strip()
                             dic['issn']=separador[1][:separador[1].find(',')].strip()
                             dic['fecha']=separador[1][separador[1].find(','):].lstrip(',').strip()
-                            dic['volumen']=separador[2]
-                            dic['fasciculo']=separador[3]
+                            dic['volumen']=separador[2].strip()
+                            dic['fasciculo']=separador[3].strip()
                             dic['paginas']=separador[4].rstrip(',').strip()
                         elif dato=='DOI:':
                             dic['doi']=re.sub(r'http://dx.doi.org/|doi:|https://doi.org/|http://doi.org/','',list_datos[i+1]).strip()

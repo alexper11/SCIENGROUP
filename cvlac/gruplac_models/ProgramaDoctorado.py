@@ -6,10 +6,10 @@ class ProgramaDoctorado(Base):
     __tablename__ = 'programa_doctorado'
     id = Column(Integer, primary_key=True)
     idgruplac = Column(String(50), nullable=False)
-    programa = Column(String(300), nullable=True)
+    programa = Column(String(600), nullable=True)
     fecha = Column(String(60), nullable=True)
-    acto = Column(String(200), nullable=True)
-    institucion = Column(String(400), nullable=True)
+    acto = Column(String(400), nullable=True)
+    institucion = Column(String(600), nullable=True)
     
     def __init__(self, **kwargs):
         for key, value in kwargs.items():

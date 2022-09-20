@@ -122,14 +122,14 @@ class ExtractorCvlac():
                             if(key == dato):
                                 if(dato=="fasc."):
                                     list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])
-                                    art_individual['fasc.']=list_fasc[0]                        
-                                    art_individual['p.']=list_fasc[1]
-                                    art_individual['fecha.']=list_fasc[2].replace(',','')
+                                    art_individual['fasc.']=list_fasc[0].strip()                 
+                                    art_individual['p.']=list_fasc[1].strip()
+                                    art_individual['fecha.']=list_fasc[2].replace(',','').strip()
                                 else:
                                     art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()
                     
                     art_individual=pd.DataFrame([dict(zip(list(self.articulos.columns),art_individual.values()))])
-                    self.articulos = almacena_df(self.articulos,art_individual).reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)     
+                    self.articulos = almacena_df(self.articulos,art_individual).reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
         except AttributeError:
             pass       
         
@@ -357,7 +357,7 @@ class ExtractorCvlac():
                             if isinstance(var,list) and len(var)!=0:
                                 index=dato.rfind((var[0]))
                                 libros_aux['En']=dato[:index].strip()
-                                libros_aux['fecha']=dato[index:]
+                                libros_aux['fecha']=dato[index:].strip().rstrip(".")
                             else:
                                 libros_aux['En']=dato.strip()
                                 libros_aux['fecha']=""
