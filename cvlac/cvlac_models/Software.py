@@ -15,7 +15,7 @@ class Software(Base):
     lugar = Column(String(50), nullable=True)
     fecha = Column(String(500), nullable=False)
     plataforma = Column(String(2000), nullable=True)
-    ambiente = Column(String(150), nullable=True)
+    ambiente = Column(String(1000), nullable=True)
     palabras = Column(String(3000), nullable=True)
     areas = Column(String(3000), nullable=True)
     sectores = Column(String(3000), nullable=True)

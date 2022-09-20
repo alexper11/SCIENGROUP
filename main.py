@@ -70,6 +70,7 @@ if __name__ == '__main__':
     create_cvlac_db()
     create_gruplac_db()
     #create_scopus_db()
+    print('Bases de datos creadas')
     
     ########################
     #CVLAC
@@ -82,9 +83,10 @@ if __name__ == '__main__':
     ######################
     #Extraccion de tablas CVLAC
     ######################
-    print('setting grup attributes')
+    print('setting grup attributes...')
     Extractor.set_grup_attrs(lista_gruplac)
     
+    print('updating cvlacdb...')
     articulos=ArticulosController()
     articulos.insert_df(Extractor.grup_articulos.reset_index(drop=True))
     
@@ -151,6 +153,7 @@ if __name__ == '__main__':
     print('setting perfil attributes')
     Extractor.set_perfil_attrs(lista_gruplac)
     
+    print('updating gruplacdb...')
     articulosg=ArticulosGController()
     articulosg.insert_df(Extractor.perfil_articulos)
     

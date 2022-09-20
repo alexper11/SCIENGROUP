@@ -39,30 +39,6 @@ class ExtractorGruplac(ExtractorCvlac):
         #########
         #El prefijo 'perfil' indica un atributo refente a una tabla especifica del perfil de un gruplac
         #######
-        """
-        self.perfil_basico={'idgruplac':[],'nombre':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
-        self.perfil_instituciones={'idgruplac':[],'nombre':[],'aval':[]}
-        self.perfil_lineas={'idgruplac':[],'lineas':[]}
-        self.perfil_integrantes={'idgruplac':[],'url':[],'integrante':[],'vinculacion':[],'horas':[],'fecha_vinculacion':[]}
-        self.perfil_programa_doctorado={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
-        self.perfil_programa_maestria={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
-        self.perfil_otro_programa={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
-        self.perfil_curso_doctorado={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
-        self.perfil_curso_maestria={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
-        self.perfil_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'doi':[],'autores':[]}
-        self.perfil_libros={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'isbn':[],'editorial':[],'autores':[]}
-        self.perfil_caplibros={'idgruplac':[],'verificado':[],'tipo':[],'capitulo':[],'lugar':[],'fecha':[],'libro':[],'isbn':[],'volumen':[],'paginas':[],'editorial':[],'autores':[]}
-        self.perfil_otros_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'autores':[]}
-        self.perfil_otros_libros={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'isbn':[],'volumen':[],'paginas':[],'editorial':[],'autores':[]}
-        self.perfil_diseno_industrial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
-        self.perfil_otros_tecnologicos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
-        self.perfil_prototipos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
-        self.perfil_software={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'url':[],'nombre_comercial':[],'nombre_proyecto':[],'institucion':[],'autores':[]}
-        self.perfil_empresa_tecnologica={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'fecha':[],'nit':[],'fecha_registro':[],'mercado':[],'autores':[]}
-        self.perfil_innovacion_empresarial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
-        self.perfil_planta_piloto={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
-        """
-        ####
         self.perfil_basico=pd.DataFrame(columns=['idgruplac','nombre','fecha_formacion','lugar','lider','certificacion','pagina_web','email','clasificacion','areas','programas','programas_secundario'])
         self.perfil_instituciones=pd.DataFrame(columns=['idgruplac','nombre','aval'])
         self.perfil_lineas=pd.DataFrame(columns=['idgruplac','lineas'])
@@ -114,7 +90,7 @@ class ExtractorGruplac(ExtractorCvlac):
     def get_gruplac_list(self, url):
         #recibe url del buscador scienti que contiene la lista de gruplacs de un departamento
         gruplac_list=[]
-        r=requests.get(url, verify=False) #Prescindir de Verify=False
+        r=requests.get(url)#, verify=False) #Prescindir de Verify=False
         soup=BeautifulSoup(r.content,'lxml')
         links=soup.find_all('a', attrs={'target':'_blank'})
         for a in links:
@@ -187,7 +163,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 self.grup_innovacion_empresarial=pd.concat([self.grup_innovacion_empresarial,dataframes["innovacion_empresarial"]],ignore_index=True)
             except:
                 print('Error estableciendo atributos de prefijo grup del objeto ')
-                raise
+                #raise
     
     def set_perfil_attrs(self, gruplac_list):
         #recibe una lista de urls de grupos de investigación y rellena los valores de los atributos de forma
