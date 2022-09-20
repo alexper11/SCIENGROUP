@@ -285,8 +285,7 @@ class ExtractorGruplac(ExtractorCvlac):
         except AttributeError:
             pass          
         except:
-            pass
-        self.perfil_integrantes= almacena_df(self.perfil_integrantes,dfs)   
+            pass  
         return self.perfil_integrantes
 
     def get_perfil_programa_doctorado(self, soup, url):        
@@ -447,12 +446,12 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['fasciculo']=separador[3].strip()
                             dic['paginas']=separador[4].rstrip(',').strip()
                         elif dato=='DOI:':
-                            dic['doi']=re.sub(r'http://dx.doi.org/|doi:|https://doi.org/|http://doi.org/','',list_datos[i+1]).strip()
+                            dic['doi']=re.sub(r'http://dx.doi.org/|doi:|DOI:|https://doi.org/|http://doi.org/','',list_datos[i+1]).lstrip(':').strip()
                         else:
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
                            
                     dic=pd.DataFrame([dic])
-                    self.perfil_articulos = almacena_df(self.perfil_articulos,dic)                                                       
+                    self.perfil_articulos = almacena_df(self.perfil_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                                      
             else:
                 raise Exception  
         except AttributeError:
@@ -487,7 +486,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_libros = almacena_df(self.perfil_libros,dic) 
+                    self.perfil_libros = almacena_df(self.perfil_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True) 
                                          
             else:
                 raise Exception  
@@ -566,13 +565,13 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['revista']=separador[0][separador[0].find(','):].lstrip(',').strip()
                             dic['issn']=separador[1][:separador[1].find(',')].strip()
                             dic['fecha']=separador[1][separador[1].find(','):].lstrip(',').strip()
-                            dic['volumen']=separador[2]
-                            dic['fasciculo']=separador[3]
-                            dic['paginas']=separador[4].rstrip(',').strip()                       
+                            dic['volumen']=separador[2].strip()
+                            dic['fasciculo']=separador[3].strip()
+                            dic['paginas']=separador[4].rstrip(',-').strip()                       
                         else:
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_otros_articulos = almacena_df( self.perfil_otros_articulos,dic)                                                     
+                    self.perfil_otros_articulos = almacena_df( self.perfil_otros_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                                     
             else:
                 raise Exception  
         except AttributeError:
@@ -601,7 +600,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         elif i==2:
                             separador=re.split('ISBN:|vol:|págs:|Ed\.',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['isbn']=separador[1].strip().rstrip(',')
                             dic['volumen']=separador[2].strip()
                             dic['paginas']=separador[3].strip().rstrip(',')
@@ -609,7 +608,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_otros_libros = almacena_df( self.perfil_otros_libros,dic)                                    
+                    self.perfil_otros_libros = almacena_df( self.perfil_otros_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                   
             else:
                 raise Exception  
         except AttributeError:
@@ -639,7 +638,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['institucion']=separador[2].strip()
                         else:                            
@@ -675,7 +674,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Nombre comercial:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['nombre_comercial']=separador[2].strip()
                         elif i==3:
@@ -713,7 +712,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['institucion']=separador[2].strip()
                         else:                            
@@ -749,7 +748,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|, Sitio web:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip()
                             dic['url']=separador[2].strip()
                         elif i==3:
@@ -829,7 +828,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['institucion']=separador[2].strip()
                         else:                            
@@ -865,7 +864,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Nombre comercial:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['nombre_comercial']=separador[2].strip()
                         elif i==3:
