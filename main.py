@@ -83,6 +83,7 @@ if __name__ == '__main__':
     ######################
     #Extraccion de tablas CVLAC
     ######################
+    """
     print('setting grup attributes...')
     Extractor.set_grup_attrs(lista_gruplac)
     
@@ -146,7 +147,7 @@ if __name__ == '__main__':
     
     tecnologicos=TecnologicosController()
     tecnologicos.insert_df(Extractor.grup_tecnologicos.reset_index(drop=True))
-    
+    """
     ######################
     #Extraccion de tablas GRUPLAC
     ######################

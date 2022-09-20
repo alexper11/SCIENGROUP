@@ -10,9 +10,9 @@ class EmpresaTecnologica(Base):
     tipo = Column(String(200), nullable=True)
     nombre = Column(String(1500), nullable=True)
     fecha = Column(String(100), nullable=True)
-    nit = Column(String(150), nullable=True)
+    nit = Column(String(300), nullable=True)
     fecha_registro = Column(String(100), nullable=True)
-    mercado = Column(String(150), nullable=True)
+    mercado = Column(String(300), nullable=True)
     autores = Column(String(6000), nullable=True)       
     
     def __init__(self, **kwargs):

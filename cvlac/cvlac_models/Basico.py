@@ -10,7 +10,7 @@ class Basico(Base):
     nombre = Column(String(1000), nullable=False)
     nombre_citaciones = Column(String(1000), nullable=True)
     nacionalidad = Column(String(500), nullable=True)
-    sexo = Column(String(100), nullable=True)
+    sexo = Column(String(200), nullable=True)
     
     def __init__(self, **kwargs):
     

@@ -6,7 +6,7 @@ class Academica(Base):
     __tablename__ = 'academica'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
-    tipo = Column(String(150), nullable=False)
+    tipo = Column(String(150), nullable=True)
     institucion = Column(String(600), nullable=True)
     titulo = Column(String(600), nullable=True)
     fecha = Column(String(200), nullable=True)

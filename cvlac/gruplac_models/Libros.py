@@ -12,7 +12,7 @@ class Libros(Base):
     lugar = Column(String(1000), nullable=True)
     fecha = Column(String(100), nullable=True)
     isbn = Column(String(500), nullable=True)
-    editorial = Column(String(200), nullable=True)
+    editorial = Column(String(400), nullable=True)
     autores = Column(String(6000), nullable=True)       
     
     def __init__(self, **kwargs):

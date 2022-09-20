@@ -6,10 +6,10 @@ class CursoMaestria(Base):
     __tablename__ = 'curso_maestria'
     id = Column(Integer, primary_key=True)
     idgruplac = Column(String(50), nullable=False)
-    curso = Column(String(400), nullable=True)
+    curso = Column(String(1000), nullable=True)
     fecha = Column(String(60), nullable=True)
     acto = Column(String(50), nullable=True)
-    programa = Column(String(200), nullable=True)
+    programa = Column(String(800), nullable=True)
     
     def __init__(self, **kwargs):
         for key, value in kwargs.items():

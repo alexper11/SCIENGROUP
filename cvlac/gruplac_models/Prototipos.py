@@ -12,7 +12,7 @@ class Prototipos(Base):
     lugar = Column(String(100), nullable=True)
     fecha = Column(String(100), nullable=True)
     disponibilidad = Column(String(100), nullable=True)
-    institucion = Column(String(400), nullable=True)
+    institucion = Column(String(600), nullable=True)
     autores = Column(String(6000), nullable=True)       
     
     def __init__(self, **kwargs):

@@ -8,7 +8,7 @@ class OtrosArticulos(Base):
     idgruplac = Column(String(50), nullable=False)
     verificado = Column(Boolean,unique=False, default=True)
     tipo = Column(String(200), nullable=True)
-    nombre = Column(String(1500), nullable=False)
+    nombre = Column(String(1500), nullable=True)
     lugar = Column(String(1000), nullable=True)
     revista = Column(String(1000), nullable=True)
     issn = Column(String(500), nullable=True)

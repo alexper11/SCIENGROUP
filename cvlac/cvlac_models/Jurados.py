@@ -6,8 +6,8 @@ class Jurados(Base):
     __tablename__ = 'jurados'
     id = Column(Integer, primary_key=True)
     idcvlac = Column(String(20), nullable=False)
-    nombre = Column(String(1000), nullable=False)
-    titulo = Column(String(1000), nullable=False)
+    nombre = Column(String(1000), nullable=True)
+    titulo = Column(String(1000), nullable=True)
     tipo = Column(String(500), nullable=True)
     lugar = Column(String(200), nullable=True)
     programa = Column(String(800), nullable=True)
