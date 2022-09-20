@@ -64,22 +64,20 @@ from scopus.controllers.MetaDBScoController import MetaDBScoController
 
 if __name__ == '__main__':
     
-    #######################
+    ########################
+    #MODULO CVLAC
+    ########################
+    """
     sys.path.append(".")
-    #######################
     create_cvlac_db()
     create_gruplac_db()
     #create_scopus_db()
     print('Bases de datos creadas')
     
-    ########################
-    #CVLAC
-    ########################
-    
     Extractor=ExtractorGruplac()
     #para este caso el parametro de entrada es la url del buscador scienti para el departamento del Cauca
     lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')
-    
+    """
     ######################
     #Extraccion de tablas CVLAC
     ######################
@@ -151,6 +149,7 @@ if __name__ == '__main__':
     ######################
     #Extraccion de tablas GRUPLAC
     ######################
+    """
     print('setting perfil attributes')
     Extractor.set_perfil_attrs(lista_gruplac)
     
@@ -220,7 +219,7 @@ if __name__ == '__main__':
 
     
     del Extractor
-   
+    """
     ########################
     #SCOPUS
     ########################
@@ -258,11 +257,11 @@ if __name__ == '__main__':
     #Insertar fecha de extracción de los datos en ambos modulos
     #########################################
     
-    metadb= MetaCvlacDBController()
-    metadb.insert_datetime()
+    #metadb= MetaCvlacDBController()
+    #metadb.insert_datetime()
     
-    metadb1= MetaGruplacDBController()
-    metadb1.insert_datetime()
+    #metadb1= MetaGruplacDBController()
+    #metadb1.insert_datetime()
     #metadbsco=MetaDBScoController()
     #metadbsco.insert_datetime()
 
@@ -277,11 +276,19 @@ if __name__ == '__main__':
     input_df = scientopy.scopus_preprocessed_df('"linked open data"')
     input_df.to_csv('papersPreprocessed.csv',index=False)
     """
-    
-"""
 
-##Pruebas para tablas individuales
-if __name__ == '__main__':
+
+
+
+
+
+
+
+
+
+
+ 
+    ##Pruebas para tablas individuales
 
     #prueba a tablas individuales.. dentro del main
     Extractor=ExtractorGruplac()
@@ -325,13 +332,24 @@ if __name__ == '__main__':
         df_prueba=Extractor.get_perfil_prototipos(dom,url)  
     
     df_prueba.to_csv('prueba.csv',index=False)
-"""
 
-"""
-from cvlac.cvlac_models.DBmodel import create_db
-from cvlac.cvlac_controllers.ArticulosController import ArticulosController
 
-if __name__ == '__main__':
+
+
+
+
+
+
+
+
+    ##############
+    #DEMOS PARA PRUEBAS
+    ##############
+    """
+    from cvlac.cvlac_models.DBmodel import create_db
+    from cvlac.cvlac_controllers.ArticulosController import ArticulosController
+
+
     ############################
     #DEMO CVLAC
     ############################
@@ -366,4 +384,4 @@ if __name__ == '__main__':
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
     df_productos=ExtractorS.get_articles_full([7004506288])
     display(df_productos['titulo'].to_string())
-"""
+    """
