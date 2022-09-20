@@ -5,29 +5,6 @@ import re
 class ExtractorCvlac():
     
     def __init__(self):
-        """
-        self.academica={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[],'proyecto':[]}
-        self.actuacion={'idcvlac':[],'areas':[]}
-        self.articulos={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'verificado':[],'lugar':[],'revista':[],'issn':[],'editorial':[],'volumen':[],'fasciculo':[], 'paginas':[],'fecha':[],'doi':[], 'palabras':[], 'sectores':[]}
-        self.basico={'idcvlac':[],'categoria':[],'nombre':[],'citaciones':[],'nacionalidad':[],'sexo':[]}
-        self.complementaria={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[]}
-        self.estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
-        self.evaluador={'idcvlac':[],'ambito':[],'par_evaluador':[],'editorial':[],'revista':[],'institucion':[],'fecha':[]}
-        self.idioma={'idcvlac':[],'idioma':[],'habla':[],'escribe':[],'lee':[],'entiende':[]}
-        self.investigacion={'idcvlac':[],'nombre':[],'activa':[]}
-        self.jurados={'idcvlac':[],'nombre':[],'titulo':[],'tipo':[],'lugar':[],'programa':[],'orientado':[],'palabras':[],'areas':[],'sectores':[]}
-        self.libros={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'verificado':[],'lugar':[],'fecha':[],'editorial':[],'isbn':[],'volumen':[],'paginas':[], 'palabras':[], 'areas':[], 'sectores':[]}
-        self.reconocimiento={'idcvlac':[],'nombre':[],'fecha':[]}
-        self.redes={'idcvlac':[],'nombre':[],'url':[]}
-        self.identificadores={'idcvlac':[],'nombre':[],'url':[]}        
-        self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'verificado':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
-        self.software={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.prototipo={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.tecnologicos={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.empresa_tecnologica={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'verificado':[],'nit':[],'registro_camara':[],'palabras':[],'areas':[],'sectores':[]}
-        self.innovacion_empresarial={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        """
-        ###################3
         self.academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha','proyecto'])
         self.actuacion=pd.DataFrame(columns=['idcvlac','areas'])
         self.articulos=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','verificado','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas','fecha','doi', 'palabras', 'sectores'])
