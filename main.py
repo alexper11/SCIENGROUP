@@ -70,18 +70,18 @@ if __name__ == '__main__':
     """
     sys.path.append(".")
     create_cvlac_db()
-    create_gruplac_db()
+    #create_gruplac_db()
     #create_scopus_db()
     print('Bases de datos creadas')
     
     Extractor=ExtractorGruplac()
     #para este caso el parametro de entrada es la url del buscador scienti para el departamento del Cauca
     lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')
-    """
+    
     ######################
     #Extraccion de tablas CVLAC
     ######################
-    """
+    
     print('setting grup attributes...')
     Extractor.set_grup_attrs(lista_gruplac)
     
@@ -286,7 +286,7 @@ if __name__ == '__main__':
 
 
 
-
+    
  
     ##Pruebas para tablas individuales
 
@@ -333,7 +333,7 @@ if __name__ == '__main__':
     
     df_prueba.to_csv('prueba.csv',index=False)
 
-
+    
 
 
 
