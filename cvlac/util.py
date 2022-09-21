@@ -8,8 +8,8 @@ import platform
 import time
 import pandas as pd
 ############# Quitar msj alertas certificado en consola
-#from requests.packages.urllib3.exceptions import InsecureRequestWarning
-#requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 ###########
     
 #Recibe cualquier url y retorna su DOM
@@ -19,7 +19,7 @@ def get_lxml(url):
     for i in range(tries):
         try:
             headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-            r = requests.get(url, headers=headers)#, verify=False)
+            r = requests.get(url, headers=headers, verify=False)
             #r.encoding = "UTF-8"
             soup = BeautifulSoup(r.content,'lxml')
         except:
