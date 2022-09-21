@@ -5,29 +5,6 @@ import re
 class ExtractorCvlac():
     
     def __init__(self):
-        """
-        self.academica={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[],'proyecto':[]}
-        self.actuacion={'idcvlac':[],'areas':[]}
-        self.articulos={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'verificado':[],'lugar':[],'revista':[],'issn':[],'editorial':[],'volumen':[],'fasciculo':[], 'paginas':[],'fecha':[],'doi':[], 'palabras':[], 'sectores':[]}
-        self.basico={'idcvlac':[],'categoria':[],'nombre':[],'citaciones':[],'nacionalidad':[],'sexo':[]}
-        self.complementaria={'idcvlac':[],'tipo':[],'institucion':[],'titulo':[],'fecha':[]}
-        self.estancias={'idcvlac':[],'nombre':[],'entidad':[],'area':[],'fecha_inicio':[],'fecha_fin':[],'descripcion':[]}
-        self.evaluador={'idcvlac':[],'ambito':[],'par_evaluador':[],'editorial':[],'revista':[],'institucion':[],'fecha':[]}
-        self.idioma={'idcvlac':[],'idioma':[],'habla':[],'escribe':[],'lee':[],'entiende':[]}
-        self.investigacion={'idcvlac':[],'nombre':[],'activa':[]}
-        self.jurados={'idcvlac':[],'nombre':[],'titulo':[],'tipo':[],'lugar':[],'programa':[],'orientado':[],'palabras':[],'areas':[],'sectores':[]}
-        self.libros={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'verificado':[],'lugar':[],'fecha':[],'editorial':[],'isbn':[],'volumen':[],'paginas':[], 'palabras':[], 'areas':[], 'sectores':[]}
-        self.reconocimiento={'idcvlac':[],'nombre':[],'fecha':[]}
-        self.redes={'idcvlac':[],'nombre':[],'url':[]}
-        self.identificadores={'idcvlac':[],'nombre':[],'url':[]}        
-        self.caplibros={'idcvlac':[],'autores':[],'capitulo':[],'libro':[],'lugar':[],'verificado':[],'isbn':[],'editorial':[],'volumen':[],'paginas':[],'fecha':[], 'palabras':[], 'areas':[], 'sectores':[]}
-        self.software={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[],'plataforma':[], 'ambiente':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.prototipo={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.tecnologicos={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        self.empresa_tecnologica={'idcvlac':[],'autores':[],'nombre':[],'tipo':[],'verificado':[],'nit':[],'registro_camara':[],'palabras':[],'areas':[],'sectores':[]}
-        self.innovacion_empresarial={'idcvlac':[],'autor':[],'nombre':[],'tipo':[],'verificado':[],'nombre_comercial':[],'contrato_registro':[],'lugar':[],'fecha':[], 'palabras':[],'areas':[], 'sectores':[]}
-        """
-        ###################3
         self.academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha','proyecto'])
         self.actuacion=pd.DataFrame(columns=['idcvlac','areas'])
         self.articulos=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','verificado','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas','fecha','doi', 'palabras', 'sectores'])
@@ -145,14 +122,14 @@ class ExtractorCvlac():
                             if(key == dato):
                                 if(dato=="fasc."):
                                     list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])
-                                    art_individual['fasc.']=list_fasc[0]                        
-                                    art_individual['p.']=list_fasc[1]
-                                    art_individual['fecha.']=list_fasc[2].replace(',','')
+                                    art_individual['fasc.']=list_fasc[0].strip()                 
+                                    art_individual['p.']=list_fasc[1].strip()
+                                    art_individual['fecha.']=list_fasc[2].replace(',','').strip()
                                 else:
                                     art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()
                     
                     art_individual=pd.DataFrame([dict(zip(list(self.articulos.columns),art_individual.values()))])
-                    self.articulos = almacena_df(self.articulos,art_individual).reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)     
+                    self.articulos = almacena_df(self.articulos,art_individual).reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
         except AttributeError:
             pass       
         
@@ -380,7 +357,7 @@ class ExtractorCvlac():
                             if isinstance(var,list) and len(var)!=0:
                                 index=dato.rfind((var[0]))
                                 libros_aux['En']=dato[:index].strip()
-                                libros_aux['fecha']=dato[index:]
+                                libros_aux['fecha']=dato[index:].strip().rstrip(".")
                             else:
                                 libros_aux['En']=dato.strip()
                                 libros_aux['fecha']=""

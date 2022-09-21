@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.util import almacena, almacena_df
-from cvlac.util import get_lxml, get_gruplacList
+from cvlac.util import get_lxml
 import re
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -39,30 +39,6 @@ class ExtractorGruplac(ExtractorCvlac):
         #########
         #El prefijo 'perfil' indica un atributo refente a una tabla especifica del perfil de un gruplac
         #######
-        """
-        self.perfil_basico={'idgruplac':[],'nombre':[],'fecha_formacion':[],'lugar':[],'lider':[],'certificacion':[],'pagina_web':[],'email':[],'clasificacion':[],'areas':[],'programas':[],'programas_secundario':[]}
-        self.perfil_instituciones={'idgruplac':[],'nombre':[],'aval':[]}
-        self.perfil_lineas={'idgruplac':[],'lineas':[]}
-        self.perfil_integrantes={'idgruplac':[],'url':[],'integrante':[],'vinculacion':[],'horas':[],'fecha_vinculacion':[]}
-        self.perfil_programa_doctorado={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
-        self.perfil_programa_maestria={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
-        self.perfil_otro_programa={'idgruplac':[],'programa':[],'fecha':[],'acto':[],'institucion':[]}
-        self.perfil_curso_doctorado={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
-        self.perfil_curso_maestria={'idgruplac':[],'curso':[],'fecha':[],'acto':[],'programa':[]}
-        self.perfil_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'doi':[],'autores':[]}
-        self.perfil_libros={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'isbn':[],'editorial':[],'autores':[]}
-        self.perfil_caplibros={'idgruplac':[],'verificado':[],'tipo':[],'capitulo':[],'lugar':[],'fecha':[],'libro':[],'isbn':[],'volumen':[],'paginas':[],'editorial':[],'autores':[]}
-        self.perfil_otros_articulos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'revista':[],'issn':[],'fecha':[],'volumen':[],'fasciculo':[],'paginas':[],'autores':[]}
-        self.perfil_otros_libros={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'isbn':[],'volumen':[],'paginas':[],'editorial':[],'autores':[]}
-        self.perfil_diseno_industrial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
-        self.perfil_otros_tecnologicos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
-        self.perfil_prototipos={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
-        self.perfil_software={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'url':[],'nombre_comercial':[],'nombre_proyecto':[],'institucion':[],'autores':[]}
-        self.perfil_empresa_tecnologica={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'fecha':[],'nit':[],'fecha_registro':[],'mercado':[],'autores':[]}
-        self.perfil_innovacion_empresarial={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'institucion':[],'autores':[]}
-        self.perfil_planta_piloto={'idgruplac':[],'verificado':[],'tipo':[],'nombre':[],'lugar':[],'fecha':[],'disponibilidad':[],'nombre_comercial':[],'institucion':[],'autores':[]}
-        """
-        ####
         self.perfil_basico=pd.DataFrame(columns=['idgruplac','nombre','fecha_formacion','lugar','lider','certificacion','pagina_web','email','clasificacion','areas','programas','programas_secundario'])
         self.perfil_instituciones=pd.DataFrame(columns=['idgruplac','nombre','aval'])
         self.perfil_lineas=pd.DataFrame(columns=['idgruplac','lineas'])
@@ -98,11 +74,11 @@ class ExtractorGruplac(ExtractorCvlac):
                 soup = BeautifulSoup(r.content,'lxml') 
                 url_inv = soup.find_all('a', attrs={'target':'_blank'})
             except:
-                print(r)
+                print('request...',r)
                 if i < tries - 1:
                     continue
                 else:
-                    print('Error al extraer urls')                    
+                    print('Error al extraer urls de miembros',url)                    
             break
                     
         for a in url_inv:
@@ -114,14 +90,14 @@ class ExtractorGruplac(ExtractorCvlac):
     def get_gruplac_list(self, url):
         #recibe url del buscador scienti que contiene la lista de gruplacs de un departamento
         gruplac_list=[]
-        r=requests.get(url, verify=False) #Prescindir de Verify=False
+        r=requests.get(url)#, verify=False) #Prescindir de Verify=False
         soup=BeautifulSoup(r.content,'lxml')
         links=soup.find_all('a', attrs={'target':'_blank'})
         for a in links:
             url_gruplac=a['href']
             if(url_gruplac.find('https://scienti.minciencias.gov.co/gruplac/jsp/visualiza')!=-1):
                 gruplac_list.append(url_gruplac)
-        print(len(gruplac_list))
+        print('gruplacs: ',len(gruplac_list))
         return gruplac_list
     
     def get_cvs(self, url_gruplac):
@@ -138,7 +114,7 @@ class ExtractorGruplac(ExtractorCvlac):
             df_reconocimiento = self.get_reconocimiento(lxml_url, url)
             df_evaluador = self.get_evaluador(lxml_url, url) 
             df_redes = self.get_redes(lxml_url, url)
-            df_identifica = self.get_identificadores(lxml_url, url) #REVISAR
+            df_identifica = self.get_identificadores(lxml_url, url)
             df_libros = self.get_libro(lxml_url, url)
             df_jurado = self.get_jurado(lxml_url, url)
             df_complementaria = self.get_complementaria(lxml_url, url)
@@ -146,7 +122,7 @@ class ExtractorGruplac(ExtractorCvlac):
             df_academica = self.get_academica(lxml_url, url)
             df_caplibros = self.get_caplibro(lxml_url, url)
             df_software = self.get_software(lxml_url, url)
-            df_prototipo = self.get_prototipos(lxml_url, url)
+            df_prototipo = self.get_prototipo(lxml_url, url)
             df_tecnologicos = self.get_tecnologicos(lxml_url, url)
             df_empresa = self.get_empresa_tecnologica(lxml_url, url)
             df_innovacion = self.get_innovacion(lxml_url, url)
@@ -165,28 +141,29 @@ class ExtractorGruplac(ExtractorCvlac):
         for gruplac in gruplac_list:
             try:
                 dataframes=self.get_cvs(gruplac)
-                self.grup_academica=self.grup_academica.append(dataframes['academica'])
-                self.grup_actuacion=self.grup_actuacion.append(dataframes['actuacion'])
-                self.grup_articulos=self.grup_articulos.append(dataframes['articulos'])
-                self.grup_basico=self.grup_basico.append(dataframes['basico'])
-                self.grup_complementaria=self.grup_complementaria.append(dataframes["complementaria"])
-                self.grup_estancias=self.grup_estancias.append(dataframes["estancias"])
-                self.grup_evaluador=self.grup_evaluador.append(dataframes["evaluador"])
-                self.grup_identificadores=self.grup_identificadores.append(dataframes["identificadores"])
-                self.grup_idioma=self.grup_idioma.append(dataframes["idioma"])
-                self.grup_investiga=self.grup_investiga.append(dataframes["investigacion"])
-                self.grup_jurado=self.grup_jurado.append(dataframes["jurado"])
-                self.grup_libros=self.grup_libros.append(dataframes["libros"])
-                self.grup_reconocimiento=self.grup_reconocimiento.append(dataframes["reconocimiento"])
-                self.grup_redes=self.grup_redes.append(dataframes["redes"])
-                self.grup_caplibros=self.grup_caplibros.append(dataframes["caplibros"])
-                self.grup_software=self.grup_software.append(dataframes["software"])
-                self.grup_prototipo=self.grup_prototipo.append(dataframes["prototipo"])
-                self.grup_tecnologicos=self.grup_tecnologicos.append(dataframes["tecnologicos"])
-                self.grup_empresa_tecnologica=self.grup_empresa_tecnologica.append(dataframes["empresa_tecnologica"])
-                self.grup_innovacion_empresarial=self.grup_innovacion_empresarial.append(dataframes["innovacion_empresarial"])
+                self.grup_academica=pd.concat([self.grup_academica,dataframes['academica']],ignore_index=True)
+                self.grup_actuacion=pd.concat([self.grup_actuacion,dataframes['actuacion']],ignore_index=True) 
+                self.grup_articulos=pd.concat([self.grup_articulos,dataframes['articulos']],ignore_index=True)
+                self.grup_basico=pd.concat([self.grup_basico,dataframes['basico']],ignore_index=True)
+                self.grup_complementaria=pd.concat([self.grup_complementaria,dataframes["complementaria"]],ignore_index=True)
+                self.grup_estancias=pd.concat([self.grup_estancias,dataframes["estancias"]],ignore_index=True)
+                self.grup_evaluador=pd.concat([self.grup_evaluador,dataframes["evaluador"]],ignore_index=True)
+                self.grup_identificadores=pd.concat([self.grup_identificadores,dataframes["identificadores"]],ignore_index=True)
+                self.grup_idioma=pd.concat([self.grup_idioma,dataframes["idioma"]],ignore_index=True)
+                self.grup_investiga=pd.concat([self.grup_investiga,dataframes["investigacion"]],ignore_index=True)
+                self.grup_jurado=pd.concat([self.grup_jurado,dataframes["jurado"]],ignore_index=True)
+                self.grup_libros=pd.concat([self.grup_libros,dataframes["libros"]],ignore_index=True)
+                self.grup_reconocimiento=pd.concat([self.grup_reconocimiento,dataframes["reconocimiento"]],ignore_index=True)
+                self.grup_redes=pd.concat([self.grup_redes,dataframes["redes"]],ignore_index=True)
+                self.grup_caplibros=pd.concat([self.grup_caplibros,dataframes["caplibros"]],ignore_index=True)
+                self.grup_software=pd.concat([self.grup_software,dataframes["software"]],ignore_index=True)
+                self.grup_prototipo=pd.concat([self.grup_prototipo,dataframes["prototipo"]],ignore_index=True)
+                self.grup_tecnologicos=pd.concat([self.grup_tecnologicos,dataframes["tecnologicos"]],ignore_index=True)
+                self.grup_empresa_tecnologica=pd.concat([self.grup_empresa_tecnologica,dataframes["empresa_tecnologica"]],ignore_index=True)
+                self.grup_innovacion_empresarial=pd.concat([self.grup_innovacion_empresarial,dataframes["innovacion_empresarial"]],ignore_index=True)
             except:
                 print('Error estableciendo atributos de prefijo grup del objeto ')
+                #raise
     
     def set_perfil_attrs(self, gruplac_list):
         #recibe una lista de urls de grupos de investigación y rellena los valores de los atributos de forma
@@ -217,6 +194,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 self.get_perfil_prototipos(lxml_url,url)
             except:
                 print('Error estableciendo atributos de prefijo perfil del objeto')
+        print('Atributos de perfil configurados con exito')
     
     def get_perfil_basico(self, soup, url):
         try:
@@ -307,8 +285,7 @@ class ExtractorGruplac(ExtractorCvlac):
         except AttributeError:
             pass          
         except:
-            pass
-        self.perfil_integrantes= almacena_df(self.perfil_integrantes,dfs)   
+            pass  
         return self.perfil_integrantes
 
     def get_perfil_programa_doctorado(self, soup, url):        
@@ -465,16 +442,16 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['revista']=separador[0][separador[0].find(','):].lstrip(',').strip()
                             dic['issn']=separador[1][:separador[1].find(',')].strip()
                             dic['fecha']=separador[1][separador[1].find(','):].lstrip(',').strip()
-                            dic['volumen']=separador[2]
-                            dic['fasciculo']=separador[3]
+                            dic['volumen']=separador[2].strip()
+                            dic['fasciculo']=separador[3].strip()
                             dic['paginas']=separador[4].rstrip(',').strip()
                         elif dato=='DOI:':
-                            dic['doi']=re.sub(r'http://dx.doi.org/|doi:|https://doi.org/|http://doi.org/','',list_datos[i+1]).strip()
+                            dic['doi']=re.sub(r'http://dx.doi.org/|doi:|DOI:|https://doi.org/|http://doi.org/','',list_datos[i+1]).lstrip(':').strip()
                         else:
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
                            
                     dic=pd.DataFrame([dic])
-                    self.perfil_articulos = almacena_df(self.perfil_articulos,dic)                                                       
+                    self.perfil_articulos = almacena_df(self.perfil_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                                      
             else:
                 raise Exception  
         except AttributeError:
@@ -509,7 +486,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_libros = almacena_df(self.perfil_libros,dic) 
+                    self.perfil_libros = almacena_df(self.perfil_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True) 
                                          
             else:
                 raise Exception  
@@ -588,13 +565,13 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['revista']=separador[0][separador[0].find(','):].lstrip(',').strip()
                             dic['issn']=separador[1][:separador[1].find(',')].strip()
                             dic['fecha']=separador[1][separador[1].find(','):].lstrip(',').strip()
-                            dic['volumen']=separador[2]
-                            dic['fasciculo']=separador[3]
-                            dic['paginas']=separador[4].rstrip(',').strip()                       
+                            dic['volumen']=separador[2].strip()
+                            dic['fasciculo']=separador[3].strip()
+                            dic['paginas']=separador[4].rstrip(',-').strip()                       
                         else:
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_otros_articulos = almacena_df( self.perfil_otros_articulos,dic)                                                     
+                    self.perfil_otros_articulos = almacena_df( self.perfil_otros_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                                     
             else:
                 raise Exception  
         except AttributeError:
@@ -623,7 +600,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         elif i==2:
                             separador=re.split('ISBN:|vol:|págs:|Ed\.',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['isbn']=separador[1].strip().rstrip(',')
                             dic['volumen']=separador[2].strip()
                             dic['paginas']=separador[3].strip().rstrip(',')
@@ -631,7 +608,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_otros_libros = almacena_df( self.perfil_otros_libros,dic)                                    
+                    self.perfil_otros_libros = almacena_df( self.perfil_otros_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                   
             else:
                 raise Exception  
         except AttributeError:
@@ -661,7 +638,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['institucion']=separador[2].strip()
                         else:                            
@@ -697,7 +674,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Nombre comercial:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['nombre_comercial']=separador[2].strip()
                         elif i==3:
@@ -735,7 +712,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['institucion']=separador[2].strip()
                         else:                            
@@ -771,7 +748,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|, Sitio web:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip()
                             dic['url']=separador[2].strip()
                         elif i==3:
@@ -851,7 +828,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['institucion']=separador[2].strip()
                         else:                            
@@ -887,7 +864,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Nombre comercial:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
-                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['disponibilidad']=separador[1].strip().rstrip(',')
                             dic['nombre_comercial']=separador[2].strip()
                         elif i==3:

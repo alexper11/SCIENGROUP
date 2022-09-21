@@ -9,9 +9,9 @@ class InnovacionEmpresarial(Base):
     verificado = Column(Boolean,unique=False, default=True)
     tipo = Column(String(200), nullable=True)
     nombre = Column(String(1500), nullable=True)
-    lugar = Column(String(100), nullable=True)
+    lugar = Column(String(200), nullable=True)
     fecha = Column(String(100), nullable=True)
-    disponibilidad = Column(String(100), nullable=True)
+    disponibilidad = Column(String(200), nullable=True)
     institucion = Column(String(400), nullable=True)
     autores = Column(String(6000), nullable=True)       
     
