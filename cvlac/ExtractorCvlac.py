@@ -143,7 +143,13 @@ class ExtractorCvlac():
                 fid = url.find('=')               
                 for blockquote in list_blockquote:
                     dic={'idcvlac':'','autores':'','nombre':'','tipo':'','verificado':'','lugar':'','revista':'','ISSN:':'','ed:':'','v.':'','fasc.':'', 'p.':'','fecha.':'',' DOI: ':'', 'Palabras: ':'', 'Sectores: ':''}
-                    dic['idcvlac']=url[fid+1:]
+                    dic['idcvlac']=url[fid+1:]                    
+                    tipo=blockquote.find_parent('tr').find_previous_sibling('tr')                    
+                    if tipo.find('img') == None:
+                        dic['verificado']=False
+                    else:
+                        dic['verificado']=True
+                    dic['tipo']=tipo.find('b').text
                     blockquote=re.sub('</blockquote>|<blockquote>',''," ".join(str(blockquote).split())).replace('&amp;','&')
                     index_i=blockquote.find('<br/>')
                     dato=blockquote[:index_i]
