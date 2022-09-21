@@ -68,7 +68,7 @@ class ExtractorCvlac():
             pass  
         return self.actuacion
     
-    def get_articulo(self, soup, url):
+    """def get_articulo(self, soup, url):
         try:
             tableart=(soup.find('a', attrs={'name':'articulos'}).parent)            
             if(str((tableart).find('h3').contents[0])==('Artículos')):                                
@@ -86,7 +86,7 @@ class ExtractorCvlac():
                     list_datos=(re.split('<i>|</i>|</b>|<b>',quote_text_clear))
                     list_datos.pop(0)
                     bloque_string=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/|<blockquote>|</blockquote>','',(" ".join((str(block_art)).split()))) 
-                    bloque_string=bloque_string.replace('&amp;','&')   
+                    bloque_string=bloque_string.replace('&amp;','&') 
                     fblock=bloque_string.find("<i>")
                     list_string=(re.split('<br/>|, "|" . En:',bloque_string[:fblock]))        
                     x=0
@@ -101,10 +101,10 @@ class ExtractorCvlac():
                         print('Articulos > 4: ',url)
                         informacion=['Autores','Nombre','En']
                         list_string2=(re.split('<br/>',bloque_string[:fblock]))
-                        """
-                        Pendiente:manejo de excepcion, separador (, ")
-                        Poner un contador
-                        """
+                        
+                        #Pendiente:manejo de excepcion, separador (, ")
+                        #Poner un contador
+                        
                         list_string=(re.split(', "|" . En:',list_string2[0]))
                         art_individual['Revista']=("".join(list_string2[1])).strip()
                         try:
@@ -135,7 +135,47 @@ class ExtractorCvlac():
         
         df_articulos = self.articulos
         return df_articulos
-    
+    """
+    def get_articulo(self, soup, url):
+        try:                       
+            list_blockquote=soup.find('h3',string='Artículos').find_parent('table').find_all('blockquote')
+            if(list_blockquote!=None):
+                fid = url.find('=')               
+                for blockquote in list_blockquote:
+                    dic={'idcvlac':'','autores':'','nombre':'','tipo':'','verificado':'','lugar':'','revista':'','ISSN:':'','ed:':'','v.':'','fasc.':'', 'p.':'','fecha.':'',' DOI: ':'', 'Palabras: ':'', 'Sectores: ':''}
+                    dic['idcvlac']=url[fid+1:]
+                    blockquote=re.sub('</blockquote>|<blockquote>',''," ".join(str(blockquote).split())).replace('&amp;','&')
+                    index_i=blockquote.find('<br/>')
+                    dato=blockquote[:index_i]
+                    dic['autores']=dato[:dato.find(', "')]
+                    dic['nombre']=dato[dato.find(', "')+3:dato.rfind('. En:')].strip().rstrip('"')
+                    dic['lugar']=dato[dato.rfind('. En:')+5:].strip()
+                    list_datos=re.split('<i>|</i>|<b>|</b>',blockquote[index_i:].replace('<br/>',''))                    
+                    dic['revista']=list_datos[0].strip()
+                    list_datos.pop(0)
+                    for dato in list_datos:
+                        dato=dato.replace('<br/>','')
+                        if dato in dic:                                                                                       
+                            if dato != 'fasc.':
+                                dato=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/','',dato)            
+                                dic[dato]=(list_datos[list_datos.index(dato)+1]).strip()
+                            else:
+                                list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])                                                         
+                                dic['fasc.']=list_fasc[0].strip()                 
+                                dic['p.']=list_fasc[1].strip()
+                                dic['fecha.']=list_fasc[2].replace(',','').strip()
+                    
+                    dic=pd.DataFrame([dict(zip(list(self.articulos.columns),dic.values()))])                                
+                    self.articulos = almacena_df( self.articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                   
+            else:
+                raise Exception  
+        except AttributeError:
+            pass          
+        except:
+            pass   
+        return self.articulos
+
+
     def get_basico(self, soup, url):
         dic2={'IDCVLAC':'','Categoría':'','Nombre':'','Nombre en citaciones':'','Nacionalidad':'','Sexo':''}         
         table = soup.find('a', attrs={'name':'datos_generales'}).parent
