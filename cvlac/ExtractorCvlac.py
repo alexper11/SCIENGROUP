@@ -147,6 +147,10 @@ class ExtractorCvlac():
                     blockquote=re.sub('</blockquote>|<blockquote>',''," ".join(str(blockquote).split())).replace('&amp;','&')
                     index_i=blockquote.find('<br/>')
                     dato=blockquote[:index_i]
+                    
+                    if len(re.findall(', "', dato)) > 1:
+                        print('Revisar separación:',url)
+                    
                     dic['autores']=dato[:dato.find(', "')]
                     dic['nombre']=dato[dato.find(', "')+3:dato.rfind('. En:')].strip().rstrip('"')
                     dic['lugar']=dato[dato.rfind('. En:')+5:].strip()
