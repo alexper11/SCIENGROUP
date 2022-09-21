@@ -12,12 +12,12 @@ class Articulos(Base):
     lugar = Column(String(1000), nullable=True)
     revista = Column(String(1000), nullable=True)
     issn = Column(String(500), nullable=True)
-    fecha = Column(String(80), nullable=True)
-    volumen = Column(String(80), nullable=True)
-    fasciculo = Column(String(80), nullable=True)
+    fecha = Column(String(100), nullable=True)
+    volumen = Column(String(100), nullable=True)
+    fasciculo = Column(String(100), nullable=True)
     paginas = Column(String(80), nullable=True)
     doi = Column(String(1000), nullable=True)
-    autores = Column(String(6000), nullable=False)       
+    autores = Column(String(6000), nullable=True)       
     
     def __init__(self, **kwargs):
         

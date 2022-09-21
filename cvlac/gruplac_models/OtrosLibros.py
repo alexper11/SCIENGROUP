@@ -9,12 +9,12 @@ class OtrosLibros(Base):
     verificado = Column(Boolean,unique=False, default=True)
     tipo = Column(String(200), nullable=True)
     nombre = Column(String(1500), nullable=True)
-    lugar = Column(String(100), nullable=True)
+    lugar = Column(String(200), nullable=True)
     fecha = Column(String(100), nullable=True)
     isbn = Column(String(500), nullable=True)
     volumen = Column(String(80), nullable=True)
     paginas = Column(String(80), nullable=True)
-    editorial = Column(String(200), nullable=True)
+    editorial = Column(String(300), nullable=True)
     autores = Column(String(6000), nullable=True)       
     
     def __init__(self, **kwargs):

@@ -21,7 +21,7 @@ from cvlac.cvlac_models.Software import Software
 from cvlac.cvlac_models.Prototipo import Prototipo
 from cvlac.cvlac_models.MetaDB import MetaDB
 
-def create_db():
+def create_cvlac_db():
     
     if not database_exists(engine.url):
         create_database(engine.url)
