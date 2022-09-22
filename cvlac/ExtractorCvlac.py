@@ -155,8 +155,9 @@ class ExtractorCvlac():
                     dato=blockquote[:index_i]
                     
                     if len(re.findall(', "', dato)) > 1:
-                        print('Revisar separación:',url)
-                    
+                        print('Revisar separación:',url)#oeoeoe
+                        
+                    #oeoeoeoe
                     dic['autores']=dato[:dato.find(', "')].strip()
                     dic['nombre']=dato[dato.find(', "')+3:dato.rfind('. En:')].strip().rstrip('"')
                     dic['lugar']=dato[dato.rfind('. En:')+5:].strip()
