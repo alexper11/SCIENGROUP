@@ -553,7 +553,7 @@ class ExtractorCvlac():
                     for i,item in enumerate(list_datos):
                         if i == 0:
                             try:
-                                index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                index1=re.search('(?s:.*)[A-Z\u00C0-\u00DC\],|(?s:.*)-,',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
                             except:
                                 index1=0
                             dic['autor'] = item[:index1].strip()
@@ -605,7 +605,7 @@ class ExtractorCvlac():
                             for i,item in enumerate(list_datos):
                                 if i == 0:
                                     try:
-                                        index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                        index1=re.search('(?s:.*)[A-Z\u00C0-\u00DC\],|(?s:.*)-,',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
                                     except:
                                         index1=0
                                     dic['autor'] = item[:index1].strip()
@@ -653,7 +653,7 @@ class ExtractorCvlac():
                     for i,item in enumerate(list_datos):
                         if i == 0:
                             try:
-                                index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                index1=re.search('(?s:.*)[A-Z\u00C0-\u00DC\],|(?s:.*)-,',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
                             except:
                                 index1=0
                             dic['autor'] = item[:index1].strip()
@@ -701,7 +701,7 @@ class ExtractorCvlac():
                     for i,item in enumerate(list_datos):
                         if i == 0:
                             try:
-                                index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                index1=re.search('(?s:.*)[A-Z\u00C0-\u00DC\],|(?s:.*)-,',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
                             except:
                                 index1=0
                             dic['autores'] = item[:index1].strip()
@@ -747,7 +747,7 @@ class ExtractorCvlac():
                             for i,item in enumerate(list_datos):
                                 if i == 0:
                                     try:
-                                        index1=re.search('(?s:.*)[A-Z],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                        index1=re.search('(?s:.*)[A-Z\u00C0-\u00DC\],|(?s:.*)-,',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
                                     except:
                                         index1=0
                                     dic['autor'] = item[:index1].strip()
