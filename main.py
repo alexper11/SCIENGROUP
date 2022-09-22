@@ -67,22 +67,22 @@ if __name__ == '__main__':
     ########################
     #MODULO CVLAC
     ########################
-    """
+    
     sys.path.append(".")
-    #create_cvlac_db()
-    create_gruplac_db()
+    create_cvlac_db()
+    #create_gruplac_db()
     #create_scopus_db()
     print('Bases de datos creadas')
     
     Extractor=ExtractorGruplac()
     #para este caso el parametro de entrada es la url del buscador scienti para el departamento del Cauca
     lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')
-    """
+    
     ######################
     #Extraccion de tablas CVLAC
     ######################
     
-    """print('setting grup attributes...')
+    print('setting grup attributes...')
     Extractor.set_grup_attrs(lista_gruplac)
     
     print('updating cvlacdb...')
@@ -145,12 +145,12 @@ if __name__ == '__main__':
     
     tecnologicos=TecnologicosController()
     tecnologicos.insert_df(Extractor.grup_tecnologicos.drop_duplicates(ignore_index=True))
-    """
+    
     ######################
     #Extraccion de tablas GRUPLAC
     ######################
-    
-    """print('setting perfil attributes')
+    """
+    print('setting perfil attributes')
     Extractor.set_perfil_attrs(lista_gruplac)
     
     print('updating gruplacdb...')
@@ -218,7 +218,8 @@ if __name__ == '__main__':
     plantapilotog.insert_df(Extractor.perfil_planta_piloto)
 
     
-    del Extractor"""
+    del Extractor
+    """
     
     ########################
     #SCOPUS
@@ -275,105 +276,4 @@ if __name__ == '__main__':
     scientopy = Scientopy(API_KEY,INST_TOKEN)
     input_df = scientopy.scopus_preprocessed_df('"linked open data"')
     input_df.to_csv('papersPreprocessed.csv',index=False)
-    """
-
-
- 
-    ##Pruebas para tablas individuales
-
-    #prueba a tablas individuales.. dentro del main
-    Extractor=ExtractorGruplac()
-    
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000626252'
-    #perfil de cristian figueroa:
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
-    #perfil de gustavo ramirtez:
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
-    #perfil gruplac telematica:
-    #url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160'
-    #url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002153'
-
-    #empresa abse tec:
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000373770'
-    #innovacion empresarial:
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000523496'
-    #prototipo
-    #url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000373770'
-    #urls cvlac:
-    list_url=['https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013021',
-    'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001427333',
-    'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368',
-    'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013056',
-    'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000012963',
-    'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000004900']
-    #urls gruplac:
-    
-    list_url=['https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160',
-    'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000015570']
-    
-    list_url=['https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000004672',
-    'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002153',
-    'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001014',
-    'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002726',
-    'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001162',
-    'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160']
-    list_url=['https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368']
-    
-    for url in list_url:
-        dom=get_lxml(url)
-        df_prueba=Extractor.get_articulo(dom,url)  
-    
-    df_prueba.to_csv('prueba.csv',index=False)
-
-   
-
-
-
-
-
-
-
-
-    ##############
-    #DEMOS PARA PRUEBAS
-    ##############
-    """
-    from cvlac.cvlac_models.DBmodel import create_db
-    from cvlac.cvlac_controllers.ArticulosController import ArticulosController
-
-
-    ############################
-    #DEMO CVLAC
-    ############################
-    print('Ejecutando Demo cvlac...')
-    Extractor=ExtractorGruplac()
-    url='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013056'
-    dom=get_lxml(url)
-    df=Extractor.get_articulo(dom,url)
-    print("Extracción supo")
-    ######################
-    sys.path.append(".")
-    #######################  
-    create_db()
-    print("Creacion db supo")
-    articulos=ArticulosController()
-    articulos.insert_df(df)
-    print("Inserción supo")
-    
-    #articulos.delete_idcvlac('0000013056')
-    #print('borrado supo')
-    
-    del Extractor
-    
-    ###########################
-    #DEMO SCOPUS
-    ###########################
-    
-    API_KEY=""
-    INST_TOKEN=""
-    API_KEY, INST_TOKEN = read_key()
-    print('Ejecutando Demo Scopus...')
-    ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
-    df_productos=ExtractorS.get_articles_full([7004506288])
-    display(df_productos['titulo'].to_string())
     """
