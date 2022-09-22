@@ -153,25 +153,34 @@ class ExtractorCvlac():
                     blockquote=re.sub('</blockquote>|<blockquote>',''," ".join(str(blockquote).split())).replace('&amp;','&')
                     index_i=blockquote.find('<br/>')
                     dato=blockquote[:index_i]
-                    dic['autores']=dato[:dato.find(', "')]
+                    
+                    if len(re.findall(', "', dato)) > 1:
+                        print('Revisar separación:',url)#oeoeoe
+                        
+                    #oeoeoeoe
+                    dic['autores']=dato[:dato.find(', "')].strip()
                     dic['nombre']=dato[dato.find(', "')+3:dato.rfind('. En:')].strip().rstrip('"')
                     dic['lugar']=dato[dato.rfind('. En:')+5:].strip()
                     list_datos=re.split('<i>|</i>|<b>|</b>',blockquote[index_i:].replace('<br/>',''))                    
                     dic['revista']=list_datos[0].strip()
                     list_datos.pop(0)
-                    for dato in list_datos:
+                    for i,dato in enumerate(list_datos):
                         dato=dato.replace('<br/>','')
                         if dato in dic:                                                        
                             if dato != 'fasc.':
                                 dato=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/','',dato)            
-                                dic[dato]=(list_datos[list_datos.index(dato)+1]).strip()
-                            else:
-                                index_pg=dato.rfind('p.')
-                                print(dato)
-                                list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])                                                         
-                                dic['fasc.']=dato[:index_pg].strip()                 
-                                dic['p.']=list_fasc[1].strip()
-                                dic['fecha.']=list_fasc[2].replace(',','').strip()
+                                dic[dato]=(list_datos[i+1]).strip()
+                            else:                                
+                                index_pg=list_datos[i+1].rfind('p.')
+                                dic['fasc.']=list_datos[i+1][:index_pg]
+                                dato2=list_datos[i+1][index_pg+2:].strip().rstrip(',')
+                                index_fe=dato2.rfind(',')
+                                dic['p.']=dato2[:index_fe].strip()
+                                dic['fecha.']=dato2[index_fe+1:]
+                                #list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])                                                         
+                                #dic['fasc.']=dato[:index_pg].strip()                 
+                                #dic['p.']=list_fasc[1].strip()
+                                #dic['fecha.']=list_fasc[2].replace(',','').strip()
                     
                     dic=pd.DataFrame([dict(zip(list(self.articulos.columns),dic.values()))])                                
                     self.articulos = almacena_df( self.articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                   

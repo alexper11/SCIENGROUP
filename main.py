@@ -67,6 +67,7 @@ if __name__ == '__main__':
     ########################
     #MODULO CVLAC
     ########################
+    """
     sys.path.append(".")
     #create_cvlac_db()
     create_gruplac_db()
@@ -76,12 +77,12 @@ if __name__ == '__main__':
     Extractor=ExtractorGruplac()
     #para este caso el parametro de entrada es la url del buscador scienti para el departamento del Cauca
     lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')
-    
+    """
     ######################
     #Extraccion de tablas CVLAC
     ######################
-    """
-    print('setting grup attributes...')
+    
+    """print('setting grup attributes...')
     Extractor.set_grup_attrs(lista_gruplac)
     
     print('updating cvlacdb...')
@@ -149,7 +150,7 @@ if __name__ == '__main__':
     #Extraccion de tablas GRUPLAC
     ######################
     
-    print('setting perfil attributes')
+    """print('setting perfil attributes')
     Extractor.set_perfil_attrs(lista_gruplac)
     
     print('updating gruplacdb...')
@@ -217,7 +218,7 @@ if __name__ == '__main__':
     plantapilotog.insert_df(Extractor.perfil_planta_piloto)
 
     
-    del Extractor
+    del Extractor"""
     
     ########################
     #SCOPUS
@@ -277,15 +278,6 @@ if __name__ == '__main__':
     """
 
 
-
-
-
-
-
-
-
-
-   
  
     ##Pruebas para tablas individuales
 
@@ -325,11 +317,11 @@ if __name__ == '__main__':
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002726',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001162',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160']
-    
+    list_url=['https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368']
     
     for url in list_url:
         dom=get_lxml(url)
-        df_prueba=Extractor.get_perfil_integrantes(dom,url)  
+        df_prueba=Extractor.get_articulo(dom,url)  
     
     df_prueba.to_csv('prueba.csv',index=False)
 
