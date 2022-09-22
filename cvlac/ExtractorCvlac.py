@@ -164,19 +164,23 @@ class ExtractorCvlac():
                     list_datos=re.split('<i>|</i>|<b>|</b>',blockquote[index_i:].replace('<br/>',''))                    
                     dic['revista']=list_datos[0].strip()
                     list_datos.pop(0)
-                    for dato in list_datos:
+                    for i,dato in enumerate(list_datos):
                         dato=dato.replace('<br/>','')
-                        if dato in dic:                                                                                       
+                        if dato in dic:                                                        
                             if dato != 'fasc.':
                                 dato=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/','',dato)            
-                                dic[dato]=(list_datos[list_datos.index(dato)+1]).strip()
-                            else:
-                                ##############
-                                #CORREGIR SPLIT PROBLEMA p. , 0001674493
-                                list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])                                                         
-                                dic['fasc.']=list_fasc[0].strip()                 
-                                dic['p.']=list_fasc[1].strip()
-                                dic['fecha.']=list_fasc[2].replace(',','').strip()
+                                dic[dato]=(list_datos[i+1]).strip()
+                            else:                                
+                                index_pg=list_datos[i+1].rfind('p.')
+                                dic['fasc.']=list_datos[i+1][:index_pg]
+                                dato2=list_datos[i+1][index_pg+2:].strip().rstrip(',')
+                                index_fe=dato2.rfind(',')
+                                dic['p.']=dato2[:index_fe].strip()
+                                dic['fecha.']=dato2[index_fe+1:]
+                                #list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])                                                         
+                                #dic['fasc.']=dato[:index_pg].strip()                 
+                                #dic['p.']=list_fasc[1].strip()
+                                #dic['fecha.']=list_fasc[2].replace(',','').strip()
                     
                     dic=pd.DataFrame([dict(zip(list(self.articulos.columns),dic.values()))])                                
                     self.articulos = almacena_df( self.articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                   
@@ -561,15 +565,15 @@ class ExtractorCvlac():
                         else :
                             dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
                     cont_aux=dic['contrato/registro'].split('. En:') 
-                    dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
+                    dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
                     try:     
                             lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                             index_datos=re.search(',(\d{4})',lugg).start()                        
                     except :
                         index_datos= -1
                     dic['lugar']=lugg[:index_datos].strip()
-                    dic['fecha']=lugg[index_datos+1:].rstrip('.').strip().rstrip(',')
-                    dic['plataforma']=dic['plataforma'].rstrip('.').strip().rstrip(',')
+                    dic['fecha']=lugg[index_datos+1:].strip()
+                    
                     dic=pd.DataFrame([dict(zip(list(self.software.columns),dic.values()))])
                     self.software = almacena_df(self.software,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)
                     
@@ -613,7 +617,7 @@ class ExtractorCvlac():
                                 else :
                                     dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
                             cont_aux=dic['contrato/registro'].split('. En:') 
-                            dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
+                            dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
                             try:     
                                     lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                                     index_datos=re.search(',(\d{4})',lugg).start()                        
