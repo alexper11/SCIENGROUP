@@ -153,11 +153,7 @@ class ExtractorCvlac():
                     blockquote=re.sub('</blockquote>|<blockquote>',''," ".join(str(blockquote).split())).replace('&amp;','&')
                     index_i=blockquote.find('<br/>')
                     dato=blockquote[:index_i]
-                    
-                    if len(re.findall(', "', dato)) > 1:
-                        print('Revisar separación:',url)
-                    
-                    dic['autores']=dato[:dato.find(', "')].strip()
+                    dic['autores']=dato[:dato.find(', "')]
                     dic['nombre']=dato[dato.find(', "')+3:dato.rfind('. En:')].strip().rstrip('"')
                     dic['lugar']=dato[dato.rfind('. En:')+5:].strip()
                     list_datos=re.split('<i>|</i>|<b>|</b>',blockquote[index_i:].replace('<br/>',''))                    
@@ -165,15 +161,15 @@ class ExtractorCvlac():
                     list_datos.pop(0)
                     for dato in list_datos:
                         dato=dato.replace('<br/>','')
-                        if dato in dic:                                                                                       
+                        if dato in dic:                                                        
                             if dato != 'fasc.':
                                 dato=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/','',dato)            
                                 dic[dato]=(list_datos[list_datos.index(dato)+1]).strip()
                             else:
-                                ##############
-                                #CORREGIR SPLIT PROBLEMA p. , 0001674493
+                                index_pg=dato.rfind('p.')
+                                print(dato)
                                 list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])                                                         
-                                dic['fasc.']=list_fasc[0].strip()                 
+                                dic['fasc.']=dato[:index_pg].strip()                 
                                 dic['p.']=list_fasc[1].strip()
                                 dic['fecha.']=list_fasc[2].replace(',','').strip()
                     
@@ -560,15 +556,15 @@ class ExtractorCvlac():
                         else :
                             dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
                     cont_aux=dic['contrato/registro'].split('. En:') 
-                    dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
+                    dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
                     try:     
                             lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                             index_datos=re.search(',(\d{4})',lugg).start()                        
                     except :
                         index_datos= -1
                     dic['lugar']=lugg[:index_datos].strip()
-                    dic['fecha']=lugg[index_datos+1:].rstrip('.').strip().rstrip(',')
-                    dic['plataforma']=dic['plataforma'].rstrip('.').strip().rstrip(',')
+                    dic['fecha']=lugg[index_datos+1:].strip()
+                    
                     dic=pd.DataFrame([dict(zip(list(self.software.columns),dic.values()))])
                     self.software = almacena_df(self.software,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)
                     
@@ -612,7 +608,7 @@ class ExtractorCvlac():
                                 else :
                                     dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
                             cont_aux=dic['contrato/registro'].split('. En:') 
-                            dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
+                            dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
                             try:     
                                     lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                                     index_datos=re.search(',(\d{4})',lugg).start()                        
