@@ -264,8 +264,7 @@ class ExtractorGruplac(ExtractorCvlac):
             pass  
         return self.perfil_lineas
     
-    def get_perfil_integrantes(self, soup, url):
-        dfs=pd.DataFrame(columns=self.perfil_integrantes.keys())               
+    def get_perfil_integrantes(self, soup, url):             
         try:            
             child=soup.find('td', attrs={'class':'celdaEncabezado'},string='Integrantes del grupo').find_parent('table')
             if(child!=None):
@@ -276,7 +275,7 @@ class ExtractorGruplac(ExtractorCvlac):
                     list_url.append(link['href'])                
                 dfs.insert(0, 'url', list_url)
                 fid = url.find('=')
-                dfs.insert(0, 'idgruplac', url[fid+1:])                              
+                dfs.insert(0, 'idgruplac', url[fid+1:])                          
                 dfs.columns=list(self.perfil_integrantes.columns)
                 dfs['integrante']=dfs['integrante'].str.replace(r'[^a-zA-Z\u00C0-\u017F\s]+','', regex=True).str.strip()           
                 self.perfil_integrantes= almacena_df(self.perfil_integrantes,dfs)
