@@ -86,64 +86,64 @@ if __name__ == '__main__':
     
     print('updating cvlacdb...')
     articulos=ArticulosController()
-    articulos.insert_df(Extractor.grup_articulos.reset_index(drop=True))
+    articulos.insert_df(Extractor.grup_articulos.drop_duplicates(ignore_index=True))
     
     actuacion = ActuacionController()
-    actuacion.insert_df(Extractor.grup_actuacion.reset_index(drop=True))
+    actuacion.insert_df(Extractor.grup_actuacion.drop_duplicates(ignore_index=True))
     
     basico=BasicoController()
-    basico.insert_df(Extractor.grup_basico.reset_index(drop=True))
+    basico.insert_df(Extractor.grup_basico.drop_duplicates(ignore_index=True))
     
     evaluador=EvaluadorController()
-    evaluador.insert_df(Extractor.grup_evaluador.reset_index(drop=True))
+    evaluador.insert_df(Extractor.grup_evaluador.drop_duplicates(ignore_index=True))
     
     identificadores=IdentificadoresController()
-    identificadores.insert_df(Extractor.grup_identificadores.reset_index(drop=True))
+    identificadores.insert_df(Extractor.grup_identificadores.drop_duplicates(ignore_index=True))
     
     idioma=IdiomaController()
-    idioma.insert_df(Extractor.grup_idioma.reset_index(drop=True))
+    idioma.insert_df(Extractor.grup_idioma.drop_duplicates(ignore_index=True))
     
     investigacion=InvestigacionController()
-    investigacion.insert_df(Extractor.grup_investiga.reset_index(drop=True))
+    investigacion.insert_df(Extractor.grup_investiga.drop_duplicates(ignore_index=True))
     
     jurados=JuradosController()
-    jurados.insert_df(Extractor.grup_jurado.reset_index(drop=True))
+    jurados.insert_df(Extractor.grup_jurado.drop_duplicates(ignore_index=True))
     
     libros=LibrosController()
-    libros.insert_df(Extractor.grup_libros.reset_index(drop=True))
+    libros.insert_df(Extractor.grup_libros.drop_duplicates(ignore_index=True))
     
     reconocimiento=ReconocimientoController()
-    reconocimiento.insert_df(Extractor.grup_reconocimiento.reset_index(drop=True))
+    reconocimiento.insert_df(Extractor.grup_reconocimiento.drop_duplicates(ignore_index=True))
     
     redes=RedesController()
-    redes.insert_df(Extractor.grup_redes.reset_index(drop=True))
+    redes.insert_df(Extractor.grup_redes.drop_duplicates(ignore_index=True))
     
     estancias=EstanciasController()
-    estancias.insert_df(Extractor.grup_estancias.reset_index(drop=True))
+    estancias.insert_df(Extractor.grup_estancias.drop_duplicates(ignore_index=True))
     
     academica=AcademicaController()
-    academica.insert_df(Extractor.grup_academica.reset_index(drop=True))
+    academica.insert_df(Extractor.grup_academica.drop_duplicates(ignore_index=True))
     
     complementaria=ComplementariaController()
-    complementaria.insert_df(Extractor.grup_complementaria.reset_index(drop=True))
+    complementaria.insert_df(Extractor.grup_complementaria.drop_duplicates(ignore_index=True))
     
     caplibros=CaplibrosController()
-    caplibros.insert_df(Extractor.grup_caplibros.reset_index(drop=True))
+    caplibros.insert_df(Extractor.grup_caplibros.drop_duplicates(ignore_index=True))
     
     empresatec=EmpresaTecnologicaController()
-    empresatec.insert_df(Extractor.grup_empresa_tecnologica.reset_index(drop=True))
+    empresatec.insert_df(Extractor.grup_empresa_tecnologica.drop_duplicates(ignore_index=True))
     
     innovaempresa=InnovacionEmpresarialController()
-    innovaempresa.insert_df(Extractor.grup_innovacion_empresarial.reset_index(drop=True))
+    innovaempresa.insert_df(Extractor.grup_innovacion_empresarial.drop_duplicates(ignore_index=True))
     
     prototipo=PrototipoController()
-    prototipo.insert_df(Extractor.grup_prototipo.reset_index(drop=True))
+    prototipo.insert_df(Extractor.grup_prototipo.drop_duplicates(ignore_index=True))
     
     software=SoftwareController()
-    software.insert_df(Extractor.grup_software.reset_index(drop=True))
+    software.insert_df(Extractor.grup_software.drop_duplicates(ignore_index=True))
     
     tecnologicos=TecnologicosController()
-    tecnologicos.insert_df(Extractor.grup_tecnologicos.reset_index(drop=True))
+    tecnologicos.insert_df(Extractor.grup_tecnologicos.drop_duplicates(ignore_index=True))
     """
     ######################
     #Extraccion de tablas GRUPLAC
