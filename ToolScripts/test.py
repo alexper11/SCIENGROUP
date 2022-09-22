@@ -65,8 +65,8 @@ else:
     print("no es lista")
 """
 #nombre=datos
+"""
 
-import re
 import pandas as pd
 url='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000003625'
 
@@ -75,3 +75,8 @@ dfs = pd.read_html(url, header=1, match=r'^Integrantes del grupo$')
 #dfs=dfs[0].set_index("Datos básicos").T.reset_index(drop=True)
 #dfs.columns.name=None
 print(dfs[0])#.rename(columns=dfs[0].iloc[0]))#.rename(columns=dfs[4].iloc[1]).drop(labels=[0,1],axis=0))
+"""
+import re
+dato='"NOE ALBAN LOPEZ, ""EVALUACIÓN DE DIFERENTES, "FORMULACIONES DE COMPOSTAJE A PARTIR DE RESIDUOS DE COSECHA DE TOMATE (Solanum lycopersicum)" . En: Colombia" '
+if len(re.findall(', "', dato)) > 1:
+    print('ok')
