@@ -8,7 +8,7 @@ from scopus.readKey import read_key
 import pandas as pd
 import sys
 
-"""from cvlac.cvlac_models.DBmodel import create_cvlac_db
+from cvlac.cvlac_models.DBmodel import create_cvlac_db
 from cvlac.cvlac_controllers.ActuacionController import ActuacionController
 from cvlac.cvlac_controllers.ArticulosController import ArticulosController
 from cvlac.cvlac_controllers.BasicoController import BasicoController
@@ -59,7 +59,7 @@ from cvlac.gruplac_controllers.MetaGruplacDBController import MetaGruplacDBContr
 from scopus.models.DBmodel import create_scopus_db
 from scopus.controllers.AutoresController import AutoresController
 from scopus.controllers.ProductosController import ProductosController  
-from scopus.controllers.MetaDBScoController import MetaDBScoController   """                  
+from scopus.controllers.MetaDBScoController import MetaDBScoController                  
 
 
 if __name__ == '__main__':
@@ -67,10 +67,9 @@ if __name__ == '__main__':
     ########################
     #MODULO CVLAC
     ########################
-    """
     sys.path.append(".")
-    create_cvlac_db()
-    #create_gruplac_db()
+    #create_cvlac_db()
+    create_gruplac_db()
     #create_scopus_db()
     print('Bases de datos creadas')
     
@@ -81,7 +80,7 @@ if __name__ == '__main__':
     ######################
     #Extraccion de tablas CVLAC
     ######################
-    
+    """
     print('setting grup attributes...')
     Extractor.set_grup_attrs(lista_gruplac)
     
@@ -149,7 +148,7 @@ if __name__ == '__main__':
     ######################
     #Extraccion de tablas GRUPLAC
     ######################
-    """
+    
     print('setting perfil attributes')
     Extractor.set_perfil_attrs(lista_gruplac)
     
@@ -219,7 +218,7 @@ if __name__ == '__main__':
 
     
     del Extractor
-    """
+    
     ########################
     #SCOPUS
     ########################
@@ -286,7 +285,7 @@ if __name__ == '__main__':
 
 
 
-    
+   
  
     ##Pruebas para tablas individuales
 
@@ -320,20 +319,21 @@ if __name__ == '__main__':
     list_url=['https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000015570']
     
-    """list_url=['https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000004672',
+    list_url=['https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000004672',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002153',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001014',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002726',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001162',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160']
-    list_url=['https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000061344']"""
+    
+    
     for url in list_url:
         dom=get_lxml(url)
         df_prueba=Extractor.get_perfil_integrantes(dom,url)  
     
     df_prueba.to_csv('prueba.csv',index=False)
 
-    
+   
 
 
 
