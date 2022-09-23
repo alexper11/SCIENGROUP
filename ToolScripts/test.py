@@ -80,3 +80,6 @@ import re
 dato='"NOE ALBAN LOPEZ, ""EVALUACIÓN DE DIFERENTES, "FORMULACIONES DE COMPOSTAJE A PARTIR DE RESIDUOS DE COSECHA DE TOMATE (Solanum lycopersicum)" . En: Colombia" '
 if len(re.findall(', "', dato)) > 1:
     print('ok')
+
+c='asdasd....,,,,   '
+print(c.rstrip('. ,'))

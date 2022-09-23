@@ -563,16 +563,16 @@ class ExtractorCvlac():
                             dic['autor'] = item[:index1].strip()
                             dic['nombre'] = item[index1+1:].strip()
                         else :
-                            dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
+                            dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').rstrip('. ,').strip()
                     cont_aux=dic['contrato/registro'].split('. En:') 
-                    dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
+                    dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
                     try:     
                             lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                             index_datos=re.search(',(\d{4})',lugg).start()                        
                     except :
                         index_datos= -1
                     dic['lugar']=lugg[:index_datos].strip()
-                    dic['fecha']=lugg[index_datos+1:].strip()
+                    dic['fecha']=lugg[index_datos+1:].rstrip('. ,').strip()
                     
                     dic=pd.DataFrame([dict(zip(list(self.software.columns),dic.values()))])
                     self.software = almacena_df(self.software,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)
@@ -665,7 +665,7 @@ class ExtractorCvlac():
                         else :
                             dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
                     cont_aux=dic['contrato/registro'].split('. En:') 
-                    dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
+                    dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
                     try:     
                             lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                             index_datos=re.search(',(\d{4})',lugg).start()                        
@@ -719,7 +719,7 @@ class ExtractorCvlac():
                             else: pass
 
                     dic=pd.DataFrame([dict(zip(list(self.empresa_tecnologica.columns),dic.values()))])
-                    self.empresa_tecnologica = almacena_df(self.empresa_tecnologica,dic)
+                    self.empresa_tecnologica = almacena_df(self.empresa_tecnologica,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)
                       
         except AttributeError:
             pass            
