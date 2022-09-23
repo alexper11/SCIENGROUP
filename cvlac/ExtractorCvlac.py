@@ -172,7 +172,7 @@ class ExtractorCvlac():
                                 dic[dato]=(list_datos[i+1]).strip()
                             else:                                
                                 index_pg=list_datos[i+1].rfind('p.')
-                                dic['fasc.']=list_datos[i+1][:index_pg]
+                                dic['fasc.']=list_datos[i+1][:index_pg].strip()
                                 dato2=list_datos[i+1][index_pg+2:].strip().rstrip(',')
                                 index_fe=dato2.rfind(',')
                                 dic['p.']=dato2[:index_fe].strip()
@@ -191,7 +191,6 @@ class ExtractorCvlac():
         except:
             pass   
         return self.articulos
-
 
     def get_basico(self, soup, url):
         dic2={'IDCVLAC':'','Categoría':'','Nombre':'','Nombre en citaciones':'','Nacionalidad':'','Sexo':''}         
