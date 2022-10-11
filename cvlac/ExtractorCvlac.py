@@ -650,7 +650,7 @@ class ExtractorCvlac():
                         dic['verificado']=False
                     else:
                         dic['verificado']=True
-                    dic['tipo']=tipo.find('b').text
+                    dic['tipo']=tipo.find('b').text.strip()
                     
                     dic['idcvlac'] = url[(url.find('='))+1:]
                     for i,item in enumerate(list_datos):
@@ -680,6 +680,7 @@ class ExtractorCvlac():
             pass
         df_tecnologicos = self.tecnologicos   
         return df_tecnologicos
+        
 
     def get_empresa_tecnologica(self, soup, url):
         try:
