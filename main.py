@@ -69,7 +69,7 @@ if __name__ == '__main__':
     ########################
     
     sys.path.append(".")
-    create_cvlac_db()
+    #create_cvlac_db()
     #create_gruplac_db()
     #create_scopus_db()
     print('Bases de datos creadas')

@@ -58,12 +58,12 @@ for a in links_total:
                         pass
                     if h3s!=None:                
                         titulo_c=str(h3s.contents[0]).strip()
-                        if titulo_c == "Innovación generada en la gestión empresarial":
-                            print(url_cvlac)
-                        if titulo_c in lista_cvlacs:
-                            pass
-                        else:
-                            lista_cvlacs.append(titulo_c)
-                         
-print(lista_cvlacs)
-print(len(lista_cvlacs)) 
+                        if titulo_c == "Productos tecnológicos":
+                            print(url_cvlac)    
+                            if titulo_c in lista_cvlacs:
+                                pass
+                            else:
+                                lista_cvlacs.append(titulo_c)
+                            
+#print(lista_cvlacs)
+#print(len(lista_cvlacs)) 
