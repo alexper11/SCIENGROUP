@@ -346,7 +346,7 @@ class ExtractorCvlac():
                             x=0 
                             for i in j[0:2]:
                                 dic2['idcvlac'] = url[(url.find('='))+1:]
-                                dic2[str(list1[x])]=("".join(i)).strip()                            
+                                dic2[str(list1[x])]=("".join(i)).rstrip(', .').strip()                            
                                 x=x+1     
                             dic2=pd.DataFrame([dic2]) 
                             self.investigacion = almacena_df(self.investigacion,dic2)
@@ -366,16 +366,15 @@ class ExtractorCvlac():
                     quote_text_clear=quote_text_clear.replace('&amp;','&')               
                     list_datos=(re.split('<i>|</i>|<b>|</b>',quote_text_clear))
                     dic_aux['IDCVLAC'] = url[(url.find('='))+1:]
-                    dic_aux['Nombre'] = (list_datos[0]).strip()                   
+                    dic_aux['Nombre'] = list_datos[0].rstrip(', ').strip()                   
                     for dato in list_datos:                            
                         for key in dic_aux:                                                              
                             if(key == dato):
-                                dic_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip() 
+                                dic_aux[dato]=(list_datos[list_datos.index(dato)+1]).rstrip(', .').strip() 
                     
                     dic_aux=pd.DataFrame([dict(zip(list(self.jurados.columns),dic_aux.values()))])
                     self.jurados = almacena_df(self.jurados,dic_aux)
-                    
-                    #dic_aux={}
+
         except AttributeError:
             pass
         df_jurado= self.jurados
@@ -442,7 +441,7 @@ class ExtractorCvlac():
                     for div_i in li_idioma:
                         fecha=(div_i.text).rfind("-")
                         dic2['idcvlac'] = url[(url.find('='))+1:]
-                        dic2['nombre'] = ((div_i.text)[:fecha]).strip() 
+                        dic2['nombre'] = ((div_i.text)[:fecha]).rstrip(', .').strip() 
                         dic2['fecha'] = ((div_i.text)[fecha+1:]).strip() 
                         dic2=pd.DataFrame([dic2])                      
                         self.reconocimiento = almacena_df(self.reconocimiento,dic2)
@@ -612,11 +611,11 @@ class ExtractorCvlac():
                                     except:
                                         index1=0
                                     dic['autor'] = item[:index1].strip()
-                                    dic['nombre'] = item[index1+1:].strip()
+                                    dic['nombre'] = item[index1+1:].rstrip(', .').strip()
                                 else :
                                     dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
                             cont_aux=dic['contrato/registro'].split('. En:') 
-                            dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
+                            dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
                             try:     
                                     lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                                     index_datos=re.search(',(\d{4})',lugg).start()                        
