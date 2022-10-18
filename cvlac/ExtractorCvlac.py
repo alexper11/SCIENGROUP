@@ -1,6 +1,9 @@
-import pandas as pd
-from cvlac.util import almacena, almacena_df
 import re
+
+import pandas as pd
+
+from cvlac.util import almacena, almacena_df
+
 
 class ExtractorCvlac():
     

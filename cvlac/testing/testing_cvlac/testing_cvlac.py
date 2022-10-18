@@ -1,9 +1,10 @@
+import unittest
+
+import numpy as np
+import pandas as pd
 
 from cvlac.ExtractorCvlac import ExtractorCvlac
 from cvlac.util import get_lxml
-import pandas as pd
-import unittest
-import numpy as np
 
 """
 SQL QUERY:
@@ -384,19 +385,19 @@ def run_unittests():
 
     lxml_url2 = get_lxml(url2)
     df_auto2=Extractor.get_evaluador(lxml_url2,url2).astype(str)
-    #df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/evaluador2.csv', dtype='object', keep_default_na=False)
+    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/evaluador2.csv', dtype='object', keep_default_na=False)
     Extractor.evaluador = Extractor.evaluador.iloc[0:0]
 
     lxml_url3 = get_lxml(url3)
     df_auto3=Extractor.get_evaluador(lxml_url3,url3).astype(str)
-    #df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/evaluador3.csv', dtype='object', keep_default_na=False)
+    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/evaluador3.csv', dtype='object', keep_default_na=False)
 
     try:
         print('******************************************')
         print('Pruebas unitarias para tabla: evaluador')
         print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
-        #print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
-        #print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
     except Exception as e:
         print('Reporte: ')
         print(e)
