@@ -308,3 +308,96 @@ def run_unittests():
         print('Reporte: ')
         print(e)
         
+    ##########################
+    #Prueba tabla idioma
+    ##########################
+    url1='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000011720'
+    url2='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000185997'
+    url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000676446'
+    
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_idioma(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/idioma1.csv', dtype='object', keep_default_na=False)
+    Extractor.idioma = Extractor.idioma.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_idioma(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/idioma2.csv', dtype='object', keep_default_na=False)
+    Extractor.idioma = Extractor.idioma.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_idioma(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/idioma3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: idioma')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+    
+    ##########################
+    #Prueba tabla identificadores
+    ##########################
+    url1='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368'
+    url2='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001787051'
+    url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001343159'
+    
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_identificadores(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/identificadores1.csv', dtype='object', keep_default_na=False)
+    Extractor.identificadores = Extractor.identificadores.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_identificadores(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/identificadores2.csv', dtype='object', keep_default_na=False)
+    Extractor.identificadores = Extractor.identificadores.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_identificadores(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/identificadores3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: identificadores')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+    
+    ##########################
+    #Prueba tabla evaluador
+    ##########################
+    url1='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001378453'
+    url2='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000491012'
+    url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000011410'
+    
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_evaluador(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/evaluador1.csv', dtype='object', keep_default_na=False)
+    Extractor.evaluador = Extractor.evaluador.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_evaluador(lxml_url2,url2).astype(str)
+    #df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/evaluador2.csv', dtype='object', keep_default_na=False)
+    Extractor.evaluador = Extractor.evaluador.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_evaluador(lxml_url3,url3).astype(str)
+    #df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/evaluador3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: evaluador')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        #print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        #print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+
