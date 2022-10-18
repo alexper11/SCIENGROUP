@@ -286,13 +286,13 @@ class ExtractorCvlac():
                                         var=re.findall(r"(?s:.*), (\d{4}, \D+)",dato2)
                                         if isinstance(var,list) and len(var)!=0:
                                             index=dato2.rfind((var[0]))
-                                            dic2[dato]=dato2[:index]
-                                            dic2['fecha']=dato2[index:]
+                                            dic2[dato]=dato2[:index].rstrip(', .').strip()
+                                            dic2['fecha']=dato2[index:].strip()
                                         else:                                           
-                                            dic2[dato]=dato2
+                                            dic2[dato]=dato2.rstrip(', .').strip()
                                             dic2['fecha']=""
                                     else:
-                                        dic2[dato]=(list_datos[list_datos.index(dato)+1]).strip()   
+                                        dic2[dato]=(list_datos[list_datos.index(dato)+1]).rstrip(', .').strip()   
                                         
                         dic2=pd.DataFrame([dict(zip(list(self.evaluador.columns),dic2.values()))])
                         self.evaluador = almacena_df(self.evaluador,dic2)                 
