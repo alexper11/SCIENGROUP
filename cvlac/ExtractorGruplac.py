@@ -1,11 +1,13 @@
+import re
+import ssl
+
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+
 from cvlac.ExtractorCvlac import ExtractorCvlac
-from cvlac.util import almacena, almacena_df
-from cvlac.util import get_lxml
-import re
-import ssl
+from cvlac.util import almacena, almacena_df, get_lxml
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 class ExtractorGruplac(ExtractorCvlac):
@@ -67,6 +69,7 @@ class ExtractorGruplac(ExtractorCvlac):
         dire=[]
         r=''
         tries=3
+        url_inv=[]
         for i in range(tries):
             try:
                 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
@@ -129,12 +132,12 @@ class ExtractorGruplac(ExtractorCvlac):
         #limpiar atributos
         super().__init__()
             
-        return {"basico":df_basico,"articulos":df_articulos,"actuacion":df_actuacion,"idioma":df_idioma,
-                "investigacion":df_investiga,"reconocimiento":df_reconocimiento,"evaluador":df_evaluador,
-                "redes":df_redes,"identificadores":df_identifica,"libros":df_libros,"jurado":df_jurado,
-                "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica,
-                "caplibros":df_caplibros,"software":df_software,"prototipo":df_prototipo,"tecnologicos":df_tecnologicos,
-                "empresa_tecnologica":df_empresa,"innovacion_empresarial":df_innovacion}
+        return {"basico":df_basico,"articulos":df_articulos,"actuacion":df_actuacion,"idioma":df_idioma,                                #type: ignore    
+                "investigacion":df_investiga,"reconocimiento":df_reconocimiento,"evaluador":df_evaluador,                               #type: ignore
+                "redes":df_redes,"identificadores":df_identifica,"libros":df_libros,"jurado":df_jurado,                                 #type: ignore
+                "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica,                                   #type: ignore
+                "caplibros":df_caplibros,"software":df_software,"prototipo":df_prototipo,"tecnologicos":df_tecnologicos,                #type: ignore
+                "empresa_tecnologica":df_empresa,"innovacion_empresarial":df_innovacion}                                                #type: ignore
     
     
     def set_grup_attrs(self,gruplac_list):
@@ -213,7 +216,7 @@ class ExtractorGruplac(ExtractorCvlac):
                                 cells = row.findChildren('td')
                                 try:
                                     cells[1]=" ".join(cells[1].text.split())
-                                    dic2[re.sub('¿|\?','',cells[0].text.strip())]= cells[1]
+                                    dic2[re.sub('¿|\?','',cells[0].text.strip())]= cells[1] #type: ignore
                                 except AttributeError:
                                     print('error gruplac basico url: : ', url)        
                         dic2=pd.DataFrame([dict(zip(list(self.perfil_basico.columns),dic2.values()))])
@@ -425,7 +428,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','revista':'','issn':'','fecha':'','volumen':'','fasciculo':'','paginas':'','doi':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -450,7 +453,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
                            
                     dic=pd.DataFrame([dic])
-                    self.perfil_articulos = almacena_df(self.perfil_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                                      
+                    self.perfil_articulos = almacena_df(self.perfil_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)         #type: ignore                                             
             else:
                 raise Exception  
         except AttributeError:
@@ -467,7 +470,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','isbn':'','editorial':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -477,7 +480,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         elif i==1:
                             dic['nombre']=dato.lstrip(' : ')
                         elif i==2:
-                            separador=re.split('ISBN:|Ed\.',dato)                       
+                            separador=re.split('ISBN:|Ed\.',dato)                       #type: ignore    
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
                             dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
                             dic['isbn']=separador[1].strip().rstrip(',')
@@ -485,7 +488,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_libros = almacena_df(self.perfil_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True) 
+                    self.perfil_libros = almacena_df(self.perfil_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)  #type: ignore
                                          
             else:
                 raise Exception  
@@ -503,7 +506,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','capitulo':'','lugar':'','fecha':'','libro':'','isbn':'','volumen':'','paginas':'','editorial':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -523,7 +526,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             index_isbn=dato.rfind('ISBN:')                            
                             dic['libro']=dato[:index_isbn].strip()
                             dato=dato[index_isbn:]
-                            separador=re.split('Vol\.|págs:|Ed\.',dato)
+                            separador=re.split('Vol\.|págs:|Ed\.',dato) #type: ignore
                             dic['isbn']=separador[0][5:].rstrip(',').strip()
                             dic['volumen']=separador[1].rstrip(',').strip()
                             dic['paginas']=separador[2].rstrip(',').strip() 
@@ -531,7 +534,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         else:
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_caplibros = almacena_df(self.perfil_caplibros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
+                    self.perfil_caplibros = almacena_df(self.perfil_caplibros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)    #type: ignore   
             else:
                 raise Exception  
         except AttributeError:
@@ -548,7 +551,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','revista':'','issn':'','fecha':'','volumen':'','fasciculo':'','paginas':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -570,7 +573,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         else:
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_otros_articulos = almacena_df( self.perfil_otros_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                                     
+                    self.perfil_otros_articulos = almacena_df( self.perfil_otros_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)   #type: ignore                                                     
             else:
                 raise Exception  
         except AttributeError:
@@ -587,7 +590,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','isbn':'','volumen':'','paginas':'','editorial':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -597,7 +600,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         elif i==1:
                             dic['nombre']=dato.lstrip(' : ')
                         elif i==2:
-                            separador=re.split('ISBN:|vol:|págs:|Ed\.',dato)                       
+                            separador=re.split('ISBN:|vol:|págs:|Ed\.',dato)                       #type: ignore
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
                             dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip().rstrip(',')
                             dic['isbn']=separador[1].strip().rstrip(',')
@@ -607,7 +610,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()
                     dic=pd.DataFrame([dic])                                 
-                    self.perfil_otros_libros = almacena_df( self.perfil_otros_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                   
+                    self.perfil_otros_libros = almacena_df( self.perfil_otros_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)         #type: ignore                              
             else:
                 raise Exception  
         except AttributeError:
@@ -624,7 +627,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','institucion':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -660,7 +663,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','nombre_comercial':'','institucion':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -698,7 +701,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','institucion':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -734,7 +737,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','url':'','nombre_comercial':'','nombre_proyecto':'','institucion':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -777,7 +780,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','fecha':'','nit':'','fecha_registro':'','mercado':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -814,7 +817,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','institucion':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
@@ -850,7 +853,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 for tr in list_tr:
                     dic={'idgruplac':'','verificado':'','tipo':'','nombre':'','lugar':'','fecha':'','disponibilidad':'','nombre_comercial':'','institucion':'','autores':''}
                     dic['idgruplac']=url[fid+1:] 
-                    dic['verificado'] = False if tr.find('img')==None else True
+                    dic['verificado'] = False if tr.find('img')==None else True #type: ignore
                     tr=" ".join(str(tr).split())
                     list_datos=re.split('<strong>|</strong>|<br/>',tr)
                     list_datos.pop(0)
