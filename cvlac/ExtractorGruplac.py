@@ -709,7 +709,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         if i==0:
                             dic['tipo']=dato
                         elif i==1:
-                            dic['nombre']=dato.lstrip(' : ')
+                            dic['nombre']=dato.lstrip(' : ').rstrip('. ,')
                         elif i==2:
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('Disponibilidad:|Institución financiadora:',dato)                       
@@ -885,5 +885,5 @@ class ExtractorGruplac(ExtractorCvlac):
         return self.perfil_planta_piloto
 
 ##############
-    def __del__(self):
-        print('ExtractorGruplacList Object Destroyed')
+    #def __del__(self):
+        #print('ExtractorGruplacList Object Destroyed')
