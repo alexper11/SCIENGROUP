@@ -560,7 +560,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         if i==0:
                             dic['tipo']=dato
                         elif i==1:
-                            dic['nombre']=dato.replace(":","").strip()
+                            dic['nombre']=dato.replace(":","",1).strip()
                         elif i==2:
                             separador=re.split('ISSN:|vol:|fasc:|págs:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')]
@@ -572,7 +572,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['paginas']=separador[4].rstrip(',-').strip()                       
                         else:
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
-                    dic=pd.DataFrame([dic])                                 
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                            
                     self.perfil_otros_articulos = almacena_df( self.perfil_otros_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)   #type: ignore                                                     
             else:
                 raise Exception  
@@ -669,7 +669,7 @@ class ExtractorGruplac(ExtractorCvlac):
                     list_datos.pop(0)
                     for i,dato in enumerate(list_datos):                                                                                            
                         if i==0:
-                            dic['tipo']=dato
+                            dic['tipo']=dato.strip()
                         elif i==1:
                             dic['nombre']=dato.lstrip(' : ')
                         elif i==2:
