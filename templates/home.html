@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %}
+    {{ super() }}
+    Bienvenido
+{% endblock %}
+
+{% block content %}
+    {% if user_ip %}
+        <h5 style="text-align:center">IP registrado: {{user_ip}}</h5>
+    {% else %}
+        <a href="{{ url_for('index')}}">Ir a inicio</a>
+    {% endif %}
+
+
+{% endblock %}
