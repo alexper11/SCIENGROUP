@@ -216,7 +216,6 @@ if __name__ == '__main__':
     
     plantapilotog=PlantaPilotoGController()
     plantapilotog.insert_df(Extractor.perfil_planta_piloto)
-
     
     del Extractor"""
     
@@ -340,8 +339,6 @@ if __name__ == '__main__':
     """
     from cvlac.cvlac_models.DBmodel import create_db
     from cvlac.cvlac_controllers.ArticulosController import ArticulosController
-
-
     ############################
     #DEMO CVLAC
     ############################

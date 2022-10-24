@@ -1,0 +1,11 @@
+flask
+flask-bootstrap
+flask-wtf
+flask-testing
+pandas
+requests
+bs4
+pyquery
+selenium
+sqlalchemy
+sqlalchemy_utils
