@@ -175,9 +175,9 @@ class ExtractorCvlac():
                             else:                                
                                 index_pg=list_datos[i+1].rfind('p.')
                                 dic['fasc.']=list_datos[i+1][:index_pg].strip()
-                                dato2=list_datos[i+1][index_pg+2:].strip().rstrip(',')
+                                dato2=list_datos[i+1][index_pg+2:].strip().rstrip(', ')
                                 index_fe=dato2.rfind(',')
-                                dic['p.']=dato2[:index_fe].strip()
+                                dic['p.']=dato2[:index_fe].rstrip(', -').strip()
                                 dic['fecha.']=dato2[index_fe+1:]
                                 #list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])                                                         
                                 #dic['fasc.']=dato[:index_pg].strip()                 

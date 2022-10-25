@@ -305,3 +305,381 @@ def run_unittests_gruplac():
     except Exception as e:
         print('Reporte: ')
         print(e)
+        
+    ##########################
+    #Prueba tabla lineas
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002157'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000019510'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_lineas(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/lineas1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_lineas = Extractor.perfil_lineas.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_lineas(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/lineas2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_lineas = Extractor.perfil_lineas.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_lineas(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/lineas3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: lineas')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+        
+    ##########################
+    #Prueba tabla integrantes
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000020815'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000021902'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000017266'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_integrantes(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/integrantes1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_integrantes = Extractor.perfil_integrantes.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_integrantes(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/integrantes2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_integrantes = Extractor.perfil_integrantes.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_integrantes(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/integrantes3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: integrantes')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+        
+    ##########################
+    #Prueba tabla instituciones
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000003625'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002141'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000020932'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_instituciones(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/instituciones1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_instituciones = Extractor.perfil_instituciones.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_instituciones(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/instituciones2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_instituciones = Extractor.perfil_instituciones.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_instituciones(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/instituciones3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: instituciones')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+        
+    ##########################
+    #Prueba tabla innovacion_empresarial
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000007096'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000005833'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000007276'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_innovacion_empresarial(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/innovacion_empresarial1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_innovacion_empresarial = Extractor.perfil_innovacion_empresarial.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_innovacion_empresarial(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/innovacion_empresarial2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_innovacion_empresarial = Extractor.perfil_innovacion_empresarial.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_innovacion_empresarial(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/innovacion_empresarial3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: innovacion_empresarial')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+        
+    ##########################
+    #Prueba tabla empresa_tecnologica
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001995'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000007827'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_empresa_tecnologica(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/empresa_tecnologica1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_empresa_tecnologica = Extractor.perfil_empresa_tecnologica.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_empresa_tecnologica(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/empresa_tecnologica2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_empresa_tecnologica = Extractor.perfil_empresa_tecnologica.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_empresa_tecnologica(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/empresa_tecnologica3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: empresa_tecnologica')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+        
+    ##########################
+    #Prueba tabla diseno_industrial
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002191'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000005833'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000000694'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_diseno_industrial(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/diseno_industrial1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_diseno_industrial = Extractor.perfil_diseno_industrial.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_diseno_industrial(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/diseno_industrial2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_diseno_industrial = Extractor.perfil_diseno_industrial.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_diseno_industrial(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/diseno_industrial3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: diseno_industrial')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+    
+    ##########################
+    #Prueba tabla curso_maestria
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000018223'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000012288'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000003792'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_curso_maestria(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/curso_maestria1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_curso_maestria = Extractor.perfil_curso_maestria.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_curso_maestria(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/curso_maestria2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_curso_maestria = Extractor.perfil_curso_maestria.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_curso_maestria(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/curso_maestria3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: curso_maestria')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+    
+    ##########################
+    #Prueba tabla curso_doctorado
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000000592'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000012079'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002175'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_curso_doctorado(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/curso_doctorado1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_curso_doctorado = Extractor.perfil_curso_doctorado.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_curso_doctorado(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/curso_doctorado2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_curso_doctorado = Extractor.perfil_curso_doctorado.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_curso_doctorado(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/curso_doctorado3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: curso_doctorado')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+    
+    ##########################
+    #Prueba tabla caplibros
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000006693'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000005833'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002127'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_caplibros(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/caplibros1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_caplibros = Extractor.perfil_caplibros.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_caplibros(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/caplibros2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_caplibros = Extractor.perfil_caplibros.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_caplibros(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/caplibros3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: caplibros')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+    
+    ##########################
+    #Prueba tabla basico
+    ##########################
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002126'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001155'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000000316'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_basico(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/basico1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_basico = Extractor.perfil_basico.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_basico(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/basico2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_basico = Extractor.perfil_basico.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_basico(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/basico3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: basico')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+        
+    ##########################
+    #Prueba tabla articulos
+    ##########################
+    """
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002126'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001155'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000000316'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_articulos(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/articulos1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_articulos = Extractor.perfil_articulos.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_articulos(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/articulos2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_articulos = Extractor.perfil_articulos.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_articulos(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/articulos3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: articulos')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+    """
+    
+    ##########################
+    #Prueba tabla libros
+    ##########################
+    """
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002126'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001155'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000000316'
+
+    lxml_url1 = get_lxml(url1)
+    df_auto1=Extractor.get_perfil_libros(lxml_url1,url1).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/libros1.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_libros = Extractor.perfil_libros.iloc[0:0]
+
+    lxml_url2 = get_lxml(url2)
+    df_auto2=Extractor.get_perfil_libros(lxml_url2,url2).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/libros2.csv', dtype='object', keep_default_na=False)
+    Extractor.perfil_libros = Extractor.perfil_libros.iloc[0:0]
+
+    lxml_url3 = get_lxml(url3)
+    df_auto3=Extractor.get_perfil_libros(lxml_url3,url3).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/libros3.csv', dtype='object', keep_default_na=False)
+
+    try:
+        print('******************************************')
+        print('Pruebas unitarias para tabla: libros')
+        print('Prueba 1:',test.test_dfs(df_auto1,df_manu1))
+        print('Prueba 2:',test.test_dfs(df_auto2,df_manu2))
+        print('Prueba 3:',test.test_dfs(df_auto3,df_manu3))
+    except Exception as e:
+        print('Reporte: ')
+        print(e)
+    """
+    
+    
