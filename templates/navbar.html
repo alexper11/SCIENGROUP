@@ -1,0 +1,30 @@
+<!--<nav>
+    <ul>
+        <img src="{{ url_for('static',filename='images/logo.png')}}" alt="radiohead logo">
+        <li><a href="{{ url_for('index') }}">Ir a inicio</a></li>
+        <li><a href="https://platzi.com" target="_blank">Ir a Platzi</a></li>
+    </ul>
+</nav>-->
+
+<div class="navbar navbar-light" style="background-color: #082066;" role="navigation">
+    <div class="container">
+        <div class="navbar-header">           
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static',filename='images/escudo_unicauca.png') }}"
+                    style="max-width: 36px"
+                    alt="logo jack">
+            </a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                <li><a href="{{ url_for('extractor') }}">Extractor</a></li>                
+                <li><a href="{{ url_for('scopus') }}">Scopus</a></li> 
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Dashboard</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
