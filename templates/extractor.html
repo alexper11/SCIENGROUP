@@ -8,18 +8,18 @@
 
 {% block content %}
        
-    <div class="container">        
-        {{ wtf.quick_form(field_form_cvlac) }}
+    <div class="container">  
         {% if enlace_cvlac %}
-            <h4 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h4>
-        {% endif %}
+            <h6 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h6>
+        {% endif %}      
+        {{ wtf.quick_form(field_form_cvlac) }}        
     </div>
 
     <div class="container">        
-        {{ wtf.quick_form(field_form_gruplac) }}
         {% if enlace_gruplac %}
-            <h4 style="text-align:center" >Enlace de gruplac: {{ enlace_gruplac }}</h4>
+            <h6 style="text-align:center" >Enlace de gruplac: {{ enlace_gruplac }}</h6>
         {% endif %}
+        {{ wtf.quick_form(field_form_gruplac) }}        
     </div>
 
 {% endblock %}

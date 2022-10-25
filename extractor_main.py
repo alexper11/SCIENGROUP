@@ -65,7 +65,7 @@ from scopus.controllers.MetaDBScoController import MetaDBScoController
 from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, PasswordField, SubmitField
+from wtforms.fields import StringField, SubmitField, RadioField
 from wtforms.validators import DataRequired
 import unittest
 ###########   end librerias flask   ###########
@@ -78,11 +78,12 @@ app.config['SECRET_KEY']='SUPER SECRETO' #No es la mejor practica
 
     
 class FieldFormCvlac(FlaskForm):
-    enlace_cvlac = StringField('Digite enlace Cvlac:', validators=[DataRequired()])
+    enlace_cvlac = StringField('Digite enlace Cvlac:', validators=[DataRequired()])    
     submit_cvlac = SubmitField('Extraer cvlac')
     
 class FieldFormGruplac(FlaskForm):
     enlace_gruplac = StringField('Digite enlace Gruplac:', validators=[DataRequired()])
+    action_gruplac = RadioField('Elige una opción:', choices = ['Extraer datos del Gruplac', 'Extraer datos del los investigadores del Gruplac'], validators=[DataRequired()])
     submit_gruplac = SubmitField('Extraer gruplac')
 
 #Creamos un decorador:
@@ -108,12 +109,10 @@ def index():
 
 @app.route('/home', methods=['GET', 'POST']) #ruta en que
 def home():
-    user_ip = session.get('user_ip')
-    
+    user_ip = session.get('user_ip')    
     context = {
         'user_ip' : user_ip
-    }    
-    
+    }        
     return render_template('home.html', **context)
 
 @app.route('/extractor', methods=['GET', 'POST']) 
@@ -123,37 +122,21 @@ def extractor():
         
     field_form_gruplac = FieldFormGruplac()
     enlace_gruplac = session.get('enlace_gruplac')
+    action_gruplac = session.get('action_gruplac')
         
     context_extractor = {
         'field_form_cvlac' : field_form_cvlac,
         'enlace_cvlac' : enlace_cvlac,
         'field_form_gruplac' : field_form_gruplac,
+        'action_gruplac' : action_gruplac,
         'enlace_gruplac' : enlace_gruplac
-    }    
-    
-    if field_form_gruplac.validate_on_submit():#detecta cuando hay post y valida la forma
-        enlace_gruplac = field_form_gruplac.enlace_gruplac.data
-        session['enlace_gruplac'] = enlace_gruplac
+    }        
         
-        flash('Empezando la extraccion de grupo registrado en Gruplac')
-        Extractor=ExtractorGruplac()
-        #urls gruplac:
-        
-        list_url = [enlace_gruplac]
-        
-        for url in list_url:
-            dom=get_lxml(url)
-            df_prueba=Extractor.get_perfil_articulos(dom,url)  
-        
-        df_prueba.to_csv('prueba_gruplac.csv',index=False)
-        flash('Extraccion del grupo de gruplac finalizado')
-        return redirect(url_for('extractor'))
-    
     if field_form_cvlac.validate_on_submit():
         enlace_cvlac = field_form_cvlac.enlace_cvlac.data
         session['enlace_cvlac'] = enlace_cvlac
         
-        flash('Empezando la extraccion del perfil de Cvlac')
+        flash('Empezando la extracción del perfil de Cvlac')
         Extractor=ExtractorGruplac()
         #urls cvlac:
                 
@@ -163,11 +146,44 @@ def extractor():
             dom=get_lxml(url)
             df_prueba=Extractor.get_articulo(dom,url)  
         
-        df_prueba.to_csv('prueba_cvlac.csv',index=False)
+        df_prueba.to_csv('extraccion_cvlac_individual.csv',index=False)
         
-        flash('Extraccion del perfil de Cvlac terminado')
+        flash('Extracción del perfil de Cvlac terminado')
         
         return redirect(url_for('extractor'))
+    
+    if field_form_gruplac.validate_on_submit():#detecta cuando hay post y valida la forma
+        enlace_gruplac = field_form_gruplac.enlace_gruplac.data
+        action_gruplac = field_form_gruplac.action_gruplac.data
+        session['enlace_gruplac'] = enlace_gruplac
+        session['action_gruplac'] = action_gruplac
+                
+        Extractor=ExtractorGruplac()
+        list_url = [enlace_gruplac]
+        
+        #Extrae datos de un gruplac:
+        if action_gruplac == 'Extraer datos del Gruplac':
+            flash('Empezando la extracción del perfil de Gruplac')
+            for url in list_url:
+                dom=get_lxml(url)
+                df_prueba=Extractor.get_perfil_articulos(dom,url)  
+            
+            df_prueba.to_csv('extraccion_gruplac.csv',index=False)
+            flash('Extracción del perfil de Gruplac terminado')
+            return redirect(url_for('extractor'))
+        
+        #Extrae datos de investigadores de gruplac:
+        elif action_gruplac == 'Extraer datos del los investigadores del Gruplac':
+            flash('Empezando la extracción de los Cvlacs del perfil de Gruplac')
+            list_url=Extractor.get_members_list(enlace_gruplac)
+            for url in list_url:
+                dom=get_lxml(url)
+                df_prueba=Extractor.get_articulo(dom,url) 
+            df_prueba.to_csv('extraccion_cvlacs_gruplac.csv',index=False)
+        
+            flash('Extracción de los Cvlacs del perfil de Gruplac terminado')
+        else:
+            pass   
    
     return render_template('extractor.html', **context_extractor)
 
