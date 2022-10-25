@@ -235,7 +235,7 @@ class ExtractorGruplac(ExtractorCvlac):
                     dic['idgruplac']=(url[fid+1:])                  
                     i_clear=i.text.strip()
                     index=i_clear.rfind('-  (')#posible futuro error: doble espacio
-                    dic['nombre']=(i_clear[3:index].strip())
+                    dic['nombre']=(i_clear[3:index].strip().lstrip('.- '))
                     dic['aval']=(re.sub(r'[^A-Za-z0-9 ]+','',i_clear[index:]).strip())
 
                     dic=pd.DataFrame([dict(zip(list(self.perfil_instituciones.columns),dic.values()))])
@@ -257,8 +257,8 @@ class ExtractorGruplac(ExtractorCvlac):
                 dic['idgruplac']=url[fid+1:]
                 linea=""
                 for i in child:                                       
-                    linea=linea+i.text.strip()[3:]+";"
-                dic['lineas']=linea.strip()           
+                    linea=linea+i.text.strip()[3:].lstrip(' -.').rstrip(' ;,.')+";"
+                dic['lineas']=linea.rstrip(', .;-').strip()
                 dic=pd.DataFrame([dic])                
                 self.perfil_lineas = almacena_df(self.perfil_lineas,dic)                  
         except AttributeError:
@@ -514,7 +514,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         if i==0:
                             dic['tipo']=dato
                         elif i==1:
-                            dic['capitulo']=dato.lstrip(' : ')
+                            dic['capitulo']=dato.lstrip(' : ').rstrip(' .,')
                         elif i==2:
                             #revisar bd, calidad datos con esta separacion                            
                             index_lugar=dato.find(',')                                                                                    
@@ -529,7 +529,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             separador=re.split('Vol\.|págs:|Ed\.',dato) #type: ignore
                             dic['isbn']=separador[0][5:].rstrip(',').strip()
                             dic['volumen']=separador[1].rstrip(',').strip()
-                            dic['paginas']=separador[2].rstrip(',').strip() 
+                            dic['paginas']=separador[2].rstrip(', -').strip() 
                             dic['editorial']=separador[3].strip()  
                         else:
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()
@@ -788,7 +788,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         if i==0:
                             dic['tipo']=dato
                         elif i==1:
-                            dic['nombre']=dato.lstrip(' : ')
+                            dic['nombre']=dato.lstrip(' : ').rstrip(', .')
                         elif i==2:
                             #Pendiente: buscar y verificar separadores
                             separador=re.split('NIT:|Fecha de registro ante cámara:',dato)                       
@@ -799,7 +799,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['mercado']=dato.strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    dic=pd.DataFrame([dic])                                 
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                  
                     self.perfil_empresa_tecnologica = almacena_df( self.perfil_empresa_tecnologica,dic)                                                                                       
             else:
                 raise Exception  
@@ -835,7 +835,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=separador[2].strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()   
-                    dic=pd.DataFrame([dic])                                 
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                           
                     self.perfil_innovacion_empresarial = almacena_df( self.perfil_innovacion_empresarial,dic)                                                                              
             else:
                 raise Exception  

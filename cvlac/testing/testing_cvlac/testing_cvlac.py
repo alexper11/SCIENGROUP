@@ -186,23 +186,22 @@ def run_unittests_cvlac():
     ##########################
     #Prueba tabla libros
     ##########################
-    """
-    url1='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh='
-    url2='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh='
-    url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh='
+    url1='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000011606'
+    url2='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000470252'
+    url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000561460'
     
     lxml_url1 = get_lxml(url1)
-    df_auto1=Extractor.get_libros(lxml_url1,url1).astype(str)
+    df_auto1=Extractor.get_libro(lxml_url1,url1).astype(str)
     df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/libros1.csv', dtype='object', keep_default_na=False)
     Extractor.libros = Extractor.libros.iloc[0:0]
 
     lxml_url2 = get_lxml(url2)
-    df_auto2=Extractor.get_libros(lxml_url2,url2).astype(str)
+    df_auto2=Extractor.get_libro(lxml_url2,url2).astype(str)
     df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/libros2.csv', dtype='object', keep_default_na=False)
     Extractor.libros = Extractor.libros.iloc[0:0]
 
     lxml_url3 = get_lxml(url3)
-    df_auto3=Extractor.get_libros(lxml_url3,url3).astype(str)
+    df_auto3=Extractor.get_libro(lxml_url3,url3).astype(str)
     df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/libros3.csv', dtype='object', keep_default_na=False)
 
     try:
@@ -214,7 +213,6 @@ def run_unittests_cvlac():
     except Exception as e:
         print('Reporte: ')
         print(e)
-    """
     
     ##########################
     #Prueba tabla jurados
@@ -560,10 +558,9 @@ def run_unittests_cvlac():
     ##########################
     #Prueba tabla articulos
     ##########################
-    """
-    url1='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001452311'
-    url2='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001412764'
-    url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001471317'
+    url1='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001625568'
+    url2='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000317535'
+    url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013030'
     
     lxml_url1 = get_lxml(url1)
     df_auto1=Extractor.get_articulo(lxml_url1,url1).astype(str)
@@ -588,7 +585,6 @@ def run_unittests_cvlac():
     except Exception as e:
         print('Reporte: ')
         print(e)
-    """
 
     ##########################
     #Prueba tabla actuacion
