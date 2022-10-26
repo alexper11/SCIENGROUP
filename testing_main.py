@@ -6,6 +6,6 @@ from cvlac.util import get_lxml
 
 sys.path.append(".")
 
-run_unittests_cvlac()
-#run_unittests_gruplac()
+#run_unittests_cvlac()
+run_unittests_gruplac()
 
