@@ -315,16 +315,20 @@ def run_unittests_gruplac():
 
     lxml_url1 = get_lxml(url1)
     df_auto1=Extractor.get_perfil_lineas(lxml_url1,url1).astype(str)
+    #print(df_auto1.iloc[0,1].split(';').sort())
+    df_auto1.iloc[0,1]=';'.join(sorted(df_auto1.iloc[0,1].split(';')))
     df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/lineas1.csv', dtype='object', keep_default_na=False)
     Extractor.perfil_lineas = Extractor.perfil_lineas.iloc[0:0]
 
     lxml_url2 = get_lxml(url2)
     df_auto2=Extractor.get_perfil_lineas(lxml_url2,url2).astype(str)
+    df_auto2.iloc[0,1]=';'.join(sorted(df_auto2.iloc[0,1].split(';')))
     df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/lineas2.csv', dtype='object', keep_default_na=False)
     Extractor.perfil_lineas = Extractor.perfil_lineas.iloc[0:0]
 
     lxml_url3 = get_lxml(url3)
     df_auto3=Extractor.get_perfil_lineas(lxml_url3,url3).astype(str)
+    df_auto3.iloc[0,1]=';'.join(sorted(df_auto3.iloc[0,1].split(';')))
     df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/lineas3.csv', dtype='object', keep_default_na=False)
 
     try:
@@ -531,17 +535,17 @@ def run_unittests_gruplac():
     url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002175'
 
     lxml_url1 = get_lxml(url1)
-    df_auto1=Extractor.get_perfil_curso_doctorado(lxml_url1,url1).astype(str)
+    df_auto1=Extractor.get_perfil_curso_doctorado(lxml_url1,url1).sort_values('curso',ignore_index=True).astype(str)
     df_manu1=pd.read_csv('cvlac/testing/testing_gruplac/curso_doctorado1.csv', dtype='object', keep_default_na=False)
     Extractor.perfil_curso_doctorado = Extractor.perfil_curso_doctorado.iloc[0:0]
 
     lxml_url2 = get_lxml(url2)
-    df_auto2=Extractor.get_perfil_curso_doctorado(lxml_url2,url2).astype(str)
+    df_auto2=Extractor.get_perfil_curso_doctorado(lxml_url2,url2).sort_values('curso',ignore_index=True).astype(str)
     df_manu2=pd.read_csv('cvlac/testing/testing_gruplac/curso_doctorado2.csv', dtype='object', keep_default_na=False)
     Extractor.perfil_curso_doctorado = Extractor.perfil_curso_doctorado.iloc[0:0]
 
     lxml_url3 = get_lxml(url3)
-    df_auto3=Extractor.get_perfil_curso_doctorado(lxml_url3,url3).astype(str)
+    df_auto3=Extractor.get_perfil_curso_doctorado(lxml_url3,url3).sort_values('curso',ignore_index=True).astype(str)
     df_manu3=pd.read_csv('cvlac/testing/testing_gruplac/curso_doctorado3.csv', dtype='object', keep_default_na=False)
 
     try:
