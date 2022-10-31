@@ -437,7 +437,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         if i==0:
                             dic['tipo']=dato.replace(":","")
                         elif i==1:
-                            dic['nombre']=dato
+                            dic['nombre']=dato.rstrip(', .-').strip()
                         elif i==2:
                             separador=re.split('ISSN:|vol:|fasc:|págs:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')]
@@ -446,7 +446,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['fecha']=separador[1][separador[1].find(','):].lstrip(',').strip()
                             dic['volumen']=separador[2].strip()
                             dic['fasciculo']=separador[3].strip()
-                            dic['paginas']=separador[4].rstrip(',').strip()
+                            dic['paginas']=separador[4].rstrip(', -').strip()
                         elif dato=='DOI:':
                             dic['doi']=re.sub(r'http://dx.doi.org/|doi:|DOI:|https://doi.org/|http://doi.org/','',list_datos[i+1]).lstrip(':').strip()
                         else:
@@ -483,7 +483,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             separador=re.split('ISBN:|Ed\.',dato)                       #type: ignore    
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
                             dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
-                            dic['isbn']=separador[1].strip().rstrip(',')
+                            dic['isbn']=separador[1].strip().rstrip(', .-')
                             dic['editorial']=separador[2].lstrip(',').strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
