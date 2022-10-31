@@ -623,10 +623,9 @@ def run_unittests_gruplac():
     ##########################
     #Prueba tabla articulos
     ##########################
-    """
-    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002126'
-    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001155'
-    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000000316'
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000015254'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000005361'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002156'
 
     lxml_url1 = get_lxml(url1)
     df_auto1=Extractor.get_perfil_articulos(lxml_url1,url1).astype(str)
@@ -651,15 +650,13 @@ def run_unittests_gruplac():
     except Exception as e:
         print('Reporte: ')
         print(e)
-    """
     
     ##########################
     #Prueba tabla libros
     ##########################
-    """
-    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002126'
-    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001155'
-    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000000316'
+    url1='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001995'
+    url2='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008372'
+    url3='https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000002141'
 
     lxml_url1 = get_lxml(url1)
     df_auto1=Extractor.get_perfil_libros(lxml_url1,url1).astype(str)
@@ -684,6 +681,5 @@ def run_unittests_gruplac():
     except Exception as e:
         print('Reporte: ')
         print(e)
-    """
     
     
