@@ -171,7 +171,10 @@ class ExtractorCvlac():
                         if dato in dic:                                                        
                             if dato != 'fasc.':
                                 dato=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/','',dato)            
-                                dic[dato]=(list_datos[i+1]).strip()
+                                if dato == 'v.':
+                                    dic[dato]=(list_datos[i+1]).rstrip(' ,.No').strip()
+                                else:
+                                    dic[dato]=(list_datos[i+1]).rstrip(' ,.-').strip()
                             else:                                
                                 index_pg=list_datos[i+1].rfind('p.')
                                 dic['fasc.']=list_datos[i+1][:index_pg].strip()
