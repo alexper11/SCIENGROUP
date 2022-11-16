@@ -11,7 +11,7 @@ class ExtractorCvlac():
         self.academica=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha','proyecto'])
         self.actuacion=pd.DataFrame(columns=['idcvlac','areas'])
         self.articulos=pd.DataFrame(columns=['idcvlac','autores','nombre','tipo','verificado','lugar','revista','issn','editorial','volumen','fasciculo', 'paginas','fecha','doi', 'palabras', 'sectores'])
-        self.basico=pd.DataFrame(columns=['idcvlac','categoria','nombre','citaciones','nacionalidad','sexo'])
+        self.basico=pd.DataFrame(columns=['idcvlac','categoria','nombre','nombre_citaciones','nacionalidad','sexo'])
         self.complementaria=pd.DataFrame(columns=['idcvlac','tipo','institucion','titulo','fecha'])
         self.estancias=pd.DataFrame(columns=['idcvlac','nombre','entidad','area','fecha_inicio','fecha_fin','descripcion'])
         self.evaluador=pd.DataFrame(columns=['idcvlac','ambito','par_evaluador','editorial','revista','institucion','fecha'])
@@ -44,7 +44,7 @@ class ExtractorCvlac():
                     x=0               
                     for datos in list_datos:
                         dic_aux['idcvlac'] = url[(url.find('='))+1:]
-                        dic_aux[str(list1[x])]=("".join(datos)).strip()                         
+                        dic_aux[str(list1[x])]=("".join(datos)).rstrip(', .').strip()                         
                         x=x+1
                     dic_aux=pd.DataFrame([dic_aux])
                     self.academica = almacena_df(self.academica,dic_aux)
@@ -124,7 +124,7 @@ class ExtractorCvlac():
                         for key in art_individual:                                                              
                             if(key == dato):
                                 if(dato=="fasc."):
-                                    list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])
+                                    #list_fasc=re.split('p.| ,',list_datos[list_datos.index(dato)+1]) #escape despues de p type: ignore
                                     art_individual['fasc.']=list_fasc[0].strip()                 
                                     art_individual['p.']=list_fasc[1].strip()
                                     art_individual['fecha.']=list_fasc[2].replace(',','').strip()
@@ -132,7 +132,7 @@ class ExtractorCvlac():
                                     art_individual[dato]=(list_datos[list_datos.index(dato)+1]).strip()
                     
                     art_individual=pd.DataFrame([dict(zip(list(self.articulos.columns),art_individual.values()))])
-                    self.articulos = almacena_df(self.articulos,art_individual).reset_index(drop=True).replace(to_replace ='^\W+$|,$', value = '', regex = True)
+                    #self.articulos = almacena_df(self.articulos,art_individual).reset_index(drop=True).replace(to_replace ='^W+$|,$', value = '', regex = True) #escape antes de W type: ignore
         except AttributeError:
             pass       
         
@@ -149,18 +149,17 @@ class ExtractorCvlac():
                     dic['idcvlac']=url[fid+1:]                    
                     tipo=blockquote.find_parent('tr').find_previous_sibling('tr')                    
                     if tipo.find('img') == None:
-                        dic['verificado']=False
+                        dic['verificado']=False #type: ignore
                     else:
-                        dic['verificado']=True
+                        dic['verificado']=True  #type: ignore
                     dic['tipo']=tipo.find('b').text
                     blockquote=re.sub('</blockquote>|<blockquote>',''," ".join(str(blockquote).split())).replace('&amp;','&')
                     index_i=blockquote.find('<br/>')
                     dato=blockquote[:index_i]
                     
                     if len(re.findall(', "', dato)) > 1:
-                        print('Revisar separación:',url)#oeoeoe
+                        print('Revisar separación:',url)
                         
-                    #oeoeoeoe
                     dic['autores']=dato[:dato.find(', "')].strip()
                     dic['nombre']=dato[dato.find(', "')+3:dato.rfind('. En:')].strip().rstrip('"')
                     dic['lugar']=dato[dato.rfind('. En:')+5:].strip()
@@ -172,13 +171,16 @@ class ExtractorCvlac():
                         if dato in dic:                                                        
                             if dato != 'fasc.':
                                 dato=re.sub('http://dx.doi.org/|https://doi.org/|https://doi.org/','',dato)            
-                                dic[dato]=(list_datos[i+1]).strip()
+                                if dato == 'v.':
+                                    dic[dato]=(list_datos[i+1]).rstrip(' ,.No').strip()
+                                else:
+                                    dic[dato]=(list_datos[i+1]).rstrip(' ,.-').strip()
                             else:                                
                                 index_pg=list_datos[i+1].rfind('p.')
                                 dic['fasc.']=list_datos[i+1][:index_pg].strip()
-                                dato2=list_datos[i+1][index_pg+2:].strip().rstrip(',')
+                                dato2=list_datos[i+1][index_pg+2:].strip().rstrip(', ')
                                 index_fe=dato2.rfind(',')
-                                dic['p.']=dato2[:index_fe].strip()
+                                dic['p.']=dato2[:index_fe].rstrip(', -').strip()
                                 dic['fecha.']=dato2[index_fe+1:]
                                 #list_fasc=re.split('p\.| ,',list_datos[list_datos.index(dato)+1])                                                         
                                 #dic['fasc.']=dato[:index_pg].strip()                 
@@ -186,7 +188,7 @@ class ExtractorCvlac():
                                 #dic['fecha.']=list_fasc[2].replace(',','').strip()
                     
                     dic=pd.DataFrame([dict(zip(list(self.articulos.columns),dic.values()))])                                
-                    self.articulos = almacena_df( self.articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)                                   
+                    self.articulos = almacena_df( self.articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)# type: ignore                                   
             else:
                 raise Exception  
         except AttributeError:
@@ -259,7 +261,7 @@ class ExtractorCvlac():
                     x=0
                     dic_aux['idcvlac'] = url[(url.find('='))+1:]              
                     for datos in list_datos:                        
-                        dic_aux[str(list1[x])]=("".join(datos)).strip().replace('Desde: ','').replace('Hasta: ','')                       
+                        dic_aux[str(list1[x])]=("".join(datos)).strip().replace('Desde: ','').replace('Hasta: ','').rstrip(', .')                       
                         x=x+1
                     dic_aux=pd.DataFrame([dic_aux])   
                     self.estancias = almacena_df(self.estancias,dic_aux)
@@ -393,9 +395,9 @@ class ExtractorCvlac():
                     
                     tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
                     if tipo.find('img') == None:
-                        libros_aux['verificado']=False
+                        libros_aux['verificado']=False  #type: ignore
                     else:
-                        libros_aux['verificado']=True
+                        libros_aux['verificado']=True   #type: ignore
                     libros_aux['tipo']=tipo.find('b').text
                     
                     quote_text_clear=re.sub('<blockquote>|</blockquote>|<br>|<br/>','',(" ".join((str(block_art)).split())))
@@ -427,7 +429,7 @@ class ExtractorCvlac():
                             if(key == dato):
                                 libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()  
                     libros_aux=pd.DataFrame([dict(zip(list(self.libros.columns),libros_aux.values()))])
-                    self.libros = almacena_df(self.libros,libros_aux).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
+                    self.libros = almacena_df(self.libros,libros_aux).replace(to_replace ='^\W+$|,$', value = '', regex = True)# type: ignore   
         except AttributeError:
             pass     
         df_libros = self.libros 
@@ -497,16 +499,16 @@ class ExtractorCvlac():
                 for block_cap in blocks_cap:
                     cap_libros_aux={'idcvlac':'','autores':'','capitulo':'','libro':'','lugar':'','verificado':'','ISBN:':'','ed:':'',', v.':'','paginas':'','fecha':'', 'Palabras: ':'', 'Areas: ':'', 'Sectores: ':''}
                     if block_cap.find('img') == None:
-                        cap_libros_aux['verificado']=False
+                        cap_libros_aux['verificado']=False  #type: ignore
                     else:
-                        cap_libros_aux['verificado']=True
+                        cap_libros_aux['verificado']=True   #type: ignore
                     block_cap=re.sub('<blockquote>|</blockquote>','',(" ".join((str(block_cap)).split()))).replace('&amp;','&')
                     index_name=block_cap.find(', "')
-                    list_autores=block_cap[:index_name].split('<br/>')
+                    list_autores=block_cap[:index_name].replace('Tipo: Capítulo de libro','').split('<br/>')
                     list_autores.pop(0)
                     autores=""
                     for autor in list_autores:
-                        var2=autor.split(',')[0]
+                        var2=autor.split(',')[0].rstrip()
                         autores=autores+var2+","
                     cap_libros_aux['idcvlac'] = url[(url.find('='))+1:]
                     cap_libros_aux['autores'] = autores.strip()
@@ -524,12 +526,12 @@ class ExtractorCvlac():
                                 if(dato==", v."):
                                     list_fasc=(re.split(',',list_datos[list_datos.index(dato)+1]))  
                                     cap_libros_aux[', v.']=list_fasc[0].strip()                   
-                                    cap_libros_aux['paginas']=list_fasc[1].replace("p.","")
+                                    cap_libros_aux['paginas']=list_fasc[1].replace("p.","").strip()
                                     cap_libros_aux['fecha']=list_fasc[2].strip()                                    
                                 else:
                                     cap_libros_aux[dato]=(list_datos[list_datos.index(dato)+1]).strip()
                     cap_libros_aux=pd.DataFrame([dict(zip(list(self.caplibros.columns),cap_libros_aux.values()))])
-                    self.caplibros = almacena_df(self.caplibros,cap_libros_aux)
+                    self.caplibros = almacena_df(self.caplibros,cap_libros_aux).replace(to_replace ='^\W+$|,$', value = '', regex = True) #type: ignore
                     cap_libros_aux={}   
         except AttributeError:
             pass     
@@ -550,15 +552,15 @@ class ExtractorCvlac():
                     dic={'idcvlac':'','autor':'','nombre':'','tipo':'','verificado':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'','plataforma':'', 'ambiente':'', 'Palabras':'','Areas':'', 'Sectores':''}
                     tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
                     if tipo.find('img') == None:
-                        dic['verificado']=False
+                        dic['verificado']=False #type: ignore
                     else:
-                        dic['verificado']=True
+                        dic['verificado']=True  #type: ignore
                     dic['tipo']=tipo.find('b').text
                     dic['idcvlac'] = url[(url.find('='))+1:]
                     for i,item in enumerate(list_datos):
                         if i == 0:
                             try:
-                                index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end() #type: ignore #re.sub('(?s:.*)![A-Z],','',cadena)).end()
                             except:
                                 index1=0
                             dic['autor'] = item[:index1].strip()
@@ -567,16 +569,17 @@ class ExtractorCvlac():
                             dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').rstrip('. ,').strip()
                     cont_aux=dic['contrato/registro'].split('. En:') 
                     dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
+                    lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                     try:     
-                            lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
-                            index_datos=re.search(',(\d{4})',lugg).start()                        
+                            #lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
+                            index_datos=re.search(',(\d{4})',lugg).start()  #type: ignore       
                     except :
                         index_datos= -1
                     dic['lugar']=lugg[:index_datos].strip()
                     dic['fecha']=lugg[index_datos+1:].rstrip('. ,').strip()
                     
                     dic=pd.DataFrame([dict(zip(list(self.software.columns),dic.values()))])
-                    self.software = almacena_df(self.software,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)
+                    self.software = almacena_df(self.software,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)# type: ignore
                     
         except AttributeError:
             pass
@@ -600,9 +603,9 @@ class ExtractorCvlac():
                             
                             tipo=blockquote.find_parent('tr').find_previous_sibling('tr')                    
                             if tipo.find('img') == None:
-                                dic['verificado']=False
+                                dic['verificado']=False #type: ignore
                             else:
-                                dic['verificado']=True
+                                dic['verificado']=True  #type: ignore
                             dic['tipo']=tipo.find('b').text
                             
                             dic['idcvlac'] = url[(url.find('='))+1:]
@@ -610,7 +613,7 @@ class ExtractorCvlac():
                             for i,item in enumerate(list_datos):
                                 if i == 0:
                                     try:
-                                        index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                        index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end()#type: ignore #re.sub('(?s:.*)![A-Z],','',cadena)).end()
                                     except:
                                         index1=0
                                     dic['autor'] = item[:index1].strip()
@@ -619,16 +622,17 @@ class ExtractorCvlac():
                                     dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
                             cont_aux=dic['contrato/registro'].split('. En:') 
                             dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
+                            lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                             try:     
-                                    lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
-                                    index_datos=re.search(',(\d{4})',lugg).start()                        
+                                    #lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
+                                    index_datos=re.search(',(\d{4})',lugg).start() #type: ignore               
                             except :
                                 index_datos= -1
                             dic['lugar']=lugg[:index_datos].strip()
                             dic['fecha']=lugg[index_datos+1:].strip()
 
                             dic=pd.DataFrame([dict(zip(list(self.prototipo.columns),dic.values()))])
-                            self.prototipo = almacena_df(self.prototipo,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)
+                            self.prototipo = almacena_df(self.prototipo,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)# type: ignore
                             
         except AttributeError:
             pass           
@@ -649,16 +653,16 @@ class ExtractorCvlac():
                     dic={'idcvlac':'','autor':'','nombre':'','tipo':'','verificado':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'', 'Palabras':'','Areas':'', 'Sectores':''}
                     tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
                     if tipo.find('img') == None:
-                        dic['verificado']=False
+                        dic['verificado']=False #type: ignore
                     else:
-                        dic['verificado']=True
+                        dic['verificado']=True  #type: ignore
                     dic['tipo']=tipo.find('b').text.strip()
                     
                     dic['idcvlac'] = url[(url.find('='))+1:]
                     for i,item in enumerate(list_datos):
                         if i == 0:
                             try:
-                                index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end() #type: ignore #re.sub('(?s:.*)![A-Z],','',cadena)).end()
                             except:
                                 index1=0
                             dic['autor'] = item[:index1].strip()
@@ -667,16 +671,17 @@ class ExtractorCvlac():
                             dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
                     cont_aux=dic['contrato/registro'].split('. En:') 
                     dic['contrato/registro']=cont_aux[0].strip() if len(dic['contrato/registro']) != 0 else ''
+                    lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                     try:     
-                            lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
-                            index_datos=re.search(',(\d{4})',lugg).start()                        
+                            #lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
+                            index_datos=re.search(',(\d{4})',lugg).start()  #type: ignore
                     except :
                         index_datos= -1
                     dic['lugar']=lugg[:index_datos].strip()
                     dic['fecha']=lugg[index_datos+1:].strip()
           
                     dic=pd.DataFrame([dict(zip(list(self.tecnologicos.columns),dic.values()))])
-                    self.tecnologicos = almacena_df(self.tecnologicos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True) 
+                    self.tecnologicos = almacena_df(self.tecnologicos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)# type: ignore 
                      
         except AttributeError:
             pass
@@ -698,16 +703,16 @@ class ExtractorCvlac():
                     dic={'idcvlac':'','autores':'','nombre':'','tipo':'','verificado':'','nit':'','Registrado ante la c´mara el':'','verificado':'','Palabras':'','Areas':'', 'Sectores':''}
                     tipo=block_art.find_parent('tr').find_previous_sibling('tr')                    
                     if tipo.find('img') == None:
-                        dic['verificado']=False
+                        dic['verificado']=False #type: ignore
                     else:
-                        dic['verificado']=True
+                        dic['verificado']=True  #type: ignore
                     dic['tipo']=tipo.find('b').text
                     
                     dic['idcvlac'] = url[(url.find('='))+1:]
                     for i,item in enumerate(list_datos):
                         if i == 0:
                             try:
-                                index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end() #type: ignore #re.sub('(?s:.*)![A-Z],','',cadena)).end()
                             except:
                                 index1=0
                             dic['autores'] = item[:index1].strip()
@@ -717,11 +722,11 @@ class ExtractorCvlac():
                             if(separador!=-1):
                                 dic[item[:separador]]=re.sub('<[^<]+?>', '',item[separador:]).lstrip(':').strip()
                             elif(item.find('Nit')!=-1):
-                                dic['nit']=re.sub('<[^<]+?>', '',item[item.rfind('Nit')+3:]).strip()         
+                                dic['nit']=re.sub('<[^<]+?>', '',item[item.rfind('Nit')+3:]).rstrip(', .').strip()         
                             else: pass
 
                     dic=pd.DataFrame([dict(zip(list(self.empresa_tecnologica.columns),dic.values()))])
-                    self.empresa_tecnologica = almacena_df(self.empresa_tecnologica,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)
+                    self.empresa_tecnologica = almacena_df(self.empresa_tecnologica,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)# type: ignore
                       
         except AttributeError:
             pass            
@@ -744,16 +749,16 @@ class ExtractorCvlac():
                             dic={'idcvlac':'','autor':'','nombre':'','tipo':'','verificado':'','Nombre comercial':'','contrato/registro':'','lugar':'','fecha':'', 'Palabras':'','Areas':'', 'Sectores':''}
                             tipo=blockquote.find_parent('tr').find_previous_sibling('tr')                    
                             if tipo.find('img') == None:
-                                dic['verificado']=False
+                                dic['verificado']=False  # type: ignore
                             else:
-                                dic['verificado']=True
+                                dic['verificado']=True  # type: ignore
                             dic['tipo']=tipo.find('b').text
                             dic['idcvlac'] = url[(url.find('='))+1:]
                             
                             for i,item in enumerate(list_datos):
                                 if i == 0:
                                     try:
-                                        index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end()#re.sub('(?s:.*)![A-Z],','',cadena)).end()
+                                        index1=re.search('(?s:.*)-,|(?s:.*)[A-Z\u00C0-\u00DC],',item.strip().rstrip(',')).end() #type: ignore #re.sub('(?s:.*)![A-Z],','',cadena)).end()
                                     except:
                                         index1=0
                                     dic['autor'] = item[:index1].strip()
@@ -762,16 +767,17 @@ class ExtractorCvlac():
                                     dic[item[:item.find(':')]]=re.sub('<[^<]+?>', '',item[item.find(':'):]).lstrip(':').strip()
                             cont_aux=dic['contrato/registro'].split('. En:') 
                             dic['contrato/registro']=cont_aux[0] if len(dic['contrato/registro']) != 0 else ''
+                            lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
                             try:     
-                                    lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
-                                    index_datos=re.search(',(\d{4})',lugg).start()                        
+                                    #lugg=cont_aux[1] if len(dic['contrato/registro']) >= 1 else ''
+                                    index_datos=re.search(',(\d{4})',lugg).start()  #type: ignore      
                             except :
                                 index_datos= -1
                             dic['lugar']=lugg[:index_datos].strip()
                             dic['fecha']=lugg[index_datos+1:].strip()
 
                             dic=pd.DataFrame([dict(zip(list(self.innovacion_empresarial.columns),dic.values()))])
-                            self.innovacion_empresarial = almacena_df(self.innovacion_empresarial,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)   
+                            self.innovacion_empresarial = almacena_df(self.innovacion_empresarial,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)# type: ignore   
                             
         except AttributeError:
             pass           
