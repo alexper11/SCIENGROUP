@@ -184,6 +184,7 @@ class ExtractorScopus:
     
     def get_authors_df(self, authors):    
         self.__init__(self.API_KEY, self.INST_TOKEN)
+        print('Extrayendo autores...')
         for author in authors:    
             time.sleep(0.2)
             url = f'https://api.elsevier.com/content/author/author_id/{author}?view=ENHANCED'
@@ -236,7 +237,7 @@ class ExtractorScopus:
         
         return df_autores
     
-    def get_field_search(self, field,r,key=''):
+    def get_field_search(self, field, r, key=''):
         if key!='':
             if key == 'page_start':
                 try:
@@ -360,13 +361,13 @@ class ExtractorScopus:
             break
         return stage
 
-    def get_scopusid_list(self,author):
+    def get_scopusid_list(self,affil):
         result=''
         scopusid_list=[]
         eid_list=[]
         cursor=0
         tries=3
-        url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&start=0&count=1&field=dc:identifier&view=STANDARD'
+        url = f'https://api.elsevier.com/content/search/scopus?query=af-id({affil})&start=0&count=1&field=dc:identifier&view=STANDARD'
         for i in range(tries):
             try:
                 response = requests.get(url,
@@ -381,11 +382,11 @@ class ExtractorScopus:
                 if i < tries - 1:
                     continue
                 else:
-                    print('Error al extraer scopus_id list:',author)
+                    print('Error al extraer scopus_id list:',affil)
                     TotalArt=0
             break      
         while cursor <= TotalArt:
-            url = f'https://api.elsevier.com/content/search/scopus?query=au-id({author})&start={cursor}&count=200&field=dc:identifier,eid&view=STANDARD'
+            url = f'https://api.elsevier.com/content/search/scopus?query=af-id({affil})&start={cursor}&count=200&field=dc:identifier,eid&view=STANDARD'
             tries=3
             for i in range(tries):
                 try:
@@ -401,7 +402,7 @@ class ExtractorScopus:
                     if i < tries - 1:
                         continue
                     else:
-                        print('Error al extraer el scopusid list de autor: ',author)
+                        print('Error al extraer el scopusid list de autor: ',affil)
                         flag=False
                 break
             cursor = cursor + 200
@@ -659,13 +660,13 @@ class ExtractorScopus:
                 text =''
         return text
         
-    def get_articles_full(self, author_list):
+    def get_articles_full(self, affil_list):
         result=''
         count=0
-        for author in author_list:
-            print('extrayendo...',count,' de ', len(author_list))
+        for affil in affil_list:
+            print('extrayendo...',count,' de ', len(affil_list))
             tries=3
-            articles=self.get_scopusid_list(author)
+            articles=self.get_scopusid_list(affil)
             for article in articles:
                 url=f'https://api.elsevier.com/content/abstract/eid/{article}?view=FULL'  #USAR EID
                 #url=f'https://api.elsevier.com/content/abstract/scopus_id/{article}?view=FULL'   #USAR SCOPUS ID

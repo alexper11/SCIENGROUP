@@ -7,18 +7,17 @@ class AutoresController:
     count = 0
     def __init__(self):
         self.__class__.count = self.__class__.count + 1
-    
+            
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            autores = Autores(**dic)
-            scopusdb.session.add(autores)
+        scopusdb.session.bulk_insert_mappings(Autores, dicList)
         try:
             scopusdb.session.commit()
         except:
             scopusdb.session.rollback()
             print("No se pudo insertar el dataframe en Autores")
             df.to_csv('AutoresScopus.csv')
-            raise
         finally:
             scopusdb.session.close()
+            
+    #pendiente metodo delete
