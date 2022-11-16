@@ -10,15 +10,14 @@ class ProductosController:
     
     def insert_df(self, df):
         dicList=df.to_dict(orient='records')
-        for dic in dicList:
-            productos = Productos(**dic)
-            scopusdb.session.add(productos)
+        scopusdb.session.bulk_insert_mappings(Productos, dicList)
         try:
             scopusdb.session.commit()
         except:
             scopusdb.session.rollback()
             print("No se pudo insertar el dataframe en Productos")
-            df.to_csv('Productoscopus.csv')
-            raise
+            df.to_csv('ProductosScopus.csv')
         finally:
             scopusdb.session.close()
+            
+    #pendiente metodo delete

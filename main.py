@@ -64,16 +64,15 @@ from scopus.controllers.MetaDBScoController import MetaDBScoController
 
 if __name__ == '__main__':
     
-    ########################
-    #MODULO CVLAC
-    ########################
-    
     sys.path.append(".")
     #create_cvlac_db()
     #create_gruplac_db()
-    #create_scopus_db()
+    create_scopus_db()
     print('Bases de datos creadas')
-    
+    ########################
+    #MODULO CVLAC
+    ########################
+    """
     Extractor=ExtractorGruplac()
     #para este caso el parametro de entrada es la url del buscador scienti para el departamento del Cauca
     lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')
@@ -145,7 +144,7 @@ if __name__ == '__main__':
     
     tecnologicos=TecnologicosController()
     tecnologicos.insert_df(Extractor.grup_tecnologicos.drop_duplicates(ignore_index=True))
-    
+    """
     ######################
     #Extraccion de tablas GRUPLAC
     ######################
@@ -224,8 +223,6 @@ if __name__ == '__main__':
     ########################
     #SCOPUS
     ########################
-    """
-    
     API_KEY=""
     INST_TOKEN=""
     API_KEY, INST_TOKEN = read_key()
@@ -241,9 +238,8 @@ if __name__ == '__main__':
     autores = AutoresController()
     autores.insert_df(df_autores)
     
-    df_productos=ExtractorS.get_articles_full(authors_list)
+    df_productos=ExtractorS.get_articles_full([60051434])
     #df_productos=pd.read_csv ('df_productos.csv')
-    
     productos = ProductosController()
     try:
         productos.insert_df(df_productos)
@@ -251,9 +247,7 @@ if __name__ == '__main__':
         df_productos.to_csv('df_productos.csv',index=False)
         raise
     del ExtractorS
-    
-    """
-    
+
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
     #########################################
