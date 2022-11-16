@@ -4,3 +4,20 @@ html * {
 img {
     max-width: 30px;
 }
+button{    
+    text-align: center;
+    border-radius: 5px;
+            -webkit-box-shadow: -1px 3px 18px 0px rgba(0,0,0,0.35);
+            -moz-box-shadow: -1px 3px 18px 0px rgba(0,0,0,0.35);
+            box-shadow: -1px 3px 18px 0px rgba(0,0,0,0.35);   
+ }
+
+ input {
+    display: block;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(2, 38, 137, 0.4);
+    box-shadow: 0 2px 4px 0 rgba(4, 9, 160, 0.2), 0 2px 4px 0 rgba(4, 9, 160, 0.2);
+    text-align: center;
+  }

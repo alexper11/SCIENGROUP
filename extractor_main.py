@@ -62,7 +62,7 @@ from scopus.controllers.ProductosController import ProductosController
 from scopus.controllers.MetaDBScoController import MetaDBScoController                  
 
 #############   Librerias para flask  #########
-from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash
+from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash, jsonify
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, SubmitField, RadioField
@@ -115,7 +115,7 @@ def home():
     }        
     return render_template('home.html', **context)
 
-@app.route('/extractor', methods=['GET', 'POST']) 
+@app.route('/extractor', methods=['GET', 'POST'])
 def extractor():
     field_form_cvlac = FieldFormCvlac()
     enlace_cvlac = session.get('enlace_cvlac')
@@ -135,55 +135,62 @@ def extractor():
     if field_form_cvlac.validate_on_submit():
         enlace_cvlac = field_form_cvlac.enlace_cvlac.data
         session['enlace_cvlac'] = enlace_cvlac
-        
-        flash('Empezando la extracción del perfil de Cvlac')
-        Extractor=ExtractorGruplac()
-        #urls cvlac:
+        if 'https://scienti.minciencias.gov.co/cvlac/visualizador/' in enlace_cvlac:
+            try:
+                Extractor=ExtractorGruplac()
+                #urls cvlac:                    
+                dom=get_lxml(enlace_cvlac)
+                df_prueba=Extractor.get_articulo(dom,enlace_cvlac)  
                 
-        list_url = [enlace_cvlac]
+                df_prueba.to_csv('extraccion_cvlac_individual.csv',index=False)
+                flash('Extracción del perfil de Cvlac terminado')                
+            except:
+                flash('Error de conexion')
+            #make_response(redirect('/home'))
+        else:
+            flash('Lo sentimos, link incorrecto')
         
-        for url in list_url:
-            dom=get_lxml(url)
-            df_prueba=Extractor.get_articulo(dom,url)  
-        
-        df_prueba.to_csv('extraccion_cvlac_individual.csv',index=False)
-        
-        flash('Extracción del perfil de Cvlac terminado')
-        
-        return redirect(url_for('extractor'))
+        return redirect(url_for('extractor'))        
     
     if field_form_gruplac.validate_on_submit():#detecta cuando hay post y valida la forma
         enlace_gruplac = field_form_gruplac.enlace_gruplac.data
         action_gruplac = field_form_gruplac.action_gruplac.data
         session['enlace_gruplac'] = enlace_gruplac
         session['action_gruplac'] = action_gruplac
+        if 'https://scienti.minciencias.gov.co/gruplac/jsp/' in enlace_gruplac:
+            try:       
+                Extractor=ExtractorGruplac()        
                 
-        Extractor=ExtractorGruplac()
-        list_url = [enlace_gruplac]
-        
-        #Extrae datos de un gruplac:
-        if action_gruplac == 'Extraer datos del Gruplac':
-            flash('Empezando la extracción del perfil de Gruplac')
-            for url in list_url:
-                dom=get_lxml(url)
-                df_prueba=Extractor.get_perfil_articulos(dom,url)  
-            
-            df_prueba.to_csv('extraccion_gruplac.csv',index=False)
-            flash('Extracción del perfil de Gruplac terminado')
-            return redirect(url_for('extractor'))
-        
-        #Extrae datos de investigadores de gruplac:
-        elif action_gruplac == 'Extraer datos del los investigadores del Gruplac':
-            flash('Empezando la extracción de los Cvlacs del perfil de Gruplac')
-            list_url=Extractor.get_members_list(enlace_gruplac)
-            for url in list_url:
-                dom=get_lxml(url)
-                df_prueba=Extractor.get_articulo(dom,url) 
-            df_prueba.to_csv('extraccion_cvlacs_gruplac.csv',index=False)
-        
-            flash('Extracción de los Cvlacs del perfil de Gruplac terminado')
+                #Extrae datos de un gruplac:
+                if action_gruplac == 'Extraer datos del Gruplac':
+                    list_url = enlace_gruplac
+                    #render_template('home.html')
+                    dom=get_lxml(enlace_gruplac)
+                    df_prueba=Extractor.get_perfil_articulos(dom,enlace_gruplac)  
+                    df_prueba.to_csv('extraccion_gruplac.csv',index=False)
+                                
+                    flash('Extracción del perfil de Gruplac terminado')
+                    
+                #Extrae datos de investigadores de gruplac:
+                elif action_gruplac == 'Extraer datos del los investigadores del Gruplac':            
+                    list_url=Extractor.get_members_list(enlace_gruplac)
+                    for url in list_url:
+                        dom=get_lxml(url)                
+                        df_prueba=Extractor.get_articulo(dom,url)
+                        print("extrayendo") 
+                    df_prueba.to_csv('extraccion_cvlacs_gruplac.csv',index=False)
+                                
+                    flash('Extracción de los Cvlacs del perfil de Gruplac terminado')
+                    
+                else:
+                    #make_response(redirect('/home'))
+                    pass  
+            except:
+                flash('Error de conexion')            
         else:
-            pass   
+            flash('Lo sentimos, link incorrecto')
+            
+        return redirect(url_for('extractor'))
    
     return render_template('extractor.html', **context_extractor)
 
