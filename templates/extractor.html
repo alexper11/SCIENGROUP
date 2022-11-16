@@ -8,18 +8,36 @@
 
 {% block content %}
        
-    <div class="container">  
-        {% if enlace_cvlac %}
-            <h6 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h6>
-        {% endif %}      
-        {{ wtf.quick_form(field_form_cvlac) }}        
-    </div>
-
-    <div class="container">        
-        {% if enlace_gruplac %}
-            <h6 style="text-align:center" >Enlace de gruplac: {{ enlace_gruplac }}</h6>
-        {% endif %}
-        {{ wtf.quick_form(field_form_gruplac) }}        
-    </div>
+    <div class="container" style="max-width: 70rem;">
+        <span id="success_message"></span>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Extractor Cvlac y Gruplac</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="form_extractor_cvlac">
+                    {{ wtf.quick_form(field_form_cvlac) }}
+                </form>
+                <form method="post" id="form_extractor_gruplac">
+                    <hr size="2px" color="black" style="max-width: 70rem;"/>
+                    {{ wtf.quick_form(field_form_gruplac) }} 
+                </form>       
+                        
+                <br><br>
+                <!--{% if enlace_cvlac or enlace_gruplac%}       
+                    <h6 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h6>                         
+                {% endif %}
+                {% if enlace_cvlac %}       
+                    <h6 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h6>
+                {% endif %} -->                
+                <div class="form-group" id="process" style="display:none;">
+                    <h5><strong>Por favor espere, extrayendo...</strong></h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 5%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
 
 {% endblock %}
