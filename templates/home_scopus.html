@@ -1,0 +1,44 @@
+{% extends 'base_scopus.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %}
+    {{ super() }}
+    Bienvenido
+{% endblock %}
+
+{% block content %}    
+    {% if apikey or token%}
+        <div class="container" style="max-width: 90rem;">        
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title text-center">Estado de registro</h3>
+                </div>
+                <div class="panel-body">
+                    <h3 class="panel-title"><br>Hola, bienvenido al sistema de extracción de datos de Scopus. <br><br> Su token registrado es {{ token | capitalize }} y su apikey es {{ apikey | capitalize }}<br><br></h3>
+                </div>
+            </div>
+        </div>
+        
+    {% else %}  
+        <div class="container" style="max-width: 90rem;">        
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title text-center">Registro credenciales de Scopus</h3>
+                </div>
+                <div class="panel-body">
+                    <form method="post" id="form_credential">
+                        {{ wtf.quick_form(login_form) }}
+                    </form>                 
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if user_ip %}
+        <h6 style="text-align:center">IP registrado: {{user_ip}}</h6>
+    {% else %}
+        <!-- para actualizar la ip por si se borro cache -->
+        <!-- <a href="{{ url_for('index')}}">Ir a inicio</a> -->
+    {% endif %}
+
+{% endblock %}

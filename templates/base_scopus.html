@@ -1,0 +1,126 @@
+{% extends 'bootstrap/base.html' %}
+{% block head %}
+    {{ super() }}
+    <title>
+        {% block title %}Extractor |{% endblock %}
+    </title>
+    <!-- start -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- end -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}">
+    <!-- start -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<!-- start -->
+    <script>
+        $(document).ready(function(){
+        $('#form_extractor_cvlac').on('submit', function(event){
+        //   event.preventDefault();         
+          $.ajax({
+          url:"/extractor",
+          method:"POST",
+          data:$(this).serialize(),
+          beforeSend:function()
+          {
+           $('#submit_cvlac').attr('disabled', 'disabled');
+           $('#submit_gruplac').attr('disabled', 'disabled');
+           $('#process').css('display', 'block');
+           $('#logo_static').css('display', 'none');
+           $('#logo_load').css('display', 'block');
+          },
+          success:function(data)
+          { 
+           var percentage = 0;         
+           var timer = setInterval(function(){
+            percentage = percentage + 20;
+            progress_bar_process(percentage, timer,data);            
+           }, 100);
+          }
+         })              
+        });
+        $('#form_extractor_gruplac').on('submit', function(event){                 
+          $.ajax({
+          url:"/extractor_scopus",
+          method:"POST",
+          data:$(this).serialize(),
+          beforeSend:function()
+          {
+           $('#submit_cvlac').attr('disabled', 'disabled');
+           $('#submit_gruplac').attr('disabled', 'disabled');
+           $('#process').css('display', 'block');
+           $('#logo_static').css('display', 'none');
+           $('#logo_load').css('display', 'block');
+          },
+          success:function(data)
+          { 
+           var percentage = 20;         
+           var timer = setInterval(function(){
+            percentage = percentage + 20;
+            progress_bar_process(percentage, timer,data);            
+           }, 1000);
+          }
+         })              
+        });
+        
+        function progress_bar_process(percentage, timer,data)
+        {
+            $('.progress-bar').css('width', percentage + '%');
+            if(percentage > 100)
+            {
+                clearInterval(timer);
+                $('#form_extractor_cvlac')[0].reset();
+                $('#process').css('display', 'none');
+                $('#logo_load').css('display', 'none');
+                $('#logo_static').css('display', 'block');
+                $('.progress-bar').css('width', '0%');
+                $('#submit_cvlac').attr('disabled', false);
+                $('#submit_gruplac').attr('disabled', false);
+                // $('#success_message').html(data);
+                setTimeout(function(){
+                // $('#success_message').html('');
+                // location.reload();
+                }, 1000);
+            }
+        }           
+        });
+    </script>
+    <!-- end -->
+
+{% endblock %}
+
+{% block body %}
+    {% block navbar %}
+        {% include 'navbar_scopus.html' %}
+    {% endblock %}
+    
+    {% for message in get_flashed_messages() %}
+        {% if message == 'Error de conexion' %}
+            <div class="alert alert-danger alert-dismissible center-block" style="max-width: 90rem;">
+                <button type="button"
+                        data-dismiss="alert"
+                        class="close">&times;</button>
+                {{ message }}
+            </div>
+        {% elif message == 'Lo sentimos, link incorrecto' %}
+            <div class="alert alert-warning alert-dismissible center-block" style="max-width: 90rem;">
+                <button type="button"
+                        data-dismiss="alert"       
+                        class="close">&times;</button>
+                {{ message }}
+            </div>
+        {% else %}
+        <div class="alert alert-success alert-dismissible center-block" style="max-width: 90rem;">
+            <button type="button"
+                    data-dismiss="alert"
+                    class="close">&times;</button>
+            {{ message }}
+        </div> 
+        {% endif %}
+    {% endfor %}
+    
+    {% block content %}{% endblock %}
+    {% block scripts %}
+        {{ super()}}<!--para heredar todos los scripts -->
+    {% endblock %}
+{% endblock %}
