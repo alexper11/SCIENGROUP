@@ -26,6 +26,8 @@
            $('#submit_cvlac').attr('disabled', 'disabled');
            $('#submit_gruplac').attr('disabled', 'disabled');
            $('#process').css('display', 'block');
+           $('#logo_static').css('display', 'none');
+           $('#logo_load').css('display', 'block');
           },
           success:function(data)
           { 
@@ -39,7 +41,7 @@
         });
         $('#form_extractor_gruplac').on('submit', function(event){                 
           $.ajax({
-          url:"/extractor",
+          url:"/extractor_scienti",
           method:"POST",
           data:$(this).serialize(),
           beforeSend:function()
@@ -47,6 +49,8 @@
            $('#submit_cvlac').attr('disabled', 'disabled');
            $('#submit_gruplac').attr('disabled', 'disabled');
            $('#process').css('display', 'block');
+           $('#logo_static').css('display', 'none');
+           $('#logo_load').css('display', 'block');
           },
           success:function(data)
           { 
@@ -67,6 +71,8 @@
                 clearInterval(timer);
                 $('#form_extractor_cvlac')[0].reset();
                 $('#process').css('display', 'none');
+                $('#logo_load').css('display', 'none');
+                $('#logo_static').css('display', 'block');
                 $('.progress-bar').css('width', '0%');
                 $('#submit_cvlac').attr('disabled', false);
                 $('#submit_gruplac').attr('disabled', false);
@@ -85,26 +91,26 @@
 
 {% block body %}
     {% block navbar %}
-        {% include 'navbar.html' %}
+        {% include 'navbar_scienti.html' %}
     {% endblock %}
     
     {% for message in get_flashed_messages() %}
         {% if message == 'Error de conexion' %}
-            <div class="alert alert-danger alert-dismissible center-block" style="max-width: 70rem;">
+            <div class="alert alert-danger alert-dismissible center-block" style="max-width: 90rem;">
                 <button type="button"
                         data-dismiss="alert"
                         class="close">&times;</button>
                 {{ message }}
             </div>
         {% elif message == 'Lo sentimos, link incorrecto' %}
-            <div class="alert alert-warning alert-dismissible center-block" style="max-width: 70rem;">
+            <div class="alert alert-warning alert-dismissible center-block" style="max-width: 90rem;">
                 <button type="button"
                         data-dismiss="alert"       
                         class="close">&times;</button>
                 {{ message }}
             </div>
         {% else %}
-        <div class="alert alert-success alert-dismissible center-block" style="max-width: 70rem;">
+        <div class="alert alert-success alert-dismissible center-block" style="max-width: 90rem;">
             <button type="button"
                     data-dismiss="alert"
                     class="close">&times;</button>
