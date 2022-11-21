@@ -30,7 +30,7 @@ class ExtractorScopus:
                 response = requests.get(url,
                                             headers={'Accept':'application/json',
                                                     'X-ELS-APIKey': self.API_KEY,
-                                                    'X-ELS-Insttoken': self.INST_TOKEN})
+                                                    'X-ELS-Insttoken': self.INST_TOKEN}, verify=False)#eliminar verify=False
                 
                 result = response.json()    
                 authorIdList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
@@ -55,7 +55,8 @@ class ExtractorScopus:
                     response = requests.get(url,
                                                 headers={'Accept':'application/json',
                                                         'X-ELS-APIKey': self.API_KEY,
-                                                        'X-ELS-Insttoken': self.INST_TOKEN})
+                                                        'X-ELS-Insttoken': self.INST_TOKEN}, verify=False)#eliminar verify=False
+                    
                     result = response.json()
                     
                     tempList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
@@ -194,7 +195,7 @@ class ExtractorScopus:
                     response = requests.get(url,
                                             headers={'Accept':'application/json',
                                                 'X-ELS-APIKey': self.API_KEY,
-                                                'X-ELS-Insttoken': self.INST_TOKEN})
+                                                'X-ELS-Insttoken': self.INST_TOKEN}, verify=False)#eliminar verify=False
                     
                     result = response.json()
                     r=result['author-retrieval-response'][0]['coredata']
@@ -319,7 +320,7 @@ class ExtractorScopus:
                     response = requests.get(url,
                                             headers={'Accept':'application/json',
                                             'X-ELS-APIKey': self.API_KEY,
-                                            'X-ELS-Insttoken': self.INST_TOKEN})
+                                            'X-ELS-Insttoken': self.INST_TOKEN}, verify=False)#eliminar verify=False
                         
                     result = response.json()
                     try:
@@ -345,7 +346,7 @@ class ExtractorScopus:
                 response = requests.get(url,
                                         headers={'Accept':'application/json',
                                         'X-ELS-APIKey': self.API_KEY,
-                                        'X-ELS-Insttoken': self.INST_TOKEN})
+                                        'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
                         
                 result = response.json()
                 try:
@@ -373,7 +374,7 @@ class ExtractorScopus:
                 response = requests.get(url,
                                         headers={'Accept':'application/json',
                                         'X-ELS-APIKey': self.API_KEY,
-                                        'X-ELS-Insttoken': self.INST_TOKEN})
+                                        'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
                 
                 result = response.json()
                 TotalArt = int(result['search-results']['opensearch:totalResults'])
@@ -393,7 +394,7 @@ class ExtractorScopus:
                     response = requests.get(url,
                                             headers={'Accept':'application/json',
                                             'X-ELS-APIKey': self.API_KEY,
-                                            'X-ELS-Insttoken': self.INST_TOKEN})
+                                            'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
                     
                     result = response.json()        
                     flag=True
@@ -436,7 +437,7 @@ class ExtractorScopus:
                     response = requests.get(url,
                                             headers={'Accept':'application/json',
                                             'X-ELS-APIKey': self.API_KEY,
-                                            'X-ELS-Insttoken': self.INST_TOKEN})
+                                            'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
                     
                     result = response.json()
                     TotalArt = int(result['search-results']['opensearch:totalResults'])
@@ -498,7 +499,7 @@ class ExtractorScopus:
                         response = requests.get(url,
                                                 headers={'Accept':'application/json',
                                                 'X-ELS-APIKey': self.API_KEY,
-                                                'X-ELS-Insttoken': self.INST_TOKEN})
+                                                'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
                         
                         result = response.json()
                         #cursor_next=str(result['search-results']['cursor']['@next'])
@@ -675,7 +676,7 @@ class ExtractorScopus:
                         response = requests.get(url,
                                                 headers={'Accept':'application/json',
                                                 'X-ELS-APIKey': self.API_KEY,
-                                                'X-ELS-Insttoken': self.INST_TOKEN})
+                                                'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
                         
                         result = response.json()
                         flag=True

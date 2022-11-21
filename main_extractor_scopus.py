@@ -77,14 +77,14 @@ bootstrap = Bootstrap(app)
 app.config['SECRET_KEY']='SUPER SECRETO' #No es la mejor practica
 
     
-class FieldFormCvlac(FlaskForm):
-    enlace_cvlac = StringField('Digite enlace Cvlac:', validators=[DataRequired()])    
-    submit_cvlac = SubmitField('Extraer cvlac')
+class FieldFormScopus(FlaskForm):
+    id_scopus = StringField('Digite el ID de la institución:', validators=[DataRequired()])    
+    submit_scopus = SubmitField('Extraer productos')
     
 class CredentialForm(FlaskForm):
     apikey = StringField('Digite el Apikey:', validators=[DataRequired()])
     token = StringField('Digite el Token:', validators=[DataRequired()])    
-    submit_cvlac = SubmitField('Registrar')
+    submit_credential = SubmitField('Registrar')
 
 #Creamos un decorador:
 @app.cli.command()
@@ -110,20 +110,20 @@ def index():
 @app.route('/home_scopus', methods=['GET', 'POST']) #ruta en que
 def home():
     user_ip = session.get('user_ip')
-    login_form = CredentialForm()
+    credential_form = CredentialForm()
     apikey = session.get('apikey')
     token = session.get('token')
     
     context = {
         'user_ip' : user_ip,
-        'login_form' : login_form,
+        'login_form' : credential_form,
         'apikey' : apikey,
         'token' : token
     }
     
-    if login_form.validate_on_submit():#detecta cuando hay posy y valida la forma
-        apikey = login_form.apikey.data
-        token = login_form.token.data
+    if credential_form.validate_on_submit():#detecta cuando hay posy y valida la forma
+        apikey = credential_form.apikey.data
+        token = credential_form.token.data
         session['apikey'] = apikey
         session['token'] = token
         
@@ -135,80 +135,67 @@ def home():
 
 @app.route('/extractor_scopus', methods=['GET', 'POST'])
 def extractor():
-    field_form_cvlac = FieldFormCvlac()
-    enlace_cvlac = session.get('enlace_cvlac')
-        
-    field_form_gruplac = FieldFormCvlac()
-    enlace_gruplac = session.get('enlace_gruplac')
-    action_gruplac = session.get('action_gruplac')
-        
+    field_form_scopus = FieldFormScopus()
+    credential_form = CredentialForm()
+    id_scopus = session.get('id_scopus') 
+    apikey = session.get('apikey')
+    token = session.get('token')     
+            
     context_extractor = {
-        'field_form_cvlac' : field_form_cvlac,
-        'enlace_cvlac' : enlace_cvlac,
-        'field_form_gruplac' : field_form_gruplac,
-        'action_gruplac' : action_gruplac,
-        'enlace_gruplac' : enlace_gruplac
+        'field_form_scopus' : field_form_scopus,
+        'id_scopus' : id_scopus,
+        'apikey' : apikey,
+        'token' : token
     }        
         
-    if field_form_cvlac.validate_on_submit():
-        enlace_cvlac = field_form_cvlac.enlace_cvlac.data
-        session['enlace_cvlac'] = enlace_cvlac
-        if 'https://scienti.minciencias.gov.co/cvlac/visualizador/' in enlace_cvlac:
-            try:
-                Extractor=ExtractorGruplac()
-                #urls cvlac:                    
-                dom=get_lxml(enlace_cvlac)
-                df_prueba=Extractor.get_articulo(dom,enlace_cvlac)  
-                
-                df_prueba.to_csv('extraccion_cvlac_individual.csv',index=False)
-                flash('Extracción del perfil de Cvlac terminado')                
-            except:
-                flash('Error de conexion')
-            #make_response(redirect('/home'))
-        else:
-            flash('Lo sentimos, link incorrecto')
+    if field_form_scopus.validate_on_submit():
+        id_scopus = field_form_scopus.id_scopus.data
+        session['id_scopus'] = id_scopus
+        apikey = credential_form.apikey.data
+        token = credential_form.token.data
+        session['apikey'] = apikey
+        session['token'] = token
         
-        return redirect(url_for('extractor'))        
-    
-    if field_form_gruplac.validate_on_submit():#detecta cuando hay post y valida la forma
-        enlace_gruplac = field_form_gruplac.enlace_gruplac.data
-        action_gruplac = field_form_gruplac.action_gruplac.data
-        session['enlace_gruplac'] = enlace_gruplac
-        session['action_gruplac'] = action_gruplac
-        if 'https://scienti.minciencias.gov.co/gruplac/jsp/' in enlace_gruplac:
-            try:       
-                Extractor=ExtractorGruplac()        
-                
-                #Extrae datos de un gruplac:
-                if action_gruplac == 'Extraer datos del Gruplac':
-                    list_url = enlace_gruplac
-                    #render_template('home.html')
-                    dom=get_lxml(enlace_gruplac)
-                    df_prueba=Extractor.get_perfil_articulos(dom,enlace_gruplac)  
-                    df_prueba.to_csv('extraccion_gruplac.csv',index=False)
-                                
-                    flash('Extracción del perfil de Gruplac terminado')
-                    
-                #Extrae datos de investigadores de gruplac:
-                elif action_gruplac == 'Extraer datos del los investigadores del Gruplac':            
-                    list_url=Extractor.get_members_list(enlace_gruplac)
-                    for url in list_url:
-                        dom=get_lxml(url)                
-                        df_prueba=Extractor.get_articulo(dom,url)
-                        print("extrayendo") 
-                    df_prueba.to_csv('extraccion_cvlacs_gruplac.csv',index=False)
-                                
-                    flash('Extracción de los Cvlacs del perfil de Gruplac terminado')
-                    
-                else:
-                    #make_response(redirect('/home'))
-                    pass  
-            except:
-                flash('Error de conexion')            
-        else:
-            flash('Lo sentimos, link incorrecto')
+        try:
+            sys.path.append(".")                               
+            create_scopus_db()
+            print('Bases de datos creadas')
             
-        return redirect(url_for('extractor'))
+            # API_KEY=""
+            # INST_TOKEN=""
+            # API_KEY, INST_TOKEN = read_key()            
+            # ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
+            print('api: ', apikey)
+            print ('token: ',token)
+            ExtractorS = ExtractorScopus(apikey,token)
+            
+            # authors_list=ExtractorS.get_auid_list(60051434)
+            authors_list=ExtractorS.get_auid_list(id_scopus)
+            
+            df_autores=ExtractorS.get_authors_df(authors_list) 
+            
+            autores = AutoresController()
+            autores.insert_df(df_autores)
+            
+            # df_productos=ExtractorS.get_articles_full([60051434])
+            df_productos=ExtractorS.get_articles_full([id_scopus])
+            
+            #df_productos=pd.read_csv ('df_productos.csv')
+            productos = ProductosController()
+            try:
+                productos.insert_df(df_productos)
+            except:
+                df_productos.to_csv('df_productos.csv',index=False)
+                raise
+            del ExtractorS
+            
+            flash('Extracción del perfil de Cvlac terminado')                
+        except:
+            flash('Error de conexion')
+        #make_response(redirect('/home'))
+                
+        return redirect(url_for('extractor'))    
+
    
     return render_template('extractor_scopus.html', **context_extractor)
 
