@@ -12,7 +12,7 @@ class Autores(Base):
     orcid = Column(String(200), nullable=True)
     documentos= Column(String(50), nullable=True)
     fecha_creacion = Column(String(100), nullable=True)
-    citado = Column(String(50), nullable=True)
+    documentos_citados = Column(String(50), nullable=True)
     citaciones = Column(String(50), nullable=True)
     h_index = Column(String(50), nullable=True)
     co_autores = Column(String(50), nullable=True)

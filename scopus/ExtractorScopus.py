@@ -7,13 +7,13 @@ import pandas as pd
 class ExtractorScopus:
     
     def __init__(self, api_key, inst_token):
-        self.autores={"nombre":[],"nombre_index":[],"autor_id":[],"eid":[],"orcid":[],"documentos":[],"fecha_creacion":[],"citado":[],
+        self.autores={"nombre":[],"nombre_index":[],"autor_id":[],"eid":[],"orcid":[],"documentos":[],"fecha_creacion":[],"documentos_citados":[],
                      "citaciones":[],"h_index":[],"co_autores":[],"estado":[],"areas":[],"rango_publicacion":[],
                      "institucion":[],"departamento":[]}
             #Agregar indexed name
         self.articulos={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
                         "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"idioma":[],
-                        "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],"etapa_publicacion":[],
+                        "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"affil_id":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],"etapa_publicacion":[],
                         "autores":[],"autores_id":[],"tipo_acceso":[],"palabras_clave_autor":[],"palabras_clave_index":[],"agencia_fundadora":[],"pais":[]}
             #Agregar indexed name
         
@@ -25,6 +25,7 @@ class ExtractorScopus:
         s=0
         url = f'https://api.elsevier.com/content/search/author?query=AF-ID({affilid})&start=0&count=200&field=dc:identifier'
         tries=3
+        TotalId=0
         for i in range(tries):
             try:    
                 response = requests.get(url,
@@ -36,9 +37,12 @@ class ExtractorScopus:
                 authorIdList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
                 TotalId= int(result['search-results']['opensearch:totalResults'])
                 s=200
-            
             except:
-                print(result)
+                #print(result)
+                if result['search-results']['opensearch:totalResults']==0 or result['search-results']['opensearch:totalResults']=='0':
+                        authorIdList=[]
+                        #print('ok')
+                        break
                 if i < tries - 1:
                     continue
                 else:
@@ -62,17 +66,21 @@ class ExtractorScopus:
                     authorIdList.extend(tempList)
                     
                 except KeyError:
-                    print(result)
-                    print('Excepcion en get_auid_list')
-                
-                except:
-                    print(result) 
+                    #print('KeyError al extraer auid_list')
+                    #print(result)
+                    if result['search-results']['opensearch:totalResults']==0 or result['search-results']['opensearch:totalResults']=='0':
+                        authorIdList=[]
+                        break
+                    #raise
                     
+                except:
+                    print(result)    
                     if i < tries - 1:
                         continue
                     else:
                         print('Error al extraer auid_list')
                         print(response.headers)
+                        print(result) 
                 break
             s=s+200
                 
@@ -183,7 +191,7 @@ class ExtractorScopus:
         return text
     
     def get_authors_df(self, authors):    
-        self.__init__(self.API_KEY, self.INST_TOKEN)
+        
         print('Extrayendo autores...')
         for author in authors:    
             time.sleep(0.2)
@@ -206,9 +214,10 @@ class ExtractorScopus:
                     if i < tries - 1: 
                         continue
                     else:
+                        #Poner excepción para agotamiento de request del servicio api scopus
+                        ###
                         flag=False
                         print('Error al extraer el autor(authors_df): ',author)
-                        
                 break
             if flag==True:
                 pass
@@ -219,7 +228,7 @@ class ExtractorScopus:
             self.autores['autor_id'].append(''.join(filter(str.isdigit,str(r['dc:identifier']))))
             self.autores['orcid'].append(self.get_field('orcid',r))
             self.autores['documentos'].append(self.get_field('document-count',r))
-            self.autores['citado'].append(self.get_field('cited-by-count',r))
+            self.autores['documentos_citados'].append(self.get_field('cited-by-count',r))
             self.autores['citaciones'].append(self.get_field('citation-count',r))
             self.autores['h_index'].append(self.get_field('h-index',r2))
             self.autores['co_autores'].append(self.get_field('coauthor-count',r2))
@@ -233,8 +242,9 @@ class ExtractorScopus:
             self.autores['departamento'].append(self.get_field('depart',r4))
         
         df_autores = pd.DataFrame(self.autores) 
-        df_autores.reset_index(drop=True)
-        
+        df_autores.drop_duplicates(subset ="autor_id", inplace = True)
+        df_autores= df_autores.reset_index(drop=True).reset_index(drop=True).replace(to_replace ='&amp;', value = '&', regex=True)
+        self.__init__(self.API_KEY, self.INST_TOKEN)
         return df_autores
     
     def get_field_search(self, field, r, key=''):
@@ -361,7 +371,7 @@ class ExtractorScopus:
             break
         return stage
 
-    def get_scopusid_list(self,affil):
+    def get_eid_list(self,affil):
         result=''
         scopusid_list=[]
         eid_list=[]
@@ -415,11 +425,18 @@ class ExtractorScopus:
                 articles=result['search-results']['entry']
             except KeyError:
                 print(result)
+                print('KEY ERROR EN get_eid_list')
                 continue
             
             for article in articles:
                 #scopusid_list.append(''.join(filter(str.isdigit,str(article['dc:identifier']))))
-                eid_list.append(str(article['eid']))  #USAR EID
+                try:
+                    eid_list.append(str(article['eid']))  #USAR EID
+                except:
+                    print('eid Key error')
+                    print(article)
+                    print('affilition:', affil)
+                    
         #return scopusid_list   
         return eid_list
         
@@ -666,7 +683,10 @@ class ExtractorScopus:
         for affil in affil_list:
             print('extrayendo...',count,' de ', len(affil_list))
             tries=3
-            articles=self.get_scopusid_list(affil)
+            articles=self.get_eid_list(affil)
+            if len(articles)==0:
+                count=count+1
+                continue
             for article in articles:
                 url=f'https://api.elsevier.com/content/abstract/eid/{article}?view=FULL'  #USAR EID
                 #url=f'https://api.elsevier.com/content/abstract/scopus_id/{article}?view=FULL'   #USAR SCOPUS ID
@@ -712,7 +732,7 @@ class ExtractorScopus:
                         print(result)
                 #####################METODOS PARA EXTRACCION DE CAMPOS
                 
-                self.articulos['scopus_id'].append(article)
+                self.articulos['scopus_id'].append(article[article.rfind('-')+1:-1]) #revisar
                 self.articulos['eid'].append(self.get_field_search('eid',coredata))
                 self.articulos['titulo'].append(self.get_field_search('dc:title',coredata))
                 self.articulos['creador'].append(self.get_field_abstract('dc:creator',coredata))
@@ -732,6 +752,7 @@ class ExtractorScopus:
                 self.articulos['citado'].append(self.get_field_abstract('citedby-count',coredata))
                 self.articulos['link'].append(self.get_field_search('link',coredata,key='@rel'))
                 self.articulos['institucion'].append(self.get_field_search('affiliation',complete,key='affilname'))
+                self.articulos['affil_id'].append(self.get_field_search('affiliation',complete,key='@id'))#####revisar
                 self.articulos['abstract'].append(self.get_field_abstract('abstracts',item))
                 self.articulos['tema'].append(self.get_field_search('subject-area',subject,key='$'))
                 self.articulos['tipo_fuente'].append(self.get_field_abstract('prism:aggregationType',coredata))
@@ -745,11 +766,11 @@ class ExtractorScopus:
                 self.articulos['agencia_fundadora'].append(self.get_field_abstract('xocs:meta',item))
                 self.articulos['pais'].append(self.get_field_abstract('affiliation',complete,key='affiliation-country'))
             count=count+1
-                #############################
+            #############################
         df_articulos = pd.DataFrame(self.articulos) 
-        df_articulos.drop_duplicates(subset ="titulo", inplace = True)
-        df_articulos.reset_index(drop=True)
-        self.__init__(self.API_KEY, self.INST_TOKEN)
+        df_articulos.drop_duplicates(subset ="scopus_id", inplace = True)
+        df_articulos=df_articulos.reset_index(drop=True).replace(to_replace ='&amp;', value = '&', regex=True) 
+        self.__init__(self.API_KEY, self.INST_TOKEN)    #limpia atributos
         return df_articulos
     
     def __del__(self):

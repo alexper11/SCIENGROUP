@@ -26,6 +26,7 @@ class Productos(Base):
     citado = Column(String(50), nullable=True)
     link = Column(String(2000), nullable=True)
     institucion = Column(String(10000), nullable=True)
+    affil_id = Column(String(10000), nullable=True)
     abstract = Column(String(10000), nullable=True)
     tema = Column(String(30000), nullable=True)
     tipo_fuente = Column(String(200), nullable=True)
