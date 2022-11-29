@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_scienti.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block title %}
@@ -8,18 +8,18 @@
 
 {% block content %}
        
-    <div class="container" style="max-width: 70rem;">
+    <div class="container" style="max-width: 90rem;">
         <span id="success_message"></span>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Extractor Cvlac y Gruplac</h3>
+                <h3 class="panel-title text-center">Extractor Cvlac y Gruplac</h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="form_extractor_cvlac">
                     {{ wtf.quick_form(field_form_cvlac) }}
                 </form>
                 <form method="post" id="form_extractor_gruplac">
-                    <hr size="2px" color="black" style="max-width: 70rem;"/>
+                    <hr size="2px" color="black" style="max-width: 90rem;"/>
                     {{ wtf.quick_form(field_form_gruplac) }} 
                 </form>       
                         

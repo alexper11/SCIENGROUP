@@ -1,0 +1,42 @@
+<!--<nav>
+    <ul>
+        <img src="{{ url_for('static',filename='images/logo.png')}}" alt="radiohead logo">
+        <li><a href="{{ url_for('index') }}">Ir a inicio</a></li>
+        <li><a href="https://platzi.com" target="_blank">Ir a Platzi</a></li>
+    </ul>
+</nav>-->
+
+<div class="navbar navbar-light" style="background-color: #3065b4;" role="navigation" >
+    <div class="container" style="max-width: 90rem;">
+        <div class="navbar-header">           
+            <a class="navbar-brand" href="{{ url_for('extractor') }}">
+                <div class="logo_static" id="logo_static" style="display:block;">
+                    <img src="{{ url_for('static',filename='images/logo.png') }}"
+                    alt="logo jack">
+                </div>
+                <div class="logo_load" id="logo_load" style="display:none;">
+                    <div class="loader">                
+                        <div class="inner one"></div>
+                        <div class="inner two"></div>
+                        <div class="inner three"></div>
+                    </div>
+                </div>    
+                
+            </a>
+        </div>
+
+        <div class="navbar-text">
+            <h4 class="navbar-text">Extractor Scienti Dashboard Analytics</h4>
+            
+            <ul class="nav navbar-nav pull-xs-right">
+                <li class="nav-item"><a href="{{ url_for('index') }}">Inicio</a></li>
+                <li class="nav-item"><a href="{{ url_for('extractor') }}">Extractor</a></li>                
+                <!-- <li><a href="{{ url_for('scopus') }}">Scopus</a></li> 
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Dashboard</a>
+                </li> -->
+            </ul>
+        </div>
+        
+    </div>
+</div>
