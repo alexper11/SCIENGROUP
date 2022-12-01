@@ -20,6 +20,7 @@ class Autores(Base):
     areas = Column(String(12000), nullable=True)
     rango_publicacion = Column(String(200), nullable=True)
     institucion = Column(String(1000), nullable=True)
+    affil_id = Column(String(10000), nullable=True)
     departamento = Column(String(1000), nullable=True)
     
     def __init__(self, **kwargs):
