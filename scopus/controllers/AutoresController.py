@@ -20,4 +20,12 @@ class AutoresController:
         finally:
             scopusdb.session.close()
             
-    #pendiente metodo delete
+    def delete_affil_id(self, affid):
+        scopusdb.session.query(Autores).filter(Autores.affil_id.like(f'%{affid}%')).delete()
+        try:
+            scopusdb.session.commit()
+        except:
+            scopusdb.session.rollback()
+            print("No se pudo eliminar el affid: "+affid+" en Autores")
+        finally:
+            scopusdb.session.close()

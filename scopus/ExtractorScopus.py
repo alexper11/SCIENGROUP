@@ -9,7 +9,7 @@ class ExtractorScopus:
     def __init__(self, api_key, inst_token):
         self.autores={"nombre":[],"nombre_index":[],"autor_id":[],"eid":[],"orcid":[],"documentos":[],"fecha_creacion":[],"documentos_citados":[],
                      "citaciones":[],"h_index":[],"co_autores":[],"estado":[],"areas":[],"rango_publicacion":[],
-                     "institucion":[],"departamento":[]}
+                     "institucion":[],"affil_id":[],"departamento":[]}
             #Agregar indexed name
         self.articulos={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
                         "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"idioma":[],
@@ -159,8 +159,29 @@ class ExtractorScopus:
                     try:
                         text=str(r['ip-doc']['preferred-name']['$'])
                     except KeyError:
-                        text=''
-                            
+                        text=''     
+        elif field=="inst_id":
+            if isinstance(r, list):
+                c=0
+                insts=''
+                for i in r:
+                    if c==0:
+                        try:
+                            insts=str(i['@affiliation-id'])
+                        except:
+                            insts=' '
+                        c=1
+                    else:
+                        try:
+                            insts=insts+', '+str(i['@affiliation-id'])
+                        except: 
+                            insts=insts+', '+' '
+                text=insts
+            else:
+                try:
+                    text=str(r['@affiliation-id'])
+                except:
+                    text=''
         elif field=="depart":
             if isinstance(r, list):
                 c=0
@@ -240,6 +261,7 @@ class ExtractorScopus:
             self.autores['nombre_index'].append(self.get_field("indexed-name",r3))
             self.autores['rango_publicacion'].append(self.get_field('publication-range',r3))
             self.autores['institucion'].append(self.get_field('inst',r4))
+            self.autores['affil_id'].append(self.get_field('inst_id',r4))
             self.autores['departamento'].append(self.get_field('depart',r4))
         
         df_autores = pd.DataFrame(self.autores) 
