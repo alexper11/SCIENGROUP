@@ -7,6 +7,9 @@ from scopus.Scientopy import Scientopy
 
 import pandas as pd
 import sys
+import requests
+import json
+from requests.exceptions import ConnectionError
 
 # from scopus.models.DBmodel import create_scopus_db
 from scopus.controllers.AutoresController import AutoresController
@@ -144,21 +147,34 @@ def extractor():
 
                 # Lo siguiente es para id_institucion
                 # hacerlo para solo producto
-                df_productos=ExtractorS.get_articles_full([id_scopus])
-                ###
-                productos = ProductosController()
-                try:
-                    productos.insert_df(df_productos)
-                except:
-                    df_productos.to_csv('df_productos.csv',index=False)
-                    raise
-                del ExtractorS
+                url = f'https://api.elsevier.com/content/author/author_id/a?view=ENHANCED'
+                response = requests.get(url,
+                                        headers={'Accept':'application/json',
+                                                 'X-ELS-APIKey': apikey,
+                                                 'X-ELS-Insttoken': token})
+                print(response.headers)
+                result = response.json()
+                print(result)
+                df_autores=ExtractorS.get_authors_df([id_scopus])
+                df_autores.to_csv('df_autores.csv',index=False)
+                # df_productos=ExtractorS.get_articles_full([id_scopus])
+                # ###
+                # productos = ProductosController()
+                # try:
+                #     productos.insert_df(df_productos)
+                # except:
+                #     df_productos.to_csv('df_productos.csv',index=False)
+                #     raise
+                # del ExtractorS
                 flash('Extracción del perfil de Scopus terminado')
 
-        except:
+        except ConnectionError:            
             print('no entro a nada')
             flash('Error de conexión')
         #make_response(redirect('/home'))
+        
+        except:
+           print('Error de texto, verificar valor ingresado')
 
         return redirect(url_for('extractor'))
 

@@ -806,7 +806,7 @@ class ExtractorScopus:
                                     'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
                     
             result = response.json()
-            print(type(result))                 
+            #print(type(result))                 
             if result['error-response']['error-code'] == 'APIKEY_INVALID':
                 self.STATE_API=result['error-response']['error-code']                            
                 return self.STATE_API
@@ -814,7 +814,7 @@ class ExtractorScopus:
                 self.STATE_API='APIKEY_VALID'
         except:
             self.STATE_API='APIKEY_VALID'
-            print('Credencial valida, request: ', result)         
+            #print('Credencial valida, request: ', result)         
         return self.STATE_API
     
     def __del__(self):
