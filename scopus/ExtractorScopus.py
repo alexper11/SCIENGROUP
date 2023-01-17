@@ -236,11 +236,18 @@ class ExtractorScopus:
                     if i < tries - 1: 
                         continue
                     else:
-                        #Poner excepción para agotamiento de request del servicio api scopus
-                        ###
                         flag=False
                         print('Error al extraer el autor(authors_df): ',author)
+                        #Poner excepción para agotamiento de request del servicio api scopus
+                        #RESPONSE
+                        if response['X-RateLimit-Remaining']=='0' or response['X-RateLimit-Remaining']==0:
+                            return 'API Error: Limite de solicitudes de la API alcanzado' 
+                        elif result['service-error']:
+                            return 'API Error: '+result['service-error']['statusText']
+                        else:
+                            pass    
                 break
+            
             if flag==True:
                 pass
             else:
@@ -711,6 +718,9 @@ class ExtractorScopus:
                 count=count+1
                 continue
             for article in articles:
+                ##################
+                #HACER UNA FUNCIÓN PARA ESTE UNICO PROCESO
+                ##################
                 url=f'https://api.elsevier.com/content/abstract/eid/{article}?view=FULL'  #USAR EID
                 #url=f'https://api.elsevier.com/content/abstract/scopus_id/{article}?view=FULL'   #USAR SCOPUS ID
                 for i in range(tries):
@@ -795,6 +805,7 @@ class ExtractorScopus:
         df_articulos=df_articulos.reset_index(drop=True).replace(to_replace ='&amp;', value = '&', regex=True) 
         self.__init__(self.API_KEY, self.INST_TOKEN)    #limpia atributos
         return df_articulos
+    
     def get_credential_validator(self,affil):
         result=''        
         url = f'https://api.elsevier.com/content/search/scopus?query=af-id({affil})&start=0&count=1&field=dc:identifier&view=STANDARD'
