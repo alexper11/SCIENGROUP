@@ -830,7 +830,7 @@ class ExtractorScopus:
                     ###############
                     if response.headers['X-RateLimit-Remaining']=='0' or response.headers['X-RateLimit-Remaining']==0:
                         return 'API Error: Limite de solicitudes de la API alcanzado' 
-                    elif result['service-error']:
+                    elif result['service-error']['status']:
                         return 'API Error: '+result['service-error']['status']['statusText']
                     else:
                         pass 
@@ -839,7 +839,7 @@ class ExtractorScopus:
             pass
         else:
             #######################
-            return 'error inesperado'
+            print('error inesperado...')
         try:
             coredata=result['abstracts-retrieval-response']['coredata']
             item=result["abstracts-retrieval-response"]["item"]
@@ -850,16 +850,10 @@ class ExtractorScopus:
             keywords=result["abstracts-retrieval-response"]["authkeywords"]
             idxterms=result["abstracts-retrieval-response"]["idxterms"]
         
-        ##################REVISAR TRAS ELSE
         except:
-            try:
-                msg=result['service-error']['status']['statusText']
-                print('ERROR DEL SERVICIO: ', msg)
-                print('PRODUCTO EID: ', article)
-            except:
-                print('Falla del servicio API: ')
-                print(result)
-        #####################METODOS PARA EXTRACCION DE CAMPOS
+            print('error inesperado')
+            #raise
+            
         dic_article={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
                         "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"idioma":[],
                         "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"affil_id":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],"etapa_publicacion":[],
