@@ -317,10 +317,10 @@ if __name__ == '__main__':
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000001162',
     'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000008160']
     list_url=['https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001239368']
-    
+    list_url=['https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000013021']
     for url in list_url:
         dom=get_lxml(url)
-        df_prueba=Extractor.get_articulo(dom,url)  
+        df_prueba=Extractor.get_caplibro(dom,url)  
     
     df_prueba.to_csv('prueba.csv',index=False)
 
