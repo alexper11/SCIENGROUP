@@ -795,6 +795,27 @@ class ExtractorScopus:
         df_articulos=df_articulos.reset_index(drop=True).replace(to_replace ='&amp;', value = '&', regex=True) 
         self.__init__(self.API_KEY, self.INST_TOKEN)    #limpia atributos
         return df_articulos
+    def get_credential_validator(self,affil):
+        result=''        
+        url = f'https://api.elsevier.com/content/search/scopus?query=af-id({affil})&start=0&count=1&field=dc:identifier&view=STANDARD'
+        
+        try:
+            response = requests.get(url,
+                                    headers={'Accept':'application/json',
+                                    'X-ELS-APIKey': self.API_KEY,
+                                    'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
+                    
+            result = response.json()
+            print(type(result))                 
+            if result['error-response']['error-code'] == 'APIKEY_INVALID':
+                self.STATE_API=result['error-response']['error-code']                            
+                return self.STATE_API
+            else:
+                self.STATE_API='APIKEY_VALID'
+        except:
+            self.STATE_API='APIKEY_VALID'
+            print('Credencial valida, request: ', result)         
+        return self.STATE_API
     
     def __del__(self):
         print('ExtractorScopus Object Destroyed')
