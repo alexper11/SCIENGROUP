@@ -240,10 +240,10 @@ class ExtractorScopus:
                         print('Error al extraer el autor(authors_df): ',author)
                         #Poner excepción para agotamiento de request del servicio api scopus
                         #RESPONSE
-                        if response['X-RateLimit-Remaining']=='0' or response['X-RateLimit-Remaining']==0:
+                        if (response.headers['X-RateLimit-Remaining']=='0') or (response.headers['X-RateLimit-Remaining']==0):
                             return 'API Error: Limite de solicitudes de la API alcanzado' 
-                        elif result['service-error']:
-                            return 'API Error: '+result['service-error']['statusText']
+                        elif result['service-error']['status']:
+                            return 'API Error: '+result['service-error']['status']['statusText']
                         else:
                             pass    
                 break
