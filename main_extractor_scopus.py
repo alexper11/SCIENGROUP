@@ -155,18 +155,24 @@ def extractor():
                 print(response.headers)
                 result = response.json()
                 print(result)
+                print(response.headers['X-RateLimit-Remaining'])
                 df_autores=ExtractorS.get_authors_df([id_scopus])
-                df_autores.to_csv('df_autores.csv',index=False)
-                # df_productos=ExtractorS.get_articles_full([id_scopus])
-                # ###
-                # productos = ProductosController()
-                # try:
-                #     productos.insert_df(df_productos)
-                # except:
-                #     df_productos.to_csv('df_productos.csv',index=False)
-                #     raise
-                # del ExtractorS
-                flash('Extracción del perfil de Scopus terminado')
+                if isinstance(df_autores,str):
+                    print('aqui')
+                    print(df_autores)
+                    flash(df_autores)
+                else:
+                    df_autores.to_csv('df_autores.csv',index=False)
+                    # df_productos=ExtractorS.get_articles_full([id_scopus])
+                    # ###
+                    # productos = ProductosController()
+                    # try:
+                    #     productos.insert_df(df_productos)
+                    # except:
+                    #     df_productos.to_csv('df_productos.csv',index=False)
+                    #     raise
+                    # del ExtractorS
+                    flash('Extracción del perfil de Scopus terminado')
 
         except ConnectionError:            
             print('no entro a nada')
@@ -174,7 +180,8 @@ def extractor():
         #make_response(redirect('/home'))
         
         except:
-           print('Error de texto, verificar valor ingresado')
+            raise
+            print('Error de texto, verificar valor ingresado')
 
         return redirect(url_for('extractor'))
 
