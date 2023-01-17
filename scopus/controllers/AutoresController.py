@@ -29,3 +29,9 @@ class AutoresController:
             print("No se pudo eliminar el affid: "+affid+" en Autores")
         finally:
             scopusdb.session.close()
+            
+    """
+    record_obj = scopusdb.session.query(Autores).filter(Autores.affil_id.like(f'%{affid}%')).all()
+    scopusdb.session.delete(record_obj)
+    scopusdb.session.commit()
+    """

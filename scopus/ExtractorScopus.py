@@ -704,7 +704,7 @@ class ExtractorScopus:
         result=''
         count=0
         for affil in affil_list:
-            print('extrayendo...',count,' de ', len(affil_list))
+            print('extrayendo...',count+1,' de ', len(affil_list))
             tries=3
             articles=self.get_eid_list(affil)
             if len(articles)==0:
@@ -724,7 +724,7 @@ class ExtractorScopus:
                         flag=True
                     except:
                         print('retrying request...')
-                        print(result)
+                        #print(result)
                         if i < tries - 1:
                             continue
                         else:
