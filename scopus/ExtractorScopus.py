@@ -238,12 +238,11 @@ class ExtractorScopus:
                     else:
                         flag=False
                         print('Error al extraer el autor(authors_df): ',author)
-                        #Poner excepción para agotamiento de request del servicio api scopus
-                        #RESPONSE
-                        if response['X-RateLimit-Remaining']=='0' or response['X-RateLimit-Remaining']==0:
+                        ##################Excepciones
+                        if response.headers['X-RateLimit-Remaining']=='0' or response.headers['X-RateLimit-Remaining']==0:
                             return 'API Error: Limite de solicitudes de la API alcanzado' 
-                        elif result['service-error']:
-                            return 'API Error: '+result['service-error']['statusText']
+                        elif result['service-error']['status']:
+                            return 'API Error: '+result['service-error']['status']['statusText']
                         else:
                             pass    
                 break
@@ -805,6 +804,103 @@ class ExtractorScopus:
         df_articulos=df_articulos.reset_index(drop=True).replace(to_replace ='&amp;', value = '&', regex=True) 
         self.__init__(self.API_KEY, self.INST_TOKEN)    #limpia atributos
         return df_articulos
+    
+    def get_article(self, article):
+        #parameter 'article' is eid of the article
+        tries=3
+        url=f'https://api.elsevier.com/content/abstract/eid/{article}?view=FULL'  #USAR EID
+        #url=f'https://api.elsevier.com/content/abstract/scopus_id/{article}?view=FULL'   #USAR SCOPUS ID
+        for i in range(tries):
+            try:
+                response = requests.get(url,
+                                        headers={'Accept':'application/json',
+                                        'X-ELS-APIKey': self.API_KEY,
+                                        'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
+                result = response.json()
+                flag=True
+            except:
+                print('retrying request...')
+                #print(result)
+                if i < tries - 1:
+                    continue
+                else:
+                    print('Error al extraer el articulo: ',article)
+                    flag=False
+                    ###############
+                    if response.headers['X-RateLimit-Remaining']=='0' or response.headers['X-RateLimit-Remaining']==0:
+                        return 'API Error: Limite de solicitudes de la API alcanzado' 
+                    elif result['service-error']:
+                        return 'API Error: '+result['service-error']['status']['statusText']
+                    else:
+                        pass 
+            break
+        if flag==True:
+            pass
+        else:
+            #######################
+            return 'error inesperado'
+        try:
+            coredata=result['abstracts-retrieval-response']['coredata']
+            item=result["abstracts-retrieval-response"]["item"]
+            language=result["abstracts-retrieval-response"]["language"]
+            complete=result["abstracts-retrieval-response"]
+            subject=result["abstracts-retrieval-response"]["subject-areas"]
+            authors=result["abstracts-retrieval-response"]["authors"]
+            keywords=result["abstracts-retrieval-response"]["authkeywords"]
+            idxterms=result["abstracts-retrieval-response"]["idxterms"]
+        
+        ##################REVISAR TRAS ELSE
+        except:
+            try:
+                msg=result['service-error']['status']['statusText']
+                print('ERROR DEL SERVICIO: ', msg)
+                print('PRODUCTO EID: ', article)
+            except:
+                print('Falla del servicio API: ')
+                print(result)
+        #####################METODOS PARA EXTRACCION DE CAMPOS
+        dic_article={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
+                        "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"idioma":[],
+                        "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"affil_id":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],"etapa_publicacion":[],
+                        "autores":[],"autores_id":[],"tipo_acceso":[],"palabras_clave_autor":[],"palabras_clave_index":[],"agencia_fundadora":[],"pais":[]}
+        
+        dic_article['scopus_id'].append(article[article.rfind('-')+1:-1]) #revisar
+        dic_article['eid'].append(self.get_field_search('eid',coredata))
+        dic_article['titulo'].append(self.get_field_search('dc:title',coredata))
+        dic_article['creador'].append(self.get_field_abstract('dc:creator',coredata))
+        dic_article['nombre_publicacion'].append(self.get_field_search('prism:publicationName',coredata))
+        dic_article['editorial'].append(self.get_field_abstract('dc:publisher',coredata))
+        dic_article['issn'].append(self.get_field_abstract('prism:issn',coredata))
+        dic_article['isbn'].append(self.get_field_abstract('prism:isbn',coredata))
+        dic_article['volumen'].append(self.get_field_abstract('prism:volume',coredata))
+        dic_article['issue'].append(self.get_field_abstract('prism:issueIdentifier',coredata))
+        dic_article['numero_articulo'].append(self.get_field_abstract('article-number',coredata))
+        dic_article['pag_inicio'].append(self.get_field_search('prism:pageRange',coredata,key='page_start'))
+        dic_article['pag_fin'].append(self.get_field_search('prism:pageRange',coredata,key='page_end'))
+        dic_article['pag_count'].append(self.get_field_abstract('page_count',item))
+        dic_article['fecha_publicacion'].append(self.get_field_search('prism:coverDate',coredata))
+        dic_article['idioma'].append(self.get_field_abstract('@xml:lang',language))
+        dic_article['doi'].append(self.get_field_abstract('prism:doi',coredata))
+        dic_article['citado'].append(self.get_field_abstract('citedby-count',coredata))
+        dic_article['link'].append(self.get_field_search('link',coredata,key='@rel'))
+        dic_article['institucion'].append(self.get_field_search('affiliation',complete,key='affilname'))
+        dic_article['affil_id'].append(self.get_field_search('affiliation',complete,key='@id'))#####revisar
+        dic_article['abstract'].append(self.get_field_abstract('abstracts',item))
+        dic_article['tema'].append(self.get_field_search('subject-area',subject,key='$'))
+        dic_article['tipo_fuente'].append(self.get_field_abstract('prism:aggregationType',coredata))
+        dic_article['tipo_documento'].append(self.get_field_abstract('subtypeDescription',coredata))
+        dic_article['etapa_publicacion'].append(self.get_field_abstract('ait:process-info',item,key='stage'))
+        dic_article['autores'].append(self.get_field_abstract('author',authors,key='preferred-name'))
+        dic_article['autores_id'].append(self.get_field_search('author',authors,key='@auid'))
+        dic_article['tipo_acceso'].append(self.get_field_search('openaccess',coredata))
+        dic_article['palabras_clave_autor'].append(self.get_field_search('author-keyword',keywords,key='$'))
+        dic_article['palabras_clave_index'].append(self.get_field_search('mainterm',idxterms,key='$'))
+        dic_article['agencia_fundadora'].append(self.get_field_abstract('xocs:meta',item))
+        dic_article['pais'].append(self.get_field_abstract('affiliation',complete,key='affiliation-country'))
+        #############################
+        df_articulo = pd.DataFrame(dic_article)
+        df_articulo=df_articulo.reset_index(drop=True).replace(to_replace ='&amp;', value = '&', regex=True) 
+        return df_articulo
     
     def get_credential_validator(self,affil):
         result=''        
