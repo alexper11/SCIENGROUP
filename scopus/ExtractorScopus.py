@@ -818,7 +818,15 @@ class ExtractorScopus:
                                         'X-ELS-APIKey': self.API_KEY,
                                         'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
                 result = response.json()
-                flag=True
+                coredata=result['abstracts-retrieval-response']['coredata']
+                item=result["abstracts-retrieval-response"]["item"]
+                language=result["abstracts-retrieval-response"]["language"]
+                complete=result["abstracts-retrieval-response"]
+                subject=result["abstracts-retrieval-response"]["subject-areas"]
+                authors=result["abstracts-retrieval-response"]["authors"]
+                keywords=result["abstracts-retrieval-response"]["authkeywords"]
+                idxterms=result["abstracts-retrieval-response"]["idxterms"]
+        
             except:
                 print('retrying request...')
                 #print(result)
@@ -826,8 +834,6 @@ class ExtractorScopus:
                     continue
                 else:
                     print('Error al extraer el articulo: ',article)
-                    flag=False
-                    ###############
                     if response.headers['X-RateLimit-Remaining']=='0' or response.headers['X-RateLimit-Remaining']==0:
                         return 'API Error: Limite de solicitudes de la API alcanzado' 
                     elif result['service-error']['status']:
@@ -835,25 +841,7 @@ class ExtractorScopus:
                     else:
                         pass 
             break
-        if flag==True:
-            pass
-        else:
-            #######################
-            print('error inesperado...')
-        try:
-            coredata=result['abstracts-retrieval-response']['coredata']
-            item=result["abstracts-retrieval-response"]["item"]
-            language=result["abstracts-retrieval-response"]["language"]
-            complete=result["abstracts-retrieval-response"]
-            subject=result["abstracts-retrieval-response"]["subject-areas"]
-            authors=result["abstracts-retrieval-response"]["authors"]
-            keywords=result["abstracts-retrieval-response"]["authkeywords"]
-            idxterms=result["abstracts-retrieval-response"]["idxterms"]
-        
-        except:
-            print('error inesperado')
-            #raise
-            
+                
         dic_article={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
                         "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"idioma":[],
                         "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"affil_id":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],"etapa_publicacion":[],

@@ -37,10 +37,10 @@ app.config['SECRET_KEY']='SUPER SECRETO' #No es la mejor practica
 
 
 class FieldFormAutor(FlaskForm):
-    id_autor = StringField('Digite el ID del autor:', validators=[DataRequired()])
+    id_autor = StringField('Digite el Author ID:', validators=[DataRequired()])
     submit_autor = SubmitField('Extraer Autor')
 class FieldFormProducto(FlaskForm):
-    id_producto = StringField('Digite el ID del producto:', validators=[DataRequired()])
+    id_producto = StringField('Digite el EID del producto:', validators=[DataRequired()])
     submit_producto = SubmitField('Extraer Producto')
 
 class CredentialForm(FlaskForm):
@@ -189,19 +189,13 @@ def extractor():
                 #Inicio
                 print('Credenciales validas')                
                
-                df_productos='ExtractorS.get_product_df([id_producto])'
+                df_productos=ExtractorS.get_article(id_producto)#eid
+                print('df_prodcutos:', df_productos)
                 if isinstance(df_productos,str):                    
                     flash(df_productos)
                 else:
-                    df_productos.to_csv('df_autores.csv',index=False)
-                    # df_productos=ExtractorS.get_articles_full([id_autor])
-                    # ###
-                    # productos = ProductosController()
-                    # try:
-                    #     productos.insert_df(df_productos)
-                    # except:
-                    #     df_productos.to_csv('df_productos.csv',index=False)
-                    #     raise
+                    df_productos.to_csv('df_productos.csv',index=False)
+                    
                     del ExtractorS
                     flash('Extracción del perfil de Scopus terminado')
 
@@ -211,6 +205,7 @@ def extractor():
             #make_response(redirect('/home'))
         
         except:
+            raise
             print('Error de texto, verificar valor ingresado')
 
         return redirect(url_for('extractor'))
