@@ -4,15 +4,12 @@
     <title>
         {% block title %}Extractor |{% endblock %}
     </title>
-    <!-- start -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <!-- end -->
+    
     <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}">
     <!-- start -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<!-- start -->
+    <!-- <script href="{{ url_for('static',filename='js/jquery.js')}}"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <!-- start -->
     <script>
         $(document).ready(function(){
         $('#form_extractor_scopus').on('submit', function(event){
@@ -30,21 +27,7 @@
           },
           success:function(data)
           { 
-           var percentage = 0;         
-           var timer = setInterval(function(){
-            percentage = percentage + 20;
-            progress_bar_process(percentage, timer,data);            
-           }, 100);
-          }
-         })              
-        });        
-        
-        function progress_bar_process(percentage, timer,data)
-        {
-            $('.progress-bar').css('width', percentage + '%');
-            if(percentage > 100)
-            {
-                clearInterval(timer);
+            clearInterval(timer);
                 $('#form_extractor_scopus')[0].reset();
                 $('#process').css('display', 'none');
                 $('#logo_load').css('display', 'none');
@@ -56,8 +39,9 @@
                 // $('#success_message').html('');
                 // location.reload();
                 }, 1000);
-            }
-        }           
+          }
+         })              
+        });                      
         });
     </script>
     <!-- end -->
@@ -70,7 +54,7 @@
     {% endblock %}
     
     {% for message in get_flashed_messages() %}
-        {% if message == 'Error de conexion' %}
+        {% if message == 'Error de conexión' or message == 'Credenciales inválidas' %}
             <div class="alert alert-danger alert-dismissible center-block" style="max-width: 90rem;">
                 <button type="button"
                         data-dismiss="alert"
