@@ -36,9 +36,12 @@ bootstrap = Bootstrap(app)
 app.config['SECRET_KEY']='SUPER SECRETO' #No es la mejor practica
 
 
-class FieldFormScopus(FlaskForm):
-    id_scopus = StringField('Digite el ID de la institución:', validators=[DataRequired()])
-    submit_scopus = SubmitField('Extraer productos')
+class FieldFormAutor(FlaskForm):
+    id_autor = StringField('Digite el ID del autor:', validators=[DataRequired()])
+    submit_autor = SubmitField('Extraer Autor')
+class FieldFormProducto(FlaskForm):
+    id_producto = StringField('Digite el ID del producto:', validators=[DataRequired()])
+    submit_producto = SubmitField('Extraer Producto')
 
 class CredentialForm(FlaskForm):
     apikey = StringField('Digite el Apikey:', validators=[DataRequired()])
@@ -94,51 +97,44 @@ def home():
 
 @app.route('/extractor_scopus', methods=['GET', 'POST'])
 def extractor():
-    field_form_scopus = FieldFormScopus()
-    credential_form = CredentialForm()
-    id_scopus = session.get('id_scopus')
+    field_form_autor = FieldFormAutor()
+    field_form_producto = FieldFormProducto()
+    #credential_form = CredentialForm()
+    id_autor = session.get('id_autor')
+    id_producto = session.get('id_producto')
     apikey = session.get('apikey')
     token = session.get('token')
 
 
     context_extractor = {
-        'field_form_scopus' : field_form_scopus,
-        'id_scopus' : id_scopus,
+        'field_form_autor' : field_form_autor,
+        'field_form_producto' : field_form_producto,
+        'id_autor' : id_autor,
+        'id_producto' : id_producto,
         # 'credential_form': credential_form,
         'apikey' : apikey,
         'token' : token
     }
 
-    if field_form_scopus.validate_on_submit():
-        id_scopus = field_form_scopus.id_scopus.data
-        session['id_scopus'] = id_scopus
+    if field_form_autor.validate_on_submit():
+        id_autor = field_form_autor.id_autor.data
+        session['id_autor'] = id_autor
         apikey = session.get('apikey')
         token = session.get('token')
-        # apikey = credential_form.apikey.data
-        # token = credential_form.token.data
-        # session['apikey'] = apikey
-        # session['token'] = token
-
         try:
             sys.path.append(".")
-            # create_scopus_db()
-            print('Inicializando prueba...')
-
-            # API_KEY=""
-            # INST_TOKEN=""
-            # API_KEY, INST_TOKEN = read_key()
-            # ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
+            print('Inicializando prueba...')            
             print('api: ', apikey)
             print ('token: ',token)
             ExtractorS = ExtractorScopus(apikey,token)
-            state_api = ExtractorS.get_credential_validator(id_scopus)
+            state_api = ExtractorS.get_credential_validator(id_autor)
             if state_api == 'APIKEY_INVALID':
                 print('Credenciales invalidas')
                 flash('Credenciales inválidas')
             else:
                 #Inicio
                 print('Credenciales validas')
-                # authors_list=ExtractorS.get_auid_list(id_scopus)
+                # authors_list=ExtractorS.get_auid_list(id_autor)
                 # df_autores=ExtractorS.get_authors_df(authors_list)
 
                 # autores = AutoresController()
@@ -147,23 +143,13 @@ def extractor():
 
                 # Lo siguiente es para id_institucion
                 # hacerlo para solo producto
-                url = f'https://api.elsevier.com/content/author/author_id/a?view=ENHANCED'
-                response = requests.get(url,
-                                        headers={'Accept':'application/json',
-                                                 'X-ELS-APIKey': apikey,
-                                                 'X-ELS-Insttoken': token})
-                print(response.headers)
-                result = response.json()
-                print(result)
-                print(response.headers['X-RateLimit-Remaining'])
-                df_autores=ExtractorS.get_authors_df([id_scopus])
-                if isinstance(df_autores,str):
-                    print('aqui')
-                    print(df_autores)
+               
+                df_autores=ExtractorS.get_authors_df([id_autor])
+                if isinstance(df_autores,str):                    
                     flash(df_autores)
                 else:
                     df_autores.to_csv('df_autores.csv',index=False)
-                    # df_productos=ExtractorS.get_articles_full([id_scopus])
+                    # df_productos=ExtractorS.get_articles_full([id_autor])
                     # ###
                     # productos = ProductosController()
                     # try:
@@ -171,20 +157,63 @@ def extractor():
                     # except:
                     #     df_productos.to_csv('df_productos.csv',index=False)
                     #     raise
-                    # del ExtractorS
+                    del ExtractorS
                     flash('Extracción del perfil de Scopus terminado')
 
         except ConnectionError:            
-            print('no entro a nada')
+            print('Error de conexion')
             flash('Error de conexión')
-        #make_response(redirect('/home'))
+            #make_response(redirect('/home'))
         
         except:
-            raise
             print('Error de texto, verificar valor ingresado')
 
         return redirect(url_for('extractor'))
+    
+    if field_form_producto.validate_on_submit():
+        id_producto = field_form_producto.id_producto.data
+        session['id_producto'] = id_producto
+        apikey = session.get('apikey')
+        token = session.get('token')
+        try:
+            sys.path.append(".")
+            print('Inicializando prueba...')            
+            print('api: ', apikey)
+            print ('token: ',token)
+            ExtractorS = ExtractorScopus(apikey,token)
+            state_api = ExtractorS.get_credential_validator(id_producto)
+            if state_api == 'APIKEY_INVALID':
+                print('Credenciales invalidas')
+                flash('Credenciales inválidas')
+            else:
+                #Inicio
+                print('Credenciales validas')                
+               
+                df_productos='ExtractorS.get_product_df([id_producto])'
+                if isinstance(df_productos,str):                    
+                    flash(df_productos)
+                else:
+                    df_productos.to_csv('df_autores.csv',index=False)
+                    # df_productos=ExtractorS.get_articles_full([id_autor])
+                    # ###
+                    # productos = ProductosController()
+                    # try:
+                    #     productos.insert_df(df_productos)
+                    # except:
+                    #     df_productos.to_csv('df_productos.csv',index=False)
+                    #     raise
+                    del ExtractorS
+                    flash('Extracción del perfil de Scopus terminado')
 
+        except ConnectionError:            
+            print('Error de conexion')
+            flash('Error de conexión')
+            #make_response(redirect('/home'))
+        
+        except:
+            print('Error de texto, verificar valor ingresado')
+
+        return redirect(url_for('extractor'))
 
     return render_template('extractor_scopus.html', **context_extractor)
 
