@@ -21,7 +21,7 @@ class ProductosController:
             scopusdb.session.close()
             
     def delete_affil_id(self, affid):
-        scopusdb.session.query(Productos).filter(Productos.affil_id.like(f'%{affid}%')).delete()
+        scopusdb.session.query(Productos).filter(Productos.affil_id.like(f'%{affid}%')).delete(synchronize_session=False)
         try:
             scopusdb.session.commit()
         except:
@@ -31,7 +31,7 @@ class ProductosController:
             scopusdb.session.close()
             
     def delete_eid(self, eid):
-        scopusdb.session.query(Productos).filter(Productos.eid.like(f'%{eid}%')).delete()
+        scopusdb.session.query(Productos).filter(Productos.eid.like(f'%{eid}%')).delete(synchronize_session=False)
         try:
             scopusdb.session.commit()
         except:
