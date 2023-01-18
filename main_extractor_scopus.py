@@ -37,10 +37,12 @@ app.config['SECRET_KEY']='SUPER SECRETO' #No es la mejor practica
 
 
 class FieldFormAutor(FlaskForm):
+    #authorid de Gustavo Ramirez = 36603157500
+    #authorid de Cristhian Figueroa = 7004506288
     id_autor = StringField('Digite el Author ID:', validators=[DataRequired()])
     submit_autor = SubmitField('Extraer Autor')
 class FieldFormProducto(FlaskForm):
-    id_producto = StringField('Digite el EID del producto:', validators=[DataRequired()])
+    id_producto = StringField('Digite el eid del Producto:', validators=[DataRequired()])
     submit_producto = SubmitField('Extraer Producto')
 
 class CredentialForm(FlaskForm):
@@ -133,20 +135,19 @@ def extractor():
                 flash('Credenciales inválidas')
             else:
                 #Inicio
-                print('Credenciales validas')
-                
+                print('Credenciales validas')              
                
-                df_autores=ExtractorS.get_authors_df([id_autor])
-                flash('Extracción del perfil de Scopus terminado')
+                df_autores=ExtractorS.get_authors_df([id_autor])                
                 if isinstance(df_autores,str):                    
                     flash(df_autores)
-                else:
-                    #df_autores.to_csv('df_autores.csv',index=False)
-                                        
+                else:                                                           
                     autores = AutoresController()
+                    print('Extracción del perfil de Scopus terminado')
+                    flash('Extracción del perfil de Scopus terminado')
                     autores.delete_autor_id(id_autor)
-                    autores.insert_df(df_autores)                    
-                    flash('ghuarda')
+                    autores.insert_df(df_autores)
+                    print('Guardado exitósamente en la base de datos')                    
+                    flash('Guardado exitósamente en la base de datos')
             del ExtractorS
         except ConnectionError:            
             print('Error de conexion')
@@ -155,6 +156,8 @@ def extractor():
         
         except:
             print('Error de texto, verificar valor ingresado')
+            flash('Error de texto, verificar valor ingresado')
+            raise
 
         return redirect(url_for('extractor'))
     
@@ -178,17 +181,19 @@ def extractor():
                 print('Credenciales validas')                
                
                 df_productos=ExtractorS.get_article(id_producto)#eid
-                flash('Extracción del perfil de Scopus terminado')
+                
                 print('df_prodcutos:', df_productos)
                 if isinstance(df_productos,str):                    
                     flash(df_productos)
                 else:
                     #df_productos.to_csv('df_productos.csv',index=False)
-                    
+                    print('Extracción del perfil de Scopus terminado')
+                    flash('Extracción del perfil de Scopus terminado')
                     productos = ProductosController()
                     productos.delete_eid(id_producto)
                     productos.insert_df(df_productos)                    
-                    flash('ghuarda')
+                    print('Guardado exitósamente en la base de datos')                    
+                    flash('Guardado exitósamente en la base de datos')
             del ExtractorS
                     
 
