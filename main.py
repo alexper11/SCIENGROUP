@@ -65,15 +65,15 @@ from scopus.controllers.MetaDBScoController import MetaDBScoController
 if __name__ == '__main__':
     
     sys.path.append(".")
-    #create_cvlac_db()
-    #create_gruplac_db()
-    #create_scopus_db()
+    create_cvlac_db()
+    create_gruplac_db()
+    create_scopus_db()
     print('Bases de datos creadas')
     
     ########################
     #MODULO CVLAC
     ########################
-    """
+    
     Extractor=ExtractorGruplac()
     #para este caso el parametro de entrada es la url del buscador scienti para el departamento del Cauca
     lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')
@@ -99,7 +99,9 @@ if __name__ == '__main__':
     evaluador.insert_df(Extractor.grup_evaluador.drop_duplicates(ignore_index=True))
     
     identificadores=IdentificadoresController()
-    identificadores.insert_df(Extractor.grup_identificadores.drop_duplicates(ignore_index=True))
+    aux_identificadores=Extractor.grup_identificadores.drop_duplicates(ignore_index=True)
+    aux_identificadores.to_csv('aux_identificadores.csv',index=False)
+    identificadores.insert_df(aux_identificadores)
     
     idioma=IdiomaController()
     idioma.insert_df(Extractor.grup_idioma.drop_duplicates(ignore_index=True))
@@ -145,20 +147,24 @@ if __name__ == '__main__':
     
     tecnologicos=TecnologicosController()
     tecnologicos.insert_df(Extractor.grup_tecnologicos.drop_duplicates(ignore_index=True))
-    """
+    
     ######################
     #Extraccion de tablas GRUPLAC
     ######################
-    """
+    
     print('setting perfil attributes')
     Extractor.set_perfil_attrs(lista_gruplac)
     
     print('updating gruplacdb...')
     articulosg=ArticulosGController()
-    articulosg.insert_df(Extractor.perfil_articulos)
+    aux_articulosg=Extractor.perfil_articulos
+    aux_articulosg.to_csv('aux_articulosg.csv',index=False)
+    articulosg.insert_df(aux_articulosg)
     
     basicog=BasicoGController()
-    basicog.insert_df(Extractor.perfil_basico)
+    aux_basicog=Extractor.perfil_basico
+    aux_basicog.to_csv('aux_basicog.csv',index=False)
+    basicog.insert_df(aux_basicog)
     
     instituciones=InstitucionesController()
     instituciones.insert_df(Extractor.perfil_instituciones)
@@ -167,7 +173,9 @@ if __name__ == '__main__':
     lineasg.insert_df(Extractor.perfil_lineas)
     
     integrantes=IntegrantesController()
-    integrantes.insert_df(Extractor.perfil_integrantes)
+    aux_integrantes=Extractor.perfil_integrantes
+    aux_integrantes.to_csv('aux_integrantes.csv',index=False)
+    integrantes.insert_df(aux_integrantes)
     
     pdoctorado=ProgramaDoctoradoController()
     pdoctorado.insert_df(Extractor.perfil_programa_doctorado)
@@ -185,16 +193,24 @@ if __name__ == '__main__':
     cmaestria.insert_df(Extractor.perfil_curso_maestria)
     
     librosg=LibrosGController()
-    librosg.insert_df(Extractor.perfil_libros)
+    aux_librosg=Extractor.perfil_libros
+    aux_librosg.to_csv('aux_librosg.csv',index=False)
+    librosg.insert_df(aux_librosg)
     
     caplibrosg=CaplibrosGController()
-    caplibrosg.insert_df(Extractor.perfil_caplibros)
+    aux_caplibrosg=Extractor.perfil_caplibros
+    aux_caplibrosg.to_csv('aux_caplibrosg.csv',index=False)
+    caplibrosg.insert_df(aux_caplibrosg)
     
     oarticulos=OtrosArticulosController()
-    oarticulos.insert_df(Extractor.perfil_otros_articulos)
+    aux_oarticulos=Extractor.perfil_otros_articulos
+    aux_oarticulos.to_csv('aux_oarticulos.csv',index=False)
+    oarticulos.insert_df(aux_oarticulos)
     
     olibros=OtrosLibrosController()
-    olibros.insert_df(Extractor.perfil_otros_libros)
+    aux_olibros=Extractor.perfil_otros_libros
+    aux_olibros.to_csv('aux_olibros.csv',index=False)
+    olibros.insert_df(aux_olibros)
     
     disenoind=DisenoIndustrialGController()
     disenoind.insert_df(Extractor.perfil_diseno_industrial)
@@ -216,10 +232,8 @@ if __name__ == '__main__':
     
     plantapilotog=PlantaPilotoGController()
     plantapilotog.insert_df(Extractor.perfil_planta_piloto)
-
     
     del Extractor
-    """
     
     ########################
     #SCOPUS
@@ -234,6 +248,8 @@ if __name__ == '__main__':
     ExtractorS = ExtractorScopus(API_KEY,INST_TOKEN)
     authors_set=set()
     
+    #La siguiente lista de id de afiliciones se obtuvo tras un proceso de selección y filtrado de datos desde la
+    #base de datos de scopus para recopilar las afiliciones de los municipios y la capital del Cauca.
     cauca_affiliations=['60051434','113372863','117688708','117795037','126338541','128447346','128268840',
                   '127081273','126489416','128778365','128309743','128482659','117008946','126682182',
                   '128105349','126290034','126174357','112818394','125811395',
@@ -254,8 +270,6 @@ if __name__ == '__main__':
                   '128132135','127180877','127175281','126426661','126369148','126220579','126220389',
                   '116477105','112246667','109475450']   
         
-    """#COMENTADO PROCESO DE AUTORES POR LIMITE DE API
-    
     for affiliation in cauca_affiliations:
         authors_set.update(ExtractorS.get_auid_list(affiliation))
 
@@ -263,7 +277,7 @@ if __name__ == '__main__':
     
     autores = AutoresController()
     autores.insert_df(df_autores)
-    """
+    
     
     df_productos=ExtractorS.get_articles_full(cauca_affiliations)
     #df_productos=pd.read_csv ('df_productos.csv')
@@ -274,20 +288,22 @@ if __name__ == '__main__':
     except:
         df_productos.to_csv('df_productos_scopus.csv',index=False)
         raise
+    
+    
     del ExtractorS
 
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
     #########################################
     
-    #metadb= MetaCvlacDBController()
-    #metadb.insert_datetime()
+    metadb= MetaCvlacDBController()
+    metadb.insert_datetime()
     
-    #metadb1= MetaGruplacDBController()
-    #metadb1.insert_datetime()
+    metadb1= MetaGruplacDBController()
+    metadb1.insert_datetime()
     
-    #metadbsco=MetaDBScoController()
-    #metadbsco.insert_datetime()
+    metadbsco=MetaDBScoController()
+    metadbsco.insert_datetime()
 
     ###############################
     #SCIENTOPY
