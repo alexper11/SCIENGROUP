@@ -21,7 +21,7 @@ class AutoresController:
             scopusdb.session.close()
             
     def delete_affil_id(self, affid):
-        scopusdb.session.query(Autores).filter(Autores.affil_id.like(f'%{affid}%')).delete()
+        scopusdb.session.query(Autores).filter(Autores.affil_id.like(f'%{affid}%')).delete(synchronize_session=False)
         try:
             scopusdb.session.commit()
         except:
@@ -31,7 +31,7 @@ class AutoresController:
             scopusdb.session.close()
             
     def delete_autor_id(self, auid):
-        scopusdb.session.query(Autores).filter(Autores.autor_id.like(f'%{auid}%')).delete()
+        scopusdb.session.query(Autores).filter(Autores.autor_id.like(f'%{auid}%')).delete(synchronize_session=False)
         try:
             scopusdb.session.commit()
         except:
