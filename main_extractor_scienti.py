@@ -56,10 +56,6 @@ from cvlac.gruplac_controllers.PrototiposGController import PrototiposGControlle
 from cvlac.gruplac_controllers.SoftwareGController import SoftwareGController
 from cvlac.gruplac_controllers.MetaGruplacDBController import MetaGruplacDBController
 
-from scopus.models.DBmodel import create_scopus_db
-from scopus.controllers.AutoresController import AutoresController
-from scopus.controllers.ProductosController import ProductosController  
-from scopus.controllers.MetaDBScoController import MetaDBScoController                  
 
 #############   Librerias para flask  #########
 from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash, jsonify
@@ -137,11 +133,15 @@ def extractor():
         session['enlace_cvlac'] = enlace_cvlac
         if 'https://scienti.minciencias.gov.co/cvlac/visualizador/' in enlace_cvlac:
             try:
-                Extractor=ExtractorGruplac()
+                Extractor=ExtractorCvlac()
                 #urls cvlac:                    
                 dom=get_lxml(enlace_cvlac)
+                #sacarle el idcvlac desde la url
+                #Hacer lo mismo para todas las tablas
                 df_prueba=Extractor.get_articulo(dom,enlace_cvlac)  
-                
+                #Crear objeto controlador para cada tablas
+                # para cada tabla delete_idcvlac pongo idcvalc
+                # para cada tabla con objeto insert_df le mando el dataframe de la tabla
                 df_prueba.to_csv('extraccion_cvlac_individual.csv',index=False)
                 flash('Extracción del perfil de Cvlac terminado')                
             except:
@@ -166,19 +166,30 @@ def extractor():
                     list_url = enlace_gruplac
                     #render_template('home.html')
                     dom=get_lxml(enlace_gruplac)
+                    # lo mismo para todas las tablas
                     df_prueba=Extractor.get_perfil_articulos(dom,enlace_gruplac)  
+                    # creo objetos controller para cada tabla de gruplac
+                    # delete_idgruplac para cada controller
+                    # insert_df para cada controller paso df
+                    
                     df_prueba.to_csv('extraccion_gruplac.csv',index=False)
                                 
                     flash('Extracción del perfil de Gruplac terminado')
                     
                 #Extrae datos de investigadores de gruplac:
                 elif action_gruplac == 'Extraer datos del los investigadores del Gruplac':            
-                    list_url=Extractor.get_members_list(enlace_gruplac)
-                    for url in list_url:
-                        dom=get_lxml(url)                
-                        df_prueba=Extractor.get_articulo(dom,url)
-                        print("extrayendo") 
-                    df_prueba.to_csv('extraccion_cvlacs_gruplac.csv',index=False)
+                    # llamo get_cvs mando url del gruplac y recibo un diccionario de df de todas las tablas acumuladas
+                    # creo objetos controller_cvlac para todas las tablas
+                    # llamo delete_idcvlac
+                    #llamo insert_df cvlac
+                    
+                    
+                    # list_url=Extractor.get_members_list(enlace_gruplac)
+                    # for url in list_url:
+                    #     dom=get_lxml(url)                
+                    #     df_prueba=Extractor.get_articulo(dom,url)
+                    #     print("extrayendo") 
+                    # df_prueba.to_csv('extraccion_cvlacs_gruplac.csv',index=False)
                                 
                     flash('Extracción de los Cvlacs del perfil de Gruplac terminado')
                     
