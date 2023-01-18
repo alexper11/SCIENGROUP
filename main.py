@@ -305,6 +305,16 @@ if __name__ == '__main__':
     metadbsco=MetaDBScoController()
     metadbsco.insert_datetime()
 
+
+    ###############################
+    #INTEGRACIÓN DE MODULOS PARA DATOS DE GRUPOS DE INVESTIGACIÓN
+    #################################
+
+
+    
+    
+    
+    
     ###############################
     #SCIENTOPY
     #################################
