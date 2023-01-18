@@ -252,7 +252,7 @@ if __name__ == '__main__':
                   '109407507','101852916','101836579','101193438','100890026','123046459','128401012',
                   '127577880','125880059','127342961','126722732','117676389','122213398','128178397',
                   '128132135','127180877','127175281','126426661','126369148','126220579','126220389',
-                  '116477105','112246667','109475450'] #revisar ultimas tres aff id   
+                  '116477105','112246667','109475450']   
         
     """#COMENTADO PROCESO DE AUTORES POR LIMITE DE API
     
@@ -270,8 +270,9 @@ if __name__ == '__main__':
     productos = ProductosController()
     try:
         productos.insert_df(df_productos)
+        df_productos.to_csv('df_productos_scopus.csv',index=False)
     except:
-        df_productos.to_csv('df_productos.csv',index=False)
+        df_productos.to_csv('df_productos_scopus.csv',index=False)
         raise
     del ExtractorS
 
