@@ -182,6 +182,8 @@ def extractor():
                     # creo objetos controller_cvlac para todas las tablas
                     # llamo delete_idcvlac
                     #llamo insert_df cvlac
+                    #ControllerArticulos.delete_idcvlac(idcvlac)
+                    #ControllerArticulos.insert_df(dic['articulos'])
                     
                     
                     # list_url=Extractor.get_members_list(enlace_gruplac)
