@@ -36,7 +36,7 @@ class AutoresController:
             scopusdb.session.commit()
         except:
             scopusdb.session.rollback()
-            print("No se pudo eliminar el affid: "+auid+" en Autores")
+            print("No se pudo eliminar el autor id: "+auid+" en Autores")
         finally:
             scopusdb.session.close()
             
