@@ -138,7 +138,7 @@ class ExtractorGruplac(ExtractorCvlac):
                 "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica,                                   #type: ignore
                 "caplibros":df_caplibros,"software":df_software,"prototipo":df_prototipo,"tecnologicos":df_tecnologicos,                #type: ignore
                 "empresa_tecnologica":df_empresa,"innovacion_empresarial":df_innovacion}                                                #type: ignore
-    
+        
     
     def set_grup_attrs(self,gruplac_list):
         for gruplac in gruplac_list:
