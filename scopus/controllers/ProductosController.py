@@ -29,3 +29,13 @@ class ProductosController:
             print("No se pudo eliminar el affid: "+affid+" en Productos")
         finally:
             scopusdb.session.close()
+            
+    def delete_eid(self, eid):
+        scopusdb.session.query(Productos).filter(Productos.eid.like(f'%{eid}%')).delete()
+        try:
+            scopusdb.session.commit()
+        except:
+            scopusdb.session.rollback()
+            print("No se pudo eliminar el eid: "+eid+" en Productos")
+        finally:
+            scopusdb.session.close()
