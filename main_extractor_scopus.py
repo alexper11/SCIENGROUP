@@ -134,32 +134,20 @@ def extractor():
             else:
                 #Inicio
                 print('Credenciales validas')
-                # authors_list=ExtractorS.get_auid_list(id_autor)
-                # df_autores=ExtractorS.get_authors_df(authors_list)
-
-                # autores = AutoresController()
-                # autores.insert_df(df_autores)
-                # Fin
-
-                # Lo siguiente es para id_institucion
-                # hacerlo para solo producto
+                
                
                 df_autores=ExtractorS.get_authors_df([id_autor])
+                flash('Extracción del perfil de Scopus terminado')
                 if isinstance(df_autores,str):                    
                     flash(df_autores)
                 else:
-                    df_autores.to_csv('df_autores.csv',index=False)
-                    # df_productos=ExtractorS.get_articles_full([id_autor])
-                    # ###
-                    # productos = ProductosController()
-                    # try:
-                    #     productos.insert_df(df_productos)
-                    # except:
-                    #     df_productos.to_csv('df_productos.csv',index=False)
-                    #     raise
-                    del ExtractorS
-                    flash('Extracción del perfil de Scopus terminado')
-
+                    #df_autores.to_csv('df_autores.csv',index=False)
+                                        
+                    autores = AutoresController()
+                    autores.delete_autor_id(id_autor)
+                    autores.insert_df(df_autores)                    
+                    flash('ghuarda')
+            del ExtractorS
         except ConnectionError:            
             print('Error de conexion')
             flash('Error de conexión')
@@ -190,14 +178,19 @@ def extractor():
                 print('Credenciales validas')                
                
                 df_productos=ExtractorS.get_article(id_producto)#eid
+                flash('Extracción del perfil de Scopus terminado')
                 print('df_prodcutos:', df_productos)
                 if isinstance(df_productos,str):                    
                     flash(df_productos)
                 else:
-                    df_productos.to_csv('df_productos.csv',index=False)
+                    #df_productos.to_csv('df_productos.csv',index=False)
                     
-                    del ExtractorS
-                    flash('Extracción del perfil de Scopus terminado')
+                    productos = ProductosController()
+                    productos.delete_eid(id_producto)
+                    productos.insert_df(df_productos)                    
+                    flash('ghuarda')
+            del ExtractorS
+                    
 
         except ConnectionError:            
             print('Error de conexion')
