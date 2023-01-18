@@ -25,7 +25,7 @@ class ArticulosController:
             db_cvlac.session.close()
             
     def delete_idcvlac(self, idcvlac):
-        db_cvlac.session.query(Articulos).filter(Articulos.idcvlac==idcvlac).delete()
+        db_cvlac.session.query(Articulos).filter(Articulos.idcvlac==idcvlac).delete(synchronize_session=False)
         try:
             db_cvlac.session.commit()
         except:

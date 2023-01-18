@@ -42,6 +42,8 @@ class FieldFormAutor(FlaskForm):
     id_autor = StringField('Digite el Author ID:', validators=[DataRequired()])
     submit_autor = SubmitField('Extraer Autor')
 class FieldFormProducto(FlaskForm):
+    #eid articulo de Cristhian Figueroa = 2-s2.0-84944176710
+    #eid articulo de Cristhian Figueroa = 2-s2.0-85059990681
     id_producto = StringField('Digite el eid del Producto:', validators=[DataRequired()])
     submit_producto = SubmitField('Extraer Producto')
 
