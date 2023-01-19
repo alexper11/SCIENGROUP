@@ -106,7 +106,7 @@ class ExtractorGruplac(ExtractorCvlac):
     def get_cvs(self, url_gruplac):
         #recibe url de un gruplac y extrae los cvlacs que contiene
         urls=self.get_members_list(url_gruplac)
-        print('Extrayendo...')
+        print('Extrayendo: '+url_gruplac)
         for url in urls:
             lxml_url = get_lxml(url)            
             df_basico = self.get_basico(lxml_url, url)
@@ -165,8 +165,8 @@ class ExtractorGruplac(ExtractorCvlac):
                 self.grup_empresa_tecnologica=pd.concat([self.grup_empresa_tecnologica,dataframes["empresa_tecnologica"]],ignore_index=True)
                 self.grup_innovacion_empresarial=pd.concat([self.grup_innovacion_empresarial,dataframes["innovacion_empresarial"]],ignore_index=True)
             except:
-                print('Error estableciendo atributos de prefijo grup del objeto ')
-                #raise
+                print('Error estableciendo atributos de prefijo grup del objeto, gruplac: '+ gruplac)
+                raise
     
     def set_perfil_attrs(self, gruplac_list):
         #recibe una lista de urls de grupos de investigación y rellena los valores de los atributos de forma
