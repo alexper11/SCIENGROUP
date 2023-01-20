@@ -136,13 +136,33 @@ def extractor():
                 Extractor=ExtractorCvlac()
                 #urls cvlac:                    
                 dom=get_lxml(enlace_cvlac)
-                #sacarle el idcvlac desde la url
-                #Hacer lo mismo para todas las tablas
-                df_prueba=Extractor.get_articulo(dom,enlace_cvlac)  
+                id_cvlac=enlace_cvlac[enlace_cvlac.find('=')+1:]                
+                
+                df_academica=Extractor.get_academica(dom,enlace_cvlac)
+                df_actuacion=Extractor.get_actuacion(dom,enlace_cvlac)
+                df_articulo=Extractor.get_articulo(dom,enlace_cvlac)
+                df_basico=Extractor.get_basico(dom,enlace_cvlac)
+                df_complementaria=Extractor.get_complementaria(dom,enlace_cvlac)
+                df_estancias=Extractor.get_estancias(dom,enlace_cvlac)
+                df_evaluador=Extractor.get_evaluador(dom,enlace_cvlac)
+                df_idioma=Extractor.get_idioma(dom,enlace_cvlac)
+                df_investiga=Extractor.get_investiga(dom,enlace_cvlac)
+                df_jurado=Extractor.get_jurado(dom,enlace_cvlac)
+                df_libro=Extractor.get_libro(dom,enlace_cvlac)
+                df_reconocimiento=Extractor.get_reconocimiento(dom,enlace_cvlac)
+                df_redes=Extractor.get_redes(dom,enlace_cvlac)
+                df_identificadores=Extractor.get_identificadores(dom,enlace_cvlac)
+                df_caplibro=Extractor.get_caplibro(dom,enlace_cvlac)
+                df_software=Extractor.get_software(dom,enlace_cvlac)
+                df_prototipo=Extractor.get_prototipo(dom,enlace_cvlac)
+                df_tecnologicos=Extractor.get_tecnologicos(dom,enlace_cvlac)
+                df_empresa_tecnologica=Extractor.get_empresa_tecnologica(dom,enlace_cvlac)
+                df_innovacion=Extractor.get_innovacion(dom,enlace_cvlac) 
                 #Crear objeto controlador para cada tablas
                 # para cada tabla delete_idcvlac pongo idcvalc
                 # para cada tabla con objeto insert_df le mando el dataframe de la tabla
-                df_prueba.to_csv('extraccion_cvlac_individual.csv',index=False)
+                
+                #df_prueba.to_csv('extraccion_cvlac_individual.csv',index=False)
                 flash('Extracción del perfil de Cvlac terminado')                
             except:
                 flash('Error de conexion')

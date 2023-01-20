@@ -20,7 +20,7 @@ class InstitucionesController:
             db_gruplac.session.close()
             
     def delete_idgruplac(self, idgruplac):
-        db_gruplac.session.query(Instituciones).filter(Instituciones.idgruplac==idgruplac).delete()
+        db_gruplac.session.query(Instituciones).filter(Instituciones.idgruplac==idgruplac).delete(synchronize_session=False)
         try:
             db_gruplac.session.commit()
         except:
