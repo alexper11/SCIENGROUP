@@ -1,6 +1,3 @@
-from cvlac.ExtractorCvlac import ExtractorCvlac
-from cvlac.ExtractorGruplac import ExtractorGruplac
-from cvlac.util import get_lxml
 from scopus.ExtractorScopus import ExtractorScopus
 from scopus.Scientopy import Scientopy
 # from scopus.readKey import read_key
@@ -158,8 +155,7 @@ def extractor():
         
         except:
             print('Error de texto, verificar valor ingresado')
-            flash('Error de texto, verificar valor ingresado')
-            raise
+            flash('Error de texto, verificar valor ingresado')            
 
         return redirect(url_for('extractor'))
     
@@ -204,8 +200,7 @@ def extractor():
             flash('Error de conexión')
             #make_response(redirect('/home'))
         
-        except:
-            raise
+        except:            
             print('Error de texto, verificar valor ingresado')
 
         return redirect(url_for('extractor'))
