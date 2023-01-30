@@ -55,7 +55,8 @@ from cvlac.gruplac_controllers.MetaGruplacDBController import MetaGruplacDBContr
 
 
 #############   Librerias para flask  #########
-from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash, jsonify
+from flask import Flask, request, make_response, redirect, render_template, url_for, flash, jsonify
+from flask import session as session_flask
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, SubmitField, RadioField
@@ -96,13 +97,13 @@ def index():
     user_ip = request.remote_addr
 
     response = make_response(redirect('/home_scienti'))
-    session['user_ip'] = user_ip
+    session_flask['user_ip'] = user_ip
 
     return response
 
 @app.route('/home_scienti', methods=['GET', 'POST']) #ruta en que
 def home():
-    user_ip = session.get('user_ip')    
+    user_ip = session_flask.get('user_ip')    
     context = {
         'user_ip' : user_ip
     }        
@@ -111,11 +112,11 @@ def home():
 @app.route('/extractor_scienti', methods=['GET', 'POST'])
 def extractor():
     field_form_cvlac = FieldFormCvlac()
-    enlace_cvlac = session.get('enlace_cvlac')
+    enlace_cvlac = session_flask.get('enlace_cvlac')
         
     field_form_gruplac = FieldFormGruplac()
-    enlace_gruplac = session.get('enlace_gruplac')
-    action_gruplac = session.get('action_gruplac')
+    enlace_gruplac = session_flask.get('enlace_gruplac')
+    action_gruplac = session_flask.get('action_gruplac')
         
     context_extractor = {
         'field_form_cvlac' : field_form_cvlac,
@@ -127,7 +128,7 @@ def extractor():
         
     if field_form_cvlac.validate_on_submit():
         enlace_cvlac = field_form_cvlac.enlace_cvlac.data
-        session['enlace_cvlac'] = enlace_cvlac
+        session_flask['enlace_cvlac'] = enlace_cvlac
         if 'https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=' in enlace_cvlac:
             try:
                 Extractor=ExtractorCvlac()
@@ -139,7 +140,7 @@ def extractor():
                 print(df_basico['nombre'].loc[0])
                 if str(df_basico['nombre'].loc[0]) == '':
                     print('IdCvlac inválido')
-                    flash('Url inválida')
+                    flash('Lo sentimos, url inválida')
                 else: 
                     #Genera dataframe por cada tabla de informacion
                     df_academica = Extractor.get_academica(dom,enlace_cvlac)
@@ -237,10 +238,10 @@ def extractor():
                                 
             except ConnectionError:            
                 print('Error de conexion')
-                flash('Error de conexión')
+                flash('Lo sentimos, error de conexión')
             except:
                 print('Error interno')
-                flash('Error interno')
+                flash('Lo sentimos, error interno')
                 raise
             
             del Extractor
@@ -254,203 +255,235 @@ def extractor():
     if field_form_gruplac.validate_on_submit():#detecta cuando hay post y valida la forma
         enlace_gruplac = field_form_gruplac.enlace_gruplac.data
         action_gruplac = field_form_gruplac.action_gruplac.data
-        session['enlace_gruplac'] = enlace_gruplac
-        session['action_gruplac'] = action_gruplac
+        session_flask['enlace_gruplac'] = enlace_gruplac
+        session_flask['action_gruplac'] = action_gruplac
         if 'https://scienti.minciencias.gov.co/gruplac/jsp/' in enlace_gruplac:
             try:       
-                Extractor = ExtractorGruplac()
+                ExtractorG = ExtractorGruplac()
                 id_gruplac = enlace_gruplac[enlace_gruplac.find('=')+1:]      
                 
                 #Extrae datos de un gruplac:
                 if action_gruplac == 'Extraer datos del Gruplac':
                     dom = get_lxml(enlace_gruplac)
                     
-                    #Genera dataframes de tablas de información de un gruplac
-                    df_perfil_basico = Extractor.get_perfil_basico(dom,enlace_gruplac)
-                    df_perfil_instituciones = Extractor.get_perfil_instituciones(dom,enlace_gruplac)
-                    df_perfil_lineas = Extractor.get_perfil_lineas(dom,enlace_gruplac)
-                    df_perfil_integrantes = Extractor.get_perfil_integrantes(dom,enlace_gruplac)
-                    df_perfil_programa_doctorado = Extractor.get_perfil_programa_doctorado(dom,enlace_gruplac)
-                    df_perfil_programa_maestria = Extractor.get_perfil_programa_maestria(dom,enlace_gruplac)
-                    df_perfil_otro_programa = Extractor.get_perfil_otro_programa(dom,enlace_gruplac)
-                    df_perfil_curso_doctorado = Extractor.get_perfil_curso_doctorado(dom,enlace_gruplac)
-                    df_perfil_curso_maestria = Extractor.get_perfil_curso_maestria(dom,enlace_gruplac)
-                    df_perfil_articulos = Extractor.get_perfil_articulos(dom,enlace_gruplac)
-                    df_perfil_libros = Extractor.get_perfil_libros(dom,enlace_gruplac)
-                    df_perfil_caplibros = Extractor.get_perfil_caplibros(dom,enlace_gruplac)
-                    df_perfil_otros_articulos = Extractor.get_perfil_otros_articulos(dom,enlace_gruplac)
-                    df_perfil_otros_libros = Extractor.get_perfil_otros_libros(dom,enlace_gruplac)
-                    df_perfil_diseno_industrial = Extractor.get_perfil_diseno_industrial(dom,enlace_gruplac)
-                    df_perfil_otros_tecnologicos = Extractor.get_perfil_otros_tecnologicos(dom,enlace_gruplac)
-                    df_perfil_prototipos = Extractor.get_perfil_prototipos(dom,enlace_gruplac)
-                    df_perfil_software = Extractor.get_perfil_software(dom,enlace_gruplac)
-                    df_perfil_empresa_tecnologica = Extractor.get_perfil_empresa_tecnologica(dom,enlace_gruplac)
-                    df_perfil_innovacion_empresarial = Extractor.get_perfil_innovacion_empresarial(dom,enlace_gruplac)
-                    df_perfil_planta_piloto = Extractor.get_perfil_planta_piloto(dom,enlace_gruplac)
-                    
-                    print('Extracción del perfil de Cvlac terminado')
-                    flash('Extracción del perfil de Cvlac terminado')
-                    
-                    # creo objetos controller_grup para cada tabla de gruplac
-                    perfilArticulosObj = ArticulosGController()
-                    perfilBasicoObj = BasicoGController()
-                    perfilCapLibrosObj = CaplibrosGController()
-                    perfilCursoDoctoradoObj = CursoDoctoradoController()
-                    perfilCursoMaestriaObj = CursoMaestriaController()
-                    perfilDisenoIndustrialObj = DisenoIndustrialGController()
-                    perfilEmpresaTecnologicaObj = EmpresaTecnologicaGController()
-                    perfilInnovacionEmpresarialObj = InnovacionEmpresarialGController()
-                    perfilInstitucionesObj = InstitucionesController()
-                    perfilIntegrantesObj = IntegrantesController()
-                    perfilLibrosObj = LibrosGController()
-                    perfilLineasObj = LineasGController()
-                    perfilOtroProgramaObj = OtroProgramaController()
-                    perfilOtrosArticulosObj = OtrosArticulosController()
-                    perfilOtrosLibrosObj = OtrosLibrosController()
-                    perfilOtrosTecnologicosObj = OtrosTecnologicosController()
-                    perfilPlantaPilotoObj = PlantaPilotoGController()
-                    perfilProgramaDoctoradoObj = ProgramaDoctoradoController()
-                    perfilProgramaMaestriaObj = ProgramaMaestriaController()
-                    perfilPrototiposObj = PrototiposGController()
-                    perfilSoftwareObj = SoftwareGController()
-                    
-                    #Con cada objeto, elimina los datos para no guardar duplicados
-                    perfilArticulosObj.delete_idgruplac(id_gruplac)
-                    perfilBasicoObj.delete_idgruplac(id_gruplac)
-                    perfilCapLibrosObj.delete_idgruplac(id_gruplac)
-                    perfilCursoDoctoradoObj.delete_idgruplac(id_gruplac)
-                    perfilCursoMaestriaObj.delete_idgruplac(id_gruplac)
-                    perfilDisenoIndustrialObj.delete_idgruplac(id_gruplac)
-                    perfilEmpresaTecnologicaObj.delete_idgruplac(id_gruplac)
-                    perfilInnovacionEmpresarialObj.delete_idgruplac(id_gruplac)
-                    perfilInstitucionesObj.delete_idgruplac(id_gruplac)
-                    perfilIntegrantesObj.delete_idgruplac(id_gruplac)
-                    perfilLibrosObj.delete_idgruplac(id_gruplac)
-                    perfilLineasObj.delete_idgruplac(id_gruplac)
-                    perfilOtroProgramaObj.delete_idgruplac(id_gruplac)
-                    perfilOtrosArticulosObj.delete_idgruplac(id_gruplac)
-                    perfilOtrosLibrosObj.delete_idgruplac(id_gruplac)
-                    perfilOtrosTecnologicosObj.delete_idgruplac(id_gruplac)
-                    perfilPlantaPilotoObj.delete_idgruplac(id_gruplac)
-                    perfilProgramaDoctoradoObj.delete_idgruplac(id_gruplac)
-                    perfilProgramaMaestriaObj.delete_idgruplac(id_gruplac)
-                    perfilPrototiposObj.delete_idgruplac(id_gruplac)
-                    perfilSoftwareObj.delete_idgruplac(id_gruplac)
-                                        
-                    #inserta los dataframes extraidos anteriormente y los almacena
-                    perfilArticulosObj.insert_df(df_perfil_articulos)
-                    perfilBasicoObj.insert_df(df_perfil_basico)
-                    perfilCapLibrosObj.insert_df(df_perfil_caplibros)
-                    perfilCursoDoctoradoObj.insert_df(df_perfil_curso_doctorado)
-                    perfilCursoMaestriaObj.insert_df(df_perfil_curso_maestria)
-                    perfilDisenoIndustrialObj.insert_df(df_perfil_diseno_industrial)
-                    perfilEmpresaTecnologicaObj.insert_df(df_perfil_empresa_tecnologica)
-                    perfilInnovacionEmpresarialObj.insert_df(df_perfil_innovacion_empresarial)
-                    perfilInstitucionesObj.insert_df(df_perfil_instituciones)
-                    perfilIntegrantesObj.insert_df(df_perfil_integrantes)
-                    perfilLibrosObj.insert_df(df_perfil_libros)
-                    perfilLineasObj.insert_df(df_perfil_lineas)
-                    perfilOtroProgramaObj.insert_df(df_perfil_otro_programa)
-                    perfilOtrosArticulosObj.insert_df(df_perfil_otros_articulos)
-                    perfilOtrosLibrosObj.insert_df(df_perfil_otros_libros)
-                    perfilOtrosTecnologicosObj.insert_df(df_perfil_otros_tecnologicos)
-                    perfilPlantaPilotoObj.insert_df(df_perfil_planta_piloto)
-                    perfilProgramaDoctoradoObj.insert_df(df_perfil_programa_doctorado)
-                    perfilProgramaMaestriaObj.insert_df(df_perfil_programa_maestria)
-                    perfilPrototiposObj.insert_df(df_perfil_prototipos)
-                    perfilSoftwareObj.insert_df(df_perfil_software)
-                                                    
-                    print('Guardado exitósamente en la base de datos')                               
-                    flash('Guardado exitósamente en la base de datos')
+                    df_perfil_basico = ExtractorG.get_perfil_basico(dom,enlace_gruplac)
+                    print(df_perfil_basico['nombre'].shape[0])
+                    if str(df_perfil_basico['nombre'].shape[0]) == '0':
+                        print('IdGruplac inválido')
+                        flash('Lo sentimos, url inválida')
+                    else:                    
+                        #Genera dataframes de tablas de información de un gruplac
+                        #df_perfil_basico = ExtractorG.get_perfil_basico(dom,enlace_gruplac)
+                        df_perfil_instituciones = ExtractorG.get_perfil_instituciones(dom,enlace_gruplac)
+                        df_perfil_lineas = ExtractorG.get_perfil_lineas(dom,enlace_gruplac)
+                        df_perfil_integrantes = ExtractorG.get_perfil_integrantes(dom,enlace_gruplac)
+                        df_perfil_programa_doctorado = ExtractorG.get_perfil_programa_doctorado(dom,enlace_gruplac)
+                        df_perfil_programa_maestria = ExtractorG.get_perfil_programa_maestria(dom,enlace_gruplac)
+                        df_perfil_otro_programa = ExtractorG.get_perfil_otro_programa(dom,enlace_gruplac)
+                        df_perfil_curso_doctorado = ExtractorG.get_perfil_curso_doctorado(dom,enlace_gruplac)
+                        df_perfil_curso_maestria = ExtractorG.get_perfil_curso_maestria(dom,enlace_gruplac)
+                        df_perfil_articulos = ExtractorG.get_perfil_articulos(dom,enlace_gruplac)
+                        df_perfil_libros = ExtractorG.get_perfil_libros(dom,enlace_gruplac)
+                        df_perfil_caplibros = ExtractorG.get_perfil_caplibros(dom,enlace_gruplac)
+                        df_perfil_otros_articulos = ExtractorG.get_perfil_otros_articulos(dom,enlace_gruplac)
+                        df_perfil_otros_libros = ExtractorG.get_perfil_otros_libros(dom,enlace_gruplac)
+                        df_perfil_diseno_industrial = ExtractorG.get_perfil_diseno_industrial(dom,enlace_gruplac)
+                        df_perfil_otros_tecnologicos = ExtractorG.get_perfil_otros_tecnologicos(dom,enlace_gruplac)
+                        df_perfil_prototipos = ExtractorG.get_perfil_prototipos(dom,enlace_gruplac)
+                        df_perfil_software = ExtractorG.get_perfil_software(dom,enlace_gruplac)
+                        df_perfil_empresa_tecnologica = ExtractorG.get_perfil_empresa_tecnologica(dom,enlace_gruplac)
+                        df_perfil_innovacion_empresarial = ExtractorG.get_perfil_innovacion_empresarial(dom,enlace_gruplac)
+                        df_perfil_planta_piloto = ExtractorG.get_perfil_planta_piloto(dom,enlace_gruplac)
+                        
+                        print('Extracción del perfil de Gruplac terminado')
+                        flash('Extracción del perfil de Gruplac terminado')
+                        
+                        # creo objetos controller_grup para cada tabla de gruplac
+                        perfilArticulosObj = ArticulosGController()
+                        perfilArticulosObj.delete_idgruplac(id_gruplac)
+                        perfilArticulosObj.insert_df(df_perfil_articulos)
+                                                
+                        perfilBasicoObj = BasicoGController()
+                        perfilBasicoObj.delete_idgruplac(id_gruplac) 
+                        perfilBasicoObj.insert_df(df_perfil_basico)  
+                                              
+                        perfilCapLibrosObj = CaplibrosGController()
+                        perfilCapLibrosObj.delete_idgruplac(id_gruplac)
+                        perfilCapLibrosObj.insert_df(df_perfil_caplibros)
+                        
+                        perfilCursoDoctoradoObj = CursoDoctoradoController()
+                        perfilCursoDoctoradoObj.delete_idgruplac(id_gruplac)
+                        perfilCursoDoctoradoObj.insert_df(df_perfil_curso_doctorado)
+                        
+                        perfilCursoMaestriaObj = CursoMaestriaController()
+                        perfilCursoMaestriaObj.delete_idgruplac(id_gruplac)
+                        perfilCursoMaestriaObj.insert_df(df_perfil_curso_maestria)
+                        
+                        perfilDisenoIndustrialObj = DisenoIndustrialGController()
+                        perfilDisenoIndustrialObj.delete_idgruplac(id_gruplac)
+                        perfilDisenoIndustrialObj.insert_df(df_perfil_diseno_industrial)
+                        
+                        perfilEmpresaTecnologicaObj = EmpresaTecnologicaGController()
+                        perfilEmpresaTecnologicaObj.delete_idgruplac(id_gruplac)
+                        perfilEmpresaTecnologicaObj.insert_df(df_perfil_empresa_tecnologica)
+                        
+                        perfilInnovacionEmpresarialObj = InnovacionEmpresarialGController()
+                        perfilInnovacionEmpresarialObj.delete_idgruplac(id_gruplac)
+                        perfilInnovacionEmpresarialObj.insert_df(df_perfil_innovacion_empresarial)
+                        
+                        perfilInstitucionesObj = InstitucionesController()
+                        perfilInstitucionesObj.delete_idgruplac(id_gruplac)
+                        perfilInstitucionesObj.insert_df(df_perfil_instituciones)
+                        
+                        perfilIntegrantesObj = IntegrantesController()
+                        perfilIntegrantesObj.delete_idgruplac(id_gruplac)
+                        perfilIntegrantesObj.insert_df(df_perfil_integrantes)
+                        
+                        perfilLibrosObj = LibrosGController()
+                        perfilLibrosObj.delete_idgruplac(id_gruplac)
+                        perfilLibrosObj.insert_df(df_perfil_libros)
+                        
+                        perfilLineasObj = LineasGController()
+                        perfilLineasObj.delete_idgruplac(id_gruplac)
+                        perfilLineasObj.insert_df(df_perfil_lineas)
+                        
+                        perfilOtroProgramaObj = OtroProgramaController()
+                        perfilOtroProgramaObj.delete_idgruplac(id_gruplac)
+                        perfilOtroProgramaObj.insert_df(df_perfil_otro_programa)
+                        
+                        perfilOtrosArticulosObj = OtrosArticulosController()
+                        perfilOtrosArticulosObj.delete_idgruplac(id_gruplac)
+                        perfilOtrosArticulosObj.insert_df(df_perfil_otros_articulos)
+                        
+                        perfilOtrosLibrosObj = OtrosLibrosController()
+                        perfilOtrosLibrosObj.delete_idgruplac(id_gruplac)
+                        perfilOtrosLibrosObj.insert_df(df_perfil_otros_libros)
+                        
+                        perfilOtrosTecnologicosObj = OtrosTecnologicosController()
+                        perfilOtrosTecnologicosObj.delete_idgruplac(id_gruplac)
+                        perfilOtrosTecnologicosObj.insert_df(df_perfil_otros_tecnologicos)
+                        
+                        perfilPlantaPilotoObj = PlantaPilotoGController()
+                        perfilPlantaPilotoObj.delete_idgruplac(id_gruplac)
+                        perfilPlantaPilotoObj.insert_df(df_perfil_planta_piloto)
+                        
+                        perfilProgramaDoctoradoObj = ProgramaDoctoradoController()
+                        perfilProgramaDoctoradoObj.delete_idgruplac(id_gruplac)
+                        perfilProgramaDoctoradoObj.insert_df(df_perfil_programa_doctorado)
+                        
+                        perfilProgramaMaestriaObj = ProgramaMaestriaController()
+                        perfilProgramaMaestriaObj.delete_idgruplac(id_gruplac)
+                        perfilProgramaMaestriaObj.insert_df(df_perfil_programa_maestria)
+                        
+                        perfilPrototiposObj = PrototiposGController()
+                        perfilPrototiposObj.delete_idgruplac(id_gruplac)
+                        perfilPrototiposObj.insert_df(df_perfil_prototipos)
+                        
+                        perfilSoftwareObj = SoftwareGController()
+                        perfilSoftwareObj.delete_idgruplac(id_gruplac)
+                        perfilSoftwareObj.insert_df(df_perfil_software)
+                                                                              
+                        print('Guardado exitósamente en la base de datos')                               
+                        flash('Guardado exitósamente en la base de datos')
                     
                 #Extrae datos de investigadores de gruplac:
                 elif action_gruplac == 'Extraer datos del los investigadores del Gruplac':            
                     # llamo get_cvs mando url del gruplac y recibo un diccionario de df de todas las tablas acumuladas
-                    dic_data = ExtractorGruplac.get_cvs(id_gruplac)                                                            
-                    
-                    print('Extracción de los Cvlacs del perfil de Gruplac terminado')
-                    flash('Extracción de los Cvlacs del perfil de Gruplac terminado')
-                    
-                    #Crea objeto controlador para cada tabla              
-                    actuacionObj = ActuacionController()
-                    articuloObj = ArticulosController()
-                    basicoObj = BasicoController()
-                    evaluadorObj = EvaluadorController()
-                    identificadoresObj = IdentificadoresController()
-                    idiomaObj = IdiomaController()
-                    investigacionObj = InvestigacionController()
-                    juradosObj = JuradosController()
-                    librosObj = LibrosController()
-                    reconocimientoObj = ReconocimientoController()
-                    redesObj = RedesController()
-                    estanciasObj = EstanciasController()
-                    academicaObj = AcademicaController()
-                    complementariaObj = ComplementariaController()
-                    empresaTecnologicaObj = EmpresaTecnologicaController()
-                    innovacionEmpresarialObj = InnovacionEmpresarialController()
-                    capLibrosObj = CaplibrosController()
-                    prototipoObj = PrototipoController()
-                    softwareObj = SoftwareController()
-                    tecnologicosObj = TecnologicosController()
-                    
-                    #Con cada objeto, elimina los datos para no guardar duplicados
-                    actuacionObj.delete_idcvlac(id_cvlac)
-                    articuloObj.delete_idcvlac(id_cvlac)
-                    basicoObj.delete_idcvlac(id_cvlac)
-                    evaluadorObj.delete_idcvlac(id_cvlac)
-                    identificadoresObj.delete_idcvlac(id_cvlac)
-                    idiomaObj.delete_idcvlac(id_cvlac)
-                    investigacionObj.delete_idcvlac(id_cvlac)
-                    juradosObj.delete_idcvlac(id_cvlac)
-                    librosObj.delete_idcvlac(id_cvlac)
-                    reconocimientoObj.delete_idcvlac(id_cvlac)
-                    redesObj.delete_idcvlac(id_cvlac)
-                    estanciasObj.delete_idcvlac(id_cvlac)
-                    academicaObj.delete_idcvlac(id_cvlac)
-                    complementariaObj.delete_idcvlac(id_cvlac)
-                    empresaTecnologicaObj.delete_idcvlac(id_cvlac)
-                    innovacionEmpresarialObj.delete_idcvlac(id_cvlac)
-                    capLibrosObj.delete_idcvlac(id_cvlac)
-                    prototipoObj.delete_idcvlac(id_cvlac)
-                    softwareObj.delete_idcvlac(id_cvlac)
-                    tecnologicosObj.delete_idcvlac(id_cvlac)
-                    
-                    #inserta los dataframes extraidos anteriormente y los almacena
-                    actuacionObj.insert_df(dic_data['actuacion'])
-                    articuloObj.insert_df(dic_data['articulos'])
-                    basicoObj.insert_df(dic_data['basico'])
-                    evaluadorObj.insert_df(dic_data['evaluador'])
-                    identificadoresObj.insert_df(dic_data['identificadores'])
-                    idiomaObj.insert_df(dic_data['idioma'])
-                    investigacionObj.insert_df(dic_data['investigacion'])
-                    juradosObj.insert_df(dic_data['jurado'])
-                    librosObj.insert_df(dic_data['libros'])
-                    reconocimientoObj.insert_df(dic_data['reconocimiento'])
-                    redesObj.insert_df(dic_data['redes'])
-                    estanciasObj.insert_df(dic_data['estancias'])
-                    academicaObj.insert_df(dic_data['academica'])
-                    complementariaObj.insert_df(dic_data['complementaria'])
-                    empresaTecnologicaObj.insert_df(dic_data['empresa_tecnologica'])
-                    innovacionEmpresarialObj.insert_df(dic_data['innovacion_empresarial'])
-                    capLibrosObj.insert_df(dic_data['caplibros'])
-                    prototipoObj.insert_df(dic_data['prototipo'])
-                    softwareObj.insert_df(dic_data['software'])
-                    tecnologicosObj.insert_df(dic_data['tecnologicos'])
-                    
-                    print('Guardado exitósamente en la base de datos')                               
-                    flash('Guardado exitósamente en la base de datos')
+                    dom = get_lxml(enlace_gruplac)                                        
+                    df_perfil_basico = ExtractorG.get_perfil_basico(dom,enlace_gruplac)
+                    print(df_perfil_basico['nombre'].shape[0])
+                    if str(df_perfil_basico['nombre'].shape[0]) == '0':
+                        print('IdGruplac inválido')
+                        flash('Lo sentimos, url inválida')
+                    else:
+                        dic_data = ExtractorG.get_cvs(enlace_gruplac)                                                                                   
+                        #datag=dic_data.value_counts()                        
+                        print('Extracción de los Cvlacs del perfil de Gruplac terminado')
+                        flash('Extracción de los Cvlacs del perfil de Gruplac terminado')
+                       
+                        #Crea objeto controlador para cada tabla              
+                        actuacionObj = ActuacionController()
+                        articuloObj = ArticulosController()
+                        basicoObj = BasicoController()
+                        evaluadorObj = EvaluadorController()
+                        identificadoresObj = IdentificadoresController()
+                        idiomaObj = IdiomaController()
+                        investigacionObj = InvestigacionController()
+                        juradosObj = JuradosController()
+                        librosObj = LibrosController()
+                        reconocimientoObj = ReconocimientoController()
+                        redesObj = RedesController()
+                        estanciasObj = EstanciasController()
+                        academicaObj = AcademicaController()
+                        complementariaObj = ComplementariaController()
+                        empresaTecnologicaObj = EmpresaTecnologicaController()
+                        innovacionEmpresarialObj = InnovacionEmpresarialController()
+                        capLibrosObj = CaplibrosController()
+                        prototipoObj = PrototipoController()
+                        softwareObj = SoftwareController()
+                        tecnologicosObj = TecnologicosController()
+                        
+                        #Con cada objeto, elimina los datos para no guardar duplicados
+                        list_idcvlac=dic_data['basico']['idcvlac'].tolist()
+                        for id_cvlac in list_idcvlac:
+                            actuacionObj.delete_idcvlac(id_cvlac)
+                            articuloObj.delete_idcvlac(id_cvlac)
+                            basicoObj.delete_idcvlac(id_cvlac)
+                            evaluadorObj.delete_idcvlac(id_cvlac)
+                            identificadoresObj.delete_idcvlac(id_cvlac)
+                            idiomaObj.delete_idcvlac(id_cvlac)
+                            investigacionObj.delete_idcvlac(id_cvlac)
+                            juradosObj.delete_idcvlac(id_cvlac)
+                            librosObj.delete_idcvlac(id_cvlac)
+                            reconocimientoObj.delete_idcvlac(id_cvlac)
+                            redesObj.delete_idcvlac(id_cvlac)
+                            estanciasObj.delete_idcvlac(id_cvlac)
+                            academicaObj.delete_idcvlac(id_cvlac)
+                            complementariaObj.delete_idcvlac(id_cvlac)
+                            empresaTecnologicaObj.delete_idcvlac(id_cvlac)
+                            innovacionEmpresarialObj.delete_idcvlac(id_cvlac)
+                            capLibrosObj.delete_idcvlac(id_cvlac)
+                            prototipoObj.delete_idcvlac(id_cvlac)
+                            softwareObj.delete_idcvlac(id_cvlac)
+                            tecnologicosObj.delete_idcvlac(id_cvlac)                              
+                                        
+                        #inserta los dataframes extraidos anteriormente y los almacena
+                        actuacionObj.insert_df(dic_data['actuacion'])
+                        articuloObj.insert_df(dic_data['articulos'])
+                        basicoObj.insert_df(dic_data['basico'])
+                        evaluadorObj.insert_df(dic_data['evaluador'])
+                        identificadoresObj.insert_df(dic_data['identificadores'])
+                        idiomaObj.insert_df(dic_data['idioma'])
+                        investigacionObj.insert_df(dic_data['investigacion'])
+                        juradosObj.insert_df(dic_data['jurado'])
+                        librosObj.insert_df(dic_data['libros'])
+                        reconocimientoObj.insert_df(dic_data['reconocimiento'])
+                        redesObj.insert_df(dic_data['redes'])
+                        estanciasObj.insert_df(dic_data['estancias'])
+                        academicaObj.insert_df(dic_data['academica'])
+                        complementariaObj.insert_df(dic_data['complementaria'])
+                        empresaTecnologicaObj.insert_df(dic_data['empresa_tecnologica'])
+                        innovacionEmpresarialObj.insert_df(dic_data['innovacion_empresarial'])
+                        capLibrosObj.insert_df(dic_data['caplibros'])
+                        prototipoObj.insert_df(dic_data['prototipo'])
+                        softwareObj.insert_df(dic_data['software'])
+                        tecnologicosObj.insert_df(dic_data['tecnologicos'])
+                        
+                        print('Guardado exitósamente en la base de datos')                               
+                        flash('Guardado exitósamente en la base de datos')
                                         
                 else:
                     #make_response(redirect('/home_scienti'))
                     pass  
             except ConnectionError:            
                 print('Error de conexion')
-                flash('Error de conexión')
+                flash('Lo sentimos, error de conexión')
             except:
-                print('Error interno')
-                flash('Error interno')
+                print('Error interno 1')
+                flash('Lo sentimos, error interno')
+                raise
             
-            del Extractor           
+            del ExtractorG           
         else:
             print('link incorrecto')
             flash('Lo sentimos, link incorrecto')

@@ -185,8 +185,8 @@ def extractor():
                     flash(df_productos)
                 else:
                     #df_productos.to_csv('df_productos.csv',index=False)
-                    print('Extracción del perfil de Scopus terminado')
-                    flash('Extracción del perfil de Scopus terminado')
+                    print('Extracción del producto de Scopus terminado')
+                    flash('Extracción del producto de Scopus terminado')
                     productos = ProductosController()
                     productos.delete_eid(id_producto)
                     productos.insert_df(df_productos)                    
