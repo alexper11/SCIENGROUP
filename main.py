@@ -65,15 +65,15 @@ from scopus.controllers.MetaDBScoController import MetaDBScoController
 if __name__ == '__main__':
     
     sys.path.append(".")
-    create_cvlac_db()
-    create_gruplac_db()
+    #create_cvlac_db()
+    #create_gruplac_db()
     create_scopus_db()
     print('Bases de datos creadas')
     
     ########################
     #MODULO CVLAC
     ########################
-    
+    """
     Extractor=ExtractorGruplac()
     #para este caso el parametro de entrada es la url del buscador scienti para el departamento del Cauca
     lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')
@@ -148,10 +148,11 @@ if __name__ == '__main__':
     tecnologicos=TecnologicosController()
     tecnologicos.insert_df(Extractor.grup_tecnologicos.drop_duplicates(ignore_index=True))
     
+    """
     ######################
     #Extraccion de tablas GRUPLAC
     ######################
-    
+    """
     print('setting perfil attributes')
     Extractor.set_perfil_attrs(lista_gruplac)
     
@@ -234,7 +235,7 @@ if __name__ == '__main__':
     plantapilotog.insert_df(Extractor.perfil_planta_piloto)
     
     del Extractor
-    
+    """
     ########################
     #SCOPUS
     ########################
@@ -274,13 +275,14 @@ if __name__ == '__main__':
         authors_set.update(ExtractorS.get_auid_list(affiliation))
 
     df_autores=ExtractorS.get_authors_df(authors_set)
+    df_autores.to_csv('aux_autores.csv',index=False)
     
     autores = AutoresController()
     autores.insert_df(df_autores)
     
-    
     df_productos=ExtractorS.get_articles_full(cauca_affiliations)
-    #df_productos=pd.read_csv ('df_productos.csv')
+    df_productos.to_csv('aux_productos.csv',index=False)
+    
     productos = ProductosController()
     try:
         productos.insert_df(df_productos)
@@ -289,18 +291,17 @@ if __name__ == '__main__':
         df_productos.to_csv('df_productos_scopus.csv',index=False)
         raise
     
-    
     del ExtractorS
 
     #########################################
     #Insertar fecha de extracción de los datos en ambos modulos
     #########################################
     
-    metadb= MetaCvlacDBController()
-    metadb.insert_datetime()
+    #metadb= MetaCvlacDBController()
+    #metadb.insert_datetime()
     
-    metadb1= MetaGruplacDBController()
-    metadb1.insert_datetime()
+    #metadb1= MetaGruplacDBController()
+    #metadb1.insert_datetime()
     
     metadbsco=MetaDBScoController()
     metadbsco.insert_datetime()

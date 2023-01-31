@@ -5,7 +5,7 @@ import os
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-url_general="https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=117"
+url_general="https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=118"
 
 dire=[]
 r_general=requests.get(url_general, verify=False)
@@ -30,7 +30,7 @@ for a in links_total:
         for table in child:
             trs=table.find_all('tr')
             titulo=trs[0].find('td').text.strip()
-            if (len(trs) > 1) and (titulo=='Programa académico de maestría'):
+            if (len(trs) > 1) and (titulo=='PRODUCCIÓN TÉCNICA Y TECNOLÓGICA'):
                 print(url_gruplac)
                 count=count+1
 print('count : ',count)
