@@ -1,6 +1,3 @@
-from cvlac.ExtractorCvlac import ExtractorCvlac
-from cvlac.ExtractorGruplac import ExtractorGruplac
-from cvlac.util import get_lxml
 from scopus.ExtractorScopus import ExtractorScopus
 from scopus.Scientopy import Scientopy
 # from scopus.readKey import read_key
@@ -158,8 +155,7 @@ def extractor():
         
         except:
             print('Error de texto, verificar valor ingresado')
-            flash('Error de texto, verificar valor ingresado')
-            raise
+            flash('Error de texto, verificar valor ingresado')            
 
         return redirect(url_for('extractor'))
     
@@ -189,8 +185,8 @@ def extractor():
                     flash(df_productos)
                 else:
                     #df_productos.to_csv('df_productos.csv',index=False)
-                    print('Extracción del perfil de Scopus terminado')
-                    flash('Extracción del perfil de Scopus terminado')
+                    print('Extracción del producto de Scopus terminado')
+                    flash('Extracción del producto de Scopus terminado')
                     productos = ProductosController()
                     productos.delete_eid(id_producto)
                     productos.insert_df(df_productos)                    
@@ -204,8 +200,7 @@ def extractor():
             flash('Error de conexión')
             #make_response(redirect('/home'))
         
-        except:
-            raise
+        except:            
             print('Error de texto, verificar valor ingresado')
 
         return redirect(url_for('extractor'))

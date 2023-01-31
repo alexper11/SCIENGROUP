@@ -15,11 +15,13 @@
                 <h3 class="panel-title text-center">Extractor Scopus</h3>
             </div>
             <div class="panel-body">
-                <form method="post" id="form_extractor_scopus">
-                    {{ wtf.quick_form(field_form_autor) }}
+                <form method="post" id="form_extractor_autor">
+                    {{ wtf.quick_form(field_form_autor) }}                    
+                </form>
+                <form method="post" id="form_extractor_producto">                    
                     <hr size="2px" color="black" style="max-width: 90rem;"/>
                     {{ wtf.quick_form(field_form_producto) }}
-                </form>                      
+                </form>                
                         
                 <br><br>
                 <!--{% if enlace_cvlac or enlace_gruplac%}       
@@ -29,15 +31,9 @@
                     <h6 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h6>
                 {% endif %} -->                
                 <div class="form-group" id="process" style="display:none;">
-                    <h5><strong>Por favor espere, extrayendo...</strong></h5>
-                    
-                    <!-- <div>
-                        <div class='spinner' ></div>
-                    </div> -->
-                    
-                    <!-- <div class="progress">
-                             <div class="progress-bar progress-bar-striped active bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 5%"></div>
-                    </div> -->
+                    <div class="loaderText">
+                        <div class="loaderText text"></div>
+                    </div>
                 </div>
             </div>
         </div>

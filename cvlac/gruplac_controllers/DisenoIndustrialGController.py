@@ -20,11 +20,13 @@ class DisenoIndustrialGController:
             db_gruplac.session.close()
     
     def delete_idgruplac(self, idgruplac):
-        db_gruplac.session.query(DisenoIndustrial).filter(DisenoIndustrial.idgruplac==idgruplac).delete()
+        db_gruplac.session.query(DisenoIndustrial).filter(DisenoIndustrial.idgruplac==idgruplac).delete(synchronize_session=False)
         try:
             db_gruplac.session.commit()
-        except:
+        except Exception as e:
             db_gruplac.session.rollback()
             print("No se pudo eliminar el idgruplac: "+idgruplac+" en DisenoIndustrial")
+            print(e)
+            #raise
         finally:
             db_gruplac.session.close()
