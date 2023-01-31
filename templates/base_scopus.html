@@ -12,7 +12,7 @@
     <!-- start -->
     <script>
         $(document).ready(function(){
-        $('#form_extractor_scopus').on('submit', function(event){
+        $('#form_extractor_autor').on('submit', function(event){
         //   event.preventDefault();         
           $.ajax({
           url:"/extractor",
@@ -20,28 +20,39 @@
           data:$(this).serialize(),
           beforeSend:function()
           {
-           $('#submit_scopus').attr('disabled', 'disabled');
+           $('#submit_autor').attr('disabled', 'disabled');
+           $('#submit_producto').attr('disabled', 'disabled');
            $('#process').css('display', 'block');
            $('#logo_static').css('display', 'none');
            $('#logo_load').css('display', 'block');
           },
           success:function(data)
           { 
-            clearInterval(timer);
-                $('#form_extractor_scopus')[0].reset();
-                $('#process').css('display', 'none');
-                $('#logo_load').css('display', 'none');
-                $('#logo_static').css('display', 'block');
-                $('.progress-bar').css('width', '0%');
-                $('#submit_scopus').attr('disabled', false);
-                // $('#success_message').html(data);
-                setTimeout(function(){
-                // $('#success_message').html('');
-                // location.reload();
-                }, 1000);
+            
           }
          })              
-        });                      
+        });
+        $('#form_extractor_producto').on('submit', function(event){
+        //   event.preventDefault();         
+          $.ajax({
+          url:"/extractor",
+          method:"POST",
+          data:$(this).serialize(),
+          beforeSend:function()
+          {
+           $('#submit_autor').attr('disabled', 'disabled');
+           $('#submit_producto').attr('disabled', 'disabled');
+           $('#process').css('display', 'block');
+           $('#logo_static').css('display', 'none');
+           $('#logo_load').css('display', 'block');
+          },
+          success:function(data)
+          { 
+            
+          }
+         })              
+        });
+
         });
     </script>
     <!-- end -->
@@ -54,15 +65,22 @@
     {% endblock %}
     
     {% for message in get_flashed_messages() %}
-        {% if message == 'Error de conexión' or message == 'Credenciales inválidas' %}
-            <div class="alert alert-danger alert-dismissible center-block" style="max-width: 90rem;">
+        {% if message == 'Credenciales registradas con éxito' or message == 'Extracción del perfil de Scopus terminado' or message == 'Extracción del producto de Scopus terminado' %}
+            <div class="alert alert-info alert-dismissible center-block" style="max-width: 90rem;">
                 <button type="button"
                         data-dismiss="alert"
                         class="close">&times;</button>
                 {{ message }}
-            </div>        
+            </div>
+        {% elif message == 'Guardado exitósamente en la base de datos' %}
+            <div class="alert alert-success alert-dismissible center-block" style="max-width: 90rem;">
+                <button type="button"
+                        data-dismiss="alert"       
+                        class="close">&times;</button>
+                {{ message }}
+            </div>       
         {% else %}
-        <div class="alert alert-success alert-dismissible center-block" style="max-width: 90rem;">
+        <div class="alert alert-danger alert-dismissible center-block" style="max-width: 90rem;">
             <button type="button"
                     data-dismiss="alert"
                     class="close">&times;</button>

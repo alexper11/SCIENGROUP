@@ -25,7 +25,7 @@ button{
 
   
   /* inicio animacion */
-  .loader {
+  .loaderLogo {
     position: relative;
     /* top: calc(50% - 32px);
     left: calc(50% - 32px); */
@@ -91,3 +91,44 @@ button{
     }
   }
   /* fin animacion */
+
+  /* inicio loader extrayendo... */
+  .loaderText {    
+    position: absolute;
+    text-align: center;    
+    margin: auto;
+  }  
+  
+  .loaderText.text {
+    position: absolute;
+    top: 200%;
+    left: 0;
+    right: 0;
+    width: 4rem; 
+    margin: auto;
+  }
+  
+  .loaderText.text:after {
+    content: "Por\0000a0favor\0000a0espere,\0000a0extrayendo";
+    font-weight: bold;
+    animation: loading-text 2s infinite;
+  }
+  
+  @keyframes loading-text {
+    0% {
+      content: "Por\0000a0favor\0000a0espere,\0000a0extrayendo";
+    }
+    
+    25% {
+      content: "Por\0000a0favor\0000a0espere,\0000a0extrayendo.";
+    }
+    
+    50% {
+      content: "Por\0000a0favor\0000a0espere,\0000a0extrayendo..";
+    }
+    
+    75% {
+      content: "Por\0000a0favor\0000a0espere,\0000a0extrayendo...";
+    }
+  }
+  /* fin loader extrayendo... */
