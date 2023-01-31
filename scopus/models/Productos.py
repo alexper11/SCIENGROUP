@@ -40,6 +40,8 @@ class Productos(Base):
     institucion = Column(String(40000), nullable=True)
     agencia_fundadora = Column(String(3000), nullable=True)
     pais=Column(String(2000), nullable=True)
+    idgruplac = Column(String(2000), nullable=True)
+    nombre_grupo = Column(String(2000), nullable=True)
     
     
     def __init__(self, **kwargs):

@@ -22,6 +22,9 @@ class Autores(Base):
     institucion = Column(String(1000), nullable=True)
     affil_id = Column(String(10000), nullable=True)
     departamento = Column(String(1000), nullable=True)
+    idgruplac = Column(String(2000), nullable=True)
+    nombre_grupo = Column(String(2000), nullable=True)
+    idcvlac = Column(String(50), nullable=True)
     
     def __init__(self, **kwargs):
        
