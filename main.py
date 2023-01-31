@@ -7,6 +7,7 @@ from scopus.readKey import read_key
 
 import pandas as pd
 import numpy as np
+from curses import nocbreak
 import sys
 
 from cvlac.cvlac_models.DBmodel import create_cvlac_db
@@ -398,7 +399,7 @@ if __name__ == '__main__':
         for idxg,idxs1 in zip(list_prod_title_gruplac,list_prod_title_scopus):
             for idxs in idxs1:
                 if art_scopus.loc[art_scopus.index==idxs, 'idgruplac'].isna().values[0]:
-                    nombre_grupo=basic[basic['idgruplac']==aux_articulosg_indexed.loc[aux_articulosg_indexed.index==idxg]['idgruplac'].values[0]]['nombre'].values[0]
+                    nombre_grupo=basic[basic['idgruplac']==aux_articulosg_indexed.loc[aux_articulosg_indexed.index==idxg]['idgruplac'].values[0]]['nocbreak'].values[0]
                     idgruplac=aux_articulosg_indexed.loc[aux_articulosg_indexed.index==idxg]['idgruplac'].values[0]
                     art_scopus.loc[art_scopus.index==idxs, 'nombre_grupo']=nombre_grupo
                     art_scopus.loc[art_scopus.index==idxs, 'idgruplac']=idgruplac
