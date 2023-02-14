@@ -240,12 +240,19 @@ class ExtractorScopus:
                         print('Error al extraer el autor(authors_df): ',author)
                         #Poner excepción para agotamiento de request del servicio api scopus
                         #RESPONSE
-                        if (response.headers['X-RateLimit-Remaining']=='0') or (response.headers['X-RateLimit-Remaining']==0):
-                            return 'API Error: Limite de solicitudes de la API alcanzado' 
-                        elif result['service-error']['status']:
-                            return 'API Error: '+result['service-error']['status']['statusText']
-                        else:
-                            pass    
+                        try:
+                            if (response.headers['X-RateLimit-Remaining']=='0') or (response.headers['X-RateLimit-Remaining']==0):
+                                return 'API Error: Limite de solicitudes de la API alcanzado' 
+                            elif result['service-error']['status']:
+                                return 'API Error: '+result['service-error']['status']['statusText']
+                            else:
+                                pass
+                        except KeyError:
+                            print('KeyError: X-RateLimit-Remaining')
+                            print(response.headers)
+                        except:
+                            print('Unknown error:')
+                            print(response.headers)    
                 break
             
             if flag==True:
@@ -834,12 +841,19 @@ class ExtractorScopus:
                     continue
                 else:
                     print('Error al extraer el articulo: ',article)
-                    if response.headers['X-RateLimit-Remaining']=='0' or response.headers['X-RateLimit-Remaining']==0:
-                        return 'API Error: Limite de solicitudes de la API alcanzado' 
-                    elif result['service-error']['status']:
-                        return 'API Error: '+result['service-error']['status']['statusText']
-                    else:
-                        pass 
+                    try:
+                        if (response.headers['X-RateLimit-Remaining']=='0') or (response.headers['X-RateLimit-Remaining']==0):
+                            return 'API Error: Limite de solicitudes de la API alcanzado' 
+                        elif result['service-error']['status']:
+                            return 'API Error: '+result['service-error']['status']['statusText']
+                        else:
+                            pass
+                    except KeyError:
+                        print('KeyError: X-RateLimit-Remaining')
+                        print(response.headers)
+                    except:
+                        print('Unknown error')
+                        print(response.headers)
             break
                 
         dic_article={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
