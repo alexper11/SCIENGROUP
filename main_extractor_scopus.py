@@ -31,7 +31,7 @@ app= Flask(__name__)
 bootstrap = Bootstrap(app)
 
 app.config['SECRET_KEY']='SUPER SECRETO' #No es la mejor practica
-
+app.config['SESSION_COOKIE_NAME'] = 'session'
 
 class FieldFormAutor(FlaskForm):
     #authorid de Gustavo Ramirez = 36603157500
@@ -60,18 +60,25 @@ def test():
 
 @app.errorhandler(404)
 def not_found(error):
-    return render_template('404.html',error=error)
+    return render_template('404_scopus.html',error=error)
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return make_response(redirect('/'))
 
 @app.route('/')
 def index():
+    session.permanent = False
     user_ip = request.remote_addr
-
     response = make_response(redirect('/home_scopus'))
     session['user_ip'] = user_ip
     return response
 
 @app.route('/home_scopus', methods=['GET', 'POST']) #ruta en que
 def home():
+    session.permanent = False
     user_ip = session.get('user_ip')
     credential_form = CredentialForm()
     apikey = session.get('apikey')
@@ -210,3 +217,8 @@ def extractor():
 @app.route('/scopus', methods=['GET', 'POST'])
 def scopus():
     return render_template('scopus.html')
+
+#Cambia de puerto de flask siempre que se ejecute directamente el main y no se exporte como un módulo
+if __name__ == "__main__":
+    app.config['ENV'] = 'development'
+    app.run(host='127.0.0.1', port=5002, threaded=True, debug=True)
