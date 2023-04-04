@@ -56,6 +56,7 @@ from cvlac.gruplac_controllers.MetaGruplacDBController import MetaGruplacDBContr
 
 #############   Librerias para flask  #########
 from flask import Flask, request, make_response, redirect, render_template, url_for, flash, jsonify
+from flask import Flask
 from flask import session as session_flask
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -65,7 +66,7 @@ import unittest
 ###########   end librerias flask   ###########
 
 #crea una nueva instancia de flask:
-app= Flask(__name__)
+app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
 app.config['SECRET_KEY']='SUPER SECRETO' #No es la mejor practica
@@ -90,13 +91,13 @@ def test():
 
 @app.errorhandler(404)
 def not_found(error):
-    return render_template('404.html',error=error)
+    return render_template('404_scienti.html',error=error)
 
 @app.route('/')
 def index():
     user_ip = request.remote_addr
 
-    response = make_response(redirect('/home_scienti'))
+    response = make_response(redirect('/extractor_scienti'))
     session_flask['user_ip'] = user_ip
 
     return response
@@ -495,3 +496,8 @@ def extractor():
 @app.route('/scopus', methods=['GET', 'POST']) 
 def scopus():    
     return render_template('scopus.html')
+
+#Cambia de puerto de flask siempre que se ejecute directamente el main y no se exporte como un módulo
+if __name__ == "__main__":
+    app.config['ENV'] = 'development'
+    app.run(host='127.0.0.1', port=5001, threaded=True, debug=True)

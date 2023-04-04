@@ -1,0 +1,13 @@
+{% extends 'base_scopus.html' %}
+{% block title %}
+    {{ super() }}
+    404
+{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1>Lo sentimos, el extractor de scopus no encontró lo página requerida.<br><br></h1>
+        <h4>A continuación encontrarás más información del error:</h4>
+        <p>{{ error }}</p>
+    </div>    
+{% endblock %}

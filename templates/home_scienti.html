@@ -7,6 +7,28 @@
 {% endblock %}
 
 {% block content %}
+
+    <div class="container" style="max-width: 90rem;">        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title text-center">Extractor de datos de las plataformas de Scienti</h3>
+            </div>
+            <div class="panel-body">
+                <div class="container" style="max-width: 80rem;">
+                    <div class="modal-body">
+                        <h3 class="panel-title">Esta herramienta extrae los datos del aplicativo CvLAC y GrupLAC pertenecientes al sistema Scienti en Colombia. Para utilizar esta herramienta, se requiere ingresar el enlace del CvLAC o GrupLAC de interés y la plataforma extraerá la información pública disponible en el sistema.<br>
+                            Se recomienda que cualquier persona que utilice esta herramienta lea detenidamente la política de privacidad y los términos de uso definidos por MinCiencias, que establece las pautas y normas para el uso ético de los datos.
+                            <a href="https://minciencias.gov.co/ciudadano/terminosycondiciones-datospersonales" style="color: blue;">Política de uso de la información</a>
+                            <br><br>
+                        </h3>
+                            <h5>Ejemplo link CvLAC: https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000000001</h5>
+                            <h5>Ejemplo link GrupLAC: https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=000000001</h5>
+                    </div>
+                </div>                 
+                            
+            </div>
+        </div>
+    </div>
     {% if user_ip %}
         <h5 style="text-align:center">IP registrado: {{user_ip}}</h5>
     {% else %}

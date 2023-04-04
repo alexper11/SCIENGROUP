@@ -13,22 +13,26 @@
             <div class="panel-heading">
                 <h3 class="panel-title text-center">Registro credenciales de Scopus</h3>
             </div>
-            <div class="panel-body">
-                <form method="post" id="form_credential">
-                    {{ wtf.quick_form(login_form) }}
-                </form>
+            <div class="panel-body">                
                 {% if apikey or token%}
-                <!-- <div class="container" style="max-width: 90rem;">        
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title text-center">Estado de registro</h3>
-                        </div>
-                        <div class="panel-body">
-                            <h3 class="panel-title"><br>Hola, bienvenido al sistema de extracción de datos de Scopus. <br><br> Su token registrado es {{ token | capitalize }} y su apikey es {{ apikey | capitalize }}<br><br></h3>
-                        </div>
+                <div class="container" style="max-width: 90rem;">
+                    <div class="panel-body">
+                        <h3 class="panel-title text-center"><br>Ya te encuentras registrado, ve a la pestaña Extractor o cierra sesión para eliminar tus credenciales.<br><br></h3>
                     </div>
-                </div> -->
-                <h5 class="panel-title text-center"><br>Su token registrado es {{ token | capitalize }} y su apikey es {{ apikey | capitalize }}<br></h5>
+                    <script type="text/javascript">                            
+                        setTimeout(function(){
+                            window.location.replace("/extractor_scopus");
+                        }, 4000);                          
+                    </script>                    
+                </div>                 
+                <!-- <h5 class="panel-title text-center"><br>Su token registrado es {{ token | capitalize }} y su apikey es {{ apikey | capitalize }}<br></h5>-->
+                {% else %}
+                    <div class="panel-body">
+                        <h3 class="panel-title"><br>Esta herramienta extrae datos de la plataforma Scopus. Para ello es necesario el registro de un Apikey suministrado por Scopus y un Token avalado por la institución.<br><br></h3>
+                    </div>
+                    <form method="post" id="form_credential">
+                        {{ wtf.quick_form(login_form) }}
+                    </form>
                 {% endif %}             
             </div>
         </div>
