@@ -4,8 +4,11 @@ from cvlac.util import get_lxml
 from scopus.ExtractorScopus import ExtractorScopus
 from scopus.Scientopy import Scientopy
 from scopus.readKey import read_key
+from scopus.integracion import integrar
 
 import pandas as pd
+import numpy as np
+import os
 import sys
 
 from cvlac.cvlac_models.DBmodel import create_cvlac_db
@@ -88,65 +91,87 @@ if __name__ == '__main__':
     print('updating cvlacdb...')
     articulos=ArticulosController()
     articulos.insert_df(Extractor.grup_articulos.drop_duplicates(ignore_index=True))
+    del articulos
     
     actuacion = ActuacionController()
     actuacion.insert_df(Extractor.grup_actuacion.drop_duplicates(ignore_index=True))
+    del actuacion
     
     basico=BasicoController()
     basico.insert_df(Extractor.grup_basico.drop_duplicates(ignore_index=True))
+    del basico
     
     evaluador=EvaluadorController()
     evaluador.insert_df(Extractor.grup_evaluador.drop_duplicates(ignore_index=True))
+    del evaluador
     
     identificadores=IdentificadoresController()
     aux_identificadores=Extractor.grup_identificadores.drop_duplicates(ignore_index=True)
     aux_identificadores.to_csv('aux_identificadores.csv',index=False)
     identificadores.insert_df(aux_identificadores)
+    del identificadores
     
     idioma=IdiomaController()
     idioma.insert_df(Extractor.grup_idioma.drop_duplicates(ignore_index=True))
+    del idioma
     
     investigacion=InvestigacionController()
     investigacion.insert_df(Extractor.grup_investiga.drop_duplicates(ignore_index=True))
+    del investigacion
     
     jurados=JuradosController()
     jurados.insert_df(Extractor.grup_jurado.drop_duplicates(ignore_index=True))
+    del jurados
     
     libros=LibrosController()
     libros.insert_df(Extractor.grup_libros.drop_duplicates(ignore_index=True))
+    del libros
     
     reconocimiento=ReconocimientoController()
     reconocimiento.insert_df(Extractor.grup_reconocimiento.drop_duplicates(ignore_index=True))
+    del reconocimiento
     
     redes=RedesController()
     redes.insert_df(Extractor.grup_redes.drop_duplicates(ignore_index=True))
+    del redes
     
     estancias=EstanciasController()
     estancias.insert_df(Extractor.grup_estancias.drop_duplicates(ignore_index=True))
+    del estancias
     
     academica=AcademicaController()
     academica.insert_df(Extractor.grup_academica.drop_duplicates(ignore_index=True))
+    del academica
     
     complementaria=ComplementariaController()
     complementaria.insert_df(Extractor.grup_complementaria.drop_duplicates(ignore_index=True))
+    del complementaria
     
     caplibros=CaplibrosController()
     caplibros.insert_df(Extractor.grup_caplibros.drop_duplicates(ignore_index=True))
+    del caplibros
     
     empresatec=EmpresaTecnologicaController()
     empresatec.insert_df(Extractor.grup_empresa_tecnologica.drop_duplicates(ignore_index=True))
+    del empresatec
     
     innovaempresa=InnovacionEmpresarialController()
     innovaempresa.insert_df(Extractor.grup_innovacion_empresarial.drop_duplicates(ignore_index=True))
+    del innovaempresa
     
     prototipo=PrototipoController()
     prototipo.insert_df(Extractor.grup_prototipo.drop_duplicates(ignore_index=True))
+    del prototipo
     
     software=SoftwareController()
     software.insert_df(Extractor.grup_software.drop_duplicates(ignore_index=True))
+    del software
     
     tecnologicos=TecnologicosController()
     tecnologicos.insert_df(Extractor.grup_tecnologicos.drop_duplicates(ignore_index=True))
+    del tecnologicos
+    
+    print('Extracción Cvlac Finalizada')
     
     ######################
     #Extraccion de tablas GRUPLAC
@@ -160,78 +185,101 @@ if __name__ == '__main__':
     aux_articulosg=Extractor.perfil_articulos
     aux_articulosg.to_csv('aux_articulosg.csv',index=False)
     articulosg.insert_df(aux_articulosg)
+    del articulosg
     
     basicog=BasicoGController()
     aux_basicog=Extractor.perfil_basico
     aux_basicog.to_csv('aux_basicog.csv',index=False)
     basicog.insert_df(aux_basicog)
+    del basicog
     
     instituciones=InstitucionesController()
     instituciones.insert_df(Extractor.perfil_instituciones)
+    del instituciones
     
     lineasg=LineasGController()
     lineasg.insert_df(Extractor.perfil_lineas)
+    del lineasg
     
     integrantes=IntegrantesController()
     aux_integrantes=Extractor.perfil_integrantes
     aux_integrantes.to_csv('aux_integrantes.csv',index=False)
     integrantes.insert_df(aux_integrantes)
+    del integrantes
     
     pdoctorado=ProgramaDoctoradoController()
     pdoctorado.insert_df(Extractor.perfil_programa_doctorado)
+    del pdoctorado
     
     pmaestria=ProgramaMaestriaController()
     pmaestria.insert_df(Extractor.perfil_programa_maestria)
+    del pmaestria
     
     oprograma=OtroProgramaController()
     oprograma.insert_df(Extractor.perfil_otro_programa)
+    del oprograma
     
     cdoctorado=CursoDoctoradoController()
     cdoctorado.insert_df(Extractor.perfil_curso_doctorado)
+    del cdoctorado
     
     cmaestria=CursoMaestriaController()
     cmaestria.insert_df(Extractor.perfil_curso_maestria)
+    del cmaestria
     
     librosg=LibrosGController()
     aux_librosg=Extractor.perfil_libros
     aux_librosg.to_csv('aux_librosg.csv',index=False)
     librosg.insert_df(aux_librosg)
+    del librosg
     
     caplibrosg=CaplibrosGController()
     aux_caplibrosg=Extractor.perfil_caplibros
     aux_caplibrosg.to_csv('aux_caplibrosg.csv',index=False)
     caplibrosg.insert_df(aux_caplibrosg)
+    del caplibrosg
     
     oarticulos=OtrosArticulosController()
     aux_oarticulos=Extractor.perfil_otros_articulos
     aux_oarticulos.to_csv('aux_oarticulos.csv',index=False)
     oarticulos.insert_df(aux_oarticulos)
+    del oarticulos
     
     olibros=OtrosLibrosController()
     aux_olibros=Extractor.perfil_otros_libros
     aux_olibros.to_csv('aux_olibros.csv',index=False)
     olibros.insert_df(aux_olibros)
+    del olibros
     
     disenoind=DisenoIndustrialGController()
     disenoind.insert_df(Extractor.perfil_diseno_industrial)
+    del disenoind
     
     otecnologicos=OtrosTecnologicosController()
     otecnologicos.insert_df(Extractor.perfil_otros_tecnologicos)
+    del otecnologicos
     
     prototiposg=PrototiposGController()
     prototiposg.insert_df(Extractor.perfil_prototipos)
+    del prototiposg
     
     softwareg=SoftwareGController()
     softwareg.insert_df(Extractor.perfil_software)
+    del softwareg
     
     empresatecg=EmpresaTecnologicaGController()
     empresatecg.insert_df(Extractor.perfil_empresa_tecnologica)
+    del empresatecg
     
     innovaempresag=InnovacionEmpresarialGController()
     innovaempresag.insert_df(Extractor.perfil_innovacion_empresarial)
+    del innovaempresag
     
     plantapilotog=PlantaPilotoGController()
     plantapilotog.insert_df(Extractor.perfil_planta_piloto)
+    del plantapilotog
+    
+    print('Extracción Gruplac Finalizada')
     
     del Extractor
     
@@ -274,21 +322,13 @@ if __name__ == '__main__':
         authors_set.update(ExtractorS.get_auid_list(affiliation))
 
     df_autores=ExtractorS.get_authors_df(authors_set)
-    
-    autores = AutoresController()
-    autores.insert_df(df_autores)
-    
+    df_autores.to_csv('aux_autores.csv',index=False)
     
     df_productos=ExtractorS.get_articles_full(cauca_affiliations)
-    #df_productos=pd.read_csv ('df_productos.csv')
-    productos = ProductosController()
-    try:
-        productos.insert_df(df_productos)
-        df_productos.to_csv('df_productos_scopus.csv',index=False)
-    except:
-        df_productos.to_csv('df_productos_scopus.csv',index=False)
-        raise
+    df_productos = df_productos.astype(str)
+    df_productos.to_csv('aux_productos.csv',index=False)
     
+    print('Extracción Scopus finalizada')
     
     del ExtractorS
 
@@ -305,15 +345,56 @@ if __name__ == '__main__':
     metadbsco=MetaDBScoController()
     metadbsco.insert_datetime()
 
-
     ###############################
     #INTEGRACIÓN DE MODULOS PARA DATOS DE GRUPOS DE INVESTIGACIÓN
     #################################
+    
+    #Inserción a base de datos de SCOPUS
+    aux_articulosg = pd.read_csv('aux_articulosg.csv', dtype = str)
+    aux_basicog = pd.read_csv('aux_basicog.csv', dtype = str)
+    aux_caplibrosg = pd.read_csv('aux_caplibrosg.csv', dtype = str)
+    aux_identificadores = pd.read_csv('aux_identificadores.csv', dtype = str)
+    aux_integrantes = pd.read_csv('aux_integrantes.csv', dtype = str)
+    aux_librosg = pd.read_csv('aux_librosg.csv', dtype = str) #pendiente de remplazo
+    aux_oarticulos = pd.read_csv('aux_oarticulos.csv', dtype = str)
+    aux_olibros = pd.read_csv('aux_olibros.csv', dtype = str)
+    df_autores = pd.read_csv('aux_autores.csv', dtype = str)
+    df_productos = pd.read_csv('aux_productos.csv', dtype = str)
 
-
+    df_productos, df_autores=integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_integrantes,aux_librosg,aux_oarticulos,aux_olibros,df_autores,df_productos)
     
+    try:
+        os.remove('aux_articulosg.csv')
+        os.remove('aux_basicog.csv')
+        os.remove('aux_caplibrosg.csv')
+        os.remove('aux_identificadores.csv')
+        os.remove('aux_integrantes.csv')
+        os.remove('aux_librosg.csv')
+        os.remove('aux_oarticulos.csv')
+        os.remove('aux_olibros.csv')
+        os.remove('aux_autores.csv')
+        os.remove('aux_productos.csv')
+        print('aux csv files deletede')
+        
+    except:
+        print('Error deleting csv files')
     
+    productos = ProductosController()
+    try:
+        print('insertando productos')
+        productos.insert_df(df_productos)
+        #df_productos.to_csv('df_productos_scopus.csv',index=False)
+    except:
+        print('error en inserción de datos para productos de scopus')
+        raise
+        #df_productos.to_csv('df_productos_scopus.csv',index=False)
+        
+    del productos
     
+    autores = AutoresController()
+    autores.insert_df(df_autores)
+    
+    print('Integración finalizada')
     
     ###############################
     #SCIENTOPY
