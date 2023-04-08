@@ -1,10 +1,11 @@
-"idgruplac","url","integrante","vinculacion","horas","fecha_vinculacion"
-"00000000017266","https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001360927","David Alexander Gutiérrez Ramírez","Integrante",40,"2014/1 - Actual"
-"00000000017266","https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001604058","Ana Isabel Restrepo Dorado","Integrante",8,"2014/1 - 2018/12"
-"00000000017266","https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001619222","Camilo Andrés Alfonso Rodríguez","Integrante",4,"2019/1 - Actual"
-"00000000017266","https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000607134","Claudia Moreno Valencia","Integrante",6,"2014/1 - 2016/12"
-"00000000017266","https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000039666","EMILCE SANCHEZ ROJAS","Integrante",4,"2019/1 - Actual"
-"00000000017266","https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000984442","Itzjak Kadar Mizrachi","Integrante",20,"2014/1 - 2017/12"
-"00000000017266","https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001545679","Juan Pablo Pava Lozano","Integrante",24,"2016/1 - 2018/12"
-"00000000017266","https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001614825","Maria Angelica Marcela Barco Bastidas","Integrante",0,"2019/1 - Actual"
-"00000000017266","https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000074005","Monica Maya Giraldo","Integrante",2,"2019/1 - Actual"
+idgruplac,url,integrante,vinculacion,horas,fecha_vinculacion
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001360927,David Alexander Gutiérrez Ramírez,Integrante,40,2014/1 - Actual
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001604058,Ana Isabel Restrepo Dorado,Integrante,8,2014/1 - 2018/12
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001619222,Camilo Andrés Alfonso Rodríguez,Integrante,4,2019/1 - Actual
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000607134,Claudia Moreno Valencia,Integrante,6,2014/1 - 2016/12
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000039666,EMILCE SANCHEZ ROJAS,Integrante,4,2019/1 - Actual
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000984442,Itzjak Kadar Mizrachi,Integrante,20,2014/1 - 2017/12
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001545679,Juan Pablo Pava Lozano,Integrante,24,2016/1 - 2018/12
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001614825,Maria Angelica Marcela Barco Bastidas,Integrante,0,2019/1 - Actual
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000074005,Monica Maya Giraldo,Integrante,2,2019/1 - Actual
+00000000017266,https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001551244,andres fernando erazo dominguez,Integrante,0,2023/1 - Actual

@@ -1,5 +1,5 @@
-"idgruplac","verificado","tipo","nombre","lugar","fecha","disponibilidad","nombre_comercial","institucion","autores"
-"00000000015901","False","Planta piloto","EcoSecador de café","Colombia",2019,"Restringido","EcoSecador de café","UNIVERSIDAD DEL CAUCA","JULIO ANDRES MOSQUERA BOLANOS, JULIAN ANDRES CAICEDO MUNOZ, DIEGO MANUEL DUSSAN MUNOZ"
-"00000000015901","True","Planta piloto","EcoSecador","Colombia",2019,"Restringido","EcoSecador","UNIVERSIDAD DEL CAUCA","JULIO ANDRES MOSQUERA BOLANOS, JULIAN ANDRES CAICEDO MUNOZ"
-"00000000015901","False","Planta piloto","Planta Piloto para la producción de abonos orgánicos en esquema comunitario","Colombia",2019,"No restringido","planta piloto","UNIVERSIDAD DEL CAUCA","CLARA MILENA CONCHA LOZADA, DAYSE DELGADO ERASO, GEHOVELL JULIANA VIDAL PINILLA, BEATRIZ EUGENIA OSPITIA THOLA"
-"00000000015901","True","Planta piloto","RECICLA, CICLA TRITURADORA DE PLÁSTICO","Colombia",2018,"Restringido","RECICLA, CICLA TRITURADORA DE PLÁSTICO","Institución Educativa Rural Santa Rosa de Lima","JUAN PABLO DIAGO RODRIGUEZ, YANLIKA AURORA VIDAL PINILLA"
+idgruplac,verificado,tipo,nombre,lugar,fecha,disponibilidad,nombre_comercial,institucion,autores
+00000000015901,False,Planta piloto,EcoSecador de café,Colombia,2019,Restringido,EcoSecador de café,UNIVERSIDAD DEL CAUCA,"JULIO ANDRES MOSQUERA BOLANOS, JULIAN ANDRES CAICEDO MUNOZ, DIEGO MANUEL DUSSAN MUNOZ"
+00000000015901,True,Planta piloto,EcoSecador,Colombia,2019,Restringido,EcoSecador,UNIVERSIDAD DEL CAUCA,"JULIO ANDRES MOSQUERA BOLANOS, JULIAN ANDRES CAICEDO MUNOZ"
+00000000015901,False,Planta piloto,Planta Piloto para la producción de abonos orgánicos en esquema comunitario,Colombia,2020,No restringido,planta piloto,UNIVERSIDAD DEL CAUCA,"CLARA MILENA CONCHA LOZADA, DAYSE DELGADO ERASO, GEHOVELL JULIANA VIDAL PINILLA, BEATRIZ EUGENIA OSPITIA THOLA"
+00000000015901,True,Planta piloto,"RECICLA, CICLA TRITURADORA DE PLÁSTICO",Colombia,2018,Restringido,"RECICLA, CICLA TRITURADORA DE PLÁSTICO",Institución Educativa Rural Santa Rosa de Lima,"JUAN PABLO DIAGO RODRIGUEZ, YANLIKA AURORA VIDAL PINILLA"

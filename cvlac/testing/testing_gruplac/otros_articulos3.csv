@@ -1,10 +1,10 @@
-"idgruplac","verificado","tipo","nombre","lugar","revista","issn","fecha","volumen","fasciculo","paginas","autores"
-"00000000016547","True","Revista de divulgación","Productividad y desarrollo. Colombia: una débil agenda de Competitividad al 2022","Colombia","Revista De Economía & Administración","1794-7561",2019,16,2,"35 - 48","JUAN DIEGO CASTRILLON CORDOVEZ"
-"00000000016547","False","Revista de divulgación","un dia en la vida cotidiana del los jóvenes en Belelcazar, Guapi, Silvia Cauca","Colombia","sabia revista cientifica","2323-0676",2019,5,1,"20 - 32","PAOLA TOVAR"
-"00000000016547","True","Revista de divulgación","Tejidos metodológicos en trabajo social.Reflexiones a partir de la investigación ¿ intervención","Colombia","Sabia. Revista Científica","2323-0576",2019,4,1,"128 - 138","ALEXANDER LUNA NIETO"
-"00000000016547","True","Revista de divulgación","Memoria histórica de cinco mujeres afrodescendientes Victimas indirectas del conflicto social y armado","Colombia","Sabia. Revista Científica","2323-0576",2019,4,1,"40 - 51","ALEXANDER LUNA NIETO"
-"00000000016547","True","Revista de divulgación","La Proximidad como apuesta escolar para la paz","Colombia","Maestr@S","1900-7620",2017,1,,"28 - 36","FERNEY PALTA VELASCO, WILLIAN FREDY PALTA VELASCO"
-"00000000016547","True","Revista de divulgación","ESPIRITUALIDAD, PROXIMIDAD Y EDUCACIÓN","Colombia","REVISTA DE INVESTIGACIONES","2539-5122",2017,17,30,"8 - 9","WILLIAN FREDY PALTA VELASCO"
-"00000000016547","True","Revista de divulgación","La equidad de género como apuesta ética: en busca del horizonte pedagógico","Colombia","Revista Ciencias Humana","0123-5826",2016,13,,"82 - 90","WILLIAN FREDY PALTA VELASCO"
-"00000000016547","False","Revista de divulgación","Necesidad de realizar una destrucción de la Historia de la Ontología","México","GRUPO EDITORIAL GACETA HUMANIDADES","2012-0234",2015,1,"N.A","1 - 7","ALEXANDER LUNA NIETO"
-"00000000016547","True","Revista de divulgación","Educación para la ciudadanía: una apuesta para la transformación social","Colombia","Revista Ciencias Humanas","0123-5826",2015,12,1,"15 - 19","WILLIAN FREDY PALTA VELASCO"
+idgruplac,verificado,tipo,nombre,lugar,revista,issn,fecha,volumen,fasciculo,paginas,autores
+00000000016547,True,Revista de divulgación,Productividad y desarrollo. Colombia: una débil agenda de Competitividad al 2022,Colombia,Revista De Economía & Administración,1794-7561,2019,16,2,35 - 48,JUAN DIEGO CASTRILLON CORDOVEZ
+00000000016547,False,Revista de divulgación,"un dia en la vida cotidiana del los jóvenes en Belelcazar, Guapi, Silvia Cauca",Colombia,Revista sabia revista cientifica,2711-4775,2019,5,1,20 - 32,PAOLA ANDREA TOVAR TOVAR
+00000000016547,True,Revista de divulgación,Tejidos metodológicos en trabajo social.Reflexiones a partir de la investigación ¿ intervención,Colombia,Sabia. Revista Científica,2323-0576,2019,4,1,128 - 138,ALEXANDER LUNA NIETO
+00000000016547,True,Revista de divulgación,Memoria histórica de cinco mujeres afrodescendientes Victimas indirectas del conflicto social y armado,Colombia,Sabia. Revista Científica,2323-0576,2019,4,1,40 - 51,ALEXANDER LUNA NIETO
+00000000016547,True,Revista de divulgación,La Proximidad como apuesta escolar para la paz,Colombia,Maestr@S,1900-7620,2017,1,,28 - 36,"FERNEY PALTA VELASCO, WILLIAN FREDY PALTA VELASCO"
+00000000016547,True,Revista de divulgación,"ESPIRITUALIDAD, PROXIMIDAD Y EDUCACIÓN",Colombia,Revista De Investigaciones,2539-5122,2017,17,30,8 - 9,WILLIAN FREDY PALTA VELASCO
+00000000016547,True,Revista de divulgación,La equidad de género como apuesta ética: en busca del horizonte pedagógico,Colombia,Revista Ciencias Humanas,0123-5826,2016,13,,82 - 90,WILLIAN FREDY PALTA VELASCO
+00000000016547,False,Revista de divulgación,Necesidad de realizar una destrucción de la Historia de la Ontología,México,GRUPO EDITORIAL GACETA HUMANIDADES,2012-0234,2015,1,N.A,1 - 7,ALEXANDER LUNA NIETO
+00000000016547,True,Revista de divulgación,Educación para la ciudadanía: una apuesta para la transformación social,Colombia,Revista Ciencias Humanas,0123-5826,2015,12,1,15 - 19,WILLIAN FREDY PALTA VELASCO
