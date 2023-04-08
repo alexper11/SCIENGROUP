@@ -1,13 +1,10 @@
 {% extends 'base_scopus.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
-
 {% block title %}
     {{ super() }}
     Bienvenido
 {% endblock %}
-
-{% block content %}
-       
+{% block content %}    
     <div class="container" style="max-width: 90rem;">
         <span id="success_message"></span>
         <div class="panel panel-default">
@@ -15,28 +12,40 @@
                 <h3 class="panel-title text-center">Extractor Scopus</h3>
             </div>
             <div class="panel-body">
-                <form method="post" id="form_extractor_autor">
-                    {{ wtf.quick_form(field_form_autor) }}                    
-                </form>
-                <form method="post" id="form_extractor_producto">                    
-                    <hr size="2px" color="black" style="max-width: 90rem;"/>
-                    {{ wtf.quick_form(field_form_producto) }}
-                </form>                
-                        
-                <br><br>
-                <!--{% if enlace_cvlac or enlace_gruplac%}       
-                    <h6 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h6>                         
-                {% endif %}
-                {% if enlace_cvlac %}       
-                    <h6 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h6>
-                {% endif %} -->                
-                <div class="form-group" id="process" style="display:none;">
-                    <div class="loaderText">
-                        <div class="loaderText text"></div>
+                {% if apikey or token%}                    
+                    <form method="post" id="form_extractor_autor">
+                        {{ wtf.quick_form(field_form_autor) }}                    
+                    </form>
+                    <form method="post" id="form_extractor_producto">                    
+                        <hr size="2px" color="black" style="max-width: 90rem;"/>
+                        {{ wtf.quick_form(field_form_producto) }}
+                    </form>                
+                            
+                    <br><br>
+                    <!--{% if enlace_cvlac or enlace_gruplac%}       
+                        <h6 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h6>                         
+                    {% endif %}
+                    {% if enlace_cvlac %}       
+                        <h6 style="text-align:center" >Enlace de cvlac: {{ enlace_cvlac }}</h6>
+                    {% endif %} -->                
+                    <div class="form-group" id="process" style="display:none;">
+                        <div class="loaderText">
+                            <div class="loaderText text"></div>
+                        </div>
                     </div>
-                </div>
+                    {% else %}
+                        <div class="container" style="max-width: 90rem;">
+                            <div class="panel-body">
+                                <h3 class="panel-title text-center"><br>Debes registrarte primero, ve a la pestaña Inicio y registra las credenciales.<br><br></h3>
+                            </div>
+                        </div>
+                        <script type="text/javascript">                            
+                            setTimeout(function(){
+                                window.location.replace("/");
+                            }, 4000);                          
+                        </script>
+                    {% endif %} 
             </div>
         </div>
-    </div>  
-
+    </div>
 {% endblock %}
