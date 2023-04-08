@@ -2,7 +2,7 @@ import re
 
 import pandas as pd
 
-from cvlac.util import almacena, almacena_df
+from cvlac.util import almacena, almacena_df, get_lxml
 
 
 class ExtractorCvlac():
@@ -784,3 +784,34 @@ class ExtractorCvlac():
         df_innovacion = self.innovacion_empresarial  
         return df_innovacion
 
+    def get_cv(self, url):
+        #recibe url de un cvlac y lo extrae
+        lxml_url = get_lxml(url)            
+        df_basico = self.get_basico(lxml_url, url)
+        df_articulos = self.get_articulo(lxml_url, url)
+        df_actuacion = self.get_actuacion(lxml_url, url)
+        df_idioma = self.get_idioma(lxml_url, url)
+        df_investiga = self.get_investiga(lxml_url, url)
+        df_reconocimiento = self.get_reconocimiento(lxml_url, url)
+        df_evaluador = self.get_evaluador(lxml_url, url) 
+        df_redes = self.get_redes(lxml_url, url)
+        df_identifica = self.get_identificadores(lxml_url, url)
+        df_libros = self.get_libro(lxml_url, url)
+        df_jurado = self.get_jurado(lxml_url, url)
+        df_complementaria = self.get_complementaria(lxml_url, url)
+        df_estancias = self.get_estancias(lxml_url, url)
+        df_academica = self.get_academica(lxml_url, url)
+        df_caplibros = self.get_caplibro(lxml_url, url)
+        df_software = self.get_software(lxml_url, url)
+        df_prototipo = self.get_prototipo(lxml_url, url)
+        df_tecnologicos = self.get_tecnologicos(lxml_url, url)
+        df_empresa = self.get_empresa_tecnologica(lxml_url, url)
+        df_innovacion = self.get_innovacion(lxml_url, url)
+        #limpiar atributos si se desea
+        super().__init__()
+        return {"basico":df_basico,"articulos":df_articulos,"actuacion":df_actuacion,"idioma":df_idioma,                                #type: ignore    
+                "investigacion":df_investiga,"reconocimiento":df_reconocimiento,"evaluador":df_evaluador,                               #type: ignore
+                "redes":df_redes,"identificadores":df_identifica,"libros":df_libros,"jurado":df_jurado,                                 #type: ignore
+                "complementaria":df_complementaria,"estancias":df_estancias,"academica":df_academica,                                   #type: ignore
+                "caplibros":df_caplibros,"software":df_software,"prototipo":df_prototipo,"tecnologicos":df_tecnologicos,                #type: ignore
+                "empresa_tecnologica":df_empresa,"innovacion_empresarial":df_innovacion}  

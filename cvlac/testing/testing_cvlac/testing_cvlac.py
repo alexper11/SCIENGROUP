@@ -67,18 +67,18 @@ def run_unittests_cvlac():
     url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001425138'
     
     lxml_url1 = get_lxml(url1)
-    df_auto1=Extractor.get_software(lxml_url1,url1).astype(str)
-    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/software1.csv', dtype='object', keep_default_na=False)
+    df_auto1=Extractor.get_software(lxml_url1,url1).sort_values('nombre',ignore_index=True).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/software1.csv', dtype='object', keep_default_na=False).sort_values('nombre',ignore_index=True)
     Extractor.software = Extractor.software.iloc[0:0]
 
     lxml_url2 = get_lxml(url2)
-    df_auto2=Extractor.get_software(lxml_url2,url2).astype(str)
-    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/software2.csv', dtype='object', keep_default_na=False)
+    df_auto2=Extractor.get_software(lxml_url2,url2).sort_values('nombre',ignore_index=True).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/software2.csv', dtype='object', keep_default_na=False).sort_values('nombre',ignore_index=True)
     Extractor.software = Extractor.software.iloc[0:0]
 
     lxml_url3 = get_lxml(url3)
-    df_auto3=Extractor.get_software(lxml_url3,url3).astype(str)
-    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/software3.csv', dtype='object', keep_default_na=False)
+    df_auto3=Extractor.get_software(lxml_url3,url3).sort_values('nombre',ignore_index=True).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/software3.csv', dtype='object', keep_default_na=False).sort_values('nombre',ignore_index=True)
 
     try:
         print('******************************************')
@@ -377,18 +377,18 @@ def run_unittests_cvlac():
     url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000011410'
     
     lxml_url1 = get_lxml(url1)
-    df_auto1=Extractor.get_evaluador(lxml_url1,url1).astype(str)
-    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/evaluador1.csv', dtype='object', keep_default_na=False)
+    df_auto1=Extractor.get_evaluador(lxml_url1,url1).sort_values(['ambito','fecha'],ignore_index=True).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/evaluador1.csv', dtype='object', keep_default_na=False).sort_values(['ambito','fecha'],ignore_index=True)
     Extractor.evaluador = Extractor.evaluador.iloc[0:0]
 
     lxml_url2 = get_lxml(url2)
-    df_auto2=Extractor.get_evaluador(lxml_url2,url2).astype(str)
-    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/evaluador2.csv', dtype='object', keep_default_na=False)
+    df_auto2=Extractor.get_evaluador(lxml_url2,url2).sort_values(['ambito','fecha'],ignore_index=True).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/evaluador2.csv', dtype='object', keep_default_na=False).sort_values(['ambito','fecha'],ignore_index=True)
     Extractor.evaluador = Extractor.evaluador.iloc[0:0]
 
     lxml_url3 = get_lxml(url3)
-    df_auto3=Extractor.get_evaluador(lxml_url3,url3).astype(str)
-    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/evaluador3.csv', dtype='object', keep_default_na=False)
+    df_auto3=Extractor.get_evaluador(lxml_url3,url3).sort_values(['ambito','fecha'],ignore_index=True).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/evaluador3.csv', dtype='object', keep_default_na=False).sort_values(['ambito','fecha'],ignore_index=True)
 
     try:
         print('******************************************')
@@ -470,18 +470,18 @@ def run_unittests_cvlac():
     url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000028625'
     
     lxml_url1 = get_lxml(url1)
-    df_auto1=Extractor.get_complementaria(lxml_url1,url1).astype(str)
-    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/complementaria1.csv', dtype='object', keep_default_na=False)
+    df_auto1=Extractor.get_complementaria(lxml_url1,url1).sort_values(['titulo','fecha'],ignore_index=True).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/complementaria1.csv', dtype='object', keep_default_na=False).sort_values(['titulo','fecha'],ignore_index=True)
     Extractor.complementaria = Extractor.complementaria.iloc[0:0]
 
     lxml_url2 = get_lxml(url2)
-    df_auto2=Extractor.get_complementaria(lxml_url2,url2).astype(str)
-    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/complementaria2.csv', dtype='object', keep_default_na=False)
+    df_auto2=Extractor.get_complementaria(lxml_url2,url2).sort_values(['titulo','fecha'],ignore_index=True).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/complementaria2.csv', dtype='object', keep_default_na=False).sort_values(['titulo','fecha'],ignore_index=True)
     Extractor.complementaria = Extractor.complementaria.iloc[0:0]
 
     lxml_url3 = get_lxml(url3)
-    df_auto3=Extractor.get_complementaria(lxml_url3,url3).astype(str)
-    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/complementaria3.csv', dtype='object', keep_default_na=False)
+    df_auto3=Extractor.get_complementaria(lxml_url3,url3).sort_values(['titulo','fecha'],ignore_index=True).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/complementaria3.csv', dtype='object', keep_default_na=False).sort_values(['titulo','fecha'],ignore_index=True)
 
     try:
         print('******************************************')
@@ -501,18 +501,18 @@ def run_unittests_cvlac():
     url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001602134'
     
     lxml_url1 = get_lxml(url1)
-    df_auto1=Extractor.get_caplibro(lxml_url1,url1).astype(str)
-    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/caplibros1.csv', dtype='object', keep_default_na=False)
+    df_auto1=Extractor.get_caplibro(lxml_url1,url1).sort_values('capitulo',ignore_index=True).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/caplibros1.csv', dtype='object', keep_default_na=False).sort_values('capitulo',ignore_index=True)
     Extractor.caplibros = Extractor.caplibros.iloc[0:0]
 
     lxml_url2 = get_lxml(url2)
-    df_auto2=Extractor.get_caplibro(lxml_url2,url2).astype(str)
-    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/caplibros2.csv', dtype='object', keep_default_na=False)
+    df_auto2=Extractor.get_caplibro(lxml_url2,url2).sort_values('capitulo',ignore_index=True).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/caplibros2.csv', dtype='object', keep_default_na=False).sort_values('capitulo',ignore_index=True)
     Extractor.caplibros = Extractor.caplibros.iloc[0:0]
 
     lxml_url3 = get_lxml(url3)
-    df_auto3=Extractor.get_caplibro(lxml_url3,url3).astype(str)
-    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/caplibros3.csv', dtype='object', keep_default_na=False)
+    df_auto3=Extractor.get_caplibro(lxml_url3,url3).sort_values('capitulo',ignore_index=True).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/caplibros3.csv', dtype='object', keep_default_na=False).sort_values('capitulo',ignore_index=True)
 
     try:
         print('******************************************')
@@ -625,18 +625,18 @@ def run_unittests_cvlac():
     url3='https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001672586'
     
     lxml_url1 = get_lxml(url1)
-    df_auto1=Extractor.get_academica(lxml_url1,url1).astype(str)
-    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/academica1.csv', dtype='object', keep_default_na=False)
+    df_auto1=Extractor.get_academica(lxml_url1,url1).sort_values('titulo',ignore_index=True).astype(str)
+    df_manu1=pd.read_csv('cvlac/testing/testing_cvlac/academica1.csv', dtype='object', keep_default_na=False).sort_values('titulo',ignore_index=True)
     Extractor.academica = Extractor.academica.iloc[0:0]
 
     lxml_url2 = get_lxml(url2)
-    df_auto2=Extractor.get_academica(lxml_url2,url2).astype(str)
-    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/academica2.csv', dtype='object', keep_default_na=False)
+    df_auto2=Extractor.get_academica(lxml_url2,url2).sort_values('titulo',ignore_index=True).astype(str)
+    df_manu2=pd.read_csv('cvlac/testing/testing_cvlac/academica2.csv', dtype='object', keep_default_na=False).sort_values('titulo',ignore_index=True)
     Extractor.academica = Extractor.academica.iloc[0:0]
 
     lxml_url3 = get_lxml(url3)
-    df_auto3=Extractor.get_academica(lxml_url3,url3).astype(str)
-    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/academica3.csv', dtype='object', keep_default_na=False)
+    df_auto3=Extractor.get_academica(lxml_url3,url3).sort_values('titulo',ignore_index=True).astype(str)
+    df_manu3=pd.read_csv('cvlac/testing/testing_cvlac/academica3.csv', dtype='object', keep_default_na=False).sort_values('titulo',ignore_index=True)
 
     try:
         print('******************************************')

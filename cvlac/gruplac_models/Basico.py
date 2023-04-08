@@ -4,8 +4,8 @@ from sqlalchemy import Column, Integer, String
 class Basico(Base):
     
     __tablename__ = 'basico'
-    id = Column(Integer, primary_key=True)
-    idgruplac = Column(String(50), nullable=False)
+    #id = Column(Integer, primary_key=True)
+    idgruplac = Column(String(50), primary_key=True)
     nombre = Column(String(1500), nullable=True)
     fecha_formacion = Column(String(500), nullable=True)
     lugar = Column(String(300), nullable=True)

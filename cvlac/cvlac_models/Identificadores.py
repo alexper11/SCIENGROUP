@@ -1,13 +1,16 @@
 from cvlac.db_cvlac import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 class Identificadores(Base):
     
     __tablename__ = 'identificadores'
     id = Column(Integer, primary_key=True)
-    idcvlac = Column(String(20), nullable=False)
+    idcvlac = Column(String(20), ForeignKey("basico.idcvlac"), nullable=False)
     nombre = Column(String(1000), nullable=True)
     url = Column(String(1000), nullable=True)
+    
+    basico = relationship('Basico', backref='identificadores')
     
     def __init__(self, **kwargs):
         

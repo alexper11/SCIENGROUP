@@ -1,11 +1,12 @@
 from cvlac.db_gruplac import Base
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 
 class EmpresaTecnologica(Base):
     
     __tablename__ = 'empresa_tecnologica'
     id = Column(Integer, primary_key=True)
-    idgruplac = Column(String(50), nullable=False)
+    idgruplac = Column(String(50), ForeignKey("basico.idgruplac"), nullable=False)
     verificado = Column(Boolean,unique=False, default=True)
     tipo = Column(String(200), nullable=True)
     nombre = Column(String(1500), nullable=True)
@@ -14,6 +15,8 @@ class EmpresaTecnologica(Base):
     fecha_registro = Column(String(100), nullable=True)
     mercado = Column(String(300), nullable=True)
     autores = Column(String(6000), nullable=True)       
+    
+    basico = relationship('Basico', backref='empresa_tecnologica') 
     
     def __init__(self, **kwargs):
         

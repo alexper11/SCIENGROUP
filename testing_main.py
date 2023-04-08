@@ -6,6 +6,13 @@ from cvlac.util import get_lxml
 
 sys.path.append(".")
 
+#Ejecutar todas las pruebas de verificación para cvlac y gruplac
+print('**************************************')
+print('***PRUEBAS DE VERIFICACIÓN DE CVLAC***')
+print('**************************************')
 run_unittests_cvlac()
-#run_unittests_gruplac()
+print('**************************************')
+print('**PRUEBAS DE VERIFICACIÓN DE GRUPLAC**')
+print('**************************************')
+run_unittests_gruplac()
 
