@@ -30,7 +30,7 @@ for a in links_total:
         for table in child:
             trs=table.find_all('tr')
             titulo=trs[0].find('td').text.strip()
-            if (len(trs) > 1) and (titulo=='PRODUCCIÓN TÉCNICA Y TECNOLÓGICA'):
+            if (len(trs) > 1) and (titulo=='Poblaciones mejoradas de razas pecuarias'):
                 print(url_gruplac)
                 count=count+1
 print('count : ',count)

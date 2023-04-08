@@ -1,11 +1,12 @@
 from cvlac.db_gruplac import Base
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 
 class OtrosLibros(Base):
     
     __tablename__ = 'otros_libros'
     id = Column(Integer, primary_key=True)
-    idgruplac = Column(String(50), nullable=False)
+    idgruplac = Column(String(50), ForeignKey("basico.idgruplac"), nullable=False)
     verificado = Column(Boolean,unique=False, default=True)
     tipo = Column(String(200), nullable=True)
     nombre = Column(String(1500), nullable=True)
@@ -16,6 +17,8 @@ class OtrosLibros(Base):
     paginas = Column(String(80), nullable=True)
     editorial = Column(String(300), nullable=True)
     autores = Column(String(6000), nullable=True)       
+    
+    basico = relationship('Basico', backref='otros_libros') 
     
     def __init__(self, **kwargs):
         

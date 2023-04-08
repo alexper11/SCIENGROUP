@@ -1,10 +1,11 @@
-"idcvlac","autor","nombre","tipo","verificado","nombre_comercial","contrato_registro","lugar","fecha","plataforma","ambiente","palabras","areas","sectores"
-"0001425138","HENDRYS FABIAN TOBAR MUNOZ","Terra Explora","Producción técnica - Softwares - Multimedia","False","Terra Explora",,"Colombia",2018,"Android",,,,
-"0001425138","HENDRYS FABIAN TOBAR MUNOZ, CAROLINA GONZALEZ SERRANO","Tsiunas: Videojuego para la prevención de las violencias de género y la promoción de masculinidades corresponsables","Producción técnica - Softwares - Multimedia","False","Tsiunas",,"Colombia",2018,"Android, Windows",,,,
-"0001425138","HENDRYS FABIAN TOBAR MUNOZ","Cuetaya: Tierra de Colores","Producción técnica - Softwares - Multimedia","False","Cuetaya: Tierra de Colores",,"Colombia",2016,"Android",,,,
-"0001425138","HENDRYS FABIAN TOBAR MUNOZ","AR Ole, el Elfo Cierraojos","Producción técnica - Softwares - Computacional","False","AR Ole, el Elfo Cierraojos",,"España",2014,"Android","Unity3D, Vuforia",,"Ingeniería y Tecnología -- Ingenierías Eléctrica, Electrónica e Informática -- Ingeniería de Sistemas y Comunicaciones",
-"0001425138","HENDRYS FABIAN TOBAR MUNOZ","Una Aventura por el Cauca","Producción técnica - Softwares - Computacional","False","Una Aventura por el Cauca",,"España",2016,"Android","Unity3D, Vuforia",,,
-"0001425138","HENDRYS FABIAN TOBAR MUNOZ","Gremlings in my Mirror","Producción técnica - Softwares - Computacional","False",,,"España",2013,,,,,
-"0001425138","HENDRYS FABIAN TOBAR MUNOZ","Planet TB","Producción técnica - Softwares - Multimedia","False","Planet TB",,"Colombia",2009,,,,,
-"0001425138","HENDRYS FABIAN TOBAR MUNOZ","Simon y la Tuberculosis","Producción técnica - Softwares - Multimedia","False",,,"Colombia",2008,"PC",,,,
-"0001425138","HENDRYS FABIAN TOBAR MUNOZ","Bailabot","Producción técnica - Softwares - Multimedia","False",,,"Colombia",2007,"PC",,,,
+idcvlac,autor,nombre,tipo,verificado,nombre_comercial,contrato_registro,lugar,fecha,plataforma,ambiente,palabras,areas,sectores
+0001425138,HENDRYS FABIAN TOBAR MUNOZ,Terra Explora,Producción técnica - Softwares - Multimedia,False,Terra Explora,,Colombia,2018,Android,,,,
+0001425138,"HENDRYS FABIAN TOBAR MUNOZ, CAROLINA GONZALEZ SERRANO",Tsiunas: Videojuego para la prevención de las violencias de género y la promoción de masculinidades corresponsables,Producción técnica - Softwares - Multimedia,False,Tsiunas,,Colombia,2018,"Android, Windows",,,,
+0001425138,HENDRYS FABIAN TOBAR MUNOZ,Cuetaya: Tierra de Colores,Producción técnica - Softwares - Multimedia,False,Cuetaya: Tierra de Colores,,Colombia,2016,Android,,,,
+0001425138,HENDRYS FABIAN TOBAR MUNOZ,"AR Ole, el Elfo Cierraojos",Producción técnica - Softwares - Computacional,False,"AR Ole, el Elfo Cierraojos",,España,2014,Android,"Unity3D, Vuforia",,"Ingeniería y Tecnología -- Ingenierías Eléctrica, Electrónica e Informática -- Ingeniería de Sistemas y Comunicaciones",
+0001425138,HENDRYS FABIAN TOBAR MUNOZ,Una Aventura por el Cauca,Producción técnica - Softwares - Computacional,False,Una Aventura por el Cauca,,España,2016,Android,"Unity3D, Vuforia",,,
+0001425138,HENDRYS FABIAN TOBAR MUNOZ,Gremlings in my Mirror,Producción técnica - Softwares - Computacional,False,,,España,2013,,,,,
+0001425138,HENDRYS FABIAN TOBAR MUNOZ,Planet TB,Producción técnica - Softwares - Multimedia,False,Planet TB,,Colombia,2009,,,,,
+0001425138,HENDRYS FABIAN TOBAR MUNOZ,Simon y la Tuberculosis,Producción técnica - Softwares - Multimedia,False,,,Colombia,2008,PC,,,,
+0001425138,HENDRYS FABIAN TOBAR MUNOZ,Bailabot,Producción técnica - Softwares - Multimedia,False,,,Colombia,2007,PC,,,,
+0001425138,HENDRYS FABIAN TOBAR MUNOZ,enTour360,Producción técnica - Softwares - Computacional,False,enTour360,,Colombia,2022,Wordpress,Web,"Turismo, Contenidos 360","Ingeniería y Tecnología -- Ingenierías Eléctrica, Electrónica e Informática -- Ingeniería de Sistemas y Comunicaciones","Desarrollo rural, Otros sectores - Informática, Otros sectores - Información y Gestión C"

@@ -89,6 +89,11 @@ if __name__ == '__main__':
     Extractor.set_grup_attrs(lista_gruplac)
     
     print('updating cvlacdb...')
+    
+    basico=BasicoController()
+    basico.insert_df(Extractor.grup_basico.drop_duplicates(ignore_index=True))
+    del basico
+    
     articulos=ArticulosController()
     articulos.insert_df(Extractor.grup_articulos.drop_duplicates(ignore_index=True))
     del articulos
@@ -96,10 +101,6 @@ if __name__ == '__main__':
     actuacion = ActuacionController()
     actuacion.insert_df(Extractor.grup_actuacion.drop_duplicates(ignore_index=True))
     del actuacion
-    
-    basico=BasicoController()
-    basico.insert_df(Extractor.grup_basico.drop_duplicates(ignore_index=True))
-    del basico
     
     evaluador=EvaluadorController()
     evaluador.insert_df(Extractor.grup_evaluador.drop_duplicates(ignore_index=True))
@@ -181,17 +182,18 @@ if __name__ == '__main__':
     Extractor.set_perfil_attrs(lista_gruplac)
     
     print('updating gruplacdb...')
-    articulosg=ArticulosGController()
-    aux_articulosg=Extractor.perfil_articulos
-    aux_articulosg.to_csv('aux_articulosg.csv',index=False)
-    articulosg.insert_df(aux_articulosg)
-    del articulosg
     
     basicog=BasicoGController()
     aux_basicog=Extractor.perfil_basico
     aux_basicog.to_csv('aux_basicog.csv',index=False)
     basicog.insert_df(aux_basicog)
     del basicog
+    
+    articulosg=ArticulosGController()
+    aux_articulosg=Extractor.perfil_articulos
+    aux_articulosg.to_csv('aux_articulosg.csv',index=False)
+    articulosg.insert_df(aux_articulosg)
+    del articulosg
     
     instituciones=InstitucionesController()
     instituciones.insert_df(Extractor.perfil_instituciones)

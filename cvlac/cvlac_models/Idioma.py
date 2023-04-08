@@ -1,16 +1,19 @@
 from cvlac.db_cvlac import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 class Idioma(Base):
     
     __tablename__ = 'idioma'
     id = Column(Integer, primary_key=True)
-    idcvlac = Column(String(20), nullable=False)
+    idcvlac = Column(String(20), ForeignKey("basico.idcvlac"), nullable=False)
     idioma = Column(String(80), nullable=True)
     habla = Column(String(80), nullable=True)
     escribe = Column(String(80), nullable=True)
     lee = Column(String(80), nullable=True)
     entiende = Column(String(80), nullable=True)
+    
+    basico = relationship('Basico', backref='idioma')
     
     def __init__(self, **kwargs):
         

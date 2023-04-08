@@ -1,11 +1,12 @@
 from cvlac.db_cvlac import Base
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 
 class Caplibros(Base):
     
     __tablename__ = 'caplibros'
     id = Column(Integer, primary_key=True)
-    idcvlac = Column(String(20), nullable=False)
+    idcvlac = Column(String(20), ForeignKey("basico.idcvlac"), nullable=False)
     autores = Column(String(4000), nullable=True)
     capitulo = Column(String(1000), nullable=True)
     libro = Column(String(1000), nullable=True)
@@ -19,6 +20,8 @@ class Caplibros(Base):
     palabras = Column(String(3000), nullable=True)
     areas = Column(String(3000), nullable=True)
     sectores = Column(String(3000), nullable=True)
+    
+    basico = relationship('Basico', backref='caplibros')
     
     def __init__(self, **kwargs):
         
