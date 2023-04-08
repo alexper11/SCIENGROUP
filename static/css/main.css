@@ -13,6 +13,12 @@ button{
             box-shadow: -1px 3px 18px 0px rgba(0,0,0,0.35);   
  }
 
+ .navbar-nav>li.custom-blue>a {
+    color: rgb(5, 10, 75) !important;
+  }
+  .navbar-nav>li.custom-orange>a {
+    color: rgb(75, 47, 5) !important;
+  }
  input {
     display: block;
     margin-top: 5px;
