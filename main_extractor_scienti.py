@@ -193,7 +193,6 @@ def extractor():
                     #Con cada objeto, elimina los datos para no guardar duplicados
                     actuacionObj.delete_idcvlac(id_cvlac)
                     articuloObj.delete_idcvlac(id_cvlac)
-                    basicoObj.delete_idcvlac(id_cvlac)
                     evaluadorObj.delete_idcvlac(id_cvlac)
                     identificadoresObj.delete_idcvlac(id_cvlac)
                     idiomaObj.delete_idcvlac(id_cvlac)
@@ -211,11 +210,12 @@ def extractor():
                     prototipoObj.delete_idcvlac(id_cvlac)
                     softwareObj.delete_idcvlac(id_cvlac)
                     tecnologicosObj.delete_idcvlac(id_cvlac)
+                    basicoObj.delete_idcvlac(id_cvlac)
                     
                     #inserta los dataframes extraidos anteriormente y los almacena
+                    basicoObj.insert_df(df_basico)
                     actuacionObj.insert_df(df_actuacion)
                     articuloObj.insert_df(df_articulo)
-                    basicoObj.insert_df(df_basico)
                     evaluadorObj.insert_df(df_evaluador)
                     identificadoresObj.insert_df(df_identificadores)
                     idiomaObj.insert_df(df_idioma)
@@ -299,91 +299,93 @@ def extractor():
                         print('Extracción del perfil de Gruplac terminado')
                         flash('Extracción del perfil de Gruplac terminado')
                         
-                        # creo objetos controller_grup para cada tabla de gruplac
+                        # creo objetos controller_grup para cada tabla de gruplac     
+                        perfilBasicoObj = BasicoGController()
+                                           
                         perfilArticulosObj = ArticulosGController()
                         perfilArticulosObj.delete_idgruplac(id_gruplac)
-                        perfilArticulosObj.insert_df(df_perfil_articulos)
-                                                
-                        perfilBasicoObj = BasicoGController()
-                        perfilBasicoObj.delete_idgruplac(id_gruplac) 
-                        perfilBasicoObj.insert_df(df_perfil_basico)  
                                               
                         perfilCapLibrosObj = CaplibrosGController()
                         perfilCapLibrosObj.delete_idgruplac(id_gruplac)
-                        perfilCapLibrosObj.insert_df(df_perfil_caplibros)
                         
                         perfilCursoDoctoradoObj = CursoDoctoradoController()
                         perfilCursoDoctoradoObj.delete_idgruplac(id_gruplac)
-                        perfilCursoDoctoradoObj.insert_df(df_perfil_curso_doctorado)
                         
                         perfilCursoMaestriaObj = CursoMaestriaController()
                         perfilCursoMaestriaObj.delete_idgruplac(id_gruplac)
-                        perfilCursoMaestriaObj.insert_df(df_perfil_curso_maestria)
                         
                         perfilDisenoIndustrialObj = DisenoIndustrialGController()
                         perfilDisenoIndustrialObj.delete_idgruplac(id_gruplac)
-                        perfilDisenoIndustrialObj.insert_df(df_perfil_diseno_industrial)
                         
                         perfilEmpresaTecnologicaObj = EmpresaTecnologicaGController()
                         perfilEmpresaTecnologicaObj.delete_idgruplac(id_gruplac)
-                        perfilEmpresaTecnologicaObj.insert_df(df_perfil_empresa_tecnologica)
                         
                         perfilInnovacionEmpresarialObj = InnovacionEmpresarialGController()
                         perfilInnovacionEmpresarialObj.delete_idgruplac(id_gruplac)
-                        perfilInnovacionEmpresarialObj.insert_df(df_perfil_innovacion_empresarial)
                         
                         perfilInstitucionesObj = InstitucionesController()
                         perfilInstitucionesObj.delete_idgruplac(id_gruplac)
-                        perfilInstitucionesObj.insert_df(df_perfil_instituciones)
                         
                         perfilIntegrantesObj = IntegrantesController()
                         perfilIntegrantesObj.delete_idgruplac(id_gruplac)
-                        perfilIntegrantesObj.insert_df(df_perfil_integrantes)
                         
                         perfilLibrosObj = LibrosGController()
                         perfilLibrosObj.delete_idgruplac(id_gruplac)
-                        perfilLibrosObj.insert_df(df_perfil_libros)
                         
                         perfilLineasObj = LineasGController()
                         perfilLineasObj.delete_idgruplac(id_gruplac)
-                        perfilLineasObj.insert_df(df_perfil_lineas)
                         
                         perfilOtroProgramaObj = OtroProgramaController()
                         perfilOtroProgramaObj.delete_idgruplac(id_gruplac)
-                        perfilOtroProgramaObj.insert_df(df_perfil_otro_programa)
                         
                         perfilOtrosArticulosObj = OtrosArticulosController()
                         perfilOtrosArticulosObj.delete_idgruplac(id_gruplac)
-                        perfilOtrosArticulosObj.insert_df(df_perfil_otros_articulos)
                         
                         perfilOtrosLibrosObj = OtrosLibrosController()
                         perfilOtrosLibrosObj.delete_idgruplac(id_gruplac)
-                        perfilOtrosLibrosObj.insert_df(df_perfil_otros_libros)
                         
                         perfilOtrosTecnologicosObj = OtrosTecnologicosController()
                         perfilOtrosTecnologicosObj.delete_idgruplac(id_gruplac)
-                        perfilOtrosTecnologicosObj.insert_df(df_perfil_otros_tecnologicos)
                         
                         perfilPlantaPilotoObj = PlantaPilotoGController()
                         perfilPlantaPilotoObj.delete_idgruplac(id_gruplac)
-                        perfilPlantaPilotoObj.insert_df(df_perfil_planta_piloto)
                         
                         perfilProgramaDoctoradoObj = ProgramaDoctoradoController()
                         perfilProgramaDoctoradoObj.delete_idgruplac(id_gruplac)
-                        perfilProgramaDoctoradoObj.insert_df(df_perfil_programa_doctorado)
                         
                         perfilProgramaMaestriaObj = ProgramaMaestriaController()
                         perfilProgramaMaestriaObj.delete_idgruplac(id_gruplac)
-                        perfilProgramaMaestriaObj.insert_df(df_perfil_programa_maestria)
                         
                         perfilPrototiposObj = PrototiposGController()
                         perfilPrototiposObj.delete_idgruplac(id_gruplac)
-                        perfilPrototiposObj.insert_df(df_perfil_prototipos)
                         
                         perfilSoftwareObj = SoftwareGController()
                         perfilSoftwareObj.delete_idgruplac(id_gruplac)
+                        
+                        perfilBasicoObj.delete_idgruplac(id_gruplac) 
+                        
+                        perfilBasicoObj.insert_df(df_perfil_basico)
+                        perfilArticulosObj.insert_df(df_perfil_articulos)
+                        perfilCapLibrosObj.insert_df(df_perfil_caplibros)
+                        perfilCursoDoctoradoObj.insert_df(df_perfil_curso_doctorado)
+                        perfilCursoMaestriaObj.insert_df(df_perfil_curso_maestria)
+                        perfilDisenoIndustrialObj.insert_df(df_perfil_diseno_industrial)
+                        perfilEmpresaTecnologicaObj.insert_df(df_perfil_empresa_tecnologica)
+                        perfilInnovacionEmpresarialObj.insert_df(df_perfil_innovacion_empresarial)
+                        perfilInstitucionesObj.insert_df(df_perfil_instituciones)
+                        perfilIntegrantesObj.insert_df(df_perfil_integrantes)
+                        perfilLibrosObj.insert_df(df_perfil_libros)
+                        perfilLineasObj.insert_df(df_perfil_lineas)
+                        perfilOtroProgramaObj.insert_df(df_perfil_otro_programa)
+                        perfilOtrosArticulosObj.insert_df(df_perfil_otros_articulos)
+                        perfilOtrosLibrosObj.insert_df(df_perfil_otros_libros)
+                        perfilOtrosTecnologicosObj.insert_df(df_perfil_otros_tecnologicos)
+                        perfilPlantaPilotoObj.insert_df(df_perfil_planta_piloto)
+                        perfilProgramaDoctoradoObj.insert_df(df_perfil_programa_doctorado)
+                        perfilProgramaMaestriaObj.insert_df(df_perfil_programa_maestria)
+                        perfilPrototiposObj.insert_df(df_perfil_prototipos)
                         perfilSoftwareObj.insert_df(df_perfil_software)
-                                                                              
+                                                
                         print('Guardado exitósamente en la base de datos')                               
                         flash('Guardado exitósamente en la base de datos')
                     
@@ -427,9 +429,9 @@ def extractor():
                         #Con cada objeto, elimina los datos para no guardar duplicados
                         list_idcvlac=dic_data['basico']['idcvlac'].tolist()
                         for id_cvlac in list_idcvlac:
+                            
                             actuacionObj.delete_idcvlac(id_cvlac)
                             articuloObj.delete_idcvlac(id_cvlac)
-                            basicoObj.delete_idcvlac(id_cvlac)
                             evaluadorObj.delete_idcvlac(id_cvlac)
                             identificadoresObj.delete_idcvlac(id_cvlac)
                             idiomaObj.delete_idcvlac(id_cvlac)
@@ -446,12 +448,13 @@ def extractor():
                             capLibrosObj.delete_idcvlac(id_cvlac)
                             prototipoObj.delete_idcvlac(id_cvlac)
                             softwareObj.delete_idcvlac(id_cvlac)
-                            tecnologicosObj.delete_idcvlac(id_cvlac)                              
+                            tecnologicosObj.delete_idcvlac(id_cvlac)   
+                            basicoObj.delete_idcvlac(id_cvlac)                           
                                         
                         #inserta los dataframes extraidos anteriormente y los almacena
+                        basicoObj.insert_df(dic_data['basico'])
                         actuacionObj.insert_df(dic_data['actuacion'])
                         articuloObj.insert_df(dic_data['articulos'])
-                        basicoObj.insert_df(dic_data['basico'])
                         evaluadorObj.insert_df(dic_data['evaluador'])
                         identificadoresObj.insert_df(dic_data['identificadores'])
                         idiomaObj.insert_df(dic_data['idioma'])
