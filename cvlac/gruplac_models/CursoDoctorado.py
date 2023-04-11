@@ -12,7 +12,7 @@ class CursoDoctorado(Base):
     acto = Column(String(50), nullable=True)
     programa = Column(String(800), nullable=True)
     
-    basico = relationship('Basico', backref='articulos')
+    basico = relationship('Basico', backref='curso_doctorado')
     
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
