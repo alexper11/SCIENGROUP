@@ -9,12 +9,13 @@ class ExtractorScopus:
     def __init__(self, api_key, inst_token):
         self.autores={"nombre":[],"nombre_index":[],"autor_id":[],"eid":[],"orcid":[],"documentos":[],"fecha_creacion":[],"documentos_citados":[],
                      "citaciones":[],"h_index":[],"co_autores":[],"estado":[],"areas":[],"rango_publicacion":[],
-                     "institucion":[],"affil_id":[],"departamento":[]}
+                     "institucion":[],"affil_id":[],"departamento":[], "idgruplac":[], "nombre_grupo":[], "idcvlac":[]}
             #Agregar indexed name
         self.articulos={"scopus_id":[],"eid":[],"titulo":[],"creador":[],"nombre_publicacion":[],"editorial":[],"issn":[],"isbn":[],
                         "volumen":[],"issue":[],"numero_articulo":[],"pag_inicio":[],"pag_fin":[],"pag_count":[],"fecha_publicacion":[],"idioma":[],
-                        "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"affil_id":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],"etapa_publicacion":[],
-                        "autores":[],"autores_id":[],"tipo_acceso":[],"palabras_clave_autor":[],"palabras_clave_index":[],"agencia_fundadora":[],"pais":[]}
+                        "doi":[],"citado":[],"link":[],"institucion":[],"abstract":[],"affil_id":[],"tema":[],"tipo_fuente":[], "tipo_documento":[],
+                        "etapa_publicacion":[], "autores":[],"autores_id":[],"tipo_acceso":[],"palabras_clave_autor":[],"palabras_clave_index":[],
+                        "agencia_fundadora":[],"pais":[], "idgruplac":[], "nombre_grupo":[]}
             #Agregar indexed name
         
         self.API_KEY=api_key
@@ -277,6 +278,11 @@ class ExtractorScopus:
             self.autores['institucion'].append(self.get_field('inst',r4))
             self.autores['affil_id'].append(self.get_field('inst_id',r4))
             self.autores['departamento'].append(self.get_field('depart',r4))
+            self.autores['idgruplac'].append('')
+            self.autores['nombre_grupo'].append('')
+            self.autores['idcvlac'].append('')
+            
+            
         
         df_autores = pd.DataFrame(self.autores) 
         df_autores.drop_duplicates(subset ="autor_id", inplace = True)
@@ -805,6 +811,9 @@ class ExtractorScopus:
                 self.articulos['palabras_clave_index'].append(self.get_field_search('mainterm',idxterms,key='$'))
                 self.articulos['agencia_fundadora'].append(self.get_field_abstract('xocs:meta',item))
                 self.articulos['pais'].append(self.get_field_abstract('affiliation',complete,key='affiliation-country'))
+                self.articulos['idgruplac'].append('')
+                self.articulos['nombre_grupo'].append('')
+                
             count=count+1
             #############################
         df_articulos = pd.DataFrame(self.articulos) 
