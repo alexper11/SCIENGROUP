@@ -78,7 +78,7 @@ class FieldFormCvlac(FlaskForm):
     
 class FieldFormGruplac(FlaskForm):
     enlace_gruplac = StringField('Digite enlace Gruplac:', validators=[DataRequired()])
-    action_gruplac = RadioField('Elige una opción:', choices = ['Extraer datos del Gruplac', 'Extraer datos del los investigadores del Gruplac'], validators=[DataRequired()])
+    action_gruplac = RadioField('Elige una opción:', choices = ['Extraer datos del Gruplac', 'Extraer datos de los investigadores del Gruplac'], validators=[DataRequired()])
     submit_gruplac = SubmitField('Extraer gruplac')
 
 #Creamos un decorador:
