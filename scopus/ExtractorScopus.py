@@ -388,7 +388,7 @@ class ExtractorScopus:
                         page_count=''
                 break
         return page_count
-    
+    """
     def get_pub_stage(self,scopus_id):
         result=''
         url=f'https://api.elsevier.com/content/abstract/scopus_id/{scopus_id}?view=FULL'
@@ -413,7 +413,7 @@ class ExtractorScopus:
                     print('Error al extraer page_count de scopus id:',scopus_id)
             break
         return stage
-
+    """
     def get_eid_list(self,affil):
         result=''
         scopusid_list=[]
@@ -482,7 +482,7 @@ class ExtractorScopus:
                     
         #return scopusid_list   
         return eid_list
-        
+    """    
     def get_articles_lite(self, author_list):
         result=''
         for author in author_list:
@@ -617,7 +617,7 @@ class ExtractorScopus:
         df_articulos.reset_index(drop=True)
         self.__init__(self.API_KEY, self.INST_TOKEN)
         return df_articulos
-
+    """
     def get_field_abstract(self, field, r, key=''):
         if key!='':
             if key=='stage': ##################
