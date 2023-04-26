@@ -7,8 +7,9 @@
     
     <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}">
     <!-- start -->
-    <!-- <script href="{{ url_for('static',filename='js/jquery.js')}}"></script> -->
+    <script href="{{ url_for('static',filename='js/jquery.js')}}"></script>
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <!-- start -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo.png') }}">
     <script>
@@ -45,7 +46,7 @@
            $('#submit_producto').attr('disabled', 'disabled');
            $('#process').css('display', 'block');
            $('#logo_static').css('display', 'none');
-           $('#logo_load').css('display', 'block');
+           $('#logo_load').css('display', 'block');          
           },
           success:function(data)
           { 
@@ -63,6 +64,9 @@
 {% block body %}
     {% block navbar %}
         {% include 'navbar_scopus.html' %}
+    {% endblock %}
+    {% block modal %}
+        {% include 'modal_scopus.html' %}
     {% endblock %}
     
     {% for message in get_flashed_messages() %}
