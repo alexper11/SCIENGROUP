@@ -324,7 +324,11 @@ if __name__ == '__main__':
         authors_set.update(ExtractorS.get_auid_list(affiliation))
 
     df_autores=ExtractorS.get_authors_df(authors_set)
-    df_autores.to_csv('aux_autores.csv',index=False)
+    
+    try:
+        df_autores.to_csv('aux_autores.csv',index=False)
+    except:
+        print(df_autores)
     
     df_productos=ExtractorS.get_articles_full(cauca_affiliations)
     df_productos = df_productos.astype(str)
@@ -360,8 +364,8 @@ if __name__ == '__main__':
     aux_librosg = pd.read_csv('aux_librosg.csv', dtype = str) #pendiente de remplazo
     aux_oarticulos = pd.read_csv('aux_oarticulos.csv', dtype = str)
     aux_olibros = pd.read_csv('aux_olibros.csv', dtype = str)
-    df_autores = pd.read_csv('aux_autores.csv', dtype = str)
-    df_productos = pd.read_csv('aux_productos.csv', dtype = str)
+    df_autores = pd.read_csv('aux_autores.csv', dtype = str).drop(['idgruplac','nombre_grupo','idcvlac'], axis=1)
+    df_productos = pd.read_csv('aux_productos.csv', dtype = str).drop(['idgruplac','nombre_grupo'], axis=1)
 
     df_productos, df_autores=integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_integrantes,aux_librosg,aux_oarticulos,aux_olibros,df_autores,df_productos)
     

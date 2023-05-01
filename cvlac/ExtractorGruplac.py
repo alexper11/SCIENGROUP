@@ -73,7 +73,7 @@ class ExtractorGruplac(ExtractorCvlac):
         for i in range(tries):
             try:
                 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-                r = requests.get(url, headers=headers, verify=False)
+                r = requests.get(url, headers=headers)#, verify=False)
                 soup = BeautifulSoup(r.content,'lxml') 
                 url_inv = soup.find_all('a', attrs={'target':'_blank'})
             except:

@@ -1,9 +1,13 @@
-"idgruplac","verificado","tipo","nombre","lugar","fecha","disponibilidad","institucion","autores"
-"00000000018223","True","Industrial","SOFTWARE DE ALERTA TEMPRANA PARA EL APROVECHAMIENTO DE RESIDUOS DE CAFÉ EN LA CONSTRUCCIÓN DE AGLOMERADOS","Colombia",2019,"No restringido","Corporación Centro de Desarrollo Tecnológico Cluster CreaTIC","NELSON FABIAN CHANTRE SANCHEZ, RICHARD MARCELO IMBACHI CHAVEZ"
-"00000000018223","True","Industrial","Prototipo de Bicicleta electrica solar ebike solar","Colombia",2019,"Restringido","FUNDACION UNIVERSITARIA DE POPAYAN","RICHARD MARCELO IMBACHI CHAVEZ"
-"00000000018223","True","Industrial","Prototipo de Bicicleta electrica de doble tracción","Colombia",2019,"Restringido","FUNDACION UNIVERSITARIA DE POPAYAN","RICHARD MARCELO IMBACHI CHAVEZ"
-"00000000018223","True","Industrial","Prototipo de Bicicleta electrica de carga ebike cargo","Colombia",2019,"Restringido","FUNDACION UNIVERSITARIA DE POPAYAN","RICHARD MARCELO IMBACHI CHAVEZ"
-"00000000018223","True","Industrial","Prototipo de triciclo electrico para niños ebike","Colombia",2019,"Restringido","FUNDACION UNIVERSITARIA DE POPAYAN","RICHARD MARCELO IMBACHI CHAVEZ"
-"00000000018223","True","Industrial","Máquina Clasificadora de Café por tamaño","Colombia",2018,"Restringido","FUNDACION UNIVERSITARIA DE POPAYAN","DANNY LORENA IMBACHI, JULLY ANDREA MORENO MARTINEZ"
-"00000000018223","True","Servicios","Implementación de un sistema de mejora continua Kaizen aplicado al área de colisión del Taller SMI Automotriz","Colombia",2018,"Restringido","Servicios y Negocios del Cauca","JULLY ANDREA MORENO MARTINEZ"
-"00000000018223","True","Industrial","Banco de Calibración medidores de gas","Colombia",2017,"Restringido","METREX S.A.","JULLY ANDREA MORENO MARTINEZ"
+idgruplac,verificado,tipo,nombre,lugar,fecha,disponibilidad,institucion,autores
+00000000018223,True,Industrial,SOFTWARE DE ALERTA TEMPRANA PARA EL APROVECHAMIENTO DE RESIDUOS DE CAFÉ EN LA CONSTRUCCIÓN DE AGLOMERADOS,Colombia,2019,No restringido,Corporación Centro de Desarrollo Tecnológico Cluster CreaTIC,"NELSON FABIAN CHANTRE SANCHEZ, RICHARD MARCELO IMBACHI CHAVEZ"
+00000000018223,True,Industrial,Prototipo de Bicicleta electrica solar ebike solar,Colombia,2019,Restringido,FUNDACION UNIVERSITARIA DE POPAYAN,RICHARD MARCELO IMBACHI CHAVEZ
+00000000018223,True,Industrial,Prototipo de Bicicleta electrica de doble tracción,Colombia,2019,Restringido,FUNDACION UNIVERSITARIA DE POPAYAN,RICHARD MARCELO IMBACHI CHAVEZ
+00000000018223,True,Industrial,Prototipo de Bicicleta electrica de carga ebike cargo,Colombia,2019,Restringido,FUNDACION UNIVERSITARIA DE POPAYAN,RICHARD MARCELO IMBACHI CHAVEZ
+00000000018223,True,Industrial,Prototipo de triciclo electrico para niños ebike,Colombia,2019,Restringido,FUNDACION UNIVERSITARIA DE POPAYAN,RICHARD MARCELO IMBACHI CHAVEZ
+00000000018223,True,Industrial,Máquina Clasificadora de Café por tamaño,Colombia,2018,Restringido,FUNDACION UNIVERSITARIA DE POPAYAN,"DANNY LORENA IMBACHI, JULLY ANDREA MORENO MARTINEZ"
+00000000018223,True,Servicios,Implementación de un sistema de mejora continua Kaizen aplicado al área de colisión del Taller SMI Automotriz,Colombia,2018,Restringido,Servicios y Negocios del Cauca,JULLY ANDREA MORENO MARTINEZ
+00000000018223,True,Industrial,Banco de Calibración medidores de gas,Colombia,2017,Restringido,METREX S.A.,JULLY ANDREA MORENO MARTINEZ
+00000000018223,False,Industrial,MADERAS AGLOMERADAS DE CAFE,Colombia,2019,Restringido,FUNDACION UNIVERSITARIA DE POPAYAN,RICHARD MARCELO IMBACHI CHAVEZ
+00000000018223,False,Industrial,Bioproducto de Teja para bioconstruccion,Colombia,2022,Restringido,FUNDACION UNIVERSITARIA DE POPAYAN,"RICHARD MARCELO IMBACHI CHAVEZ, MARIA CAMILA AYALA GIRON, GUSTAVO PEREZ GUERRERO, YINET VANESA HOYOS BOLANOS, SANDRO MAURICIO RAMOS VELASCO"
+00000000018223,False,Industrial,Bioproducto en Bloque BCC para bioconstruccion,Colombia,2022,Restringido,FUNDACION UNIVERSITARIA DE POPAYAN,"RICHARD MARCELO IMBACHI CHAVEZ, MARIA CAMILA AYALA GIRON, GUSTAVO PEREZ GUERRERO, YINET VANESA HOYOS BOLANOS, SANDRO MAURICIO RAMOS VELASCO"
+00000000018223,False,Industrial,Bioproducto de Placa para bioconstruccion,Colombia,2022,Restringido,FUNDACION UNIVERSITARIA DE POPAYAN,"RICHARD MARCELO IMBACHI CHAVEZ, SANDRO MAURICIO RAMOS VELASCO, GUSTAVO PEREZ GUERRERO, YINET VANESA HOYOS BOLANOS, MARIA CAMILA AYALA GIRON"

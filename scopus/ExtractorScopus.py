@@ -32,7 +32,7 @@ class ExtractorScopus:
                 response = requests.get(url,
                                             headers={'Accept':'application/json',
                                                     'X-ELS-APIKey': self.API_KEY,
-                                                    'X-ELS-Insttoken': self.INST_TOKEN}, verify=False)#eliminar verify=False
+                                                    'X-ELS-Insttoken': self.INST_TOKEN})#, verify=False)#eliminar verify=False
                 
                 result = response.json()    
                 authorIdList=[''.join(filter(str.isdigit,str(r['dc:identifier']))) for r in result['search-results']["entry"]]
@@ -52,7 +52,7 @@ class ExtractorScopus:
             break
         
         while s <= TotalId:
-            time.sleep(0.4)
+            time.sleep(0.45)
             url = f'https://api.elsevier.com/content/search/author?query=AF-ID({affilid})&start={s}&count=200&field=dc:identifier'
             tries=3
             for i in range(tries):
@@ -60,7 +60,7 @@ class ExtractorScopus:
                     response = requests.get(url,
                                                 headers={'Accept':'application/json',
                                                         'X-ELS-APIKey': self.API_KEY,
-                                                        'X-ELS-Insttoken': self.INST_TOKEN}, verify=False)#eliminar verify=False
+                                                        'X-ELS-Insttoken': self.INST_TOKEN})#, verify=False)#eliminar verify=False
                     
                     result = response.json()
                     
@@ -216,8 +216,10 @@ class ExtractorScopus:
     def get_authors_df(self, authors):    
         
         print('Extrayendo autores...')
-        for author in authors:    
-            time.sleep(0.2)
+        count=0
+        for author in authors:   
+            print('Extrayendo author id: ',author,'...',count+1,' de ',len(authors))
+            time.sleep(0.3)
             url = f'https://api.elsevier.com/content/author/author_id/{author}?view=ENHANCED'
             tries=3
             for i in range(tries):
@@ -225,7 +227,7 @@ class ExtractorScopus:
                     response = requests.get(url,
                                             headers={'Accept':'application/json',
                                                 'X-ELS-APIKey': self.API_KEY,
-                                                'X-ELS-Insttoken': self.INST_TOKEN}, verify=False)#eliminar verify=False
+                                                'X-ELS-Insttoken': self.INST_TOKEN})#, verify=False)#eliminar verify=False
                     
                     result = response.json()
                     r=result['author-retrieval-response'][0]['coredata']
@@ -281,7 +283,7 @@ class ExtractorScopus:
             self.autores['idgruplac'].append('')
             self.autores['nombre_grupo'].append('')
             self.autores['idcvlac'].append('')
-            
+            count=count+1
             
         
         df_autores = pd.DataFrame(self.autores) 
@@ -372,7 +374,7 @@ class ExtractorScopus:
                     response = requests.get(url,
                                             headers={'Accept':'application/json',
                                             'X-ELS-APIKey': self.API_KEY,
-                                            'X-ELS-Insttoken': self.INST_TOKEN}, verify=False)#eliminar verify=False
+                                            'X-ELS-Insttoken': self.INST_TOKEN})#, verify=False)#eliminar verify=False
                         
                     result = response.json()
                     try:
@@ -426,7 +428,7 @@ class ExtractorScopus:
                 response = requests.get(url,
                                         headers={'Accept':'application/json',
                                         'X-ELS-APIKey': self.API_KEY,
-                                        'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
+                                        'X-ELS-Insttoken': self.INST_TOKEN})#, verify=False) #eliminar verify=False
                 
                 result = response.json()
                 TotalArt = int(result['search-results']['opensearch:totalResults'])
@@ -446,7 +448,7 @@ class ExtractorScopus:
                     response = requests.get(url,
                                             headers={'Accept':'application/json',
                                             'X-ELS-APIKey': self.API_KEY,
-                                            'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
+                                            'X-ELS-Insttoken': self.INST_TOKEN})#, verify=False) #eliminar verify=False
                     
                     result = response.json()        
                     flag=True
@@ -724,7 +726,7 @@ class ExtractorScopus:
         result=''
         count=0
         for affil in affil_list:
-            print('extrayendo...',count+1,' de ', len(affil_list))
+            print('Extrayendo productos de afiliación...',count+1,' de ', len(affil_list))
             tries=3
             articles=self.get_eid_list(affil)
             if len(articles)==0:
@@ -741,7 +743,7 @@ class ExtractorScopus:
                         response = requests.get(url,
                                                 headers={'Accept':'application/json',
                                                 'X-ELS-APIKey': self.API_KEY,
-                                                'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
+                                                'X-ELS-Insttoken': self.INST_TOKEN})#, verify=False) #eliminar verify=False
                         
                         result = response.json()
                         flag=True
@@ -832,7 +834,7 @@ class ExtractorScopus:
                 response = requests.get(url,
                                         headers={'Accept':'application/json',
                                         'X-ELS-APIKey': self.API_KEY,
-                                        'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
+                                        'X-ELS-Insttoken': self.INST_TOKEN})#, verify=False) #eliminar verify=False
                 result = response.json()
                 coredata=result['abstracts-retrieval-response']['coredata']
                 item=result["abstracts-retrieval-response"]["item"]
@@ -916,7 +918,7 @@ class ExtractorScopus:
             response = requests.get(url,
                                     headers={'Accept':'application/json',
                                     'X-ELS-APIKey': self.API_KEY,
-                                    'X-ELS-Insttoken': self.INST_TOKEN}, verify=False) #eliminar verify=False
+                                    'X-ELS-Insttoken': self.INST_TOKEN})#, verify=False) #eliminar verify=False
                     
             result = response.json()
             #print(type(result))                 
