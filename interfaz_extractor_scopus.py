@@ -8,7 +8,6 @@ import requests
 import json
 from requests.exceptions import ConnectionError
 
-# from scopus.models.DBmodel import create_scopus_db
 from scopus.controllers.AutoresController import AutoresController
 from scopus.controllers.ProductosController import ProductosController
 from scopus.controllers.MetaDBScoController import MetaDBScoController
@@ -221,4 +220,4 @@ def scopus():
 #Cambia de puerto de flask siempre que se ejecute directamente el main y no se exporte como un módulo
 if __name__ == "__main__":
     app.config['ENV'] = 'development'
-    app.run(host='127.0.0.1', port=5002, threaded=True, debug=True)
+    app.run(host='127.0.0.1', port=5005, threaded=True, debug=True)

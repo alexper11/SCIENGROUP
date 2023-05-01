@@ -27,5 +27,5 @@ app.layout = html.Div(
 server = app.server
 
 # Testing server, don't use in production, host
-if __name__ == "__main__":
-    app.run_server(host='0.0.0.0', port=8050, debug=True)
+if __name__ == '__main__':
+    app.run_server(host='0.0.0.0', port=8052,debug=True)
