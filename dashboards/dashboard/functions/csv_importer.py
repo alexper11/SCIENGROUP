@@ -10,7 +10,7 @@ import plotly.express as px
 ip='http://3.90.183.244'
 
 def read_archive():
-    df = pd.read_csv('./assets/data/prueba.csv')
+    df = pd.read_csv('./assets/data/archivo_prueba.csv')
     return df
 
 def data_validation(df):
