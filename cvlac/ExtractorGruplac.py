@@ -441,7 +441,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         elif i==2:
                             separador=re.split('ISSN:|vol:|fasc:|págs:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')]
-                            dic['revista']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['revista']=separador[0][separador[0].find(','):].lstrip(',. -').strip()
                             dic['issn']=separador[1][:separador[1].find(',')].strip()
                             dic['fecha']=separador[1][separador[1].find(','):].lstrip(',').strip()
                             dic['volumen']=separador[2].strip()
@@ -484,7 +484,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['lugar']=separador[0][:separador[0].find(',')].strip()
                             dic['fecha']=separador[0][separador[0].find(','):].lstrip(',').strip()
                             dic['isbn']=separador[1].strip().rstrip(', .-')
-                            dic['editorial']=separador[2].lstrip(',').strip()
+                            dic['editorial']=separador[2].lstrip(',. -').strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
                     dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                               
@@ -564,7 +564,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         elif i==2:
                             separador=re.split('ISSN:|vol:|fasc:|págs:',dato)                       
                             dic['lugar']=separador[0][:separador[0].find(',')]
-                            dic['revista']=separador[0][separador[0].find(','):].lstrip(',').strip()
+                            dic['revista']=separador[0][separador[0].find(','):].lstrip(',. -').strip()
                             dic['issn']=separador[1][:separador[1].find(',')].strip()
                             dic['fecha']=separador[1][separador[1].find(','):].lstrip(',').strip()
                             dic['volumen']=separador[2].strip()
@@ -606,7 +606,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['isbn']=separador[1].strip().rstrip(',')
                             dic['volumen']=separador[2].strip()
                             dic['paginas']=separador[3].strip().rstrip(',')
-                            dic['editorial']=separador[4].lstrip(',').strip()
+                            dic['editorial']=separador[4].lstrip(',. -').strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()
                     dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                             
@@ -755,7 +755,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['url']=separador[2].strip()
                         elif i==3:
                             index=dato.find(', Nombre del proyecto:')                                                                             
-                            dic['nombre_comercial']=dato[dato.find(':')+1:index].lstrip(',').strip()
+                            dic['nombre_comercial']=dato[dato.find(':')+1:index].lstrip(',. -').strip()
                             dato=dato[index:]
                             dic['nombre_proyecto']=dato[dato.find(':')+1:].strip()
                         elif i==4:
