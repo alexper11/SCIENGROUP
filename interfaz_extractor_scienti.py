@@ -390,7 +390,7 @@ def extractor():
                         flash('Guardado exitósamente en la base de datos')
                     
                 #Extrae datos de investigadores de gruplac:
-                elif action_gruplac == 'Extraer datos del los investigadores del Gruplac':            
+                elif action_gruplac == 'Extraer datos de los investigadores del Gruplac':            
                     # llamo get_cvs mando url del gruplac y recibo un diccionario de df de todas las tablas acumuladas
                     dom = get_lxml(enlace_gruplac)                                        
                     df_perfil_basico = ExtractorG.get_perfil_basico(dom,enlace_gruplac)
