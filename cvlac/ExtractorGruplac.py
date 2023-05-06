@@ -452,7 +452,7 @@ class ExtractorGruplac(ExtractorCvlac):
                         else:
                             dic['autores']=dato[dato.find(':'):].lstrip(':').strip()  
                            
-                    dic=pd.DataFrame([dic])
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)
                     self.perfil_articulos = almacena_df(self.perfil_articulos,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)         #type: ignore                                             
             else:
                 raise Exception  
@@ -487,7 +487,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['editorial']=separador[2].lstrip(',').strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    dic=pd.DataFrame([dic])                                 
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                               
                     self.perfil_libros = almacena_df(self.perfil_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)  #type: ignore
                                          
             else:
@@ -533,7 +533,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['editorial']=separador[3].strip()  
                         else:
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()
-                    dic=pd.DataFrame([dic])                                 
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                           
                     self.perfil_caplibros = almacena_df(self.perfil_caplibros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)    #type: ignore   
             else:
                 raise Exception  
@@ -609,7 +609,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['editorial']=separador[4].lstrip(',').strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()
-                    dic=pd.DataFrame([dic])                                 
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                             
                     self.perfil_otros_libros = almacena_df( self.perfil_otros_libros,dic).replace(to_replace ='^\W+$|,$', value = '', regex = True)         #type: ignore                              
             else:
                 raise Exception  
@@ -683,7 +683,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=dato[dato.find(':')+1:].strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    dic=pd.DataFrame([dic])                                 
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                                
                     self.perfil_otros_tecnologicos = almacena_df( self.perfil_otros_tecnologicos,dic)                                                                
             else:
                 raise Exception  
@@ -719,7 +719,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=separador[2].strip()
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()  
-                    dic=pd.DataFrame([dic])                                 
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                                
                     self.perfil_prototipos = almacena_df( self.perfil_prototipos,dic)                                                    
             else:
                 raise Exception  
@@ -762,7 +762,7 @@ class ExtractorGruplac(ExtractorCvlac):
                             dic['institucion']=dato[dato.find(':')+1:].strip()                       
                         else:                            
                             dic['autores']=re.sub('<[^<]+?>','',dato)[dato.find(':'):].lstrip(':').strip()       
-                    dic=pd.DataFrame([dic])                                 
+                    dic=pd.DataFrame([dic]).replace(to_replace ='&amp;', value = '&', regex=True)                                 
                     self.perfil_software = almacena_df( self.perfil_software,dic)                                                                 
             else:
                 raise Exception  
