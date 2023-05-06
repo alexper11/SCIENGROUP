@@ -196,10 +196,14 @@ if __name__ == '__main__':
     del articulosg
     
     instituciones=InstitucionesController()
-    instituciones.insert_df(Extractor.perfil_instituciones)
+    aux_instituciones=Extractor.perfil_instituciones
+    aux_instituciones.to_csv('aux_instituciones.csv',index=False)
+    instituciones.insert_df(aux_instituciones)
     del instituciones
     
     lineasg=LineasGController()
+    aux_lineas=Extractor.perfil_lineas
+    aux_lineas.to_csv('aux_lineas.csv',index=False)
     lineasg.insert_df(Extractor.perfil_lineas)
     del lineasg
     
@@ -210,11 +214,15 @@ if __name__ == '__main__':
     del integrantes
     
     pdoctorado=ProgramaDoctoradoController()
-    pdoctorado.insert_df(Extractor.perfil_programa_doctorado)
+    aux_pdoctorado=Extractor.perfil_programa_doctorado
+    aux_pdoctorado.to_csv('aux_pdoctorado.csv',index=False)
+    pdoctorado.insert_df(aux_pdoctorado)
     del pdoctorado
     
     pmaestria=ProgramaMaestriaController()
-    pmaestria.insert_df(Extractor.perfil_programa_maestria)
+    aux_pmaestria=Extractor.perfil_programa_maestria
+    aux_pmaestria.to_csv('aux_pmaestria.csv',index=False)
+    pmaestria.insert_df(aux_pmaestria)
     del pmaestria
     
     oprograma=OtroProgramaController()
@@ -222,11 +230,15 @@ if __name__ == '__main__':
     del oprograma
     
     cdoctorado=CursoDoctoradoController()
-    cdoctorado.insert_df(Extractor.perfil_curso_doctorado)
+    aux_cdoctorado=Extractor.perfil_curso_doctorado
+    aux_cdoctorado.to_csv('aux_cdoctorado.csv',index=False)
+    cdoctorado.insert_df(aux_cdoctorado)
     del cdoctorado
     
     cmaestria=CursoMaestriaController()
-    cmaestria.insert_df(Extractor.perfil_curso_maestria)
+    aux_cmaestria=Extractor.perfil_curso_maestria
+    aux_cmaestria.to_csv('aux_cmaestria.csv',index=False)
+    cmaestria.insert_df(aux_cmaestria)
     del cmaestria
     
     librosg=LibrosGController()
@@ -254,31 +266,45 @@ if __name__ == '__main__':
     del olibros
     
     disenoind=DisenoIndustrialGController()
-    disenoind.insert_df(Extractor.perfil_diseno_industrial)
+    aux_disenoind=Extractor.perfil_diseno_industrial
+    aux_disenoind.to_csv('aux_disenoind.csv',index=False)
+    disenoind.insert_df(aux_disenoind)
     del disenoind
     
     otecnologicos=OtrosTecnologicosController()
-    otecnologicos.insert_df(Extractor.perfil_otros_tecnologicos)
+    aux_otecnologicos=Extractor.perfil_otros_tecnologicos
+    aux_otecnologicos.to_csv('aux_otecnologicos.csv',index=False)
+    otecnologicos.insert_df(aux_otecnologicos)
     del otecnologicos
     
     prototiposg=PrototiposGController()
-    prototiposg.insert_df(Extractor.perfil_prototipos)
+    aux_prototiposg=Extractor.perfil_prototipos
+    aux_prototiposg.to_csv('aux_prototiposg.csv',index=False)
+    prototiposg.insert_df(aux_prototiposg)
     del prototiposg
     
     softwareg=SoftwareGController()
-    softwareg.insert_df(Extractor.perfil_software)
+    aux_softwareg=Extractor.perfil_software
+    aux_softwareg.to_csv('aux_softwareg.csv',index=False)
+    softwareg.insert_df(aux_softwareg)
     del softwareg
     
     empresatecg=EmpresaTecnologicaGController()
-    empresatecg.insert_df(Extractor.perfil_empresa_tecnologica)
+    aux_empresatecg=Extractor.perfil_empresa_tecnologica
+    aux_empresatecg.to_csv('aux_empresatecg.csv',index=False)
+    empresatecg.insert_df(aux_empresatecg)
     del empresatecg
     
     innovaempresag=InnovacionEmpresarialGController()
-    innovaempresag.insert_df(Extractor.perfil_innovacion_empresarial)
+    aux_innovaempresag=Extractor.perfil_innovacion_empresarial
+    aux_innovaempresag.to_csv('aux_innovaempresag.csv',index=False)
+    innovaempresag.insert_df(aux_innovaempresag)
     del innovaempresag
     
     plantapilotog=PlantaPilotoGController()
-    plantapilotog.insert_df(Extractor.perfil_planta_piloto)
+    aux_plantapilotog=Extractor.perfil_planta_piloto
+    aux_plantapilotog.to_csv('aux_plantapilotog.csv',index=False)
+    plantapilotog.insert_df(aux_plantapilotog)
     del plantapilotog
     
     print('Extracción Gruplac Finalizada')
@@ -355,7 +381,6 @@ if __name__ == '__main__':
     #INTEGRACIÓN DE MODULOS PARA DATOS DE GRUPOS DE INVESTIGACIÓN
     #################################
     
-    #Inserción a base de datos de SCOPUS
     aux_articulosg = pd.read_csv('aux_articulosg.csv', dtype = str)
     aux_basicog = pd.read_csv('aux_basicog.csv', dtype = str)
     aux_caplibrosg = pd.read_csv('aux_caplibrosg.csv', dtype = str)
@@ -369,6 +394,7 @@ if __name__ == '__main__':
 
     df_productos, df_autores=integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_integrantes,aux_librosg,aux_oarticulos,aux_olibros,df_autores,df_productos)
     
+    """
     try:
         os.remove('aux_articulosg.csv')
         os.remove('aux_basicog.csv')
@@ -380,20 +406,32 @@ if __name__ == '__main__':
         os.remove('aux_olibros.csv')
         os.remove('aux_autores.csv')
         os.remove('aux_productos.csv')
+        os.remove(aux_instituciones.csv)
+        os.remove(aux_lineas.csv)
+        os.remove(aux_pdoctorado.csv)
+        os.remove(aux_pmaestria.csv)
+        os.remove(aux_cdoctorado.csv)
+        os.remove(aux_cmaestria.csv)
+        os.remove(aux_disenoind.csv)
+        os.remove(aux_otecnologicos.csv)
+        os.remove(aux_prototiposg.csv)
+        os.remove(aux_softwareg.csv)
+        os.remove(aux_empresatecg.csv)
+        os.remove(aux_innovaempresag.csv)
+        os.remove(aux_plantapilotog.csv)
         print('aux csv files deletede')
         
     except:
         print('Error deleting csv files')
-    
+    """
+    #Inserción a base de datos de SCOPUS
     productos = ProductosController()
     try:
         print('insertando productos')
         productos.insert_df(df_productos)
-        #df_productos.to_csv('df_productos_scopus.csv',index=False)
     except:
         print('error en inserción de datos para productos de scopus')
         raise
-        #df_productos.to_csv('df_productos_scopus.csv',index=False)
         
     del productos
     
