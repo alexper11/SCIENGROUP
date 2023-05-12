@@ -102,7 +102,7 @@ class ExtractorScopus:
                         if c==0:
                             areas=str(rs['$'])
                         else:
-                            areas=areas+', '+str(rs['$'])
+                            areas=areas+';'+str(rs['$'])
                         c=1
                     text= areas
                 else:
@@ -146,12 +146,12 @@ class ExtractorScopus:
                         c=1
                     else:
                         try:
-                            insts=insts+', '+str(i['ip-doc']['parent-preferred-name']['$'])
+                            insts=insts+';'+str(i['ip-doc']['parent-preferred-name']['$'])
                         except KeyError:
                             try:
-                                insts=insts+', '+str(i['ip-doc']['preferred-name']['$'])
+                                insts=insts+';'+str(i['ip-doc']['preferred-name']['$'])
                             except KeyError:
-                                insts=insts+', '+' '
+                                insts=insts+';'+' '
                 text=insts
             else:
                 try:
@@ -174,9 +174,9 @@ class ExtractorScopus:
                         c=1
                     else:
                         try:
-                            insts=insts+', '+str(i['@affiliation-id'])
+                            insts=insts+';'+str(i['@affiliation-id'])
                         except: 
-                            insts=insts+', '+' '
+                            insts=insts+';'+' '
                 text=insts
             else:
                 try:
@@ -196,9 +196,9 @@ class ExtractorScopus:
                         c=1
                     else:
                         if 'parent-preferred-name' in d['ip-doc'].keys(): 
-                            departs=departs+', '+str(d['ip-doc']['preferred-name']['$'])
+                            departs=departs+';'+str(d['ip-doc']['preferred-name']['$'])
                         else:
-                            departs=departs+', '+' '
+                            departs=departs+';'+' '
                 text=departs
             else:
                 if 'parent-preferred-name' in r['ip-doc'].keys():
@@ -329,7 +329,7 @@ class ExtractorScopus:
                                     elif key=='authid' or key=='$':
                                         aff=aff+';'+str(rs[key])
                                     else:
-                                        aff=aff+'; '+str(rs[key])
+                                        aff=aff+';'+str(rs[key])
                                     c=1
                         text= aff
                     else:
@@ -645,7 +645,7 @@ class ExtractorScopus:
                                         print('excepcion en texto autores con el articulo: ', self.articulos['eid'][-1])
                                 else:
                                     try:
-                                        aff=aff+'; '+str(author[key]["ce:indexed-name"])#+str(author[key]["ce:given-name"])+' '+str(author['preferred-name']["ce:surname"])
+                                        aff=aff+';'+str(author[key]["ce:indexed-name"])#+str(author[key]["ce:given-name"])+' '+str(author['preferred-name']["ce:surname"])
                                     except:
                                         print('excepcion en texto autores con el articulo: ', self.articulos['eid'][-1])
                                 c=1
