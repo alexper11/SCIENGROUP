@@ -326,6 +326,7 @@ if __name__ == '__main__':
     
     #La siguiente lista de id de afiliciones se obtuvo tras un proceso de selección y filtrado de datos desde la
     #base de datos de scopus para recopilar las afiliciones de los municipios y la capital del Cauca.
+    """
     cauca_affiliations=['60051434','113372863','117688708','117795037','126338541','128447346','128268840',
                   '127081273','126489416','128778365','128309743','128482659','117008946','126682182',
                   '128105349','126290034','126174357','112818394','125811395',
@@ -344,7 +345,27 @@ if __name__ == '__main__':
                   '109407507','101852916','101836579','101193438','100890026','123046459','128401012',
                   '127577880','125880059','127342961','126722732','117676389','122213398','128178397',
                   '128132135','127180877','127175281','126426661','126369148','126220579','126220389',
-                  '116477105','112246667','109475450']   
+                  '116477105','112246667','109475450'] 
+    """
+    cauca_affiliations=['60051434','113372863','117795037','128447346','128268840','60276620','129051230',
+                  '127081273','126489416','128778365','128309743','128482659','117008946','126682182',
+                  '128105349','126290034','126174357','125811395','114526610','129393749','129252659',
+                  '127752672','127622090','127564855','127405489','127405461','127381524','115900332',
+                  '126777846','126186631','126173286','60108709','101775869','119181814','129182092',
+                  '114698614','116513678','117723547','117305237','113883714','114526629','129138504',
+                  '123885595','122628633','119043818','115563645','101726347','125032749','121970185',
+                  '116735865','101514240','125785463','125750906','124804790','116456976','127190801',
+                  '113900343','60077382','128549532','128171945','128105012','128814956','128957167',
+                  '128024009','126051165','125750802','125632933','127586953','126802821','128956909',
+                  '125632538','125632187','125252062','125251921','124411847','124133827','128828376',
+                  '123994672','123836332','122819512','126682198','127781039','123689024','128812265',
+                  '122309488','121977650','121967890','121824461','121318460','127656911','128778956',
+                  '120708272','120314658','119159252','118786435','118690331','127128201','128620548',
+                  '116086835','115060744','114832182','114293784','113845992','126803577','128573517',
+                  '109407507','101852916','101836579','101193438','100890026','123046459','128401012',
+                  '127577880','125880059','127342961','126722732','117676389','122213398','128178397',
+                  '128132135','127180877','127175281','126426661','126369148','126220579','126220389',
+                  '116477105','112246667','109475450','122755339','128956705']
         
     for affiliation in cauca_affiliations:
         authors_set.update(ExtractorS.get_auid_list(affiliation))
@@ -394,6 +415,22 @@ if __name__ == '__main__':
 
     df_productos, df_autores=integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_integrantes,aux_librosg,aux_oarticulos,aux_olibros,df_autores,df_productos)
     
+    #Inserción a base de datos de SCOPUS
+    productos = ProductosController()
+    try:
+        print('insertando productos')
+        productos.insert_df(df_productos)
+        df_productos.to_csv('aux_productos_integrado.csv',index=False)
+    except:
+        print('error en inserción de datos para productos de scopus')
+        raise
+        
+    del productos
+    
+    autores = AutoresController()
+    autores.insert_df(df_autores)
+    df_autores.to_csv('aux_autores_integrado.csv',index=False)
+    
     """
     try:
         os.remove('aux_articulosg.csv')
@@ -419,24 +456,14 @@ if __name__ == '__main__':
         os.remove(aux_empresatecg.csv)
         os.remove(aux_innovaempresag.csv)
         os.remove(aux_plantapilotog.csv)
-        print('aux csv files deletede')
+        os.remove(aux_autores_integrado.csv)
+        os.remove(aux_productos_integrado.csv)
+        
+        print('aux csv files deleted')
         
     except:
         print('Error deleting csv files')
     """
-    #Inserción a base de datos de SCOPUS
-    productos = ProductosController()
-    try:
-        print('insertando productos')
-        productos.insert_df(df_productos)
-    except:
-        print('error en inserción de datos para productos de scopus')
-        raise
-        
-    del productos
-    
-    autores = AutoresController()
-    autores.insert_df(df_autores)
     
     print('Integración finalizada')
     
