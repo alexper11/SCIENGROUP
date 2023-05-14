@@ -63,28 +63,31 @@ def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_i
                                 (df_productos['tipo_documento']=='Short Survey')]
     def g(x):
         d={}
-        d['idgruplac']=';'.join(x['idgruplac'])
-        d['nombre_grupo']=';'.join(x['nombre_grupo'])
+        d['idgruplac']=';'.join(set(x['idgruplac']))
+        d['nombre_grupo']=';'.join(set(x['nombre_grupo']))
         return pd.Series(d, index=['idgruplac','nombre_grupo'])
     #df basic es el df con idgruplac vs nombre_grupo
 
     def match_articulos_doi(art_scopus,art_gruplac):
-            art_gruplac=art_gruplac[['idgruplac','doi']]
-            art_scopus_1=art_scopus[['doi']]
-            matched=art_scopus_1.merge(art_gruplac,how ='inner', on='doi')
-            matched=matched.merge(basic[['idgruplac','nombre']].rename(columns={'nombre':'nombre_grupo'}),how ='left', on='idgruplac')
-            matched=matched.groupby(['doi']).apply(g).reset_index()
-            return art_scopus.merge(matched,how='left', on='doi')
+        art_gruplac1=art_gruplac[['idgruplac','doi']].replace({r'^NaN':''}).fillna('')
+        art_scopus_1=art_scopus[['doi']].fillna('').replace({r'NaN':''}).fillna('')
+        art_scopus_1=art_scopus_1[~(art_scopus_1['doi']=='')]
+        art_gruplac1=art_gruplac1[~(art_gruplac1['doi']=='')]
+        matched=art_scopus_1.merge(art_gruplac1,how ='inner', on='doi')
+        matched=matched.merge(basic[['idgruplac','nombre']].rename(columns={'nombre':'nombre_grupo'}),how ='left', on='idgruplac')
+        matched=matched.groupby(['doi']).apply(g).reset_index()
+        return art_scopus.merge(matched,how='left', on='doi')
 
     result=match_articulos_doi(df_productos_articulos,aux_articulosg)
 
     def match_articulos_nombre(art_scopus,art_gruplac):
-        art_scopus1=art_scopus[art_scopus['idgruplac'].isna()]
-        art_gruplac1=art_gruplac
-        art_scopus1['titulo']=art_scopus1['titulo'].str.replace(r'[^\w\d\s:]', '', regex=True)
-        art_gruplac1['nombre']=art_gruplac1['nombre'].str.replace(r'[^\w\d\s:]', '', regex=True)
-        art_scopus1['titulo']=art_scopus1['titulo'].str.lower()
-        art_gruplac1['nombre']=art_gruplac1['nombre'].str.lower()
+        art_gruplac1=art_gruplac.copy().replace({r'NaN':''})
+        art_scopus1=art_scopus[art_scopus['idgruplac'].isna()].replace({r'^NaN':''})
+        art_scopus1['titulo']=art_scopus1['titulo'].str.replace(r'[^\w\d\s:]', '', regex=True).str.replace(r'/\s+/g',' ',regex=True).str.normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8').str.strip()
+        art_gruplac1['nombre']=art_gruplac1['nombre'].str.replace(r'[^\w\d\s:]', '', regex=True).str.replace(r'/\s+/g',' ',regex=True).str.normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8').str.strip()
+        art_scopus1['titulo']=art_scopus1['titulo'].str.lower().fillna('')
+        art_gruplac1['nombre']=art_gruplac1['nombre'].str.lower().fillna('')
+        art_gruplac1=art_gruplac1[art_gruplac1['nombre'].str.len()>10]
         
         prod_index_match=art_gruplac1.apply(lambda x: art_scopus1['titulo'][art_scopus1['titulo'].str.contains(str(x['nombre']).lower())].index.values, axis=1)
         prod_index_match=prod_index_match.apply(lambda x: x if len(x)>0 else np.nan)
@@ -122,14 +125,14 @@ def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_i
                                 (df_productos['tipo_documento']=='Book Chapter')]
     df_productos_libros['idgruplac']=np.nan
     df_productos_libros['nombre_grupo']=np.nan
-    aux_librosg['isbn'] = aux_librosg['isbn'].str.replace(r'-', '', regex=True)
-    aux_olibros['isbn'] = aux_olibros['isbn'].str.replace(r'-', '', regex=True)
-    aux_caplibrosg['isbn'] = aux_caplibrosg['isbn'].str.replace(r'-', '', regex=True)
+    aux_librosg['isbn']= aux_librosg['isbn'].str.upper().str.replace(r'^X{2,}$|[^0-9|X]+', '',regex=True).fillna('')
+    aux_olibros['isbn']= aux_olibros['isbn'].str.upper().str.replace(r'^X{2,}$|[^0-9|X]+', '',regex=True).fillna('')
+    #aux_caplibrosg['isbn'] = aux_caplibrosg['isbn'].str.replace(r'-', '', regex=True)
 
     def match_libros_isbn(lib_scopus,lib_gruplac):
-        lib_scopus1=lib_scopus[lib_scopus['idgruplac'].isna()]
-        lib_gruplac1=lib_gruplac[['idgruplac','isbn']].dropna(subset=['isbn'])
-        index_aux = lib_gruplac1[lib_gruplac1['isbn'] == '0'].index
+        lib_scopus1=lib_scopus[lib_scopus['idgruplac'].isna()].replace({r'^NaN':''}).fillna('')
+        lib_gruplac1=lib_gruplac[['idgruplac','isbn']].dropna(subset=['isbn']).replace({r'^NaN':''}).fillna('')
+        index_aux = lib_gruplac1[(lib_gruplac1['isbn'] == '0') | (lib_gruplac1['isbn'] == '')].index
         lib_gruplac1.drop(index_aux , inplace=True)
         lib_scopus1=lib_scopus[['titulo','isbn']].dropna(subset=['isbn'])
         
@@ -168,13 +171,13 @@ def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_i
 
     def match_libros_nombre(lib_scopus,lib_gruplac):
             if 'capitulo' in lib_gruplac:
-                lib_scopus1=lib_scopus[lib_scopus['idgruplac'].isna()]
-                lib_gruplac1=lib_gruplac[['idgruplac','capitulo']]
-
-                lib_scopus1['titulo']=lib_scopus1['titulo'].str.replace(r'[^\w\d\s:]', '', regex=True)
-                lib_gruplac1['capitulo']=lib_gruplac1['capitulo'].str.replace(r'[^\w\d\s:]', '', regex=True)
-                lib_scopus1['titulo']=lib_scopus1['titulo'].str.lower()
-                lib_gruplac1['capitulo']=lib_gruplac1['capitulo'].str.lower()
+                lib_scopus1=lib_scopus[lib_scopus['idgruplac'].isna()].replace({r'^NaN':''})
+                lib_gruplac1=lib_gruplac[['idgruplac','capitulo']].replace({r'^NaN':''})
+                lib_scopus1['titulo']=lib_scopus1['titulo'].str.replace(r'[^\w\d\s:]', '', regex=True).str.strip().str.replace(r'/\s+/g',' ',regex=True).str.normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8').str.strip()
+                lib_gruplac1['capitulo']=lib_gruplac1['capitulo'].str.replace(r'[^\w\d\s:]', '', regex=True).str.strip().str.replace(r'/\s+/g',' ',regex=True).str.normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8').str.strip()
+                lib_scopus1['titulo']=lib_scopus1['titulo'].str.lower().fillna('')
+                lib_gruplac1['capitulo']=lib_gruplac1['capitulo'].str.lower().fillna('')
+                lib_gruplac1=lib_gruplac1[lib_gruplac1['capitulo'].str.len()>10]
 
                 prod_index_match=lib_gruplac1.apply(lambda x: lib_scopus1[lib_scopus1['titulo'].str.contains(str(x['capitulo']))].index.values, axis=1)
                 prod_index_match=prod_index_match.apply(lambda x: x if len(x)>0 else np.nan)
@@ -208,13 +211,13 @@ def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_i
                 return lib_scopus
             
             else:
-                lib_scopus1=lib_scopus[lib_scopus['idgruplac'].isna()]
-                lib_gruplac1=lib_gruplac[['idgruplac','nombre']]
-
-                lib_scopus1['titulo']=lib_scopus1['titulo'].str.replace(r'[^\w\d\s:]', '', regex=True)
-                lib_gruplac1['nombre']=lib_gruplac1['nombre'].str.replace(r'[^\w\d\s:]', '', regex=True)
-                lib_scopus1['titulo']=lib_scopus1['titulo'].str.lower()
-                lib_gruplac1['nombre']=lib_gruplac1['nombre'].str.lower()
+                lib_scopus1=lib_scopus[lib_scopus['idgruplac'].isna()].replace({r'NaN':''})
+                lib_gruplac1=lib_gruplac[['idgruplac','nombre']].replace({r'NaN':''})
+                lib_scopus1['titulo']=lib_scopus1['titulo'].str.replace(r'[^\w\d\s:]', '', regex=True).str.strip().str.replace(r'/\s+/g',' ',regex=True).str.normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8').str.strip()
+                lib_gruplac1['nombre']=lib_gruplac1['nombre'].str.replace(r'[^\w\d\s:]', '', regex=True).str.strip().str.replace(r'/\s+/g',' ',regex=True).str.normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8').str.strip()
+                lib_scopus1['titulo']=lib_scopus1['titulo'].str.lower().fillna('')
+                lib_gruplac1['nombre']=lib_gruplac1['nombre'].str.lower().fillna('')
+                lib_gruplac1=lib_gruplac1[lib_gruplac1['nombre'].str.len()>10]
 
                 prod_index_match=lib_gruplac1.apply(lambda x: lib_scopus1[lib_scopus1['titulo'].str.contains(str(x['nombre']))].index.values, axis=1)
                 prod_index_match=prod_index_match.apply(lambda x: x if len(x)>0 else np.nan)
