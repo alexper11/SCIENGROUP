@@ -252,7 +252,7 @@ def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_i
 
     result2=match_libros_isbn(df_productos_libros,aux_librosg)
     result2=match_libros_isbn(result2,aux_olibros)
-    result2=match_libros_isbn(result2,aux_caplibrosg)
+    #result2=match_libros_isbn(result2,aux_caplibrosg)
 
     result3=match_libros_nombre(result2,aux_caplibrosg)
     result3=match_libros_nombre(result3,aux_librosg)
@@ -270,7 +270,7 @@ def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_i
     result4 = match_articulos_nombre(result4,aux_oarticulos)
     result4 = match_libros_isbn(result4,aux_librosg)
     result4 = match_libros_isbn(result4,aux_olibros)
-    result4 = match_libros_isbn(result4,aux_caplibrosg)
+    #result4 = match_libros_isbn(result4,aux_caplibrosg)
     result4 = match_libros_nombre(result4,aux_librosg)
     result4 = match_libros_nombre(result4,aux_olibros)
     result4 = match_libros_nombre(result4,aux_caplibrosg)
