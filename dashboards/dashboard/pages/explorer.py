@@ -1,46 +1,19 @@
 from dash.dependencies import Input, Output, State
 from dash import html
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 import dash_table
 import pandas as pd
 from functions.csv_importer import read_archive
+
+# LOAD THE DIFFERENT FILES
+from lib.filter_explorer import sidebar_explorer
 
 # Datos de ejemplo
 df = read_archive()
 color = '#08469b'
 
-layout= html.Div([
-    #Header
-    html.Div([
-        html.H1("Exploración de datos"),
-        html.P("filtros para explorar los datos." )
-    ] ,
-    className='col-12',
-    style={'textAlign':'center'}
-    ),
-
-    #Dropdwon options, this configuration doesn't allow to change two filters at a time
-    html.Div([
-        dcc.Loading(dcc.Dropdown(options=[{'label': 'Opción 1', 'value': 'opcion1'},
-            {'label': 'Opción 2', 'value': 'opcion2'}], placeholder="Elija primer filtro", id='filter-1'),parent_className='dropdown', className='dropdown-loading', color=color, type='dot'),
-        dcc.Loading(dcc.Dropdown(["Opción 7","Opción 8"], placeholder="Elija cuarto filtro",id='filter-4'),parent_className='dropdown',  className='dropdown-loading',color=color, type='dot'),
-        html.Div(id='filters-container')
-    ] , 
-    className='col-6',
-    style={'textAlign':'center', 'display':'flex', 'justifyContent':'space-around'}
-    ),
-
-    #Dynamic Content
-    html.Div([
-        dcc.Loading(
-            id="loading-2",
-            children=[            
-            #Reload button
-            html.A([
-                    html.Img(src='/assets/img/reload.png',className='whatsappIcon')
-                ], id='reload-button')
-            ],type="cube", fullscreen=False, color=color, style={'height':'100%', 'marginTop':'15rem'}
-        ),
+table_explorer= html.Div([        
         # Table
         html.Div([
             html.H3('Tabla de datos'),
@@ -56,7 +29,22 @@ layout= html.Div([
     ] , 
     className='col-6',
     style={'textAlign':'center', 'display':'flex', 'justifyContent':'space-around'}
+    ),
+
+layout= html.Div([
+    #Header
+    html.Div([
+        html.H1("Exploración de datos")
+    ] ,
+    className='col-12',
+    style={'textAlign':'center'}
     ),    
+    html.Div([
+                dbc.Col(
+                    table_explorer
+                    )
+                ],className="dash-body"),
+        sidebar_explorer,
 ],
 style={"color":"black"}
 )
