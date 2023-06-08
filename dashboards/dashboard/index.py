@@ -25,7 +25,7 @@ APP_LOGO = "/assets/img/logo_dash.png"
 app.layout = html.Div([
     #The header contains the hamburguer menu, the sidebar menu and the logo
     html.Header(        
-            [html.Div([dcc.Link(html.Img(src=APP_LOGO, id='logo-icon'), href='/', id='logo-home')]),
+            [html.Div([dcc.Link(html.Img(src=APP_LOGO, id='logo-icon'), href='/')]),
             html.Div("Dashboard Analytics", className="rightOptions"),
             html.Div([
                 html.Ul([
@@ -36,7 +36,7 @@ app.layout = html.Div([
                         dcc.Link("Explorar datos", href='/exploration', className='nav-link'),
                     ], className='nav-item'),
                     html.Li([
-                        dcc.Link("Scienti", href='/scienti', className='nav-link'),
+                        dcc.Link("GrupLAC", href='/scienti', className='nav-link'),
                     ], className='nav-item'),
                     html.Li([
                         dcc.Link("Scopus", href='/scopus', className='nav-link')
@@ -44,7 +44,7 @@ app.layout = html.Div([
                 ], className='navbar-nav mr-auto')
             ], className='headerRight'),
             html.Div([
-                html.Img(src='/assets/img/info.png', className='headerIcon'),  
+                html.Img(src='/assets/img/info.png',id='info-icon'),  
                 html.Aside([
                     html.Div([
                         # Información sobre el dash

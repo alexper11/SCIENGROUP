@@ -20,26 +20,13 @@ layout= html.Div([
     #Header
     html.Div([
         html.H1("Análisis de la producción científica"),
-        html.P("filtros para gráficas." )
     ] ,
     className='col-12',
     style={'textAlign':'center'}
     ),
 
     #Dropdwon options, this configuration doesn't allow to change two filters at a time
-    
-    html.Div([
-        dcc.Loading(dcc.Dropdown(options=[{'label': 'Opción 1', 'value': 'opcion1'},
-            {'label': 'Opción 2', 'value': 'opcion2'}], placeholder="Elija primer filtro", id='filter-1'),parent_className='dropdown', className='dropdown-loading', color=color, type='dot'),
-        # dcc.Loading(dcc.Dropdown(["Opción 3","Opción 4"], placeholder="Elija segundo filtro", id='filter-2'),parent_className='dropdown', className='dropdown-loading',color=color, type='dot'),
-        # dcc.Loading(dcc.Dropdown(["Opción 5","Opción 6"], placeholder="Elija tercer filtro", id='filter-3'),parent_className='dropdown',className='dropdown-loading', color=color, type='dot'),
-        dcc.Loading(dcc.Dropdown(["Opción 7","Opción 8"], placeholder="Elija cuarto filtro",id='filter-4'),parent_className='dropdown',  className='dropdown-loading',color=color, type='dot'),
-        html.Div(id='filters-container')
-    ] , 
-    className='col-6',
-    style={'textAlign':'center', 'display':'flex', 'justifyContent':'space-around'}
-    ),
-
+   
     #Dynamic Content
     html.Div([
         dcc.Loading(
@@ -50,10 +37,10 @@ layout= html.Div([
                 html.Div([
                     html.Div([
                         html.Div(
-                            html.Div([html.P("kpi 1", style={'fontSize':'2rem'}),html.P('0',style={'fontSize':'6rem'}, id='badge-1')], className='score-card') , style={'margin':'2rem','height':'10rem'}),
-                            html.Div(html.Div([html.P("kpi 2", style={'fontSize':'2rem'}),html.P('0',style={'fontSize':'6rem'}, id='badge-2')], className='score-card') , style={'margin':'2rem','height':'10rem'}),
-                            html.Div(html.Div([html.P("kpi 3", style={'fontSize':'2rem'}),html.P('0',style={'fontSize':'6rem'}, id='badge-3')], className='score-card') , style={'margin':'2rem','height':'10rem'}),
-                            html.Div(html.Div([html.P("kpi 4", style={'fontSize':'2rem'}),html.P('0',style={'fontSize':'6rem'}, id='badge-4')], className='score-card') , style={'margin':'2rem','height':'10rem'})
+                            html.Div([html.P("Indicador 1", style={'fontSize':'2rem'}),html.P('0',style={'fontSize':'6rem'}, id='badge-1')], className='score-card') , style={'margin':'2rem','height':'10rem'}),
+                            html.Div(html.Div([html.P("Indicador 2", style={'fontSize':'2rem'}),html.P('0',style={'fontSize':'6rem'}, id='badge-2')], className='score-card') , style={'margin':'2rem','height':'10rem'}),
+                            html.Div(html.Div([html.P("Indicador 3", style={'fontSize':'2rem'}),html.P('0',style={'fontSize':'6rem'}, id='badge-3')], className='score-card') , style={'margin':'2rem','height':'10rem'}),
+                            html.Div(html.Div([html.P("Indicador 4", style={'fontSize':'2rem'}),html.P('0',style={'fontSize':'6rem'}, id='badge-4')], className='score-card') , style={'margin':'2rem','height':'10rem'})
                     ],className='card-score-container')
                 ], className='col-graph'),
             
@@ -64,18 +51,13 @@ layout= html.Div([
                 html.Div([html.Div([html.H1("Grafica 4 pantalla completa"),dcc.Graph(id='path',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})], className='card-graph card-body')], className='col-graph_100'),
                 html.Div([html.Div([html.H1("Grafica 5"),dcc.Graph(id='radial',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})], className='card-graph card-body')], className='col-graph'),
                 html.Div([html.Div([html.H1("Grafica 6"),dcc.Graph(id='radial',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})], className='card-graph card-body')], className='col-graph'),  
-            ],),
-            #Reload button
-            html.A([
-                    html.Img(src='/assets/img/reload.png',className='whatsappIcon')
-                ], id='reload-button')
+            ],),            
             ],type="cube", fullscreen=False, color=color, style={'height':'100%', 'marginTop':'15rem'}
         ),
     ] , 
     className='col-6',
     style={'textAlign':'center', 'display':'flex', 'justifyContent':'space-around'}
-    ),
-    
+    ),    
 ],
 style={"color":"black"}
 )
