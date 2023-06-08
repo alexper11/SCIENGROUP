@@ -7,139 +7,172 @@ import dash_core_components as dcc
 import json
 import plotly.express as px
 
-ip='http://3.90.183.244'
+gruplac_articulos = pd.read_csv('./assets/data/gruplac_articulos.csv', dtype = str)
+gruplac_basico = pd.read_csv('./assets/data/gruplac_basico.csv', dtype = str)
+gruplac_caplibros = pd.read_csv('./assets/data/gruplac_caplibros.csv', dtype = str)
+gruplac_integrantes = pd.read_csv('./assets/data/gruplac_integrantes.csv', dtype = str)
+gruplac_libros = pd.read_csv('./assets/data/gruplac_libros.csv', dtype = str) 
+gruplac_oarticulos = pd.read_csv('./assets/data/gruplac_oarticulos.csv', dtype = str)
+gruplac_olibros = pd.read_csv('./assets/data/gruplac_olibros.csv', dtype = str)
+gruplac_cdoctorado= pd.read_csv('./assets/data/gruplac_cdoctorado.csv', dtype = str)
+gruplac_cmaestria= pd.read_csv('./assets/data/gruplac_cmaestria.csv', dtype = str)
+gruplac_disenoind= pd.read_csv('./assets/data/gruplac_disenoind.csv', dtype = str)
+gruplac_empresatec= pd.read_csv('./assets/data/gruplac_empresatec.csv', dtype = str)
+gruplac_innovaempresa= pd.read_csv('./assets/data/gruplac_innovaempresa.csv', dtype = str)
+gruplac_instituciones= pd.read_csv('./assets/data/gruplac_instituciones.csv', dtype = str)
+gruplac_lineas= pd.read_csv('./assets/data/gruplac_lineas.csv', dtype = str)
+gruplac_otecnologicos= pd.read_csv('./assets/data/gruplac_otecnologicos.csv', dtype = str)
+gruplac_pdoctorado= pd.read_csv('./assets/data/gruplac_pdoctorado.csv', dtype = str)
+gruplac_plantapiloto= pd.read_csv('./assets/data/gruplac_plantapiloto.csv', dtype = str)
+gruplac_pmaestria= pd.read_csv('./assets/data/gruplac_pmaestria.csv', dtype = str)
+gruplac_prototipos= pd.read_csv('./assets/data/gruplac_prototipos.csv', dtype = str)
+gruplac_software= pd.read_csv('./assets/data/gruplac_software.csv', dtype = str)
+scopus_autores= pd.read_csv('./assets/data/scopus_autores.csv', dtype = str)
+scopus_productos=pd.read_csv('./assets/data/scopus_productos.csv', dtype = str)
+cvlac_articulos = pd.read_csv('./assets/data/cvlac_articulos.csv', dtype = str)
+cvlac_basico = pd.read_csv('./assets/data/cvlac_basico.csv', dtype = str)
+cvlac_caplibros = pd.read_csv('./assets/data/cvlac_caplibros.csv', dtype = str)
+cvlac_libros = pd.read_csv('./assets/data/cvlac_libros.csv', dtype = str) 
+cvlac_empresatec= pd.read_csv('./assets/data/cvlac_empresatec.csv', dtype = str)
+cvlac_innovaempresa= pd.read_csv('./assets/data/cvlac_innovaempresa.csv', dtype = str)
+cvlac_lineas= pd.read_csv('./assets/data/cvlac_lineas.csv', dtype = str)
+cvlac_tecnologicos= pd.read_csv('./assets/data/cvlac_otecnologicos.csv', dtype = str)
+cvlac_prototipos= pd.read_csv('./assets/data/cvlac_prototipos.csv', dtype = str)
+cvlac_software= pd.read_csv('./assets/data/cvlac_software.csv', dtype = str)
+cvlac_areas= pd.read_csv('./assets/data/cvlac_areas.csv', dtype = str)
+cvlac_reconocimiento= pd.read_csv('./assets/data/cvlac_reconocimiento.csv', dtype = str)
+cvlac_identificadores=pd.read_csv('./assets/data/cvlac_identificadores.csv', dtype = str)
 
-def read_archive():
-    df = pd.read_csv('./assets/data/archivo_prueba.csv')
-    return df
+#Duplicados gruplac
+with open('./assets/data/gruplac_duplicados.json','r') as file:
+    gruplac_duplicados=file.read()
+gruplac_duplicados=json.loads(gruplac_duplicados)
 
-def data_validation(df):
-    """
-    This function receive the raw dataframe, and 
-    check if it cointains the correct information,
-    and it try to set the right format
-    
-    inputs:
-        df= dataframe
-        model= the model that define the columns and format
-    output:
-        df= dataframe with the cleaned data to send towards the backend
-
-    """
-    valid_columns=['Student_id','Parcial1','Parcial2']
-
-    try:   
-
-        if len(list(df.columns)) != 3:
-            return "Error - your file must have 3 columns"
-
-        untrained_columns = [column for column in list(df.columns) if column not in valid_columns]
-        if len(untrained_columns) >0:
-            return "There are some invalid columns, please check the template, it must contain some specifics column names."
-    except:
-        return "Please check your file, it can't be processed"
-
-    
-    try:
-        df["Student_id"]= df["Student_id"].astype(str).replace(",",".")
-        df["Student_id"]= df["Student_id"].astype(int)
-        df["Parcial1"]= df["Parcial1"].astype(str).replace(",",".")
-        df["Parcial1"]= df["Parcial1"].astype(float)
-        df["Parcial2"]= df["Parcial2"].astype(str).replace(",",".")
-        df["Parcial2"]= df["Parcial2"].astype(float)
-        df.fillna(0,inplace=True)
-    except:
-        return "Please check your data types, it can't be processed, any column couldn't be parsed - Student_id (int), Parcial1(float), Parcial2(float) "
-    
-    return df
+#Re formateo de fechas y enteros
+gruplac_basico['fecha_formacion']=pd.to_datetime(gruplac_basico['fecha_formacion']).dt.to_period('M')#DTYPE: period[M]
+gruplac_articulos['fecha']=pd.to_datetime(gruplac_articulos['fecha']).dt.to_period('Y')
+gruplac_caplibros['fecha']=pd.to_datetime(gruplac_caplibros['fecha']).dt.to_period('Y')
+gruplac_pdoctorado['fecha']=pd.to_datetime(gruplac_pdoctorado['fecha'])#Tiene valores nulos!
+gruplac_pmaestria['fecha']=pd.to_datetime(gruplac_pmaestria['fecha'])#Tiene valores nulos!
+gruplac_cdoctorado['fecha']=pd.to_datetime(gruplac_cdoctorado['fecha'])#Tiene valores nulos![^a-zA-Z0-9]
+gruplac_cmaestria['fecha']=pd.to_datetime(gruplac_cmaestria['fecha'])#Tiene valores nulos!
+gruplac_oarticulos['fecha']=pd.to_datetime(gruplac_oarticulos['fecha']).dt.to_period('Y')
+gruplac_olibros['fecha']=pd.to_datetime(gruplac_olibros['fecha']).dt.to_period('Y')
+gruplac_disenoind['fecha']=pd.to_datetime(gruplac_disenoind['fecha']).dt.to_period('Y')
+gruplac_innovaempresa['fecha']=pd.to_datetime(gruplac_innovaempresa['fecha']).dt.to_period('Y')
+gruplac_plantapiloto['fecha']=pd.to_datetime(gruplac_plantapiloto['fecha']).dt.to_period('Y')
+gruplac_otecnologicos['fecha']=pd.to_datetime(gruplac_otecnologicos['fecha']).dt.to_period('Y')
+gruplac_prototipos['fecha']=pd.to_datetime(gruplac_prototipos['fecha']).dt.to_period('Y')
+gruplac_software['fecha']=pd.to_datetime(gruplac_software['fecha']).dt.to_period('Y')
+gruplac_empresatec['fecha_registro']=pd.to_datetime(gruplac_empresatec['fecha_registro'])
+gruplac_libros['fecha']=pd.to_datetime(gruplac_libros['fecha']).dt.to_period('Y')
+cvlac_empresatec=cvlac_empresatec.rename(columns={"registro_camara": "fecha"})
+cvlac_articulos['fecha'] = pd.to_datetime(cvlac_articulos['fecha']).dt.to_period('Y')
+cvlac_caplibros['fecha'] = pd.to_datetime(cvlac_caplibros['fecha']).dt.to_period('Y')
+cvlac_libros['fecha'] = pd.to_datetime(cvlac_libros['fecha']).dt.to_period('Y')
+cvlac_empresatec['fecha']= pd.to_datetime(cvlac_empresatec['fecha']).dt.to_period('Y')
+cvlac_innovaempresa['fecha']= pd.to_datetime(cvlac_innovaempresa['fecha']).dt.to_period('Y')
+cvlac_tecnologicos['fecha']= pd.to_datetime(cvlac_tecnologicos['fecha']).dt.to_period('Y')
+cvlac_prototipos['fecha']= pd.to_datetime(cvlac_prototipos['fecha']).dt.to_period('Y')
+cvlac_software['fecha']= pd.to_datetime(cvlac_software['fecha']).dt.to_period('Y')
 
 
-def data_prediction(df):
-    """
-    Send the dataframe to the backend, the endpoint depends on model
-    input:
-    df= dataframe to predict
-    model= what model to use
-    output:
-    df= dataframe with the prediction
-    """
-    #parse the df to json format
-    payload=df.to_json() 
-    r = requests.post(ip+'/eaa', data=payload)
-    return pd.read_json(json.loads(r.text))
+elementos={'Artículos':gruplac_articulos.drop(columns=['volumen','fasciculo','paginas','doi','autores']),
+           'Capítulos':gruplac_caplibros.drop(columns=['isbn','volumen','paginas','autores']),
+           'Libros':gruplac_libros.drop(columns=['isbn','autores']),
+           'Cursos de Doctorado':gruplac_cdoctorado.drop(columns=['acto']),
+           'Cursos de Maestría':gruplac_cmaestria.drop(columns=['acto']),
+           'Otros Artículos':gruplac_oarticulos.drop(columns=['volumen','fasciculo','paginas','autores']),
+           'Otros Libros':gruplac_olibros.drop(columns=['isbn','volumen','paginas','autores']),
+           'Diseño industrial':gruplac_disenoind.drop(columns=['autores']),
+           'Empresa Tecnológica':gruplac_empresatec.drop(columns=['nit','fecha','autores']),
+           'Innovación Empresarial':gruplac_innovaempresa.drop(columns=['autores']),
+           'Otros Productos Tecnológicos':gruplac_otecnologicos.drop(columns=['autores']),
+           'Programa de Doctorado':gruplac_pdoctorado.drop(columns=['acto']), 
+           'Programa de Maestría':gruplac_pmaestria.drop(columns=['acto']),
+           'Planta Piloto':gruplac_plantapiloto.drop(columns=['autores']),
+           'Prototipos':gruplac_prototipos.drop(columns=['autores']),
+           'Software':gruplac_software.drop(columns=['url','nombre_proyecto','autores']),
+           'Institución':gruplac_instituciones,
+           'Líneas de Investigación':gruplac_lineas,
+           'Datos Básicos':gruplac_basico.drop(columns=['nombre','lider','pagina_web','email','programas_secundario'])}
+
+elementos_cvlac={'Áreas de Actuación':cvlac_areas,
+                 'Artículos':cvlac_articulos.drop(columns=['autores','volumen','fasciculo','paginas','doi']),
+                 'Datos Básicos':cvlac_basico.drop(columns=['nombre_citaciones']),
+                 'Capítulos':cvlac_caplibros.drop(columns=['autores','isbn','volumen','paginas']),
+                 'Empresa Tecnológica':cvlac_empresatec.drop(columns=['autores','nit']),
+                 'Identificadores':cvlac_identificadores.drop(columns=['url']),
+                 'Innovación Empresarial':cvlac_innovaempresa.drop(columns=['autor','contrato_registro']),
+                 'Líneas de Investigación':cvlac_lineas,
+                 'Libros':cvlac_libros.drop(columns=['autores','isbn','volumen','paginas']),
+                 'Prototipos':cvlac_prototipos.drop(columns=['autor','contrato_registro']),
+                 'Reconocimientos':cvlac_reconocimiento,
+                 'Software':cvlac_software.drop(columns=['autor','contrato_registro']),
+                 'Productos Tecnológicos':cvlac_tecnologicos.drop(columns=['autor','contrato_registro'])}
 
 
-def parse_contents(contents, filename, model):
+elementos_scopus={'Artículos':scopus_productos[scopus_productos['tipo_documento']=='Article'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Documentos de Conferencia':scopus_productos[scopus_productos['tipo_documento']=='Conference Paper'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Revisiónes':scopus_productos[scopus_productos['tipo_documento']=='Review'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Capítulos':scopus_productos[scopus_productos['tipo_documento']=='Book Chapter'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Editoriales':scopus_productos[scopus_productos['tipo_documento']=='Editorial'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Cartas':scopus_productos[scopus_productos['tipo_documento']=='Letter'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Notas':scopus_productos[scopus_productos['tipo_documento']=='Note'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Erratum':scopus_productos[scopus_productos['tipo_documento']=='Erratum'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Documento de Datos':scopus_productos[scopus_productos['tipo_documento']=='Data Paper'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Encuesta Corta':scopus_productos[scopus_productos['tipo_documento']=='Short Survey'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
+                  'Libros':scopus_productos[scopus_productos['tipo_documento']=='Book'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso'])}
 
 
-    content_type, content_string = contents.split(',')
-    decoded = base64.b64decode(content_string)
-    try:
-        if 'csv' in filename:
-            # Assume that the user uploaded a CSV file
-            df = pd.read_csv(
-                io.StringIO(decoded.decode('utf-8')))
-        elif 'xls' in filename:
-            # Assume that the user uploaded an excel file
-            df = pd.read_excel(io.BytesIO(decoded))
-    except Exception as e:
-        print(e)
-        return [html.Div([
-            'There was an error processing this  file.'
-        ]),pd.DataFrame()]
-    #if the data frame contains any nan value it is filled with a zero
+caracteristicas={'idgruplac':'Código de GrupLAC','verificado':'Verificado','tipo':'Tipo','nombre':'Nombre',
+                 'lugar':'Lugar','revista':'Revista','issn':'ISSN','fecha':'Fecha','capitulo':'Nombre del Capítulo','libro':'Libro',
+                 'editorial':'Editorial','curso':'Nombre del Curso','programa':'Nombre del Programa','disponibilidad':'Disponibilidad',
+                 'institucion':'Institución','fecha_registro':'Fecha de Registro','mercado':'Mercado','aval':'Aval',
+                 'lineas':'Líneas de Investigación','fecha_formacion':'Fecha de Formación','certificacion':'Certificación',
+                 'clasificacion':'Clasificación','areas':'Áreas','programas':'Programas','nombre_comercial':'Nombre Comercial',
+                 'titulo':'Título','fecha_publicacion':'Fecha de Publicación','idioma':'Idioma','citado':'Citaciones',
+                 'tema':'Temáticas','palabras_clave_autor':'Palabras Clave de Autor','palabras_clave_index':'Palabras Clave Indizadas',
+                 'institucion':'Institución','agencia_fundadora':'Agencia Fundadora','pais':'País',
+                 'categoria':'Categoría','idcvlac':'Código de CVLAC','sexo':'Sexo','sectores':'Sectores','palabras':'Palabras Clave',
+                 'area':'Área','plataforma':'Plataforma','ambiente':'Ambiente'}
 
-    df = data_validation(df)
-
-    if(isinstance(df,str) ):
-        return[html.H1(df), pd.DataFrame()]
-    
-    df = data_prediction(df)
-
- 
-    return [html.Div([
-        
-            dcc.Graph(figure=px.pie(df[["Estado","Student_id"]].groupby(["Estado"], as_index=False).count(), values="Student_id", 
-                                names="Estado"), id="fig_prop", config={"displaylogo":False, "displayModeBar":False}),
-            html.H1("Failed Students", style={"textAlign":"center", "fontSize":"3rem"}),  # horizontal line
-            dash_table.DataTable(
-                df[df["Estado"]=="Reprobado"].to_dict('records'),
-                [{'name': i, 'id': i} for i in df.columns],
-                style_cell_conditional=[
-            {
-                'if': {'column_id': c},
-                'textAlign': 'left'
-                    } for c in ['Date', 'Region']
-                ],
-                style_data_conditional=[
-            {
-                'if': {'row_index': 'odd'},
-                'backgroundColor': 'light blue',
-            },
-            {
-                'if': {'column_id': 'Estado'},
-                'backgroundColor': '#e56b6f',
+referencias={'SCOPUS':
+                 {
+                    'Artículos':'scopus_productos',
+                    'Documentos de Conferencia':'scopus_productos',
+                    'Revisiónes':'scopus_productos',
+                    'Capítulos':'scopus_productos',
+                    'Editoriales':'scopus_productos',
+                    'Cartas':'scopus_productos',
+                    'Notas':'scopus_productos',
+                    'Erratum':'scopus_productos',
+                    'Documento de Datos':'scopus_productos',
+                    'Encuesta Corta':'scopus_productos',
+                    'Libros':'scopus_productos'
+                 },
+             'GRUPLAC':
+                 {
+                    'Artículos':'gruplac_articulos','Capítulos':'gruplac_caplibros','Libros':'gruplac_libros',
+                    'Cursos de Doctorado':'gruplac_cdoctorado','Cursos de Maestría':'gruplac_cmaestria',
+                    'Otros Artículos':'gruplac_oarticulos','Otros Libros':'gruplac_olibros',
+                    'Diseño industrial':'gruplac_disenoind','Empresa Tecnológica':'gruplac_empresatec',
+                    'Innovación Empresarial':'gruplac_innovaempresa','Otros Productos Tecnológicos':'gruplac_otecnologicos',
+                    'Programa de Doctorado':'gruplac_pdoctorado','Programa de Maestría':'gruplac_pmaestria',
+                    'Planta Piloto':'gruplac_plantapiloto','Prototipos':'gruplac_prototipos',
+                    'Software':'gruplac_software','Institución':'gruplac_instituciones',
+                    'Líneas de Investigación':'gruplac_lineas','Datos Básicos':'gruplac_basico'
+                 },
+             'CVLAC':
+                 {
+                    'Artículos':'cvlac_articulos','Áreas de Actuación':'cvlac_areas','Datos Básicos':'cvlac_basico',
+                    'Datos Básicos':'cvlac_basico','Capítulos':'cvlac_caplibros','Empresa Tecnológica':'cvlac_empresatec',
+                    'Identificadores':'cvlac_identificadores','Innovación Empresarial':'cvlac_innovaempresa',
+                    'Líneas de Investigación':'cvlac_lineas','Libros':'cvlac_libros','Prototipos':'cvlac_prototipos',
+                    'Reconocimientos':'cvlac_reconocimiento','Software':'cvlac_software','Productos Tecnológicos':'cvlac_tecnologicos'
+                 }
             }
-        ],
-        style_cell={'textAlign': 'center'},
-        filter_action="native",
-        page_action="native",
-            page_current= 0,
-            page_size= 20,
 
-            style_as_list_view=True,
-            style_header={
-            'backgroundColor': '#08469b',
-            'color':'white',
-            'fontWeight': 'bold'
-        }
-            ),
+caracteristicas_invertido= {v: k for k, v in caracteristicas.items()}
 
-            html.Hr(),  # horizontal line
-            html.Button("Download table", id="btn-download-table-alert", style={'backgroundColor':"#08469b", 'color':'white'}),
-            html.H4("*If you want to review all the information, you can to download this table as csv.", style={ "fontSize":"2rem", "margin":"0"}),
-            dcc.Download(id="download-dataframe-table"),
-            dcc.Upload(id='upload_tool_early', style={'display':'None'})
-                ], style={'width':'90%','padding':'2rem'}), df]
-
-   
+fuente_dic={'CVLAC':elementos_cvlac,'GRUPLAC':elementos,'SCOPUS':elementos_scopus}

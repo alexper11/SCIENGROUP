@@ -309,13 +309,13 @@ img.brand {
 
 .dash-sidebar {
   position:fixed;
-  top: 0;
+  top: 1rem;
   left: 0;
   bottom: 0;
   margin-top: 10rem;
   margin-left: 1rem;
   width: 16rem;
-  height: 20rem;
+  height: 45rem;
   padding: 2rem 1rem;
   background-color: #08469b;
   box-shadow: 3px 3px 6px rgb(88, 88, 88);
@@ -329,6 +329,14 @@ img.brand {
   display:grid;
   background-color: #F8F9F9;
 
+}
+.dash-body-graph {
+  margin-left: 18rem;
+  width: 20rem;
+  margin-right: 20rem;
+  padding: 2rem 1rem;
+  display:grid;
+  background-color: #F8F9F9;
 }
 
 /*************************************************************************/
@@ -389,7 +397,7 @@ h1 {
   justify-content: space-around;
   border-radius: 0.5rem;
   /* height: 40rem; */
-  width: 95vw;
+  width: 80vw;
   max-width: 100%;
   margin: 1rem 1rem;
   box-shadow: 0 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.6),
@@ -570,6 +578,10 @@ p {
   height: 7rem;
   padding: 0;
   margin-left: 4rem;
+}
+#info-icon {
+  height: 3rem;
+  padding: 0;
 }
 /*************************************************************************/
 /******************************** Responsive Code ************************/
