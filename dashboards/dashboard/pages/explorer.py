@@ -1,7 +1,8 @@
 from dash.dependencies import Input, Output
-import dash_core_components as dcc
+
+from dash import dcc
 import dash_bootstrap_components as dbc
-from dash import Dash, dcc, html, Input, Output, callback, dash_table
+from dash import Dash, html, Input, Output, callback, dash_table
 import pandas as pd
 from functions.csv_importer import referencias
 
@@ -11,7 +12,7 @@ from lib.filter_explorer import dataset, fuente_seleccionada, caracteristica_sel
 elemento_seleccionado='Artículos'
 
 color = '#08469b'
-dataset_explorador = dataset_explorer(dataset,elemento_seleccionado)
+#dataset_explorador = dataset_explorer(dataset,elemento_seleccionado)
 table_explorer= html.Div([     
         # Table
         html.Div([
@@ -20,9 +21,9 @@ table_explorer= html.Div([
                 dash_table.DataTable(
                     id='table_date',
                     #columns=[{'name': i, 'id': i} for i in dataset_explorador.columns],
-                    #data = None,
-                    page_size=9,
-                    page_action='none',
+                    data = None,
+                    page_size=100,
+                    #page_action='none',
                     style_table={'height': '350px', 'overflowY': 'auto', 'maxWidth': '1100px'},
                     style_cell={
                         'maxWidth': '200px',
@@ -76,45 +77,24 @@ def actualizar_fuente_seleccionada(fuente):
 )
 def actualizar_elemento_seleccionado(elemento, fuente): 
     dataset, opciones_caracteristica, valor_entrada=filtrar_elemento(elemento, fuente)
-    dataset_explorador = dataset_explorer(dataset, elemento).to_dict("records")
+    dataset_explorador = dataset_explorer(dataset, elemento,fuente).astype(str).fillna('No aplica').to_dict("records")
+    #dataset_explorador = dataset_explorer(dataset, elemento).to_dict("records")
     print(type(dataset_explorador))
     print(opciones_caracteristica)
     return opciones_caracteristica, dataset_explorador
     #return opciones_caracteristica
-# @callback(
-#     Output('option_inputs', 'children'),
-#     Input('filter_feature', 'value')
-# )
-# def actualizar_caractersitica_seleccionada(caracteristica):  
-#     print('caracteristica',str(caracteristica))  
-#     caracteristica_seleccionada = caracteristica
-#     valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica_seleccionada)
-#     print('Tipo de entrada: ',type(valor_entrada))
-#     if type(valor_entrada) == list:
-#         filter =  dcc.Input(
-#                     id='input_value',
-#                     placeholder='Digite el filtro',
-#                     type='text',
-#                     value=''
-#                 )
-#     elif type(valor_entrada) == str:
-#         filter = dcc.Dropdown(
-#                     id="input_value",
-#                     # options=[{"label": tags, "value": tags} for tags in opciones_entrada.index],
-#                     options= opciones_entrada,
-#                     multi=True
-#                 )
-#     elif type(valor_entrada) == tuple:
-#         filter = dcc.Input(
-#                     id='input_value1',
-#                     placeholder='Digite el año',
-#                     type='text',
-#                     value=''
-#                 ),
-#         dcc.Input(
-#                     id='input_value2',
-#                     placeholder='Digite el año',
-#                     type='text',
-#                     value=''
-#                 )
-#     return filter
+@callback(
+    Output('option_inputs', 'children'),
+    [Input('filter_feature', 'value'),Input('filter_element', 'value'), Input('filter_fuente', 'value')]
+)
+def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):  
+    print('caracteristica',str(caracteristica))
+    valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
+    print('Tipo de entrada: ',type(valor_entrada))
+    if type(valor_entrada) == list:
+        filter =  dcc.Input(id='input_value', placeholder='Digite el filtro', type='text', value='')
+    elif type(valor_entrada) == str:
+        filter = dcc.Dropdown(id="input_value", options= opciones_entrada, multi=True)
+    elif type(valor_entrada) == tuple:
+        filter = dcc.Input(id='input_value1', placeholder='Digite el a1', value=''),dcc.Input(id='input_value2', placeholder='Digite el a2', type='text', value='')
+    return filter
