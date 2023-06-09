@@ -3,7 +3,7 @@ import io
 import pandas as pd
 from dash import dash_table, html
 import requests
-import dash_core_components as dcc
+from dash import dcc
 import json
 import plotly.express as px
 
