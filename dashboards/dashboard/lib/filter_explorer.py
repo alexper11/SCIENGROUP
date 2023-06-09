@@ -64,6 +64,7 @@ def filtrar_fuente(fuente):
     opc_elemento=list(data.keys())#El cambio de esta variable debe afectar directamente el filtro elemento
     opc_caracteristica=[]#El cambio de esta variable debe modificar directamente el filtro caracteristica
     entrada_new=None
+    data=pd.DataFrame()
     return data, opc_elemento, opc_caracteristica, entrada_new
 
 def filtrar_elemento(elemento,fuente):
@@ -76,14 +77,8 @@ def filtrar_elemento(elemento,fuente):
     entrada_new=None
     return data, opc_caracteristica, entrada_new
 
-def filtrar_caracteristica(caracteristica,elemento):
-    try:
-        if len(caracteristica_seleccionada)>1:
-            data=fuente_dic[fuente_seleccionada][elemento]
-        else:
-            data=dataset.copy()
-    except:
-        data=dataset.copy()
+def filtrar_caracteristica(caracteristica,elemento,fuente):
+    data=fuente_dic[fuente][elemento]    
         
     if caracteristica=='Todos':
         #campo de entrada desaparece
@@ -95,7 +90,7 @@ def filtrar_caracteristica(caracteristica,elemento):
                           'Verificado','Certificación','Clasificación','Categoría','Sexo',
                           'Área']:  
         entrada_new=[]
-        opc_entrada=data[caracteristicas_invertido[caracteristica_seleccionada]].drop_duplicates(keep='first').to_list()
+        opc_entrada=data[caracteristicas_invertido[caracteristica]].drop_duplicates(keep='first').to_list()
         
     elif caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
                            'Líneas de Investigación','Institución','Palabras Clave','Sectores',
@@ -103,7 +98,7 @@ def filtrar_caracteristica(caracteristica,elemento):
     
         entrada_new=[]
         new_list=[]
-        data.dropna(subset=caracteristicas_invertido[caracteristica_seleccionada])[caracteristicas_invertido[caracteristica_seleccionada]].astype('object').str.split(';').apply(lambda x: new_list.extend(x))
+        data.dropna(subset=caracteristicas_invertido[caracteristica])[caracteristicas_invertido[caracteristica]].astype('object').str.split(';').apply(lambda x: new_list.extend(x))
         opc_entrada=list(filter(None,list(set(new_list))))
     #text, tipo string
     elif caracteristica in ['Código de GrupLAC','Nombre','Nombre del Capítulo','Libro','Nombre del Curso',
@@ -227,7 +222,6 @@ sidebar_explorer = html.Div(
     ],
     className="dash-sidebar",    
 )
-def dataset_explorer (dataset_base,elemento):
-    #dataset_explorador=globals()[str(referencias[fuente_seleccionada][elemento])].iloc[list(dataset_base.index)]
-    dataset_explorador=dataset_base
+def dataset_explorer (dataset_base,elemento,fuente):
+    dataset_explorador=globals()[str(referencias[fuente][elemento])].iloc[list(dataset_base.index)]
     return dataset_explorador
