@@ -1,5 +1,4 @@
 from dash.dependencies import Input, Output
-import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash import Dash, dcc, html, Input, Output, callback, dash_table
 import pandas as pd
@@ -22,7 +21,7 @@ table_explorer= html.Div([
                     #columns=[{'name': i, 'id': i} for i in dataset_explorador.columns],
                     #data = None,
                     page_size=9,
-                    page_action='none',
+                    #page_action='none',
                     style_table={'height': '350px', 'overflowY': 'auto', 'maxWidth': '1100px'},
                     style_cell={
                         'maxWidth': '200px',
@@ -76,7 +75,7 @@ def actualizar_fuente_seleccionada(fuente):
 )
 def actualizar_elemento_seleccionado(elemento, fuente): 
     dataset, opciones_caracteristica, valor_entrada=filtrar_elemento(elemento, fuente)
-    dataset_explorador = dataset_explorer(dataset, elemento).to_dict("records")
+    dataset_explorador = dataset_explorer(dataset, elemento).astype(str).fillna('No aplica').to_dict("records")
     print(type(dataset_explorador))
     print(opciones_caracteristica)
     return opciones_caracteristica, dataset_explorador

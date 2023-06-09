@@ -23,8 +23,8 @@ import json
 import re
 
 # LOAD THE DIFFERENT FILES
-from functions.csv_importer import fuente_dic, referencias, caracteristicas, caracteristicas_invertido, elementos, elementos_cvlac, elementos_scopus
-from functions.csv_importer import gruplac_articulos, gruplac_basico, gruplac_caplibros, gruplac_integrantes,gruplac_libros, gruplac_oarticulos, gruplac_olibros, gruplac_cdoctorado, gruplac_cmaestria, gruplac_disenoind,gruplac_empresatec,gruplac_innovaempresa,gruplac_instituciones,gruplac_lineas,gruplac_otecnologicos,gruplac_pdoctorado,gruplac_plantapiloto,gruplac_pmaestria,gruplac_prototipos,gruplac_software,scopus_autores,scopus_productos,cvlac_articulos,cvlac_basico,cvlac_caplibros,cvlac_libros,cvlac_empresatec,cvlac_innovaempresa,cvlac_lineas,cvlac_tecnologicos,cvlac_prototipos,cvlac_software,cvlac_areas,cvlac_reconocimiento,cvlac_identificadores
+from functions.csv_importer import fuente_dic, referencias, caracteristicas, caracteristicas_invertido#, elementos, elementos_cvlac, elementos_scopus
+#from functions.csv_importer import gruplac_articulos, gruplac_basico, gruplac_caplibros, gruplac_integrantes,gruplac_libros, gruplac_oarticulos, gruplac_olibros, gruplac_cdoctorado, gruplac_cmaestria, gruplac_disenoind,gruplac_empresatec,gruplac_innovaempresa,gruplac_instituciones,gruplac_lineas,gruplac_otecnologicos,gruplac_pdoctorado,gruplac_plantapiloto,gruplac_pmaestria,gruplac_prototipos,gruplac_software,scopus_autores,scopus_productos,cvlac_articulos,cvlac_basico,cvlac_caplibros,cvlac_libros,cvlac_empresatec,cvlac_innovaempresa,cvlac_lineas,cvlac_tecnologicos,cvlac_prototipos,cvlac_software,cvlac_areas,cvlac_reconocimiento,cvlac_identificadores
 
 
 ####################################################################################
@@ -68,7 +68,7 @@ def filtrar_fuente(fuente):
 
 def filtrar_elemento(elemento,fuente):
     data=fuente_dic[fuente]  
-    data=data[elemento].astype(globals()[str(referencias[fuente][elemento])][data[elemento].columns.to_list()].dtypes.to_dict()) #############
+    data=data[elemento]#############
     #Opciones de caracteristicas a mostrar....
     opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
     opc_caracteristica.append('Todos')
@@ -228,5 +228,6 @@ sidebar_explorer = html.Div(
     className="dash-sidebar",    
 )
 def dataset_explorer (dataset_base,elemento):
-    dataset_explorador=globals()[str(referencias[fuente_seleccionada][elemento])].iloc[list(dataset_base.index)]
+    #dataset_explorador=globals()[str(referencias[fuente_seleccionada][elemento])].iloc[list(dataset_base.index)]
+    dataset_explorador=dataset_base
     return dataset_explorador
