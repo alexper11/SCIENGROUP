@@ -51,7 +51,7 @@ valor_entrada=None
 
 #Selecciones o datos ingresados a los campos de los filtros
 fuente_seleccionada='CVLAC'
-elemento_seleccionado='Artículos'
+#
 caracteristica_seleccionada=None
 entrada_seleccionada=None
 
@@ -66,12 +66,9 @@ def filtrar_fuente(fuente):
     entrada_new=None
     return data, opc_elemento, opc_caracteristica, entrada_new
 
-def filtrar_elemento(elemento):
-    if len(elemento_seleccionado)>1:
-        data=fuente_dic[fuente_seleccionada]
-    else:
-        data=dataset.copy()    
-    data=data[elemento].astype(globals()[str(referencias[fuente_seleccionada][elemento])][data[elemento].columns.to_list()].dtypes.to_dict()) #############
+def filtrar_elemento(elemento,fuente):
+    data=fuente_dic[fuente]  
+    data=data[elemento].astype(globals()[str(referencias[fuente][elemento])][data[elemento].columns.to_list()].dtypes.to_dict()) #############
     #Opciones de caracteristicas a mostrar....
     opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
     opc_caracteristica.append('Todos')
@@ -79,10 +76,10 @@ def filtrar_elemento(elemento):
     entrada_new=None
     return data, opc_caracteristica, entrada_new
 
-def filtrar_caracteristica(caracteristica):
+def filtrar_caracteristica(caracteristica,elemento):
     try:
         if len(caracteristica_seleccionada)>1:
-            data=fuente_dic[fuente_seleccionada][elemento_seleccionado]
+            data=fuente_dic[fuente_seleccionada][elemento]
         else:
             data=dataset.copy()
     except:
@@ -126,10 +123,10 @@ def filtrar_caracteristica(caracteristica):
         
     return entrada_new, opc_entrada
 
-def filtrar_entrada(entrada):
+def filtrar_entrada(entrada,elemento_sel):
     try:
         if len(entrada_seleccionada)>1:
-            data=fuente_dic[fuente_seleccionada][elemento_seleccionado]
+            data=fuente_dic[fuente_seleccionada][elemento_sel]
         else:
             data=dataset.copy()
     except:
@@ -203,12 +200,12 @@ value_input = dcc.Input(
     type='text',
     value=''
 )
-key_picker = dcc.Dropdown(
-    id="input_tags",
-    # options=[{"label": tags, "value": tags} for tags in opciones_entrada.index],
-    options= opciones_entrada,
-    multi=True
-)
+# key_picker = dcc.Dropdown(
+#     id="input_tags",
+#     # options=[{"label": tags, "value": tags} for tags in opciones_entrada.index],
+#     options= opciones_entrada,
+#     multi=True
+# )
 #############################################################################
 # Sidebar Layout
 #############################################################################
@@ -230,6 +227,6 @@ sidebar_explorer = html.Div(
     ],
     className="dash-sidebar",    
 )
-def dataset_explorer (dataset_base):
-    dataset_explorador=globals()[str(referencias[fuente_seleccionada][elemento_seleccionado])].iloc[list(dataset_base.index)]
+def dataset_explorer (dataset_base,elemento):
+    dataset_explorador=globals()[str(referencias[fuente_seleccionada][elemento])].iloc[list(dataset_base.index)]
     return dataset_explorador
