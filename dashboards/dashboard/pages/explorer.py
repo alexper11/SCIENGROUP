@@ -5,6 +5,10 @@ import dash_bootstrap_components as dbc
 from dash import Dash, html, Input, Output, callback, dash_table
 import pandas as pd
 from functions.csv_importer import referencias
+import json
+from dash import no_update
+from dash import callback_context as ctx
+
 
 # LOAD THE DIFFERENT FILES
 from lib.filter_explorer import dataset, fuente_seleccionada, caracteristica_seleccionada, entrada_seleccionada, sidebar_explorer,filtrar_fuente,filtrar_entrada, filtrar_elemento,filtrar_caracteristica, dataset_explorer
@@ -115,12 +119,12 @@ def actualizar_elemento_seleccionado(elemento, fuente):
     [Input('filter_feature', 'value'),Input('filter_element', 'value'), Input('filter_fuente', 'value')]
 )
 def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):  
-    print('caracteristica',str(caracteristica))
+    
     if (elemento == None) or (caracteristica == None):
         valor_entrada = None
     else:
         valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
-    print('Tipo de entrada: ',type(valor_entrada))
+    
     if type(valor_entrada) == str:
         filter =  dcc.Input(id='input_value', placeholder='Digite el filtro', type='text', value='')
     elif type(valor_entrada) == list:
@@ -129,7 +133,30 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
         year_today=date.today().year
         #filter = dcc.DatePickerRange( minimum_nights=5, clearable=True, with_portal=True, start_date=date(1990, 1, 1), end_date = date.today())
         #filter = dcc.Input(id="date_start", type="number", inputMode="numeric"),dcc.Input(id="date_end",type="number", inputMode="numeric", min=1990, max=2023, step=1)
-        filter = dbc.Input(id="date_start", type="number", min=1985, max=year_today, step=1),dbc.Input(id="date_start", type="number", min=0, max=year_today, step=1)
+        filter = dbc.Input(id="date_start", type="number", min=1985, max=year_today, step=1),dbc.Input(id="input_value", type="number", min=0, max=year_today, step=1 , disabled = True)
     else:
         filter = dcc.Input(id='input_value', placeholder='Digite el filtro', type='text', value='', disabled=True)
     return filter
+
+@callback(
+    [Output('input_value', 'min'), Output('input_value','disabled')],
+    Input('date_start', 'value')
+)
+def validate_date_end(minimo):
+    return minimo, False
+
+@callback(Output('table_date', 'date'),
+              Input('filter_fuente', 'value'),
+              Input('filter_element', 'value'),
+              Input('filter_feature', 'value'),
+              Input('input_value','value'))
+def display(fuente, elemento, caracteristica, entrada):
+    filter_id = ctx.triggered_id if not None else 'No clicks yet'
+    print('filter id ',filter_id)
+    # ctx_msg = json.dumps({
+    #     'states': ctx.states,
+    #     'triggered': ctx.triggered,
+    #     'inputs': ctx.inputs
+    # }, indent=2)
+
+    return no_update
