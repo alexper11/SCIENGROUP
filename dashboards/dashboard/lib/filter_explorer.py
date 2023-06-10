@@ -121,8 +121,8 @@ def filtrar_entrada(entrada,caracteristica,elemento,fuente):
     data=fuente_dic[fuente][elemento]
     if type(entrada) == list:
         if caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
-                                           'Líneas de Investigación','Institución','Palabras Clave','Sectores',
-                                           'Palabras Clave','Código de GrupLAC']:
+                             'Líneas de Investigación','Institución','Palabras Clave','Sectores',
+                             'Palabras Clave','Código de GrupLAC']:
             if len(entrada)>1:
                 regex_entrada=re.compile('|'.join(entrada)).pattern
             else:
