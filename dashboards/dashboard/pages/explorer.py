@@ -64,25 +64,52 @@ style={"color":"black"}
     [Output('filter_element', 'options'), Output('filter_element','value')],
     Input('filter_fuente', 'value')
 )
-def actualizar_fuente_seleccionada(fuente):    
-    fuente_seleccionada = fuente
-    dataset, opciones_elemento, opciones_caracteristica, valor_entrada = filtrar_fuente(fuente_seleccionada, 'option')    
-    #dataset_explorador = dataset_explorer(dataset)    
+def actualizar_fuente_seleccionada(fuente):
+    opciones_elemento = filtrar_fuente(fuente, 'option')    
     return opciones_elemento, None
 
 @callback(
-    [Output('filter_feature', 'options'),Output('table_date', 'data')],
-    #Output('filter_feature', 'options'),
+    Output('component_filters', 'children'),
     [Input('filter_element', 'value'), Input('filter_fuente', 'value')]
 )
 def actualizar_elemento_seleccionado(elemento, fuente): 
-    dataset, opciones_caracteristica, valor_entrada=filtrar_elemento(elemento, fuente)
-    dataset_explorador = dataset_explorer(dataset, elemento,fuente).astype(str).fillna('No aplica').to_dict("records")
-    #dataset_explorador = dataset_explorer(dataset, elemento).to_dict("records")
-    print(type(dataset_explorador))
-    print(opciones_caracteristica)
-    return opciones_caracteristica, dataset_explorador
-    #return opciones_caracteristica
+    if elemento == None:
+        div_component= [html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
+        html.Div(
+            dcc.Dropdown(
+                id='filter_feature',
+                options = [],
+                disabled =True
+            ),
+        id='div_feature'),
+        html.H5("Entrada:",className="title_white",style={"color":"white"}),
+        html.Div(
+            dcc.Input(
+                id='input_value',
+                placeholder='Digite el filtro',
+                type='text',
+                disabled =True
+            ),
+        id='div_element')]
+    else:
+        opciones_caracteristica=filtrar_elemento(elemento, fuente,'option')
+        div_component = [html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
+        html.Div(
+            dcc.Dropdown(
+                id='filter_feature',
+                options = opciones_caracteristica                
+            ),
+        id='div_feature'),
+        html.H5("Entrada:",className="title_white",style={"color":"white"}),
+        html.Div(
+            dcc.Input(
+                id='input_value',
+                placeholder='Digite el filtro',
+                type='text',
+                disabled =True
+            ),
+        id='div_element')]  
+    return div_component
 @callback(
     Output('option_inputs', 'children'),
     [Input('filter_feature', 'value'),Input('filter_element', 'value'), Input('filter_fuente', 'value')]
