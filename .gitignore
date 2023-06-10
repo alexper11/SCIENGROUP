@@ -2,3 +2,4 @@ scopus/key.txt
 **/__pycache__/
 **/.vscode/
 *.csv
+extracted_data/
