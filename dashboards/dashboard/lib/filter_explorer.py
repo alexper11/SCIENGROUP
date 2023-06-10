@@ -182,24 +182,7 @@ option_element = dcc.Dropdown(
     options = opciones_elemento,
     #value = ''  # Valor inicial seleccionado
 )
-component_filters= html.Div(children=[
-    html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
-    html.Div(
-        dcc.Dropdown(
-            id='filter_feature',
-            options = [],
-            disabled =True
-        ),
-    id='div_feature'),
-    html.H5("Entrada:",className="title_white",style={"color":"white"}),
-    html.Div(
-        dcc.Input(
-            id='input_value',
-            placeholder='Digite el filtro',
-            type='text',
-            disabled =True
-        ),
-    id='div_element')],
+component_filters= html.Div(children=[],
 id='component_filters')
 
 #############################################################################
