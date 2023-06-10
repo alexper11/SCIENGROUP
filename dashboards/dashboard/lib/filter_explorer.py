@@ -180,9 +180,27 @@ option_source = dcc.Dropdown(
 option_element = dcc.Dropdown(
     id='filter_element',
     options = opciones_elemento,
-    #value = ''  # Valor inicial seleccionado
+    value = None  # Valor inicial seleccionado
 )
-component_filters= html.Div(children=[],
+component_filters= html.Div(children=[html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
+        html.Div(
+            dcc.Dropdown(
+                id='filter_feature',
+                options = [],
+                disabled =True,
+                value = None
+            ),
+        id='div_feature'),
+        html.H5("Entrada:",className="title_white",style={"color":"white"}),
+        html.Div(children=[
+            dcc.Input(
+                id='input_value',
+                placeholder='Digite el filtro',
+                type='text',
+                disabled =True,
+                value = None
+            )],
+        id='div_input')],
 id='component_filters')
 
 #############################################################################
