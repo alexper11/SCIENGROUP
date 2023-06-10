@@ -61,14 +61,14 @@ style={"color":"black"}
 )
 
 @callback(
-    Output('filter_element', 'options'),
+    [Output('filter_element', 'options'), Output('filter_element','value')],
     Input('filter_fuente', 'value')
 )
 def actualizar_fuente_seleccionada(fuente):    
     fuente_seleccionada = fuente
-    dataset, opciones_elemento, opciones_caracteristica, valor_entrada = filtrar_fuente(fuente_seleccionada)    
+    dataset, opciones_elemento, opciones_caracteristica, valor_entrada = filtrar_fuente(fuente_seleccionada, 'option')    
     #dataset_explorador = dataset_explorer(dataset)    
-    return opciones_elemento
+    return opciones_elemento, None
 
 @callback(
     [Output('filter_feature', 'options'),Output('table_date', 'data')],
@@ -96,5 +96,5 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
     elif type(valor_entrada) == str:
         filter = dcc.Dropdown(id="input_value", options= opciones_entrada, multi=True)
     elif type(valor_entrada) == tuple:
-        filter = dcc.Input(id='input_value1', placeholder='Digite el a1', value=''),dcc.Input(id='input_value2', placeholder='Digite el a2', type='text', value='')
+        filter = dcc.Input(id='input_value', placeholder='Digite el a1', value=''),dcc.Input(id='input_value2', placeholder='Digite el a2', type='text', value='')
     return filter
