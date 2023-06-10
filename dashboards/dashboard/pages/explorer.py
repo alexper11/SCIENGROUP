@@ -7,7 +7,7 @@ import pandas as pd
 from functions.csv_importer import referencias
 import json
 from dash import no_update
-from dash import callback_context as ctx
+from dash import ctx
 
 
 # LOAD THE DIFFERENT FILES
@@ -83,7 +83,8 @@ def actualizar_elemento_seleccionado(elemento, fuente):
             dcc.Dropdown(
                 id='filter_feature',
                 options = [],
-                disabled =True
+                disabled =True,
+                value = None
             ),
         id='div_feature'),
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
@@ -92,7 +93,8 @@ def actualizar_elemento_seleccionado(elemento, fuente):
                 id='input_value',
                 placeholder='Digite el filtro',
                 type='text',
-                disabled =True
+                disabled =True,
+                value = None
             )],
         id='div_input')]
     else:
@@ -101,7 +103,8 @@ def actualizar_elemento_seleccionado(elemento, fuente):
         html.Div(
             dcc.Dropdown(
                 id='filter_feature',
-                options = opciones_caracteristica                
+                options = opciones_caracteristica,
+                value = None             
             ),
         id='div_feature'),
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
@@ -110,7 +113,8 @@ def actualizar_elemento_seleccionado(elemento, fuente):
                 id='input_value',
                 placeholder='Digite el filtro',
                 type='text',
-                disabled =True
+                disabled =True,
+                value = None
             )],
         id='div_input')]  
     return div_component
@@ -151,8 +155,21 @@ def validate_date_end(minimo):
               Input('filter_feature', 'value'),
               Input('input_value','value'))
 def display(fuente, elemento, caracteristica, entrada):
-    filter_id = ctx.triggered_id if not None else 'No clicks yet'
-    print('filter id ',filter_id)
+    filter_id = ctx.triggered_id
+    if filter_id == 'filter_fuente':
+        dataset = filtrar_fuente(fuente, 'data')
+    elif filter_id == 'filter_element':
+        if elemento == None:
+            dataset = no_update
+        else:
+            dataset = filtrar_elemento(elemento, fuente, 'data')
+    elif filter_id == 'filter_feature':
+        dataset = no_update         
+    else:
+        if (entrada == None) and (caracteristica == None) and (elemento == None):
+            dataset = no_update
+        else:
+            dataset = filtrar_elemento(entrada,caracteristica,elemento,fuente)
     # ctx_msg = json.dumps({
     #     'states': ctx.states,
     #     'triggered': ctx.triggered,
