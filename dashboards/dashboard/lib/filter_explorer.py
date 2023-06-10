@@ -183,18 +183,18 @@ option_input= html.Div(
 option_element = dcc.Dropdown(
     id='filter_element',
     options = opciones_elemento,
-    value = 'Artículos'  # Valor inicial seleccionado
+    #value = ''  # Valor inicial seleccionado
 )
 option_feature = dcc.Dropdown(
     id='filter_feature',
     options = opciones_caracteristica,
-    value = None  # Valor inicial seleccionado
+    #value = None  # Valor inicial seleccionado
 )
 value_input = dcc.Input(
     id='input_value',
     placeholder='Digite el filtro',
     type='text',
-    value=''
+    #value=''
 )
 # key_picker = dcc.Dropdown(
 #     id="input_tags",
