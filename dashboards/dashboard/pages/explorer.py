@@ -2,7 +2,7 @@ from dash.dependencies import Input, Output
 from datetime import date
 from dash import dcc
 import dash_bootstrap_components as dbc
-from dash import Dash, html, Input, Output, callback, dash_table
+from dash import Dash, html, Input, Output, callback, dash_table, State
 import pandas as pd
 from functions.csv_importer import referencias
 import json
@@ -139,41 +139,23 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
         #filter = dcc.Input(id="date_start", type="number", inputMode="numeric"),dcc.Input(id="date_end",type="number", inputMode="numeric", min=1990, max=2023, step=1)
         filter = dbc.Input(id="date_start", type="number", min=1985, max=year_today, step=1),dbc.Input(id="input_value", type="number", min=0, max=year_today, step=1 , disabled = True)
     else:
-        filter = dcc.Input(id='input_value', placeholder='Digite el filtro', type='text', value='', disabled=True)
+        filter = dcc.Input(id='input_value', placeholder='Digite el filtro', type='text', value=None, disabled=True)
     return filter
 
 @callback(
-    [Output('input_value', 'min'), Output('input_value','disabled')],
-    Input('date_start', 'value')
-)
+     [Output('input_value', 'min'), Output('input_value','disabled')],
+     Input('date_start', 'value')
+ )
 def validate_date_end(minimo):
-    return minimo, False
+     return minimo, False
 
 @callback(Output('table_date', 'date'),
-              Input('filter_fuente', 'value'),
-              Input('filter_element', 'value'),
-              Input('filter_feature', 'value'),
-              Input('input_value','value'))
+            [State('filter_fuente', 'value'),
+            State('filter_fuente', 'value'),
+            State('filter_element', 'value'),
+            State('filter_feature', 'value'),
+            State('input_value','value')])
 def display(fuente, elemento, caracteristica, entrada):
-    filter_id = ctx.triggered_id
-    if filter_id == 'filter_fuente':
-        dataset = filtrar_fuente(fuente, 'data')
-    elif filter_id == 'filter_element':
-        if elemento == None:
-            dataset = no_update
-        else:
-            dataset = filtrar_elemento(elemento, fuente, 'data')
-    elif filter_id == 'filter_feature':
-        dataset = no_update         
-    else:
-        if (entrada == None) and (caracteristica == None) and (elemento == None):
-            dataset = no_update
-        else:
-            dataset = filtrar_elemento(entrada,caracteristica,elemento,fuente)
-    # ctx_msg = json.dumps({
-    #     'states': ctx.states,
-    #     'triggered': ctx.triggered,
-    #     'inputs': ctx.inputs
-    # }, indent=2)
-
+    pass
     return no_update
+
