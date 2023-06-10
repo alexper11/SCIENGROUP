@@ -68,15 +68,15 @@ def filtrar_fuente(fuente, condicion):
         data=pd.DataFrame()
         return data
 
-def filtrar_elemento(elemento,fuente):
+def filtrar_elemento(elemento,fuente,condicion):
     data=fuente_dic[fuente]  
-    data=data[elemento]#############
-    #Opciones de caracteristicas a mostrar....
+    data=data[elemento]
     opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
     opc_caracteristica.append('Todos')
-    #opc_caracteristica.append('Contador')
-    entrada_new=None
-    return data, opc_caracteristica, entrada_new
+    if condicion=='option':
+        return opc_caracteristica
+    elif condicion=='data':
+        return data
 
 def filtrar_caracteristica(caracteristica,elemento,fuente):
     data=fuente_dic[fuente][elemento]    
