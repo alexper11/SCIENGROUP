@@ -58,14 +58,15 @@ entrada_seleccionada=None
 dataset=pd.DataFrame()
 
 
-def filtrar_fuente(fuente):
+def filtrar_fuente(fuente, condicion):
     data=fuente_dic[fuente]
     #Opciones de elementos a mostrar...
-    opc_elemento=list(data.keys())#El cambio de esta variable debe afectar directamente el filtro elemento
-    opc_caracteristica=[]#El cambio de esta variable debe modificar directamente el filtro caracteristica
-    entrada_new=None
-    data=pd.DataFrame()
-    return data, opc_elemento, opc_caracteristica, entrada_new
+    if condicion=='option':
+        opc_elemento=list(data.keys())#El cambio de esta variable debe afectar directamente el filtro elemento
+        return opc_elemento
+    elif condicion=='data':
+        data=pd.DataFrame()
+        return data
 
 def filtrar_elemento(elemento,fuente):
     data=fuente_dic[fuente]  
@@ -223,5 +224,6 @@ sidebar_explorer = html.Div(
     className="dash-sidebar",    
 )
 def dataset_explorer (dataset_base,elemento,fuente):
-    dataset_explorador=globals()[str(referencias[fuente][elemento])].iloc[list(dataset_base.index)]
+    #dataset_explorador=globals()[str(referencias[fuente][elemento])].iloc[list(dataset_base.index)]
+    dataset_explorador=dataset_base
     return dataset_explorador
