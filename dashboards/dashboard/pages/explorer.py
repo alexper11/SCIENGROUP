@@ -38,13 +38,8 @@ table_explorer= html.Div([
                         'fontSize': '12px',
                          'cursor': 'pointer'
                     },
-                    # tooltip_data=[
-                    #     {
-                    #         column: {'value': str(value), 'type': 'text'}
-                    #         for column, value in row.items()#usar pandas
-                    #     } for row in dataset_explorador.to_dict("records")
-                    # ],
-                    # tooltip_duration=None,  # Para mantener visible el tooltip al mover el cursor dentro de la celda
+                    #tooltip_data=[],
+                    #tooltip_duration=None,  # Para mantener visible el tooltip al mover el cursor dentro de la celda
                 ),
                 className='table-responsive',               
             )
@@ -150,7 +145,8 @@ def validate_date_end(minimo):
      return minimo, False
 
 @callback(Output('table_date', 'data'),
-            [Input('button_state','n_clicks'),
+           #Output('table_date','tooltip_data')],
+          [Input('button_state','n_clicks'),
             State('filter_fuente', 'value'),
             State('filter_element', 'value'),
             State('filter_feature', 'value'),
@@ -158,15 +154,20 @@ def validate_date_end(minimo):
 def display(boton,fuente, elemento, caracteristica, entrada):
     if (elemento==None) and (caracteristica==None) and (entrada==None):
         data=pd.DataFrame().to_dict('records')
+        #tool_tip=[]
     elif (elemento != None) and (caracteristica==None) and (entrada==None):
         data = filtrar_elemento(elemento,fuente,'data').astype(str).fillna('No Aplica').to_dict('records')
+        #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
     elif (elemento !=None) and (caracteristica != None) and (entrada!=None):
+        print('FILTRAR ENTRADA')
         data = filtrar_entrada(entrada,caracteristica,elemento,fuente).astype(str).fillna('No Aplica').to_dict('records')
+        #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
     else:
         data=pd.DataFrame().to_dict('records')
+        #tool_tip=[]
     try:
         print(data[0])
     except:
         print(data)
-    return data
+    return data#,tool_tip
 

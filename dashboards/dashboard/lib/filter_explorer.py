@@ -79,21 +79,22 @@ def filtrar_elemento(elemento,fuente,condicion):
         return data
 
 def filtrar_caracteristica(caracteristica,elemento,fuente):
-    data=fuente_dic[fuente][elemento]    
+    data=fuente_dic[fuente][elemento].fillna('No Aplica')  
     if caracteristica=='Todos':
         #campo de entrada desaparece
         entrada_new=None
-        opc_entrada=None
+        opc_entrada=[]
     #tags, en este caso la entrada es una lista de elementos
     elif caracteristica in ['Tipo','Lugar','Revista','ISSN','Editorial','Disponibilidad',
-                          'Mercado','Aval','Programas','Idioma','Agencia Fundadora','País',
+                          'Mercado','Aval','Programas','Idioma','Agencia Fundadora',
                           'Verificado','Certificación','Clasificación','Categoría','Sexo',
                           'Área']:  
         entrada_new=[]
         opc_entrada=data[caracteristicas_invertido[caracteristica]].drop_duplicates(keep='first').to_list()
+        print(opc_entrada)
         
     elif caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
-                           'Líneas de Investigación','Institución','Palabras Clave','Sectores',
+                           'Líneas de Investigación','Institución','Palabras Clave','Sectores','País',
                            'Palabras Clave']:
     
         entrada_new=[]
@@ -105,12 +106,12 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
                             'Nombre del Programa','Nombre Comercial','Título','Código de CVLAC','Plataforma',
                             'Ambiente']:
         entrada_new=''
-        opc_entrada=None
+        opc_entrada=[]
     #date(years), tipo tuple con dos int
     else:
         
         entrada_new=()
-        opc_entrada=None
+        opc_entrada=[]
         #Las opciones de entrada en este caso son para dos campos, ya sea dos años fecha o dos valores count
         #se debe asegurar que el primer campo reciba una fecha o numero y que el segundo campo valide que el valor
         #ingresado sea mayor que el del campo anterior, si no ocurriran errores internos en el filtrado de 
@@ -120,37 +121,32 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
 def filtrar_entrada(entrada,caracteristica,elemento,fuente):
     data=fuente_dic[fuente][elemento]
     if type(entrada) == list:
+        data=data.replace(to_replace={'\(':'','\)':''},regex=True)
         if caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
                              'Líneas de Investigación','Institución','Palabras Clave','Sectores',
                              'Palabras Clave','Código de GrupLAC']:
             if len(entrada)>1:
                 regex_entrada=re.compile('|'.join(entrada)).pattern
             else:
-                regex_entrada=entrada[0]
+                regex_entrada=entrada[0].strip()
         else:
             if len(entrada)>1:
                 regex_entrada='^'+re.compile('$|^'.join(entrada)).pattern+'$'
             else:
-                regex_entrada=entrada[0]
+                regex_entrada=entrada[0].strip()
         #grupos=dataset[dataset[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(regex_entrada,regex=True)]['idgruplac'].drop_duplicates(keep='first').to_list()
         data=data.dropna(subset=caracteristicas_invertido[caracteristica])
-        data=data[data[caracteristicas_invertido[caracteristica]].str.contains(regex_entrada,regex=True)]
-
+        data=data[data[caracteristicas_invertido[caracteristica]].str.strip().str.contains(regex_entrada,regex=True)]
+        
     elif type(entrada) == str:
         #grupos=dataset[dataset[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(entrada)]['idgruplac'].drop_duplicates(keep='first').to_list()
         data=data.dropna(subset=caracteristicas_invertido[caracteristica])
         data=data[data[caracteristicas_invertido[caracteristica]].str.contains(entrada)]
     
     else:
-        if caracteristica=='Citaciones':
-            #grupos...
-            data=data.dropna(subset=caracteristicas_invertido[caracteristica])
-            data=data[(data[caracteristicas_invertido[caracteristica]] >= entrada[0]) & (data[caracteristicas_invertido[caracteristica]] <= entrada[1])]
-
-        else:
-            #grupos=dataset[(dataset[caracteristicas_invertido[caracteristica_seleccionada]].dropna().dt.year >= entrada[0]) & (dataset[caracteristicas_invertido[caracteristica_seleccionada]].dropna().dt.year <= entrada[1])]['idgruplac'].drop_duplicates(keep='first').to_list()
-            data=data.dropna(subset=caracteristicas_invertido[caracteristica])
-            data=data[(data[caracteristicas_invertido[caracteristica]].dt.year >= entrada[0]) & (data[caracteristicas_invertido[caracteristica]].dt.year <= entrada[1])]
+        data=data.dropna(subset=caracteristicas_invertido[caracteristica])
+        #dar formato datetime
+        data=data[(data[caracteristicas_invertido[caracteristica]].dt.year >= entrada[0]) & (data[caracteristicas_invertido[caracteristica]].dt.year <= entrada[1])]
 
     return data
 
@@ -213,7 +209,7 @@ sidebar_explorer = html.Div(
         # Layout dynamic here
         ####################################################
         component_filters,
-        html.Button('Filtrar', id='button_state'),
+        html.Button('Filtrar', id='button_state', n_clicks=0),
     ],
     className="dash-sidebar",    
 )
