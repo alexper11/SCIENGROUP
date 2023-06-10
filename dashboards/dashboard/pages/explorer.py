@@ -1,5 +1,5 @@
 from dash.dependencies import Input, Output
-
+from datetime import date
 from dash import dcc
 import dash_bootstrap_components as dbc
 from dash import Dash, html, Input, Output, callback, dash_table
@@ -83,14 +83,14 @@ def actualizar_elemento_seleccionado(elemento, fuente):
             ),
         id='div_feature'),
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
-        html.Div(
+        html.Div(children=[
             dcc.Input(
                 id='input_value',
                 placeholder='Digite el filtro',
                 type='text',
                 disabled =True
-            ),
-        id='div_element')]
+            )],
+        id='div_input')]
     else:
         opciones_caracteristica=filtrar_elemento(elemento, fuente,'option')
         div_component = [html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
@@ -101,27 +101,35 @@ def actualizar_elemento_seleccionado(elemento, fuente):
             ),
         id='div_feature'),
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
-        html.Div(
+        html.Div(children=[
             dcc.Input(
                 id='input_value',
                 placeholder='Digite el filtro',
                 type='text',
                 disabled =True
-            ),
-        id='div_element')]  
+            )],
+        id='div_input')]  
     return div_component
 @callback(
-    Output('option_inputs', 'children'),
+    Output('div_input', 'children'),
     [Input('filter_feature', 'value'),Input('filter_element', 'value'), Input('filter_fuente', 'value')]
 )
 def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):  
     print('caracteristica',str(caracteristica))
-    valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
+    if (elemento == None) or (caracteristica == None):
+        valor_entrada = None
+    else:
+        valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
     print('Tipo de entrada: ',type(valor_entrada))
-    if type(valor_entrada) == list:
+    if type(valor_entrada) == str:
         filter =  dcc.Input(id='input_value', placeholder='Digite el filtro', type='text', value='')
-    elif type(valor_entrada) == str:
+    elif type(valor_entrada) == list:
         filter = dcc.Dropdown(id="input_value", options= opciones_entrada, multi=True)
     elif type(valor_entrada) == tuple:
-        filter = dcc.Input(id='input_value', placeholder='Digite el a1', value=''),dcc.Input(id='input_value2', placeholder='Digite el a2', type='text', value='')
+        year_today=date.today().year
+        #filter = dcc.DatePickerRange( minimum_nights=5, clearable=True, with_portal=True, start_date=date(1990, 1, 1), end_date = date.today())
+        #filter = dcc.Input(id="date_start", type="number", inputMode="numeric"),dcc.Input(id="date_end",type="number", inputMode="numeric", min=1990, max=2023, step=1)
+        filter = dbc.Input(id="date_start", type="number", min=1985, max=year_today, step=1),dbc.Input(id="date_start", type="number", min=0, max=year_today, step=1)
+    else:
+        filter = dcc.Input(id='input_value', placeholder='Digite el filtro', type='text', value='', disabled=True)
     return filter
