@@ -174,52 +174,52 @@ def filtrar_entrada(entrada,elemento_sel):
 option_source = dcc.Dropdown(
     id='filter_fuente',
     options = opciones_fuente,
-    value = 'CVLAC'  # Valor inicial seleccionado
-    )
-
-option_input= html.Div(
-    id='option_inputs'
+    value = 'CVLAC',  # Valor inicial seleccionado
+    clearable = False
 )
 option_element = dcc.Dropdown(
     id='filter_element',
     options = opciones_elemento,
     #value = ''  # Valor inicial seleccionado
 )
-option_feature = dcc.Dropdown(
-    id='filter_feature',
-    options = opciones_caracteristica,
-    #value = None  # Valor inicial seleccionado
-)
-value_input = dcc.Input(
-    id='input_value',
-    placeholder='Digite el filtro',
-    type='text',
-    #value=''
-)
-# key_picker = dcc.Dropdown(
-#     id="input_tags",
-#     # options=[{"label": tags, "value": tags} for tags in opciones_entrada.index],
-#     options= opciones_entrada,
-#     multi=True
-# )
+component_filters= html.Div(children=[
+    html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
+    html.Div(
+        dcc.Dropdown(
+            id='filter_feature',
+            options = [],
+            disabled =True
+        ),
+    id='div_feature'),
+    html.H5("Entrada:",className="title_white",style={"color":"white"}),
+    html.Div(
+        dcc.Input(
+            id='input_value',
+            placeholder='Digite el filtro',
+            type='text',
+            disabled =True
+        ),
+    id='div_element')],
+id='component_filters')
+
 #############################################################################
 # Sidebar Layout
 #############################################################################
 sidebar_explorer = html.Div(
     [
         html.P("Filtros para explorar los datos.",style={"color":"white"} ),   
-        html.Hr(),  # Add an horizontal line
+        html.Hr(),  
         ####################################################
-        # Place the rest of Layout here
+        # Layout static here
         ####################################################
-        html.H5("Elija la fuente:",className="title_white",style={"color":"white"}),
+        html.H5("Fuente:",className="title_white",style={"color":"white"}),
         option_source,
-        html.H5("Elija el elemento:",className="title_white",style={"color":"white"}),
+        html.H5("Elemento:",className="title_white",style={"color":"white"}),
         option_element,
-        html.H5("Elija una caracteristica:",className="title_white",style={"color":"white"}),
-        option_feature,
-        html.H5("Entrada:",className="title_white",style={"color":"white"}),
-        option_input,
+        ####################################################
+        # Layout dynamic here
+        ####################################################
+        component_filters,  
     ],
     className="dash-sidebar",    
 )
