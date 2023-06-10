@@ -212,7 +212,8 @@ sidebar_explorer = html.Div(
         ####################################################
         # Layout dynamic here
         ####################################################
-        component_filters,  
+        component_filters,
+        html.Button('Filtrar', id='button_state'),
     ],
     className="dash-sidebar",    
 )
