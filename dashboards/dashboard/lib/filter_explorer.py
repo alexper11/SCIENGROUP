@@ -80,7 +80,6 @@ def filtrar_elemento(elemento,fuente,condicion):
 
 def filtrar_caracteristica(caracteristica,elemento,fuente):
     data=fuente_dic[fuente][elemento]    
-        
     if caracteristica=='Todos':
         #campo de entrada desaparece
         entrada_new=None
@@ -116,19 +115,12 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
         #se debe asegurar que el primer campo reciba una fecha o numero y que el segundo campo valide que el valor
         #ingresado sea mayor que el del campo anterior, si no ocurriran errores internos en el filtrado de 
         #dataframes por inconsistencia lógica.
-        
     return entrada_new, opc_entrada
 
-def filtrar_entrada(entrada,elemento_sel):
-    try:
-        if len(entrada_seleccionada)>1:
-            data=fuente_dic[fuente_seleccionada][elemento_sel]
-        else:
-            data=dataset.copy()
-    except:
-        data=dataset.copy()
+def filtrar_entrada(entrada,caracteristica,elemento,fuente):
+    data=fuente_dic[fuente][elemento]
     if type(entrada) == list:
-        if caracteristica_seleccionada in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
+        if caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
                                            'Líneas de Investigación','Institución','Palabras Clave','Sectores',
                                            'Palabras Clave','Código de GrupLAC']:
             if len(entrada)>1:
@@ -141,26 +133,26 @@ def filtrar_entrada(entrada,elemento_sel):
             else:
                 regex_entrada=entrada[0]
         #grupos=dataset[dataset[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(regex_entrada,regex=True)]['idgruplac'].drop_duplicates(keep='first').to_list()
-        data=data.dropna(subset=caracteristicas_invertido[caracteristica_seleccionada])
-        data=data[data[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(regex_entrada,regex=True)]
+        data=data.dropna(subset=caracteristicas_invertido[caracteristica])
+        data=data[data[caracteristicas_invertido[caracteristica]].str.contains(regex_entrada,regex=True)]
 
     elif type(entrada) == str:
         #grupos=dataset[dataset[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(entrada)]['idgruplac'].drop_duplicates(keep='first').to_list()
-        data=data.dropna(subset=caracteristicas_invertido[caracteristica_seleccionada])
-        data=data[data[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(entrada)]
+        data=data.dropna(subset=caracteristicas_invertido[caracteristica])
+        data=data[data[caracteristicas_invertido[caracteristica]].str.contains(entrada)]
     
     else:
-        if caracteristica_seleccionada=='Citaciones':
+        if caracteristica=='Citaciones':
             #grupos...
-            data=data.dropna(subset=caracteristicas_invertido[caracteristica_seleccionada])
-            data=data[(data[caracteristicas_invertido[caracteristica_seleccionada]] >= entrada[0]) & (data[caracteristicas_invertido[caracteristica_seleccionada]] <= entrada[1])]
+            data=data.dropna(subset=caracteristicas_invertido[caracteristica])
+            data=data[(data[caracteristicas_invertido[caracteristica]] >= entrada[0]) & (data[caracteristicas_invertido[caracteristica]] <= entrada[1])]
 
         else:
             #grupos=dataset[(dataset[caracteristicas_invertido[caracteristica_seleccionada]].dropna().dt.year >= entrada[0]) & (dataset[caracteristicas_invertido[caracteristica_seleccionada]].dropna().dt.year <= entrada[1])]['idgruplac'].drop_duplicates(keep='first').to_list()
-            data=data.dropna(subset=caracteristicas_invertido[caracteristica_seleccionada])
-            data=data[(data[caracteristicas_invertido[caracteristica_seleccionada]].dt.year >= entrada[0]) & (data[caracteristicas_invertido[caracteristica_seleccionada]].dt.year <= entrada[1])]
+            data=data.dropna(subset=caracteristicas_invertido[caracteristica])
+            data=data[(data[caracteristicas_invertido[caracteristica]].dt.year >= entrada[0]) & (data[caracteristicas_invertido[caracteristica]].dt.year <= entrada[1])]
 
-    return data#,grupos
+    return data
 
 
 
