@@ -149,13 +149,24 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
 def validate_date_end(minimo):
      return minimo, False
 
-@callback(Output('table_date', 'date'),
-            [State('filter_fuente', 'value'),
+@callback(Output('table_date', 'data'),
+            [Input('button_state','n_clicks'),
             State('filter_fuente', 'value'),
             State('filter_element', 'value'),
             State('filter_feature', 'value'),
             State('input_value','value')])
-def display(fuente, elemento, caracteristica, entrada):
-    pass
-    return no_update
+def display(boton,fuente, elemento, caracteristica, entrada):
+    if (elemento==None) and (caracteristica==None) and (entrada==None):
+        data=pd.DataFrame().to_dict('records')
+    elif (elemento != None) and (caracteristica==None) and (entrada==None):
+        data = filtrar_elemento(elemento,fuente,'data').astype(str).fillna('No Aplica').to_dict('records')
+    elif (elemento !=None) and (caracteristica != None) and (entrada!=None):
+        data = filtrar_entrada(entrada,caracteristica,elemento,fuente).astype(str).fillna('No Aplica').to_dict('records')
+    else:
+        data=pd.DataFrame().to_dict('records')
+    try:
+        print(data[0])
+    except:
+        print(data)
+    return data
 
