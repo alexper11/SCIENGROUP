@@ -308,14 +308,14 @@ img.brand {
 }
 
 .dash-sidebar {
-  position:fixed;
+  position:absolute;
   top: 1rem;
   left: 0;
   bottom: 0;
-  margin-top: 10rem;
+  /* margin-top: 10rem; */
   margin-left: 1rem;
-  width: 16rem;
-  height: 85rem;
+  width: 25rem;
+  height: max-content;
   padding: 2rem 1rem;
   background-color: #08469b;
   box-shadow: 3px 3px 6px rgb(88, 88, 88);
@@ -323,7 +323,7 @@ img.brand {
   border-radius:2em;
 }
 .dash-body {
-  margin-left: 18rem;
+  margin-left: 28rem;
   margin-right: 2rem;
   padding: 2rem 1rem;
   display:grid;
