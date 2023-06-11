@@ -28,12 +28,11 @@ table_explorer= html.Div([
                     data = None,
                     page_size=100,
                     #page_action='none',
-                    style_table={'height': '350px', 'overflowY': 'auto', 'maxWidth': '1100px'},
+                    style_table={'height': '350px', 'overflowY': 'auto', 'maxWidth': '1000px'},
                     style_cell={
-                        'maxWidth': '200px',
+                        'maxWidth': '500px',
                         'overflow': 'hidden',
-                        'textOverflow': 'ellipsis',
-                        'whiteSpace': 'nowrap',
+                        'whiteSpace': 'normal',
                         'textAlign': 'center',
                         'fontSize': '12px',
                          'cursor': 'pointer'
@@ -106,7 +105,7 @@ def actualizar_elemento_seleccionado(elemento, fuente):
         html.Div(children=[
             dcc.Input(
                 id='input_value',
-                placeholder='Digite el filtro',
+                placeholder='Inactivo',
                 type='text',
                 disabled =True,
                 value = None
@@ -132,9 +131,9 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
         year_today=date.today().year
         #filter = dcc.DatePickerRange( minimum_nights=5, clearable=True, with_portal=True, start_date=date(1990, 1, 1), end_date = date.today())
         #filter = dcc.Input(id="date_start", type="number", inputMode="numeric"),dcc.Input(id="date_end",type="number", inputMode="numeric", min=1990, max=2023, step=1)
-        filter = dbc.Input(id="date_start", type="number", min=1985, max=year_today, step=1),dbc.Input(id="input_value", type="number", min=0, max=year_today, step=1 , disabled = True)
+        filter = dbc.Input(id="date_start", type="number", min=1985, max=year_today, step=1, placeholder='Año inicial'),dcc.Input(id="input_value", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final')
     else:
-        filter = dcc.Input(id='input_value', placeholder='Digite el filtro', type='text', value=None, disabled=True)
+        filter = dcc.Input(id='input_value', placeholder='Inactivo', type='text', value=None, disabled=True)
     return filter
 
 @callback(
@@ -142,10 +141,11 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
      Input('date_start', 'value')
  )
 def validate_date_end(minimo):
+     if minimo == None:
+         return minimo, True
      return minimo, False
 
 @callback(Output('table_date', 'data'),
-           #Output('table_date','tooltip_data')],
           [Input('button_state','n_clicks'),
             State('filter_fuente', 'value'),
             State('filter_element', 'value'),
