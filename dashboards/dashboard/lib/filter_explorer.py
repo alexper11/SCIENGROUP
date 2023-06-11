@@ -119,7 +119,7 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
     return entrada_new, opc_entrada
 
 def filtrar_entrada(entrada,caracteristica,elemento,fuente):
-    data=fuente_dic[fuente][elemento]
+    data=fuente_dic[fuente][elemento].fillna('No Aplica')
     if type(entrada) == list:
         data=data.replace(to_replace={'\(':'','\)':''},regex=True)
         if caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
