@@ -136,7 +136,7 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
 
     else:
         print('entro aqui')
-        filter = dcc.Input(id='filter_input', placeholder='Inactivo', value=None, disabled=True)
+        filter = dcc.Input(id='filter_input', placeholder='Inactivo', value='', disabled=True)
     return filter
 
 @callback(
@@ -160,7 +160,7 @@ def filter_input_contructor(inicial, final):
         fechas = str((inicial, final))
     return fechas
 
-@callback(Output('table_date', 'data'),
+@callback([Output('table_date', 'data'),Output('table_date', 'columns')],
           [Input('button_state','n_clicks'),
             State('filter_fuente', 'value'),
             State('filter_element', 'value'),
@@ -168,31 +168,45 @@ def filter_input_contructor(inicial, final):
             State('filter_input','value')])
 def display(boton,fuente, elemento, caracteristica, entrada):
     try:
-        entrada_temp = eval(entrada)
-        if type(entrada_temp) == tuple:
-            entrada = entrada_temp
-        else:
-            raise ValueError
+        if (entrada != None) and (entrada!=''):
+            entrada_temp = eval(entrada)
+            if type(entrada_temp) == tuple:
+                entrada = entrada_temp
+            else:
+                raise ValueError
     except:
         pass
-    if (elemento==None) and (caracteristica==None) and (entrada==None):
-        data=pd.DataFrame().to_dict('records')
+    if (elemento==None) and (caracteristica==None) and ((entrada==None) or (entrada=='')):
+        data=pd.DataFrame()
+        columns=None
         #tool_tip=[]
-    elif (elemento != None) and (caracteristica==None) and (entrada==None):
-        data = filtrar_elemento(elemento,fuente,'data').astype(str).fillna('No Aplica').to_dict('records')
+    elif (elemento != None) and (caracteristica==None) and ((entrada==None) or (entrada=='')):
+        data = filtrar_elemento(elemento,fuente,'data')
+        columns=[{'name': i, 'id': i} for i in data.columns]
+        data=data.astype(str).fillna('No Aplica')
         #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
-    elif (elemento !=None) and (caracteristica != None) and (entrada!=None):
-        data = filtrar_entrada(entrada,caracteristica,elemento,fuente).astype(str).fillna('No Aplica').to_dict('records')
+    elif (elemento !=None) and (caracteristica != None) and ((entrada!=None) and (entrada!='')):
+        data = filtrar_entrada(entrada,caracteristica,elemento,fuente)
+        columns=[{'name': i, 'id': i} for i in data.columns]
+        data=data.astype(str).fillna('No Aplica')
         #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
-    elif (elemento!= None) and (caracteristica !=None) and (entrada == None):
-        data = filtrar_elemento(elemento,fuente,'data').astype(str).fillna('No Aplica').to_dict('records')
-
+    elif (elemento!= None) and (caracteristica !=None) and ((entrada==None) or (entrada=='')):
+        data = filtrar_elemento(elemento,fuente,'data')
+        columns=[{'name': i, 'id': i} for i in data.columns]
+        data=data.astype(str).fillna('No Aplica')
     else:
-        data=pd.DataFrame().to_dict('records')
+        data=pd.DataFrame()
+        columns=None
         #tool_tip=[]
     try:
-        print('print del try', data[0])
-    except:
-        print('printl del exept: ', data)
-    return data#,tool_tip
+        print(data['institucion'].iloc[5:7])
+        data['institucion']=data['institucion'].str.slice(stop=1000)+'...'
+    except Exception as e:
+        print(e)
+        pass
+    # try:
+    #     print('print del try', data[0])
+    # except:
+    #     print('printl del exept: ', data)
+    return data.to_dict('records'),columns#,tool_tip
 
