@@ -15,48 +15,34 @@ from lib.filter_explorer import dataset, fuente_seleccionada, caracteristica_sel
 
 elemento_seleccionado='Artículos'
 
-color = '#08469b'
-#dataset_explorador = dataset_explorer(dataset,elemento_seleccionado)
-table_explorer= html.Div([     
-        # Table
-        html.Div([
-            html.H3('Tabla de datos', id="title_table", style={'display': 'block'}),
-            html.Div(
-                dash_table.DataTable(
-                    id='table_date',
-                    #columns=[{'name': i, 'id': i} for i in dataset_explorador.columns],
-                    data = None,
-                    page_size=100,
-                    #page_action='none',
-                    style_table={'height': '350px', 'overflowY': 'auto', 'maxWidth': '1000px'},
-                    style_cell={
-                        'maxWidth': '500px',
-                        'overflow': 'hidden',
-                        'whiteSpace': 'normal',
-                        'textAlign': 'left',
-                        'fontSize': '12px',
-                         'cursor': 'pointer'
-                    },
-                    #tooltip_data=[],
-                    #tooltip_duration=None,  # Para mantener visible el tooltip al mover el cursor dentro de la celda
-                ),
-                className='table-responsive',               
-            )
-        ], style={'marginTop': '2em'})
-    ] , 
-    className='col-6',
-    style={'textAlign':'center', 'display':'flex', 'justifyContent':'space-around'}
+table_explorer= html.Div([
+            # html.H3('Tabla de datos', id="title_table"),
+            dash_table.DataTable(
+                id='table_date',
+                #columns=[{'name': i, 'id': i} for i in dataset_explorador.columns],
+                data = None,
+                page_size=100,
+                virtualization = True,
+                #page_action='none',
+                # css=[{'rule':'height:inherit'}],
+                style_table={'height': '100%', 'maxWidth': 'auto', 'maxHeight':'90%'},
+                style_cell={
+                    'maxWidth': '500px',
+                    'overflow': 'hidden',
+                    'whiteSpace': 'normal',
+                    'textAlign': 'left',
+                    'fontSize': '12px',
+                    'cursor': 'pointer'
+                },
+            ),
+        ],className='table_explorer', style={'height':'93%','width':'90%'},
     )
+
 layout= html.Div([    
-    html.Div([
-                dbc.Col(
-                    table_explorer
-                    )
-                ],className="dash-body"),
-        sidebar_explorer,
-],
-className="dash-content",style={"color":"black"}
-)
+    table_explorer,        
+    sidebar_explorer,
+    ],className="dash-body",style={"color":"black"})       
+
 
 @callback(
     [Output('filter_element', 'options'), Output('filter_element','value')],
