@@ -84,7 +84,7 @@ def actualizar_elemento_seleccionado(elemento, fuente):
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
-                id='input_value',
+                id='filter_input',
                 placeholder='Digite el filtro',
                 type='text',
                 disabled =True,
@@ -104,7 +104,7 @@ def actualizar_elemento_seleccionado(elemento, fuente):
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
-                id='input_value',
+                id='filter_input',
                 placeholder='Inactivo',
                 type='text',
                 disabled =True,
@@ -124,20 +124,18 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
         valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
     
     if type(valor_entrada) == str:
-        filter =  dcc.Input(id='input_value', placeholder='Digite el filtro', type='text', value='')
+        filter =  dcc.Input(id='filter_input', placeholder='Digite el filtro', type='text', value='')
     elif type(valor_entrada) == list:
-        filter = dcc.Dropdown(id="input_value", options= opciones_entrada, multi=True)
+        filter = dcc.Dropdown(id="filter_input", options= opciones_entrada, multi=True)
     elif type(valor_entrada) == tuple:
-        year_today=date.today().year
-        #filter = dcc.DatePickerRange( minimum_nights=5, clearable=True, with_portal=True, start_date=date(1990, 1, 1), end_date = date.today())
-        #filter = dcc.Input(id="date_start", type="number", inputMode="numeric"),dcc.Input(id="date_end",type="number", inputMode="numeric", min=1990, max=2023, step=1)
-        filter = dbc.Input(id="date_start", type="number", min=1985, max=year_today, step=1, placeholder='Año inicial'),dcc.Input(id="input_value", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final')
+        year_today = date.today().year      
+        filter = dbc.Input(id="date_start", type="number", min=1985, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_input', style={'display': 'none'})
     else:
-        filter = dcc.Input(id='input_value', placeholder='Inactivo', type='text', value=None, disabled=True)
+        filter = dcc.Input(id='filter_input', placeholder='Inactivo', value=None, disabled=True)
     return filter
 
 @callback(
-     [Output('input_value', 'min'), Output('input_value','disabled')],
+     [Output('date_end', 'min'), Output('date_end','disabled')],
      Input('date_start', 'value')
  )
 def validate_date_end(minimo):
@@ -145,13 +143,33 @@ def validate_date_end(minimo):
          return minimo, True
      return minimo, False
 
+@callback(
+    Output('filter_input', 'value'),
+    State('date_start', 'value'),
+    Input('date_end','value')
+ )
+def filter_input_contructor(inicial, final):
+    if final == None:
+        fechas = str((1980, date.today().year))
+    else:
+        fechas = str((inicial, final))
+    return fechas
+
 @callback(Output('table_date', 'data'),
           [Input('button_state','n_clicks'),
             State('filter_fuente', 'value'),
             State('filter_element', 'value'),
             State('filter_feature', 'value'),
-            State('input_value','value')])
+            State('filter_input','value')])
 def display(boton,fuente, elemento, caracteristica, entrada):
+    try:
+        entrada_temp = eval(entrada)
+        if type(entrada_temp) == tuple:
+            entrada = entrada_temp
+        else:
+            raise ValueError
+    except:
+        pass
     if (elemento==None) and (caracteristica==None) and (entrada==None):
         data=pd.DataFrame().to_dict('records')
         #tool_tip=[]
@@ -159,15 +177,17 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         data = filtrar_elemento(elemento,fuente,'data').astype(str).fillna('No Aplica').to_dict('records')
         #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
     elif (elemento !=None) and (caracteristica != None) and (entrada!=None):
-        print('FILTRAR ENTRADA')
         data = filtrar_entrada(entrada,caracteristica,elemento,fuente).astype(str).fillna('No Aplica').to_dict('records')
         #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
+    elif (elemento!= None) and (caracteristica !=None) and (entrada == None):
+        data = filtrar_elemento(elemento,fuente,'data').astype(str).fillna('No Aplica').to_dict('records')
+
     else:
         data=pd.DataFrame().to_dict('records')
         #tool_tip=[]
     try:
-        print(data[0])
+        print('print del try', data[0])
     except:
-        print(data)
+        print('printl del exept: ', data)
     return data#,tool_tip
 
