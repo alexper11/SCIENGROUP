@@ -35,7 +35,7 @@ table_explorer= html.Div([
                         'whiteSpace': 'normal',
                         'textAlign': 'left',
                         'fontSize': '12px',
-                         'cursor': 'pointer'
+                        'cursor': 'pointer'
                     },
                     #tooltip_data=[],
                     #tooltip_duration=None,  # Para mantener visible el tooltip al mover el cursor dentro de la celda
@@ -200,7 +200,7 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         #tool_tip=[]
     try:
         print(data['institucion'].iloc[5:7])
-        data['institucion']=data['institucion'].str.slice(stop=1000)+'...'
+        data['institucion']=data['institucion'].str.slice(stop=1000)
     except Exception as e:
         print(e)
         pass
