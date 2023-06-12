@@ -314,7 +314,7 @@ img.brand {
   left: 0;
   bottom: 0;
   margin-left: 1rem;
-  width: 25rem;
+  width: 20%;
   height: max-content;
   padding: 2rem 1rem;
   background-color: #08469b;
@@ -324,12 +324,13 @@ img.brand {
   padding-bottom: 25px;
 }
 .dash-body {
-  margin-left: 28rem;
+  margin-left: 22%;
   margin-right: 2rem;
   padding: 2rem 1rem;
   display:grid;
   background-color: #F8F9F9;
-
+  /* max-height: 235rem; */
+  height: 350px;
 }
 .dash-contents {
   position: relative;
