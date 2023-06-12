@@ -128,20 +128,25 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
     elif type(valor_entrada) == list:
         filter = dcc.Dropdown(id="filter_input", options= opciones_entrada, multi=True)
     elif type(valor_entrada) == tuple:
-        year_today = date.today().year      
-        filter = dbc.Input(id="date_start", type="number", min=1985, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_input', style={'display': 'none'})
+        year_today = date.today().year
+        option_drop = list(range(1975,date.today().year))
+        print('drop: ',option_drop)   
+        #filter = dbc.Input(id="date_start", type="number", min=1975, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_input', style={'display': 'none'})
+        filter = dcc.Dropdown(id="date_start", placeholder='Año inicial', options = option_drop, value=None), dcc.Dropdown(id="date_end", options= [],disabled = True, placeholder='Año final', value= None), dcc.Input(id='filter_input', style={'display': 'none'})
+
     else:
+        print('entro aqui')
         filter = dcc.Input(id='filter_input', placeholder='Inactivo', value=None, disabled=True)
     return filter
 
 @callback(
-     [Output('date_end', 'min'), Output('date_end','disabled')],
+     [Output('date_end', 'options'),Output('date_end','disabled')],
      Input('date_start', 'value')
  )
 def validate_date_end(minimo):
      if minimo == None:
-         return minimo, True
-     return minimo, False
+         return [1975,date.today().year], True
+     return list(range(minimo,date.today().year)), False
 
 @callback(
     Output('filter_input', 'value'),
@@ -150,7 +155,7 @@ def validate_date_end(minimo):
  )
 def filter_input_contructor(inicial, final):
     if final == None:
-        fechas = str((1980, date.today().year))
+        fechas = str((1975, date.today().year))
     else:
         fechas = str((inicial, final))
     return fechas
