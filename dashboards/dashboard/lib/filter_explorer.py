@@ -69,7 +69,7 @@ def filtrar_fuente(fuente, condicion):
         return data
 
 def filtrar_elemento(elemento,fuente,condicion):
-    data=fuente_dic[fuente]  
+    data=fuente_dic[fuente].copy()
     data=data[elemento]
     opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
     opc_caracteristica.append('Todos')
@@ -79,7 +79,7 @@ def filtrar_elemento(elemento,fuente,condicion):
         return data
 
 def filtrar_caracteristica(caracteristica,elemento,fuente):
-    data=fuente_dic[fuente][elemento].fillna('No Aplica')  
+    data=fuente_dic[fuente][elemento].fillna('No Aplica').copy()
     #sectores borrar
     if caracteristica=='Sectores':
         data=data.replace(to_replace={',':';'},regex=True)
@@ -123,8 +123,9 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
     return entrada_new, opc_entrada
 
 def filtrar_entrada(entrada,caracteristica,elemento,fuente):
-    data=fuente_dic[fuente][elemento].fillna('No Aplica')
+    data=fuente_dic[fuente][elemento].copy()
     if type(entrada) == list:
+        data = data.fillna('No Aplica')
         data=data.replace(to_replace={'\(':'','\)':''},regex=True)
         if caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
                              'Líneas de Investigación','Institución','Palabras Clave','Sectores',
@@ -143,14 +144,15 @@ def filtrar_entrada(entrada,caracteristica,elemento,fuente):
         data=data[data[caracteristicas_invertido[caracteristica]].str.strip().str.contains(regex_entrada,regex=True)]
         
     elif type(entrada) == str:
+        data = data.fillna('No Aplica')
         #grupos=dataset[dataset[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(entrada)]['idgruplac'].drop_duplicates(keep='first').to_list()
         data=data.dropna(subset=caracteristicas_invertido[caracteristica])
         data=data[data[caracteristicas_invertido[caracteristica]].str.contains(entrada)]
     
     else:
-        data=data.dropna(subset=caracteristicas_invertido[caracteristica])
-        #dar formato datetime
+        data = data.dropna(subset=caracteristicas_invertido[caracteristica])
         data=data[(data[caracteristicas_invertido[caracteristica]].dt.year >= entrada[0]) & (data[caracteristicas_invertido[caracteristica]].dt.year <= entrada[1])]
+        data = data.sort_values(by=caracteristicas_invertido[caracteristica])
 
     return data
 
@@ -186,9 +188,8 @@ component_filters= html.Div(children=[html.H5("Caracteristica:",className="title
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
-                id='input_value',
+                id='filter_input',
                 placeholder='Inactivo',
-                type='text',
                 disabled =True,
                 value = None
             )],
