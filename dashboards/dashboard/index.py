@@ -18,12 +18,11 @@ app.title = "Dashboard Scienti - Scopus"
 from pages import about_us, scopus, homepage, explorer, scienti, page404
 
 
-#Url to use the same logo than Dashboard
+
 APP_LOGO = "/assets/img/logo_dash.png"
 
-#Basic an static template for all the dah application
+
 app.layout = html.Div([
-    #The header contains the hamburguer menu, the sidebar menu and the logo
     html.Header(        
             [html.Div([dcc.Link(html.Img(src=APP_LOGO, id='logo-icon'), href='/')]),
             html.Div("Dashboard Analytics", className="rightOptions"),
