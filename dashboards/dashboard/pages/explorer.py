@@ -28,7 +28,7 @@ table_explorer= html.Div([
                     data = None,
                     page_size=100,
                     #page_action='none',
-                    style_table={'height': '350px', 'overflowY': 'auto'},
+                    style_table={'height': '350px', 'overflowY': 'auto', 'maxWidth': '1000px'},
                     style_cell={
                         'maxWidth': '500px',
                         'overflow': 'hidden',
