@@ -20,7 +20,7 @@ color = '#08469b'
 table_explorer= html.Div([     
         # Table
         html.Div([
-            html.H3(f'Tabla de datos'),
+            html.H3('Tabla de datos', id="title_table", style={'display': 'block'}),
             html.Div(
                 dash_table.DataTable(
                     id='table_date',
@@ -33,7 +33,7 @@ table_explorer= html.Div([
                         'maxWidth': '500px',
                         'overflow': 'hidden',
                         'whiteSpace': 'normal',
-                        'textAlign': 'center',
+                        'textAlign': 'left',
                         'fontSize': '12px',
                          'cursor': 'pointer'
                     },
@@ -55,7 +55,7 @@ layout= html.Div([
                 ],className="dash-body"),
         sidebar_explorer,
 ],
-style={"color":"black"}
+className="dash-content",style={"color":"black"}
 )
 
 @callback(
