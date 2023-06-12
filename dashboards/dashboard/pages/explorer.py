@@ -28,12 +28,12 @@ table_explorer= html.Div([
                     data = None,
                     page_size=100,
                     #page_action='none',
-                    style_table={'height': '350px', 'overflowY': 'auto', 'maxWidth': '1000px'},
+                    style_table={'height': '350px', 'overflowY': 'auto'},
                     style_cell={
                         'maxWidth': '500px',
                         'overflow': 'hidden',
                         'whiteSpace': 'normal',
-                        'textAlign': 'center',
+                        'textAlign': 'left',
                         'fontSize': '12px',
                          'cursor': 'pointer'
                     },
