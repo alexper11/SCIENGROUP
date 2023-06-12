@@ -90,7 +90,7 @@ ul {
 li {
   margin-top: 1rem;
 }
-input,
+ input,
 select,
 textarea {
   padding: 1rem;
@@ -99,11 +99,12 @@ textarea {
   font-family: "Arial", cursive;
   color: black !important;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale;  
+  height: max-content;
 }
 input {
   background-color: #fbfbfc;
-}
+} 
 
 button {
   padding: 1rem;
@@ -148,12 +149,12 @@ button.block {
 button.small {
   font-size: 1.2rem;
 }
-input:hover,
+/* input:hover,
 select:hover,
 textarea:hover,
 button:hover {
   border-color: #9e9c9c;
-}
+} */
 /*************************************************************************/
 /******************************** Aside  *********************************/
 /*************************************************************************/
@@ -312,7 +313,6 @@ img.brand {
   top: 1rem;
   left: 0;
   bottom: 0;
-  /* margin-top: 10rem; */
   margin-left: 1rem;
   width: 25rem;
   height: max-content;
@@ -321,6 +321,7 @@ img.brand {
   box-shadow: 3px 3px 6px rgb(88, 88, 88);
   opacity: 0.9;
   border-radius:2em;
+  padding-bottom: 25px;
 }
 .dash-body {
   margin-left: 28rem;
@@ -448,7 +449,7 @@ h1 {
 /******************************** Dropdown lists *************************/
 /*************************************************************************/
 
-.dropdown {
+/* .dropdown {
   flex: 2 1 10rem;
   margin-right: 1rem;
   margin-top: 0.2rem;
@@ -461,13 +462,13 @@ h1 {
   border-radius: 5px;
   border-width: 0.1rem;
   border-color: #aaaaaa83;
-}
+} */
 
 /*************************************************************************/
 /******************************** Reload Icon********************************/
 /*************************************************************************/
 
-.whatsappIcon {
+/* .whatsappIcon {
   position: fixed;
   z-index: 100;
   height: 5rem;
@@ -501,7 +502,7 @@ h1 {
   100% {
     transform: rotate(0deg) scale(0.8);
   }
-}
+} */
 /*************************************************************************/
 /******************************** Footer *********************************/
 /*************************************************************************/
@@ -511,16 +512,21 @@ h1 {
   color: white;
   text-align: center;
   justify-content: center;
+  position: fixed;
+  height: 25px;
+  bottom: 0;
 }
 .footer h2,
 p {
   margin: 0;
+  font-size: 1.3rem;
+  padding: 1rem 0;
 }
 
-.redes img {
+/* .redes img {
   height: 3rem;
   margin-left: 20px;
-}
+} */
 
 /*************************************************************************/
 /******************************** Loading Icon ***************************/
