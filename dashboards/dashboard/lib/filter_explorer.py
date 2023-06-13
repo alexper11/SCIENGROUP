@@ -80,8 +80,8 @@ def filtrar_elemento(elemento,fuente,condicion):
 def filtrar_caracteristica(caracteristica,elemento,fuente):
     data=fuente_dic[fuente][elemento].fillna('No Aplica').copy()
     #sectores borrar
-    if caracteristica=='Sectores':
-        data=data.replace(to_replace={',':';'},regex=True)
+    # if caracteristica=='Sectores':
+    #     data=data.replace(to_replace={',':';'},regex=True)
     ####
     if caracteristica=='Todos':
         #campo de entrada desaparece
@@ -97,7 +97,7 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
         print(opc_entrada)
         
     elif caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
-                           'Líneas de Investigación','Institución','Palabras Clave','Sectores','País',
+                           'Líneas de Investigación','Institución','Palabras Clave','País',
                            'Palabras Clave']:
     
         entrada_new=[]
@@ -107,7 +107,7 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
     #text, tipo string
     elif caracteristica in ['Código de GrupLAC','Nombre','Nombre del Capítulo','Libro','Nombre del Curso',
                             'Nombre del Programa','Nombre Comercial','Título','Código de CVLAC','Plataforma',
-                            'Ambiente']:
+                            'Ambiente','Sectores']:
         entrada_new=''
         opc_entrada=[]
     #date(years), tipo tuple con dos int
