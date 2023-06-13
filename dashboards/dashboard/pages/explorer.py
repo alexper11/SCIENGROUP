@@ -12,51 +12,40 @@ from dash import ctx
 
 # LOAD THE DIFFERENT FILES
 from lib.filter_explorer import dataset, fuente_seleccionada, caracteristica_seleccionada, entrada_seleccionada, sidebar_explorer,filtrar_fuente,filtrar_entrada, filtrar_elemento,filtrar_caracteristica, dataset_explorer
+from functions.csv_importer import gruplac_articulos, gruplac_basico, gruplac_caplibros, gruplac_integrantes,gruplac_libros, gruplac_oarticulos, gruplac_olibros, gruplac_cdoctorado, gruplac_cmaestria, gruplac_disenoind,gruplac_empresatec,gruplac_innovaempresa,gruplac_instituciones,gruplac_lineas,gruplac_otecnologicos,gruplac_pdoctorado,gruplac_plantapiloto,gruplac_pmaestria,gruplac_prototipos,gruplac_software,scopus_autores,scopus_productos,cvlac_articulos,cvlac_basico,cvlac_caplibros,cvlac_libros,cvlac_empresatec,cvlac_innovaempresa,cvlac_lineas,cvlac_tecnologicos,cvlac_prototipos,cvlac_software,cvlac_areas,cvlac_reconocimiento,cvlac_identificadores
+
 
 elemento_seleccionado='Artículos'
 
-color = '#08469b'
-#dataset_explorador = dataset_explorer(dataset,elemento_seleccionado)
-table_explorer= html.Div([     
-        # Table
-        html.Div([
-            html.H3('Tabla de datos', id="title_table", style={'display': 'block'}),
-            html.Div(
-                dash_table.DataTable(
-                    id='table_date',
-                    #columns=[{'name': i, 'id': i} for i in dataset_explorador.columns],
-                    data = None,
-                    page_size=100,
-                    #page_action='none',
-                    style_table={'height': '350px', 'overflowY': 'auto', 'maxWidth': '1000px'},
-                    style_cell={
-                        'maxWidth': '500px',
-                        'overflow': 'hidden',
-                        'whiteSpace': 'normal',
-                        'textAlign': 'left',
-                        'fontSize': '12px',
-                        'cursor': 'pointer'
-                    },
-                    #tooltip_data=[],
-                    #tooltip_duration=None,  # Para mantener visible el tooltip al mover el cursor dentro de la celda
-                ),
-                className='table-responsive',               
-            )
-        ], style={'marginTop': '2em'})
-    ] , 
-    className='col-6',
-    style={'textAlign':'center', 'display':'flex', 'justifyContent':'space-around'}
+table_explorer= html.Div([
+            # html.H3('Tabla de datos', id="title_table"),
+            dash_table.DataTable(
+                id='table_date',
+                #columns=[{'name': i, 'id': i} for i in dataset_explorador.columns],
+                data = None,
+                page_size=100,
+                virtualization = True,
+                fixed_columns={'headers':True},
+                #page_action='none',
+                # css=[{'rule':'height:inherit'}],
+                style_table={'height': '100%', 'maxWidth': 'auto', 'maxHeight':'90%'},
+                style_cell={
+                    'maxWidth': '500px',
+                    'overflow': 'hidden',
+                    'whiteSpace': 'normal',
+                    'textAlign': 'left',
+                    'fontSize': '12px',
+                    'cursor': 'pointer'
+                },
+            ),
+        ],className='table_explorer', style={'height':'93%','width':'90%'},
     )
+
 layout= html.Div([    
-    html.Div([
-                dbc.Col(
-                    table_explorer
-                    )
-                ],className="dash-body"),
-        sidebar_explorer,
-],
-className="dash-content",style={"color":"black"}
-)
+    table_explorer,        
+    sidebar_explorer,
+    ],className="dash-body",style={"color":"black"})       
+
 
 @callback(
     [Output('filter_element', 'options'), Output('filter_element','value')],
@@ -183,30 +172,33 @@ def display(boton,fuente, elemento, caracteristica, entrada):
     elif (elemento != None) and (caracteristica==None) and ((entrada==None) or (entrada=='')):
         data = filtrar_elemento(elemento,fuente,'data')
         columns=[{'name': i, 'id': i} for i in data.columns]
-        data=data.astype(str).fillna('No Aplica')
+        data=data
         #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
     elif (elemento !=None) and (caracteristica != None) and ((entrada!=None) and (entrada!='')):
         data = filtrar_entrada(entrada,caracteristica,elemento,fuente)
         columns=[{'name': i, 'id': i} for i in data.columns]
-        data=data.astype(str).fillna('No Aplica')
+        data=data
         #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
     elif (elemento!= None) and (caracteristica !=None) and ((entrada==None) or (entrada=='')):
         data = filtrar_elemento(elemento,fuente,'data')
         columns=[{'name': i, 'id': i} for i in data.columns]
-        data=data.astype(str).fillna('No Aplica')
+        data=data
     else:
         data=pd.DataFrame()
         columns=None
         #tool_tip=[]
-    try:
-        print(data['institucion'].iloc[5:7])
-        data['institucion']=data['institucion'].str.slice(stop=1000)
-    except Exception as e:
-        print(e)
-        pass
-    # try:
-    #     print('print del try', data[0])
-    # except:
-    #     print('printl del exept: ', data)
+    
+    if data.shape[0]>1:
+        data=globals()[str(referencias[fuente][elemento])].loc[list(data.index)].astype(str).fillna('No Aplica')
+        if fuente=='SCOPUS':
+            data=data.drop(['scopus_id', 'pais','eid','issue','numero_articulo','pag_inicio','pag_fin','pag_count','affil_id','abstract','etapa_publicacion','autores_id'], axis=1, errors='ignore')
+            locs=data[data['institucion'].str.len()>300].index.tolist()
+            data['institucion'].loc[locs]=data['institucion'].loc[locs].str.slice(stop=300)+'...'
+            locs=data[data['autores'].str.len()>300].index.tolist()
+            data['autores'].loc[locs]=data['autores'].loc[locs].str.slice(stop=300)+'...'
+            #data['pais']=data[data['pais'].str.len()>300]['pais'].str.slice(stop=300)+'...'
+        else:
+            data=data.drop(['volumen','fasciculo','paginas'], axis=1, errors='ignore')
+        
     return data.to_dict('records'),columns#,tool_tip
 
