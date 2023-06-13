@@ -45,6 +45,22 @@ header {
 header button {
   background-color: transparent;
 }
+#button_state {
+  background-color: #d2d1dd;
+  padding: 10px 20px;
+  justify-content: center;
+  align-items: center;
+  transition:1s;
+}
+
+#button_state:active {
+  background-color: #526ad3;
+}
+
+#filter_input {
+  width: 90%;
+}
+
 header img {
   height: 5rem;
   padding: 0.5rem;

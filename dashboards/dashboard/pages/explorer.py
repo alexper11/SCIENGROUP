@@ -15,7 +15,7 @@ from lib.filter_explorer import dataset, fuente_seleccionada, caracteristica_sel
 
 elemento_seleccionado='Artículos'
 
-table_explorer= html.Div([
+table_explorer= dcc.Loading([
             # html.H3('Tabla de datos', id="title_table"),
             dash_table.DataTable(
                 id='table_date',
@@ -27,9 +27,9 @@ table_explorer= html.Div([
                 cell_selectable=False,
                 #page_action='none',
                 # css=[{'rule':'height:inherit'}],
-                style_table={'overflowX':'auto', 'height': '100%', 'maxWidth': 'auto', 'maxHeight':'100%'},
+                style_table={'overflowX':'auto', 'height': '90%','width':'90%', 'maxWidth': 'auto', 'maxHeight':'100%'},
                 style_cell={
-                    'maxWidth': '500px',
+                    'maxWidth': '300px',
                     'overflow': 'hidden',
                     'whiteSpace': 'normal',
                     'textAlign': 'left',
@@ -37,7 +37,7 @@ table_explorer= html.Div([
                     'cursor': 'pointer'
                 },
             ),
-        ],className='table_explorer', style={'height':'93%','width':'93%'},
+        ],className='loader_explorer',
     )
 
 layout= html.Div([    
