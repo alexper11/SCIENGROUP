@@ -233,3 +233,7 @@ productos_ano.iloc[-1]=productos_ano.iloc[-1]-1
 productos_ano=productos_ano.reindex(list(range(productos_ano.index.min(),productos_ano.index.max()+1)),fill_value=0)
 #def pdly(idgruplac):
 #productos_ano
+
+opciones_parametro_general=['Ingreso Manual','Institución','Clasificación','Áreas','Líneas de Investigación']
+
+opciones_grupo=gruplac_basico['nombre'].to_list()
