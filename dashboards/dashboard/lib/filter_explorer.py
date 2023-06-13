@@ -70,9 +70,10 @@ def filtrar_fuente(fuente, condicion):
 
 def filtrar_elemento(elemento,fuente,condicion):
     data=fuente_dic[fuente][elemento].copy()
-    opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
-    opc_caracteristica.append('Todos')
     if condicion=='option':
+        data=data.drop(['nombre_grupo'], axis=1, errors='ignore')
+        opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
+        opc_caracteristica.append('Todos')
         return opc_caracteristica
     elif condicion=='data':
         return data
@@ -80,8 +81,8 @@ def filtrar_elemento(elemento,fuente,condicion):
 def filtrar_caracteristica(caracteristica,elemento,fuente):
     data=fuente_dic[fuente][elemento].fillna('No Aplica').copy()
     #sectores borrar
-    if caracteristica=='Sectores':
-        data=data.replace(to_replace={',':';'},regex=True)
+    # if caracteristica=='Sectores':
+    #     data=data.replace(to_replace={',':';'},regex=True)
     ####
     if caracteristica=='Todos':
         #campo de entrada desaparece
@@ -97,7 +98,7 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
         print(opc_entrada)
         
     elif caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
-                           'Líneas de Investigación','Institución','Palabras Clave','Sectores','País',
+                           'Líneas de Investigación','Institución','Palabras Clave','País',
                            'Palabras Clave']:
     
         entrada_new=[]
@@ -107,7 +108,7 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
     #text, tipo string
     elif caracteristica in ['Código de GrupLAC','Nombre','Nombre del Capítulo','Libro','Nombre del Curso',
                             'Nombre del Programa','Nombre Comercial','Título','Código de CVLAC','Plataforma',
-                            'Ambiente']:
+                            'Ambiente','Sectores']:
         entrada_new=''
         opc_entrada=[]
     #date(years), tipo tuple con dos int
@@ -214,6 +215,7 @@ sidebar_explorer = html.Div(
         ####################################################
         component_filters,
         html.Button('Filtrar', id='button_state', n_clicks=0),
+        
     ],
     className="dash-sidebar",    
 )
