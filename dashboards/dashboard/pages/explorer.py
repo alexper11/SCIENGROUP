@@ -94,9 +94,9 @@ def actualizar_elemento_seleccionado(elemento, fuente):
                 placeholder='Característica Requerida',
                 type='text',
                 disabled =True,
-                value = None
+                value = None,
             )],
-        id='div_input')]
+            id='div_input')]
     else:
         opciones_caracteristica=filtrar_elemento(elemento, fuente,'option')
         div_component = [html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
