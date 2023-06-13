@@ -40,6 +40,11 @@ option_value = dcc.Dropdown(
         options = ['filtro 1','filtro 2'],
         value = None  # Valor inicial seleccionado
     )
+option_input = dcc.Dropdown(
+        id='filter_inputs',
+        options = ['filtro 1','filtro 2'],
+        value = None  # Valor inicial seleccionado
+    )
 #############################################################################
 # Sidebar Layout
 #############################################################################
@@ -63,6 +68,9 @@ sidebar_graph = html.Div(
         option_parameter,
         html.H5("Valor:",className="title_white",style={"color":"white"}),
         option_value,
+        html.H5("Entrada:",className="title_white",style={"color":"white"}),
+        option_input,
+        html.Button('Filtrar', id='button_state', n_clicks=0),
     ],
     className="dash-sidebar",    
 )
