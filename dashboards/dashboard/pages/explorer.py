@@ -17,7 +17,7 @@ from functions.csv_importer import gruplac_articulos, gruplac_basico, gruplac_ca
 
 elemento_seleccionado='Artículos'
 
-table_explorer= html.Div([
+table_explorer= dcc.Loading([
             # html.H3('Tabla de datos', id="title_table"),
             dash_table.DataTable(
                 id='table_date',
@@ -26,11 +26,15 @@ table_explorer= html.Div([
                 page_size=100,
                 virtualization = True,
                 fixed_columns={'headers':True},
+<<<<<<< HEAD
+=======
+                cell_selectable=False,
+>>>>>>> cbd09beab8ddf93dbc265b37fdf9f0f262ad72ac
                 #page_action='none',
                 # css=[{'rule':'height:inherit'}],
-                style_table={'height': '100%', 'maxWidth': 'auto', 'maxHeight':'90%'},
+                style_table={'overflowX':'auto', 'height': '90%','width':'90%', 'maxWidth': 'auto', 'maxHeight':'100%'},
                 style_cell={
-                    'maxWidth': '500px',
+                    'maxWidth': '300px',
                     'overflow': 'hidden',
                     'whiteSpace': 'normal',
                     'textAlign': 'left',
@@ -38,7 +42,7 @@ table_explorer= html.Div([
                     'cursor': 'pointer'
                 },
             ),
-        ],className='table_explorer', style={'height':'93%','width':'90%'},
+        ],className='loader_explorer',
     )
 
 layout= html.Div([    
@@ -187,6 +191,7 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         data=pd.DataFrame()
         columns=None
         #tool_tip=[]
+<<<<<<< HEAD
     
     if data.shape[0]>1:
         data=globals()[str(referencias[fuente][elemento])].loc[list(data.index)].astype(str).fillna('No Aplica')
@@ -200,5 +205,17 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         else:
             data=data.drop(['volumen','fasciculo','paginas'], axis=1, errors='ignore')
         
+=======
+    try:
+        print(data['institucion'].iloc[5:7])
+        data['institucion']=data['institucion'].str.slice(stop=500)
+    except Exception as e:
+        print(e)
+        pass
+    # try:
+    #     print('print del try', data[0])
+    # except:
+    #     print('printl del exept: ', data)
+>>>>>>> cbd09beab8ddf93dbc265b37fdf9f0f262ad72ac
     return data.to_dict('records'),columns#,tool_tip
 
