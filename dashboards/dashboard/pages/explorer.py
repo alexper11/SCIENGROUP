@@ -26,10 +26,7 @@ table_explorer= dcc.Loading([
                 page_size=100,
                 virtualization = True,
                 fixed_columns={'headers':True},
-<<<<<<< HEAD
-=======
                 cell_selectable=False,
->>>>>>> cbd09beab8ddf93dbc265b37fdf9f0f262ad72ac
                 #page_action='none',
                 # css=[{'rule':'height:inherit'}],
                 style_table={'overflowX':'auto', 'height': '90%','width':'90%', 'maxWidth': 'auto', 'maxHeight':'100%'},
@@ -191,7 +188,6 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         data=pd.DataFrame()
         columns=None
         #tool_tip=[]
-<<<<<<< HEAD
     
     if data.shape[0]>1:
         data=globals()[str(referencias[fuente][elemento])].loc[list(data.index)].astype(str).fillna('No Aplica')
@@ -205,17 +201,5 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         else:
             data=data.drop(['volumen','fasciculo','paginas'], axis=1, errors='ignore')
         
-=======
-    try:
-        print(data['institucion'].iloc[5:7])
-        data['institucion']=data['institucion'].str.slice(stop=500)
-    except Exception as e:
-        print(e)
-        pass
-    # try:
-    #     print('print del try', data[0])
-    # except:
-    #     print('printl del exept: ', data)
->>>>>>> cbd09beab8ddf93dbc265b37fdf9f0f262ad72ac
     return data.to_dict('records'),columns#,tool_tip
 
