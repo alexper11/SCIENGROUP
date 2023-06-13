@@ -15,8 +15,6 @@ from datetime import datetime as dt
 from functions.csv_importer import gruplac_basico, gruplac_integrantes, elementos_gruplac_individual, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano
 
 elementos_gruplac_general=elementos_gruplac_individual
-#grupos_codigos=[]
-#grupos_nombre=[]s
 
 #################################################################
 #Funciones de filtros
