@@ -10,7 +10,6 @@ import dash_bootstrap_components as dbc
 import json
 from datetime import datetime as dt
 
-
 ####################################################################################
 # Add the dash_Img
 ####################################################################################
@@ -48,8 +47,13 @@ option_input = dcc.Dropdown(
 #############################################################################
 # Sidebar Layout
 #############################################################################
-sidebar_graph = html.Div(
-    [
+sidebar_graph = html.Div([
+    html.H1('Opciones de filtrado',className="title_white",style={"color":"white"}),
+    dcc.Tabs(id="tabs_filter_scienti", value='tab_individual', 
+    children=[dcc.Tab(label='Individual', value='tab_individual'),
+        dcc.Tab(label='Grupal', value='tab_grupal'),
+    ]),    
+    html.Div([    
         html.P("Filtros Grupo individual.",style={"color":"white"} ),   
         html.Hr(),  # Add an horizontal line
         ####################################################
@@ -59,6 +63,8 @@ sidebar_graph = html.Div(
         option_group,
         html.H5("Elemento:",className="title_white",style={"color":"white"}),
         option_element,
+    ],id="filtro_individual",style={}),
+    html.Div([ 
         html.P("Filtros Grupos General.",style={"color":"white"} ),   
         html.Hr(),  # Add an horizontal line
         ####################################################
@@ -70,7 +76,15 @@ sidebar_graph = html.Div(
         option_value,
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
         option_input,
+    ],id="filtro_grupal",style={}),
         html.Button('Filtrar', id='button_state', n_clicks=0),
-    ],
-    className="dash-sidebar",    
+],className="dash-sidebar",    
 )
+@callback(
+    [Output('filtro_individual', 'style'),Output('filtro_grupal', 'style')],
+    Input('tabs_filter_scienti', 'value'))
+def render_content(tab):
+    if tab == 'tab_individual':
+        return {"display": "block"},{"display": "none"}
+    else:
+        return {"display": "none"},{"display": "block"}
