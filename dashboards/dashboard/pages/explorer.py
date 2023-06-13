@@ -21,9 +21,10 @@ table_explorer= dcc.Loading([dbc.Toast(
             id="auto-toast",
             header="No hay datos disponibles",
             color='secondary',
-            duration=4000,
+            # duration=4000,
+            dismissable=True,
             is_open=False,
-            style={"color":"white",'backgroundColor': 'red','padding-top': '50px'}
+            # style={"color":"white",'backgroundColor': 'red','padding-top': '50px'}
             ),
             # html.H3('Tabla de datos', id="title_table"),
             dash_table.DataTable(
@@ -87,7 +88,7 @@ def actualizar_elemento_seleccionado(elemento, fuente):
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
-                id='filter_input',
+                id='filter_inputs',
                 placeholder='Característica Requerida',
                 type='text',
                 disabled =True,
@@ -107,7 +108,7 @@ def actualizar_elemento_seleccionado(elemento, fuente):
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
-                id='filter_input',
+                id='filter_inputs',
                 placeholder='Característica Requerida',
                 type='text',
                 disabled =True,
@@ -127,18 +128,18 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
         valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
     
     if type(valor_entrada) == str:
-        filter =  dcc.Input(id='filter_input', placeholder='', type='text', value='')
+        filter =  dcc.Input(id='filter_inputs', placeholder='', type='text', value='')
     elif type(valor_entrada) == list:
-        filter = dcc.Dropdown(id="filter_input", options= opciones_entrada, multi=True)
+        filter = dcc.Dropdown(id="filter_inputs", options= opciones_entrada, multi=True)
     elif type(valor_entrada) == tuple:
         #year_today = date.today().year
         option_drop = list(range(1975,date.today().year+1))
         print('drop: ',option_drop)   
-        #filter = dbc.Input(id="date_start", type="number", min=1975, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_input', style={'display': 'none'})
-        filter = dcc.Dropdown(id="date_start", placeholder='Año inicial', options = option_drop, value=None), dcc.Dropdown(id="date_end", options= [],disabled = True, placeholder='Año final', value= None), dcc.Input(id='filter_input', style={'display': 'none'})
+        #filter = dbc.Input(id="date_start", type="number", min=1975, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_inputs', style={'display': 'none'})
+        filter = dcc.Dropdown(id="date_start", placeholder='Año inicial', options = option_drop, value=None), dcc.Dropdown(id="date_end", options= [],disabled = True, placeholder='Año final', value= None), dcc.Input(id='filter_inputs', style={'display': 'none'})
 
     else:
-        filter = dcc.Input(id='filter_input', placeholder='Característica Requerida', value='', disabled=True)
+        filter = dcc.Input(id='filter_inputs', placeholder='Característica Requerida', value='', disabled=True)
     return filter
 
 @callback(
@@ -151,11 +152,11 @@ def validate_date_end(minimo):
     return list(range(minimo,date.today().year+1)), False
 
 @callback(
-    Output('filter_input', 'value'),
+    Output('filter_inputs', 'value'),
     State('date_start', 'value'),
     Input('date_end','value')
  )
-def filter_input_contructor(inicial, final):
+def filter_inputs_contructor(inicial, final):
     if final == None:
         fechas = str((1975, date.today().year))
     else:
@@ -167,7 +168,7 @@ def filter_input_contructor(inicial, final):
             State('filter_fuente', 'value'),
             State('filter_element', 'value'),
             State('filter_feature', 'value'),
-            State('filter_input','value')])
+            State('filter_inputs','value')])
 def display(boton,fuente, elemento, caracteristica, entrada):
     try:
         if (entrada != None) and (entrada!=''):
