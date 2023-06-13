@@ -79,21 +79,19 @@ def render_content(tab):
                 ],className='card-score-container'),
                 #Charts or Graphs
                 html.Div([
-                    html.Div([
-                        html.H1("Gráfica 1"),
-                        dcc.Graph(id='violin-plot',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})
-                    ],className='card-graph card-body')
-                ], className='col-graph-big'),
+                    html.H1("Gráfica 1"),
+                    dcc.Graph(id='violin-plot',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})
+                ],className='card-graph card-body col-graph-big'),                
                 html.Div([
                     html.Div([
                         html.H1("Gráfica 2 mitad1"),
                         dcc.Graph(id='histogram',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})
-                    ], className='card-graph card-body'),
+                    ], className='child card-graph'),
                     html.Div([
                         html.H1("Gráfica 2 mitad2"),
                         dcc.Graph(id='path',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})
-                    ], className='card-graph card-body'),
-                ], className='col-graph_middle'),
+                    ], className='child card-graph'),
+                ],className='col-graph-big1'), 
             ],type="cube", fullscreen=False, style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"}
         )
     else:
