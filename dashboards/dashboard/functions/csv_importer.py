@@ -177,3 +177,59 @@ referencias={'SCOPUS':
 caracteristicas_invertido= {v: k for k, v in caracteristicas.items()}
 
 fuente_dic={'CVLAC':elementos_cvlac,'GRUPLAC':elementos,'SCOPUS':elementos_scopus}
+
+elementos_gruplac_individual=list(elementos.keys())
+elementos_gruplac_individual=list(set(elementos_gruplac_individual)-set(['Institución','Líneas de Investigación','Datos Básicos']))
+
+#fecha mas antigua registrada en gruplac
+pmin=min([gruplac_articulos['fecha'].min().year,gruplac_caplibros['fecha'].min().year, gruplac_libros['fecha'].min().year,
+    gruplac_pdoctorado['fecha'].min().year,gruplac_pmaestria['fecha'].min().year,gruplac_cdoctorado['fecha'].min().year,
+    gruplac_cmaestria['fecha'].min().year,gruplac_oarticulos['fecha'].min().year,gruplac_olibros['fecha'].min().year,gruplac_disenoind['fecha'].min().year,
+    gruplac_innovaempresa['fecha'].min().year,gruplac_plantapiloto['fecha'].min().year,gruplac_otecnologicos['fecha'].min().year,
+    gruplac_prototipos['fecha'].min().year,gruplac_software['fecha'].min().year,gruplac_empresatec['fecha_registro'].min().year])
+
+#fecha mas reciente registrada e gruplac
+pmax=max([gruplac_articulos['fecha'].max().year,gruplac_caplibros['fecha'].max().year, gruplac_libros['fecha'].min().year,
+    gruplac_pdoctorado['fecha'].max().year,gruplac_pmaestria['fecha'].max().year,gruplac_cdoctorado['fecha'].max().year,
+    gruplac_cmaestria['fecha'].max().year,gruplac_oarticulos['fecha'].max().year,gruplac_olibros['fecha'].max().year,gruplac_disenoind['fecha'].max().year,
+    gruplac_innovaempresa['fecha'].max().year,gruplac_plantapiloto['fecha'].max().year,gruplac_otecnologicos['fecha'].max().year,
+    gruplac_prototipos['fecha'].max().year,gruplac_software['fecha'].max().year,gruplac_empresatec['fecha_registro'].max().year])
+
+print('Periodo de tiempo total entre ',pmin,' hasta ',pmax)
+
+#valor total de productos
+total_productos=[gruplac_articulos.shape[0],gruplac_caplibros.shape[0],gruplac_libros.shape[0],
+                gruplac_pdoctorado.shape[0],gruplac_pmaestria.shape[0],gruplac_cdoctorado.shape[0],
+                gruplac_cmaestria.shape[0],gruplac_oarticulos.shape[0],gruplac_olibros.shape[0],gruplac_disenoind.shape[0],
+                gruplac_innovaempresa.shape[0],gruplac_plantapiloto.shape[0],gruplac_otecnologicos.shape[0],
+                gruplac_prototipos.shape[0],gruplac_software.shape[0],gruplac_empresatec.shape[0]]
+total_productos=sum(total_productos)
+
+#serie productos por año
+productos_ano=pd.Series([],dtype='float64')
+productos_ano= pd.concat([productos_ano,pd.Series([pmin])])
+productos_ano= pd.concat([productos_ano,pd.Series([pmax])])
+productos_ano= pd.concat([productos_ano,gruplac_articulos['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_libros['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_caplibros['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_pdoctorado['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_pmaestria['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_cdoctorado['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_cmaestria['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_oarticulos['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_olibros['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_disenoind['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_innovaempresa['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_plantapiloto['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_otecnologicos['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_prototipos['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_software['fecha'].dropna().dt.year])
+productos_ano= pd.concat([productos_ano,gruplac_empresatec['fecha_registro'].dropna().dt.year])
+productos_ano=productos_ano.value_counts().sort_index().astype('int64')
+productos_ano.index=productos_ano.index.astype('int64')
+productos_ano.iloc[0]=productos_ano.iloc[0]-1
+productos_ano.iloc[-1]=productos_ano.iloc[-1]-1
+#RELLENADO DE AÑOS
+productos_ano=productos_ano.reindex(list(range(productos_ano.index.min(),productos_ano.index.max()+1)),fill_value=0)
+#def pdly(idgruplac):
+#productos_ano
