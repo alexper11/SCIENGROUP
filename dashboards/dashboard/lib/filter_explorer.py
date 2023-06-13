@@ -70,9 +70,10 @@ def filtrar_fuente(fuente, condicion):
 
 def filtrar_elemento(elemento,fuente,condicion):
     data=fuente_dic[fuente][elemento].copy()
-    opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
-    opc_caracteristica.append('Todos')
     if condicion=='option':
+        data=data.drop(['nombre_grupo'], axis=1, errors='ignore')
+        opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
+        opc_caracteristica.append('Todos')
         return opc_caracteristica
     elif condicion=='data':
         return data
@@ -214,6 +215,7 @@ sidebar_explorer = html.Div(
         ####################################################
         component_filters,
         html.Button('Filtrar', id='button_state', n_clicks=0),
+        
     ],
     className="dash-sidebar",    
 )
