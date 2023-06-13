@@ -23,9 +23,11 @@ table_explorer= html.Div([
                 data = None,
                 page_size=100,
                 virtualization = True,
+                fixed_columns={'headers':True},
+                cell_selectable=False,
                 #page_action='none',
                 # css=[{'rule':'height:inherit'}],
-                style_table={'height': '100%', 'maxWidth': 'auto', 'maxHeight':'90%'},
+                style_table={'overflowX':'auto', 'height': '100%', 'maxWidth': 'auto', 'maxHeight':'100%'},
                 style_cell={
                     'maxWidth': '500px',
                     'overflow': 'hidden',
@@ -35,7 +37,7 @@ table_explorer= html.Div([
                     'cursor': 'pointer'
                 },
             ),
-        ],className='table_explorer', style={'height':'93%','width':'90%'},
+        ],className='table_explorer', style={'height':'93%','width':'93%'},
     )
 
 layout= html.Div([    
@@ -186,7 +188,7 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         #tool_tip=[]
     try:
         print(data['institucion'].iloc[5:7])
-        data['institucion']=data['institucion'].str.slice(stop=1000)+'...'
+        data['institucion']=data['institucion'].str.slice(stop=500)
     except Exception as e:
         print(e)
         pass
