@@ -53,6 +53,7 @@ main {
   grid-area: main;
   position: relative;
   width: 100%;
+  height: 95%;
 }
 
 footer {
@@ -324,17 +325,22 @@ img.brand {
   padding-bottom: 25px;
 }
 .dash-body {
-  margin-left: 22%;
+  margin-left: 24%;
   margin-right: 2rem;
   padding: 2rem 1rem;
   display:grid;
   background-color: #F8F9F9;
-  /* max-height: 235rem; */
-  height: 350px;
+  height: 95%;
+  padding-bottom: 25px;
 }
 .dash-contents {
   position: relative;
 }
+
+.dash-table-container{
+  height: 100% !important;
+}
+
 .dash-body-graph {
   margin-left: 18rem;
   width: 20rem;
