@@ -83,7 +83,7 @@ footer {
   background-color: #2846cc;
 }
 
-#div_indicadores{
+#div_gruplac{
   overflow-y: auto;
   max-width: 74vw;
   height: 100% !important;
@@ -270,14 +270,16 @@ img.brand {
   margin-left: 1rem;
 }
 
-.col-graph_big {
+.col-graph-big {
   flex: 1 1 100%;
   margin-left: 1rem;
+  width: 95%;
 }
-.col-graph_middle {
-  flex: 1 1 100%;
+
+.col-graph-middle {
   display: inline-block;
-  margin-left: 1rem;
+  vertical-align: middle;
+  width: 47%;
 }
 .col-graph_three {
   flex: 1 1 33%;
@@ -407,16 +409,20 @@ H1, P {
 .svg-container {
   width: 100% !important;
 }
-
 .card-graph {
   border-radius: 0.5rem;
-  /* height: 40rem; */
-  max-width: 100%;
-  margin: 1rem 1rem;
   box-shadow: 0 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.6),
     0 6px 10px 0 rgba(0, 0, 0, 0.6);
   color: black !important;
 }
+.card-graph_middle {
+  margin: 1rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.6),
+    0 6px 10px 0 rgba(0, 0, 0, 0.6);
+  color: black !important;
+}
+
 .card-score-container {
   display: flex;
   flex-wrap: wrap;
@@ -431,20 +437,19 @@ H1, P {
 }
 
 .card-body {
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  /* display: flex; */
+  /* flex-direction: column;
+  justify-content: space-around; */
   align-items: center;
-  max-width: 100%;
 }
-.card-body h1 {
+
+/* .card-body h1 {
   margin: 0;
 }
 
 .card-body > * {
   margin-bottom: 0.5rem;
-}
+} */
 
 #filter_inputs {
   width: 90%;
