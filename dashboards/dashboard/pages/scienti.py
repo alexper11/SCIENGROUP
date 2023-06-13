@@ -13,7 +13,7 @@ import plotly.graph_objects as go
 from lib.filter_graph import sidebar_graph
 
 indicadores_individuales= dcc.Loading(
-            id="loading-2",
+            id="loading2",
             children=[html.Div([
                 html.Div([html.H1("Indicador 1", style={'fontSize':'2rem'}),html.P('0', id='badge')], className='score-card'),
                 html.Div([html.H1("Indicador 2", style={'fontSize':'2rem'}),html.P('0', id='badge')], className='score-card'),
@@ -40,7 +40,7 @@ indicadores_individuales= dcc.Loading(
             ],type="cube", fullscreen=False, style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"}
         )
 indicadores_grupales= dcc.Loading(
-            id="loading-2",
+            id="loading1",
             children=[html.Div([
                 html.Div([html.Div([html.H1("Grafica 1"),dcc.Graph(id='violin-plot',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})],className='card-graph card-body')], className='col-graph-big'),
                 html.Div([html.Div([html.H1("Grafica 2"),dcc.Graph(id='pie-1',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})],className='card-graph card-body')], className='col-graph-big'),
@@ -51,13 +51,26 @@ indicadores_grupales= dcc.Loading(
             ])],type="cube", fullscreen=False, style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"},
         )     
 
-layout= html.Div([
-    html.H2("Indicadores Individuales", className='title_graph_main'),
-    indicadores_individuales,
-    sidebar_graph,
-    html.H2("Indicadores Grupales", className='title_graph_main'),
-    indicadores_grupales,
-    ],className="dash-body-graph",style={"color":"black"}
-)  
+layout = html.Div(
+    [
+        html.Div(
+            [
+                html.H2("Indicadores Individuales", className="title_graph_main"),
+                indicadores_individuales,
+            ],
+            className="div_individual",
+        ),
+        html.Div(
+            [
+                html.H2("Indicadores Grupales", className="title_graph_main"),
+                indicadores_grupales,
+            ],
+            className="div_grupal",
+        ),
+        sidebar_graph,
+    ],
+    className="dash-body-graph",
+    style={"color": "black"},
+) 
 
 #-----------------------------------Callbacks ---------------------------------
