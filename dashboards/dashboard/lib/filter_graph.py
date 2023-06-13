@@ -15,8 +15,8 @@ from datetime import datetime as dt
 from functions.csv_importer import gruplac_basico, gruplac_integrantes, elementos_gruplac_individual, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano
 
 elementos_gruplac_general=elementos_gruplac_individual
-#grupos_codigos=[]
-#grupos_nombre=[]s
+
+opciones_grupo_individual = gruplac_basico['nombre'].to_list()
 
 #################################################################
 #Funciones de filtros
@@ -212,27 +212,28 @@ def get_perfil_minciencias(idgruplac):
 
 option_group = dcc.Dropdown(
         id='filter_group',
-        options = ['filtro 1','filtro 2'],
+        options = opciones_grupo_individual,
         value = None  # Valor inicial seleccionado
     )
 option_element = dcc.Dropdown(
-        id='filter_element',
-        options = ['filtro 1','filtro 2'],
+        id='filter_element_gruplac',
+        options = [],
+        disabled=True,
         value = None  # Valor inicial seleccionado
     )
 option_parameter = dcc.Dropdown(
         id='filter_parameter',
-        options = ['filtro 1','filtro 2'],
+        options = [],
         value = None  # Valor inicial seleccionado
     )
 option_value = dcc.Dropdown(
         id='filter_value',
-        options = ['filtro 1','filtro 2'],
+        options = [],
         value = None  # Valor inicial seleccionado
     )
 option_input = dcc.Dropdown(
         id='filter_inputs',
-        options = ['filtro 1','filtro 2'],
+        options = [],
         value = None  # Valor inicial seleccionado
     )
 #############################################################################
@@ -271,6 +272,8 @@ sidebar_graph = html.Div([
         html.Button('Filtrar', id='button_state', n_clicks=0),
 ],className="dash-sidebar",    
 )
+
+#  ---------------------callback---------------
 @callback(
     [Output('filtro_individual', 'style'),Output('filtro_grupal', 'style')],
     Input('tabs_filter_scienti', 'value'))
@@ -279,3 +282,13 @@ def render_content(tab):
         return {"display": "block"},{"display": "none"}
     else:
         return {"display": "none"},{"display": "block"}
+
+@callback(
+    [Output('filter_element_gruplac', 'value'),Output('filter_element_gruplac', 'disabled'),Output('filter_element_gruplac', 'options')],
+    Input('filter_group', 'value'))
+def render_content(grupo):
+    if grupo == None:
+        return None, True, []
+    else:
+        option_elements= filtro_gruplac_grupo_individual(grupo)
+        return 'Todos', False, option_elements

@@ -55,7 +55,7 @@ layout = html.Div([
             children=[
             html.H2("Indicadores", className="title_graph_main"),
             indicadores,
-            ],id="div_indicadores",
+            ],id="div_gruplac",
         ),        
         sidebar_graph,
     ],className="dash-body-graph", style={"color": "black"},
@@ -64,19 +64,21 @@ layout = html.Div([
 #-----------------------------------Callbacks ---------------------------------
 
 @callback(
-    Output('div_indicadores', 'children'),
+    Output('div_gruplac', 'children'),
     Input('tabs_filter_scienti', 'value'))
 def render_content(tab):
     if tab == 'tab_individual':
         return dcc.Loading(
             id="loading2",
             children=[html.H2("Indicadores Individual", className="title_graph_main"),
+                html.H1("Indicadores del grupo de investigación: ", className="group_graph_info"),
                 html.Div([
                 html.Div([html.H1("Indicador 1", style={'fontSize':'2rem'}),html.P('0', id='badge')], className='score-card'),
                 html.Div([html.H1("Indicador 2", style={'fontSize':'2rem'}),html.P('0', id='badge')], className='score-card'),
                 html.Div([html.H1("Indicador 3", style={'fontSize':'2rem'}),html.P('0', id='badge')], className='score-card'),
                 html.Div([html.H1("Indicador 4", style={'fontSize':'2rem'}),html.P('0', id='badge')], className='score-card'),
                 ],className='card-score-container'),
+                html.H1("Mas texto}: ", className="group_graph_info"),
                 #Charts or Graphs
                 html.Div([
                     html.H1("Gráfica 1"),
@@ -86,12 +88,12 @@ def render_content(tab):
                     html.Div([
                         html.H1("Gráfica 2 mitad1"),
                         dcc.Graph(id='histogram',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})
-                    ], className='child card-graph'),
+                    ], className='card-graph_middle card-body col-graph-middle'),
                     html.Div([
                         html.H1("Gráfica 2 mitad2"),
                         dcc.Graph(id='path',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":False})
-                    ], className='child card-graph'),
-                ],className='col-graph-big1'), 
+                    ], className='card-graph_middle card-body col-graph-middle'),
+                ],className='col-graph-father'), 
             ],type="cube", fullscreen=False, style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"}
         )
     else:
