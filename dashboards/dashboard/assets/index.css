@@ -354,6 +354,7 @@ img.brand {
 }
 
 .dash-table-container{
+  max-width: 74vw;
   height: 100% !important;
 }
 
