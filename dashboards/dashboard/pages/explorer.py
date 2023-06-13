@@ -35,13 +35,15 @@ table_explorer= dcc.Loading([dbc.Toast(
                 #fixed_rows={'headers':True,'data':0},
                 cell_selectable=False,
                 style_header={'position': 'sticky', 'top': 0},
-                style_table={'overflowX':'auto', 'maxHeight':'80vh','maxWidth':'95vw'},
-                style_cell_conditional=[
-                    {'if': {'column_id': 'autores'},
-                    'width': '300px'},
-                    {'if': {'column_id': 'institucion'},
-                    'width': '300px'},
-                ],
+                style_table={'overflowX':'auto', 'maxHeight':'74vh','maxWidth':'95vw'},
+                # style_cell_conditional=[
+                #     {'if': {'column_id': 'autores'},
+                #     'width': '500px'},
+                #     {'if': {'column_id': 'institucion'},
+                #     'width': '500px'},
+                #     {'if': {'column_id': 'titulo'},
+                #     'width': '500px'},
+                # ],
                 style_cell={
                     'maxHeight': '50px',
                     'overflow': 'hidden',
