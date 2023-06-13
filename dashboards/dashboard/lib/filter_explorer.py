@@ -188,7 +188,7 @@ component_filters= html.Div(children=[html.H5("Caracteristica:",className="title
         html.H5("Entrada:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
-                id='filter_input',
+                id='filter_inputs',
                 placeholder='Inactivo',
                 disabled =True,
                 value = None
