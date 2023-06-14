@@ -64,13 +64,43 @@ def render_content(tab):
     else:
         return dcc.Loading(
             id="loading1",
-            children=[html.H2("Indicadores General", className="title_graph_main"),
+            #children=[html.H2("Indicadores General", className="title_graph_main"),
+            children=[html.Div([
                 html.Div([
-                html.Div([html.Div([html.H1("Grafica 1"),dcc.Graph(id='violin-plot',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})],className='card-graph card-body')], className='col-graph-big'),
-                html.Div([html.Div([html.H1("Grafica 2"),dcc.Graph(id='pie-1',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})],className='card-graph card-body')], className='col-graph-big'),
-                html.Div([html.Div([html.H1("Grafica 3 media pantalla"),dcc.Graph(id='histogram',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})], className='card-graph card-body')], className='col-graph_50'),
-                html.Div([html.Div([html.H1("Grafica 4 pantalla completa"),dcc.Graph(id='path',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})], className='card-graph card-body')], className='col-graph_100'),
-                html.Div([html.Div([html.H1("Grafica 5"),dcc.Graph(id='radial',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})], className='card-graph card-body')], className='col-graph'),
-                html.Div([html.Div([html.H1("Grafica 6"),dcc.Graph(id='radial',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})], className='card-graph card-body')], className='col-graph'),  
+                    dcc.Graph(figure={}, id='dash_general_graph1',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                ],id='div_general_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),
+                html.Div([
+                    dcc.Graph(figure={}, id='dash_general_graph2',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                ],id='div_general_figure2', className='card-graph card-body col-graph-big', style={'display':'none'}),            
+                html.Div([
+                    html.Div([                        
+                        dcc.Graph(figure={}, id='dash_general_graph3',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                    ],id='div_general_figure3', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
+                    html.Div([
+                        dcc.Graph(figure={}, id='dash_general_graph4',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                    ],id='div_general_figure4', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
+                ],className='col-graph-father'),
+                html.Div([
+                    html.Div([                        
+                        dcc.Graph(figure={}, id='dash_general_graph5',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                    ],id='div_general_figure5', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
+                    html.Div([
+                        dcc.Graph(figure={}, id='dash_general_graph6',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                    ],id='div_general_figure6', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
+                ],className='col-graph-father'),
+                html.Div([
+                    dcc.Graph(figure={}, id='dash_general_graph7',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                ],id='div_general_figure7', className='card-graph card-body col-graph-big', style={'display':'none'}),
+                html.Div([
+                    html.Div([                        
+                        dcc.Graph(figure={}, id='dash_general_graph8',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                    ],id='div_general_figure8', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
+                    html.Div([
+                        dcc.Graph(figure={}, id='dash_general_graph9',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                    ],id='div_general_figure9', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
+                ],className='col-graph-father'),
+                html.Div([
+                    dcc.Graph(figure={}, id='dash_general_graph10',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                ],id='div_general_figure10', className='card-graph card-body col-graph-big', style={'display':'none'}),
             ])],type="cube", fullscreen=False, style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"},
         )
