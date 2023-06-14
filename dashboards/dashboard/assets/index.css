@@ -235,10 +235,10 @@ header {
   position: relative;
 }
 
-.rightOptions a span {
+/* .rightOptions a span {
   position: absolute;
   left: 60%;
-}
+} */
 img.brand {
   height: 6rem;
 }
@@ -393,8 +393,10 @@ img.brand {
   display: grid;
   text-align: center;
 }
-#badge{
-  font-size: 3rem;
+.badge{
+  font-size: 5rem;
+  padding-top: 0;
+  color:#290404;
 }
 
 .title_graph_main{
@@ -423,10 +425,20 @@ H1, P {
   color: black !important;
 }
 
-.card-score-container {
+.card-score-targets {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  border-radius: 0.5rem;
+  width: 70vw;
+  max-width: 100%;
+  margin: 1rem 1rem;  
+  color: black !important;
+}
+.card-score-container {
+  /* display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; */
   border-radius: 0.5rem;
   width: 70vw;
   max-width: 100%;
@@ -443,13 +455,15 @@ H1, P {
   align-items: center;
 }
 
-/* .card-body h1 {
-  margin: 0;
+.group_graph_info{
+  text-align: center;
 }
-
-.card-body > * {
-  margin-bottom: 0.5rem;
-} */
+.group_graph_url{
+  display: flex;
+  text-decoration: underline;
+  justify-content: center;
+  
+}
 
 #filter_inputs {
   width: 90%;

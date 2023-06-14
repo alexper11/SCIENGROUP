@@ -243,7 +243,7 @@ sidebar_graph = html.Div([
     html.H1('Opciones de filtrado',className="title_white",style={"color":"white"}),
     dcc.Tabs(id="tabs_filter_scienti", value='tab_individual', 
     children=[dcc.Tab(label='Individual', value='tab_individual'),
-        dcc.Tab(label='Grupal', value='tab_grupal'),
+        dcc.Tab(label='General', value='tab_general'),
     ]),    
     html.Div([    
         html.P("Filtros Grupo individual.",style={"color":"white"} ),   
@@ -255,6 +255,7 @@ sidebar_graph = html.Div([
         option_group,
         html.H5("Elemento:",className="title_white",style={"color":"white"}),
         option_element,
+        html.Button('Filtrar1', id='button_group_filter_indiv', n_clicks=0),
     ],id="filtro_individual",style={}),
     html.Div([ 
         html.P("Filtros Grupos General.",style={"color":"white"} ),   
@@ -268,8 +269,8 @@ sidebar_graph = html.Div([
         option_value,
         html.H5("Elemento:",className="title_white",style={"color":"white"}),
         option_element_gruplac_general,
-    ],id="filtro_grupal",style={}),
-        html.Button('Filtrar', id='button_state', n_clicks=0),
+        html.Button('Filtrar2', id='button_group_filter_group', n_clicks=0),
+    ],id="filtro_grupal",style={}),        
 ],className="dash-sidebar",    
 )
 
