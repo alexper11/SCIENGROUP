@@ -14,6 +14,12 @@ import json
 from datetime import datetime as dt
 from functions.csv_importer import gruplac_basico, gruplac_integrantes, elementos_gruplac_individual, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_grupo, opciones_parametro_general
 
+# Plotly
+import plotly.express as px
+import warnings
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
 elementos_gruplac_general=elementos_gruplac_individual
 
 #################################################################
@@ -203,6 +209,166 @@ def get_perfil_minciencias(idgruplac):
 def get_codigo_grupo(nombre):
     codigo=gruplac_basico[gruplac_basico['nombre']==nombre]['idgruplac'].iloc[0]
     return codigo
+
+###############################################################################
+#FIGURE FUNCTIONS
+############################################################################
+
+#GRUPLAC INDIVIDUAL: TODOS LOS PRODUCTOS
+def time_series_all(series):
+    series=series.to_frame().reset_index()
+    series.columns=['fecha','productos']
+    fig = px.line(series, x='fecha', y="productos", 
+                  labels={
+                      "fecha":"Años",
+                      "productos":"Conteo de Productos"})
+    fig.update_layout(title={
+                  'text':"<b>Productos Anuales Generados</b>",
+                  'xanchor':'center',
+                  'x':0.5,
+                  'yanchor':'top'},
+                  font=dict(size=12))
+    fig.update_traces(line_color='#0000ff', line_width=2)
+    return fig
+
+def bar_pie_all(grupo): #retorna dos graficas, recibe codigo de grupo
+    dic={'producto':[],'count':[]}
+    for key in list(set(fuente_dic['GRUPLAC'].keys())-set(['Institución','Líneas de Investigación','Datos Básicos'])):
+        data=fuente_dic['GRUPLAC'][key]
+        dic['count'].append(data[data['idgruplac']==grupo]['idgruplac'].count())
+        dic['producto'].append(key)
+    df=pd.DataFrame.from_dict(dic)
+    df=df[df['count']>0]
+    fig = px.bar(df, x="producto", y="count", color='producto',color_discrete_sequence=px.colors.sequential.Turbo,
+                 labels={
+                 "producto":"Tipo de Producto",
+                 "count":"Cantidad de Productos"})
+    fig.update(layout_showlegend=False)
+    fig.update_layout(title={
+               'text':"<b>Conteo de Productos</b>",
+               'xanchor':'center',
+               'x':0.5,
+               'yanchor':'top'},
+                xaxis={'categoryorder': 'total descending'},
+               font=dict(size=12))
+    fig_bar=fig
+    fig_pie = px.pie(df, values='count', names='producto', color_discrete_sequence=px.colors.sequential.Aggrnyl,
+                     hole=.3)
+    fig_pie.update_layout(title={
+               'text':"<b>Porcentaje de Productos</b>",
+               'xanchor':'center',
+               'x':0.5,
+               'yanchor':'top'},
+               font=dict(size=12))
+    return fig_bar, fig_pie
+
+#GRUPLAC INDIVIDUAL: ELEMENTO
+
+def time_series_element(series, elemento):
+    series=series.to_frame().reset_index()
+    series.columns=['fecha','productos']
+    y_label="Conteo de "+elemento
+    title_label="<b>"+elemento+" Anuales Generados </b>"
+    fig = px.line(series, x='fecha', y="productos", 
+                  labels={
+                      "fecha":"Años",
+                      "productos":y_label})
+    fig.update_layout(title={
+                  'text':title_label,
+                  'xanchor':'center',
+                  'x':0.5,
+                  'yanchor':'top'},
+                  font=dict(size=12))
+    fig.update_traces(line_color='#0000ff', line_width=2)
+    return fig
+
+def tree_author_element(data, elemento): #sólo para aquellos elementos con la columna 'autores' existente, se filtra a top 30 si hay mas
+    warnings.filterwarnings(action='ignore', category=FutureWarning)#################
+    dataset_autores=data[['idgruplac','autores']].copy()
+    dataset_autores['autores']=dataset_autores['autores'].str.split(',')
+    dataset_autores=dataset_autores.explode('autores')
+    dataset_autores['autores']=dataset_autores['autores'].str.strip()
+    dataset_autores=dataset_autores['autores'].value_counts().reset_index().rename(columns={'index':'autores','autores':'count'})
+    dataset_autores['percents']=(dataset_autores['count']*100)/sum(dataset_autores['count'])
+    if dataset_autores['autores'].count()>30:
+        dataset_autores=dataset_autores.iloc[:30]
+    fig = px.treemap(dataset_autores, path=[px.Constant("Top Autores"),'autores'], values='count', 
+                     custom_data=['percents'])
+    fig.update_traces(root_color="white")
+    fig.data[0].texttemplate = "%{label}<br>"+elemento+":%{value}<br>%{customdata:.2f}%"
+    fig.data[0].hovertemplate = '%{label}<br>'+elemento+':%{value}<br>%{customdata:.2f}%'
+    fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
+                      title={
+                      'text':'<b>Participación de Autores</b>',
+                      'xanchor':'center',
+                      'x':0.5,
+                      'yanchor':'top'},
+                      font=dict(size=14))
+    warnings.filterwarnings(action='default', category=FutureWarning)##################
+    return fig
+
+def pie_place_element(data):  #solo para elementos con dato de lugar de publicacion
+    fig_pie = px.pie(data, values=data['lugar'].value_counts(), 
+                     names=data['lugar'].value_counts().index, color_discrete_sequence=px.colors.sequential.Aggrnyl,
+                     hole=.3)
+    fig_pie.update_layout(title={
+               'text':"<b>Lugar de Publicación</b>",
+               'xanchor':'center',
+               'x':0.5,
+               'yanchor':'top'},
+               font=dict(size=12))
+    return fig_pie
+
+def pie_type_element(data): #solo elementos con columna "tipo" existente
+    fig_pie = px.pie(data, values=data['tipo'].value_counts(), 
+                     names=data['tipo'].value_counts().index, color_discrete_sequence=px.colors.qualitative.Dark2,
+                     hole=.3)
+    fig_pie.update_layout(title={
+               'text':"<b>Publicaciones por Tipo</b>",
+               'xanchor':'center',
+               'x':0.5,
+               'yanchor':'top'},
+               font=dict(size=12))
+    return fig_pie
+
+def pie_journal_element(data): #solo para elementos con columna "revista" existente, se filtra a top 30 si hay mas
+    if data['revista'].value_counts().shape[0]>30:
+        data_aux=data['revista'].value_counts().iloc[:30]
+    else:
+        data_aux=data['revista'].value_counts()
+    fig_pie = px.pie(data_aux, values=data_aux, 
+                     names=data_aux.index, color_discrete_sequence=px.colors.cyclical.Edge,
+                     hole=.3)
+    fig_pie.update_layout(title={
+               'text':"<b>Publicaciones en Revistas</b>",
+               'xanchor':'center',
+               'x':0.5,
+               'yanchor':'top'},
+               font=dict(size=12))
+    return fig_pie
+
+def pie_editorial_element(data): #solo para elementos con columna "editorial" existente, se filtra a top 30 si hay mas
+    if data['editorial'].value_counts().shape[0]>30:
+        data_aux=data['editorial'].value_counts().iloc[:30]
+    else:
+        data_aux=data['editorial'].value_counts()
+    fig_pie = px.pie(data_aux, values=data_aux, 
+                     names=data_aux.index, color_discrete_sequence=px.colors.cyclical.Edge,
+                     hole=.3)
+    fig_pie.update_layout(title={
+               'text':"<b>Publicaciones por Editoriales</b>",
+               'xanchor':'center',
+               'x':0.5,
+               'yanchor':'top'},
+               font=dict(size=12))
+    return fig_pie
+
+#GRUPLAC GENERAL: TODOS LOS PRODUCTOS
+
+
+#GRUPLAC GENERAL: ELEMENTO
+
+
 ####################################################################################
 # Add the dash_Img
 ####################################################################################
