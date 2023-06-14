@@ -221,18 +221,20 @@ option_element = dcc.Dropdown(
     )
 option_parameter = dcc.Dropdown(
         id='filter_parameter',
-        options = [],
+        options = opciones_parametro_general,
         value = None  # Valor inicial seleccionado
     )
 option_value = dcc.Dropdown(
         id='filter_value',
         options = [],
-        value = None  # Valor inicial seleccionado
+        value = None,  # Valor inicial seleccionado
+        disabled= True
     )
-option_input = dcc.Dropdown(
-        id='filter_inputs',
-        options = [],
-        value = None  # Valor inicial seleccionado
+option_element_gruplac_general = dcc.Dropdown(
+        id='filter_element_gruplac_general',
+        options = elementos_gruplac_general,
+        value = None,  # Valor inicial seleccionado
+        disabled=True
     )
 #############################################################################
 # Sidebar Layout
@@ -264,8 +266,8 @@ sidebar_graph = html.Div([
         option_parameter,
         html.H5("Valor:",className="title_white",style={"color":"white"}),
         option_value,
-        html.H5("Entrada:",className="title_white",style={"color":"white"}),
-        option_input,
+        html.H5("Elemento:",className="title_white",style={"color":"white"}),
+        option_element_gruplac_general,
     ],id="filtro_grupal",style={}),
         html.Button('Filtrar', id='button_state', n_clicks=0),
 ],className="dash-sidebar",    
@@ -284,9 +286,33 @@ def render_content(tab):
 @callback(
     [Output('filter_element_gruplac', 'value'),Output('filter_element_gruplac', 'disabled'),Output('filter_element_gruplac', 'options')],
     Input('filter_group', 'value'))
-def render_content(grupo):
+def callback_element(grupo):
     if grupo == None:
         return None, True, []
     else:
         option_elements= filtro_gruplac_grupo_individual(grupo)
         return 'Todos', False, option_elements
+
+@callback(
+    [Output('filter_value', 'value'),Output('filter_value', 'disabled'),Output('filter_value', 'options')],
+    Input('filter_parameter', 'value'))
+def callback_parameter(parametro):
+    if parametro == None:
+        return None, True, []
+    else:
+        option_elements= filtro_gruplac_parametro_general(parametro)
+        return None, False, option_elements
+    
+@callback(
+    [Output('filter_element_gruplac_general', 'disabled'),Output('filter_element_gruplac_general', 'value')],
+    [State('filter_parameter', 'value'), Input('filter_value', 'disabled'),
+    Input('filter_value', 'value')])
+def callback_value(parameter, disable_value, value):
+    if disable_value == True:
+        return True, None
+    if (value == None) and (parameter == None):
+        return True, None
+    elif (value == None) or (parameter == None):
+        return True, None
+    else:        
+        return False, None
