@@ -238,6 +238,7 @@ def bar_pie_all(grupo): #retorna dos graficas, recibe codigo de grupo
         dic['count'].append(data[data['idgruplac']==grupo]['idgruplac'].count())
         dic['producto'].append(key)
     df=pd.DataFrame.from_dict(dic)
+    df['producto']=df['producto'].str.wrap(15,break_long_words=False).str.replace('\n','<br>')
     df=df[df['count']>0]
     fig = px.bar(df, x="producto", y="count", color='producto',color_discrete_sequence=px.colors.sequential.Turbo,
                  labels={
@@ -260,6 +261,7 @@ def bar_pie_all(grupo): #retorna dos graficas, recibe codigo de grupo
                'x':0.5,
                'yanchor':'top'},
                font=dict(size=12))
+    fig_pie.update_layout( legend = {"xanchor": "right", "x": 1})
     return fig_bar, fig_pie
 
 #GRUPLAC INDIVIDUAL: ELEMENTO
@@ -332,9 +334,12 @@ def pie_type_element(data): #solo elementos con columna "tipo" existente
                'x':0.5,
                'yanchor':'top'},
                font=dict(size=12))
+    fig_pie.update_layout( legend = {"xanchor": "right", "x": 1.08})
     return fig_pie
 
-def pie_journal_element(data): #solo para elementos con columna "revista" existente, se filtra a top 30 si hay mas
+def pie_journal_element(datain): #solo para elementos con columna "revista" existente, se filtra a top 30 si hay mas
+    data=datain.copy()
+    data['revista']=data['revista'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
     if data['revista'].value_counts().shape[0]>30:
         data_aux=data['revista'].value_counts().iloc[:30]
     else:
@@ -347,10 +352,13 @@ def pie_journal_element(data): #solo para elementos con columna "revista" existe
                'xanchor':'center',
                'x':0.5,
                'yanchor':'top'},
-               font=dict(size=12))
+               font=dict(size=10))
+    fig_pie.update_layout( legend = {"xanchor": "left", "x": -0.08})
     return fig_pie
 
-def pie_editorial_element(data): #solo para elementos con columna "editorial" existente, se filtra a top 30 si hay mas
+def pie_editorial_element(datain): #solo para elementos con columna "editorial" existente, se filtra a top 30 si hay mas
+    data=datain.copy()
+    data['editorial']=data['editorial'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
     if data['editorial'].value_counts().shape[0]>30:
         data_aux=data['editorial'].value_counts().iloc[:30]
     else:
@@ -364,6 +372,7 @@ def pie_editorial_element(data): #solo para elementos con columna "editorial" ex
                'x':0.5,
                'yanchor':'top'},
                font=dict(size=12))
+    fig_pie.update_layout( legend = {"xanchor": "right", "x": 1.08})
     return fig_pie
 
 #GRUPLAC GENERAL: TODOS LOS PRODUCTOS
