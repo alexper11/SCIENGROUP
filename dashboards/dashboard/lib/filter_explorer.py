@@ -69,7 +69,7 @@ def filtrar_fuente(fuente, condicion):
         return data
 
 def filtrar_elemento(elemento,fuente,condicion):
-    data=fuente_dic[fuente][elemento].copy()
+    data=fuente_dic[fuente][elemento].drop(['autores'], axis=1, errors='ignore').copy()
     if condicion=='option':
         data=data.drop(['nombre_grupo'], axis=1, errors='ignore')
         opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
@@ -79,7 +79,7 @@ def filtrar_elemento(elemento,fuente,condicion):
         return data
 
 def filtrar_caracteristica(caracteristica,elemento,fuente):
-    data=fuente_dic[fuente][elemento].fillna('No Aplica').copy()
+    data=fuente_dic[fuente][elemento].drop(['autores'], axis=1, errors='ignore').fillna('No Aplica').copy()
     #sectores borrar
     # if caracteristica=='Sectores':
     #     data=data.replace(to_replace={',':';'},regex=True)
@@ -90,7 +90,7 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
         opc_entrada=[]
     #tags, en este caso la entrada es una lista de elementos
     elif caracteristica in ['Tipo','Lugar','Revista','ISSN','Editorial','Disponibilidad',
-                          'Mercado','Aval','Programas','Idioma','Agencia Fundadora',
+                          'Mercado','Aval','Programas','Idioma','Agencia Fundadora','Revista de Publicación',
                           'Verificado','Certificación','Clasificación','Categoría','Sexo',
                           'Área']:  
         entrada_new=[]
@@ -123,7 +123,7 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
     return entrada_new, opc_entrada
 
 def filtrar_entrada(entrada,caracteristica,elemento,fuente):
-    data=fuente_dic[fuente][elemento].copy()
+    data=fuente_dic[fuente][elemento].drop(['autores'], axis=1, errors='ignore').copy()
     if type(entrada) == list:
         data = data.fillna('No Aplica')
         data=data.replace(to_replace={'\(':'','\)':''},regex=True)

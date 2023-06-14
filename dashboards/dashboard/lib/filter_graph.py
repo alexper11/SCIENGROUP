@@ -323,11 +323,14 @@ def pie_place_element(data):  #solo para elementos con dato de lugar de publicac
     return fig_pie
 
 def pie_type_element(data): #solo elementos con columna "tipo" existente
+    title_label="<b>Publicaciones por Tipo</b>"
+    if data.shape[0]==0:
+        title_label="<b>No Hay Datos Disponibles</b>"
     fig_pie = px.pie(data, values=data['tipo'].value_counts(), 
                      names=data['tipo'].value_counts().index, color_discrete_sequence=px.colors.qualitative.Dark2,
                      hole=.3)
     fig_pie.update_layout(title={
-               'text':"<b>Publicaciones por Tipo</b>",
+               'text':title_label,
                'xanchor':'center',
                'x':0.5,
                'yanchor':'top'},

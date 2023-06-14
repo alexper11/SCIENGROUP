@@ -78,22 +78,22 @@ cvlac_software['fecha']= pd.to_datetime(cvlac_software['fecha']).dt.to_period('Y
 scopus_productos['fecha_publicacion']= pd.to_datetime(scopus_productos['fecha_publicacion']).dt.to_period('M')
 
 
-elementos={'Artículos':gruplac_articulos.drop(columns=['volumen','fasciculo','paginas','doi','autores']),
-           'Capítulos':gruplac_caplibros.drop(columns=['isbn','volumen','paginas','autores']),
-           'Libros':gruplac_libros.drop(columns=['isbn','autores']),
+elementos={'Artículos':gruplac_articulos.drop(columns=['volumen','fasciculo','paginas','doi']),
+           'Capítulos':gruplac_caplibros.drop(columns=['isbn','volumen','paginas']),
+           'Libros':gruplac_libros.drop(columns=['isbn']),
            'Cursos de Doctorado':gruplac_cdoctorado.drop(columns=['acto']),
            'Cursos de Maestría':gruplac_cmaestria.drop(columns=['acto']),
-           'Otros Artículos':gruplac_oarticulos.drop(columns=['volumen','fasciculo','paginas','autores']),
-           'Otros Libros':gruplac_olibros.drop(columns=['isbn','volumen','paginas','autores']),
-           'Diseño industrial':gruplac_disenoind.drop(columns=['autores']),
-           'Empresa Tecnológica':gruplac_empresatec.drop(columns=['nit','fecha','autores']),
-           'Innovación Empresarial':gruplac_innovaempresa.drop(columns=['autores']),
-           'Otros Productos Tecnológicos':gruplac_otecnologicos.drop(columns=['autores']),
+           'Otros Artículos':gruplac_oarticulos.drop(columns=['volumen','fasciculo','paginas']),
+           'Otros Libros':gruplac_olibros.drop(columns=['isbn','volumen','paginas']),
+           'Diseño industrial':gruplac_disenoind,
+           'Empresa Tecnológica':gruplac_empresatec.drop(columns=['nit','fecha']),
+           'Innovación Empresarial':gruplac_innovaempresa,
+           'Otros Productos Tecnológicos':gruplac_otecnologicos,
            'Programa de Doctorado':gruplac_pdoctorado.drop(columns=['acto']), 
            'Programa de Maestría':gruplac_pmaestria.drop(columns=['acto']),
-           'Planta Piloto':gruplac_plantapiloto.drop(columns=['autores']),
-           'Prototipos':gruplac_prototipos.drop(columns=['autores']),
-           'Software':gruplac_software.drop(columns=['url','nombre_proyecto','autores']),
+           'Planta Piloto':gruplac_plantapiloto,
+           'Prototipos':gruplac_prototipos,
+           'Software':gruplac_software.drop(columns=['url','nombre_proyecto']),
            'Institución':gruplac_instituciones,
            'Líneas de Investigación':gruplac_lineas,
            'Datos Básicos':gruplac_basico.drop(columns=['nombre','lider','pagina_web','email','programas_secundario'])}
@@ -113,17 +113,17 @@ elementos_cvlac={'Áreas de Actuación':cvlac_areas,
                  'Productos Tecnológicos':cvlac_tecnologicos.drop(columns=['autor','contrato_registro'])}
 
 
-elementos_scopus={'Artículos':scopus_productos[scopus_productos['tipo_documento']=='Article'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Documentos de Conferencia':scopus_productos[scopus_productos['tipo_documento']=='Conference Paper'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Revisiónes':scopus_productos[scopus_productos['tipo_documento']=='Review'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Capítulos':scopus_productos[scopus_productos['tipo_documento']=='Book Chapter'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Editoriales':scopus_productos[scopus_productos['tipo_documento']=='Editorial'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Cartas':scopus_productos[scopus_productos['tipo_documento']=='Letter'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Notas':scopus_productos[scopus_productos['tipo_documento']=='Note'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Erratum':scopus_productos[scopus_productos['tipo_documento']=='Erratum'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Documento de Datos':scopus_productos[scopus_productos['tipo_documento']=='Data Paper'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Encuesta Corta':scopus_productos[scopus_productos['tipo_documento']=='Short Survey'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso']),
-                  'Libros':scopus_productos[scopus_productos['tipo_documento']=='Book'].drop(columns=['scopus_id','eid','creador','nombre_publicacion','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores','autores_id','tipo_acceso'])}
+elementos_scopus={'Artículos':scopus_productos[scopus_productos['tipo_documento']=='Article'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Documentos de Conferencia':scopus_productos[scopus_productos['tipo_documento']=='Conference Paper'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Revisiónes':scopus_productos[scopus_productos['tipo_documento']=='Review'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Capítulos':scopus_productos[scopus_productos['tipo_documento']=='Book Chapter'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Editoriales':scopus_productos[scopus_productos['tipo_documento']=='Editorial'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Cartas':scopus_productos[scopus_productos['tipo_documento']=='Letter'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Notas':scopus_productos[scopus_productos['tipo_documento']=='Note'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Erratum':scopus_productos[scopus_productos['tipo_documento']=='Erratum'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Documento de Datos':scopus_productos[scopus_productos['tipo_documento']=='Data Paper'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Encuesta Corta':scopus_productos[scopus_productos['tipo_documento']=='Short Survey'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso']),
+                  'Libros':scopus_productos[scopus_productos['tipo_documento']=='Book'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso'])}
 
 
 caracteristicas={'idgruplac':'Código de GrupLAC','verificado':'Verificado','tipo':'Tipo','nombre':'Nombre',
@@ -136,7 +136,7 @@ caracteristicas={'idgruplac':'Código de GrupLAC','verificado':'Verificado','tip
                  'tema':'Temáticas','palabras_clave_autor':'Palabras Clave de Autor','palabras_clave_index':'Palabras Clave Indizadas',
                  'institucion':'Institución','agencia_fundadora':'Agencia Fundadora','pais':'País',
                  'categoria':'Categoría','idcvlac':'Código de CVLAC','sexo':'Sexo','sectores':'Sectores','palabras':'Palabras Clave',
-                 'area':'Área','plataforma':'Plataforma','ambiente':'Ambiente'}
+                 'area':'Área','plataforma':'Plataforma','ambiente':'Ambiente','nombre_publicacion':'Revista de Publicación'}
 
 referencias={'SCOPUS':
                  {
