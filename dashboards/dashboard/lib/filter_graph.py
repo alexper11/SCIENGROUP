@@ -199,6 +199,10 @@ def get_author_count(idgruplac):
 def get_perfil_minciencias(idgruplac):
     url='https://scienti.minciencias.gov.co/gruplac/jsp/Medicion/graficas/verPerfiles.jsp?id_convocatoria=21&nroIdGrupo='+idgruplac
     return url
+
+def get_codigo_grupo(nombre):
+    codigo=gruplac_basico[gruplac_basico['nombre']==nombre]['idgruplac'].iloc[0]
+    return codigo
 ####################################################################################
 # Add the dash_Img
 ####################################################################################
