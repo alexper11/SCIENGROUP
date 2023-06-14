@@ -350,7 +350,7 @@ def pie_journal_element(data): #solo para elementos con columna "revista" existe
                'xanchor':'center',
                'x':0.5,
                'yanchor':'top'},
-               font=dict(size=12))
+               font=dict(size=9))
     return fig_pie
 
 def pie_editorial_element(data): #solo para elementos con columna "editorial" existente, se filtra a top 30 si hay mas
@@ -366,7 +366,7 @@ def pie_editorial_element(data): #solo para elementos con columna "editorial" ex
                'xanchor':'center',
                'x':0.5,
                'yanchor':'top'},
-               font=dict(size=12))
+               font=dict(size=9))
     return fig_pie
 
 #GRUPLAC GENERAL: TODOS LOS PRODUCTOS
@@ -510,7 +510,7 @@ def callback_value(parameter, disable_value, value):
     [State('filter_group', 'value'), State('filter_element_gruplac', 'value'),
     Input('button_group_filter_indiv','n_clicks')]
  )
-def callback_filter(grupo, elemento, boton):
+def callback_filter_individual(grupo, elemento, boton):
     print(boton)
     kpi_all = {'display':'none'}
     indicators_group = ''
@@ -582,4 +582,46 @@ def callback_filter(grupo, elemento, boton):
         div_group_figure4 = {'display':'block'}
 
     return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4
+
+@callback(
+    [    
+    Output('dash_general_graph1','figure'),Output('div_general_figure1','style'),
+    Output('dash_general_graph2','figure'),Output('div_general_figure2','style'),
+    Output('dash_general_graph3','figure'),Output('div_general_figure3','style'),
+    Output('dash_general_graph4','figure'),Output('div_general_figure4','style'),
+    Output('dash_general_graph5','figure'),Output('div_general_figure5','style'),
+    Output('dash_general_graph6','figure'),Output('div_general_figure6','style'),
+    Output('dash_general_graph7','figure'),Output('div_general_figure7','style'),
+    Output('dash_general_graph8','figure'),Output('div_general_figure8','style'),
+    Output('dash_general_graph9','figure'),Output('div_general_figure9','style'),
+    Output('dash_general_graph10','figure'),Output('div_general_figure10','style'),
+    ],
+    [State('filter_parameter', 'value'), State('filter_value', 'value'), State('filter_element_gruplac_general', 'value'),
+    Input('button_group_filter_group','n_clicks')]
+ )
+def callback_filter_grupal(parametro, valor, entrada, boton):
+    dash_general_graph1 = {}
+    dash_general_graph2 = {}
+    dash_general_graph3 = {}
+    dash_general_graph4 = {}
+    dash_general_graph5 = {}
+    dash_general_graph6 = {}
+    dash_general_graph7 = {}
+    dash_general_graph8 = {}
+    dash_general_graph9 = {}
+    dash_general_graph10 = {}
+    div_general_figure1 = {'display':'none'}
+    div_general_figure2 = {'display':'none'}
+    div_general_figure3 = {'display':'none'}
+    div_general_figure4 = {'display':'none'}
+    div_general_figure5 = {'display':'none'}
+    div_general_figure6 = {'display':'none'}
+    div_general_figure7 = {'display':'none'}
+    div_general_figure8 = {'display':'none'}
+    div_general_figure9 = {'display':'none'}
+    div_general_figure10 = {'display':'none'}    
+    if boton == 0 or entrada == None:
+        return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9, dash_general_graph10, div_general_figure10
     
+
+    return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9, dash_general_graph10, div_general_figure10
