@@ -462,6 +462,7 @@ def callback_element(grupo):
         return None, True, []
     else:
         option_elements= filtro_gruplac_grupo_individual(grupo)
+        option_elements.append('Todos')
         return 'Todos', False, option_elements
 
 @callback(
@@ -487,3 +488,14 @@ def callback_value(parameter, disable_value, value):
         return True, None
     else:        
         return False, None
+
+@callback(
+    [
+    Output('indicators_group','children'),Output('products_element_group','chilren'),
+    Output('url_group_grouplac','href'),Output('group_minciencias','href'),
+    Output('kpi-1','children'),Output('kpi-2','children'),Output('kpi-3','children'),Output('kpi-4','children'),Output('kpi-5','children'),
+    Output('dash_individual_graph1','figure'),Output('div_group_figure1','style')
+    ]
+ )
+def callback_filter():
+    pass
