@@ -251,7 +251,7 @@ def bar_pie_all(grupo): #retorna dos graficas, recibe codigo de grupo
                'x':0.5,
                'yanchor':'top'},
                 xaxis={'categoryorder': 'total descending'},
-               font=dict(size=12))
+               font=dict(size=8))
     fig_bar=fig
     fig_pie = px.pie(df, values='count', names='producto', color_discrete_sequence=px.colors.sequential.Aggrnyl,
                      hole=.3)
@@ -458,14 +458,15 @@ sidebar_graph = html.Div([
 
 #  ---------------------callback---------------
 @callback(
-    [Output('filtro_individual', 'style'),Output('filtro_grupal', 'style')],
+    [Output('filtro_individual', 'hidden'),Output('filtro_grupal', 'hidden')],
     Input('tabs_filter_scienti', 'value'))
 def render_content(tab):
     if tab == 'tab_individual':
-        return {"display": "block"},{"display": "none"}
+        return False, True
     else:
-        return {"display": "none"},{"display": "block"}
+        return True, False
 
+#----------------------individual
 @callback(
     [Output('filter_element_gruplac', 'value'),Output('filter_element_gruplac', 'disabled'),Output('filter_element_gruplac', 'options')],
     Input('filter_group', 'value'))
@@ -474,8 +475,9 @@ def callback_element(grupo):
         return None, True, []
     else:
         option_elements= filtro_gruplac_grupo_individual(grupo)
+        option_elements.append('Todos')
         return 'Todos', False, option_elements
-
+#-----------------grupal
 @callback(
     [Output('filter_value', 'value'),Output('filter_value', 'disabled'),Output('filter_value', 'options')],
     Input('filter_parameter', 'value'))
@@ -499,3 +501,133 @@ def callback_value(parameter, disable_value, value):
         return True, None
     else:        
         return False, None
+
+@callback(
+    [
+    Output('kpi_all','style'),
+    Output('indicators_group','children'),Output('products_element_group','children'),
+    Output('url_group_grouplac','href'),Output('group_minciencias','href'),
+    Output('kpi-1','children'),Output('kpi-2','children'),Output('kpi-3','children'),Output('kpi-4','children'),Output('kpi-5','children'),
+    Output('dash_individual_graph1','figure'),Output('div_group_figure1','style'),
+    Output('dash_individual_graph2','figure'),Output('div_group_figure2','style'),
+    Output('dash_individual_graph3','figure'),Output('div_group_figure3','style'),
+    Output('dash_individual_graph4','figure'),Output('div_group_figure4','style'),
+    ],
+    [State('filter_group', 'value'), State('filter_element_gruplac', 'value'),
+    Input('button_group_filter_indiv','n_clicks')]
+ )
+def callback_filter_individual(grupo, elemento, boton):
+    print(boton)
+    kpi_all = {'display':'none'}
+    indicators_group = ''
+    products_element_group = ''
+    url_group_grouplac = ''
+    group_minciencias = ''
+    kpi1 = ''
+    kpi2 = ''
+    kpi3 = ''
+    kpi4 = ''
+    kpi5 = ''    
+    dash_individual_graph1 = {}
+    dash_individual_graph2 = {}
+    dash_individual_graph3 = {}
+    dash_individual_graph4 = {}
+    div_group_figure1 = {'display':'none'}
+    div_group_figure2 = {'display':'none'}
+    div_group_figure3 = {'display':'none','width':'47%'}
+    div_group_figure4 = {'display':'none'}
+    if boton == 0 or elemento == None:
+        return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4
+    
+    kpi_all = {'display':'block'}
+    #indicadores    
+    grupo_cod=get_codigo_grupo(grupo)
+    ac=get_author_count(grupo_cod)  
+    url_group_grouplac = 'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro='+grupo_cod
+    group_minciencias = get_perfil_minciencias(grupo_cod)
+    indicators_group = grupo
+    products_element_group = elemento
+    if elemento == 'Todos':
+        consistencia, ppa,ppua,pc, series_gruplac = get_indicadores(grupo_cod)        
+        kpi1 = str(consistencia)
+        kpi2 = str(ppa)
+        kpi3 = str(ppua)+'%'
+        kpi4 = str(pc)
+        kpi5 = str(ac)       
+        dash_individual_graph1 = time_series_all(series_gruplac)
+        dash_individual_graph2, dash_individual_graph3 = bar_pie_all(grupo_cod)
+        div_group_figure1 = {'display':'block'}
+        div_group_figure2 = {'display':'inline-block'}
+        div_group_figure3 = {'display':'inline-block'}
+    else:
+        consistencia, ppa,ppua,pc, series_gruplac = get_indicadores_relativos(grupo_cod, elemento)
+        kpi1 = str(consistencia)
+        kpi2 = str(ppa)
+        kpi3 = str(ppua)+'%'
+        kpi4 = str(pc)
+        kpi5 = str(ac)
+        dash_individual_graph1 = time_series_element(series_gruplac, elemento)
+        div_group_figure1 = {'display':'block'}
+        data = filtro_gruplac_elemento_individual(grupo, elemento)
+        
+        if ('revista' in data) and ('tipo' in data):
+            dash_individual_graph2 = pie_journal_element(data)
+            dash_individual_graph3 = pie_type_element(data)
+            div_group_figure2 = {'display':'inline-block'}
+            div_group_figure3 = {'display':'inline-block'}
+        elif ('editorial' in data) and ('tipo' in data):
+            dash_individual_graph2 = pie_editorial_element(data)
+            dash_individual_graph3 = pie_type_element(data)
+            div_group_figure2 = {'display':'inline-block'}
+            div_group_figure3 = {'display':'inline-block'}
+        elif ((('revista' in data) and ('editorial' in data)) != True) and ('tipo' in data):
+            dash_individual_graph3 = pie_type_element(data)
+            div_group_figure3 = {'display':'block','width':'95%'}
+        
+        dash_individual_graph4 = tree_author_element(data, elemento)        
+        div_group_figure4 = {'display':'block'}
+
+    return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4
+
+@callback(
+    [    
+    Output('dash_general_graph1','figure'),Output('div_general_figure1','style'),
+    Output('dash_general_graph2','figure'),Output('div_general_figure2','style'),
+    Output('dash_general_graph3','figure'),Output('div_general_figure3','style'),
+    Output('dash_general_graph4','figure'),Output('div_general_figure4','style'),
+    Output('dash_general_graph5','figure'),Output('div_general_figure5','style'),
+    Output('dash_general_graph6','figure'),Output('div_general_figure6','style'),
+    Output('dash_general_graph7','figure'),Output('div_general_figure7','style'),
+    Output('dash_general_graph8','figure'),Output('div_general_figure8','style'),
+    Output('dash_general_graph9','figure'),Output('div_general_figure9','style'),
+    Output('dash_general_graph10','figure'),Output('div_general_figure10','style'),
+    ],
+    [State('filter_parameter', 'value'), State('filter_value', 'value'), State('filter_element_gruplac_general', 'value'),
+    Input('button_group_filter_group','n_clicks')]
+ )
+def callback_filter_grupal(parametro, valor, entrada, boton):
+    dash_general_graph1 = {}
+    dash_general_graph2 = {}
+    dash_general_graph3 = {}
+    dash_general_graph4 = {}
+    dash_general_graph5 = {}
+    dash_general_graph6 = {}
+    dash_general_graph7 = {}
+    dash_general_graph8 = {}
+    dash_general_graph9 = {}
+    dash_general_graph10 = {}
+    div_general_figure1 = {'display':'none'}
+    div_general_figure2 = {'display':'none'}
+    div_general_figure3 = {'display':'none'}
+    div_general_figure4 = {'display':'none'}
+    div_general_figure5 = {'display':'none'}
+    div_general_figure6 = {'display':'none'}
+    div_general_figure7 = {'display':'none'}
+    div_general_figure8 = {'display':'none'}
+    div_general_figure9 = {'display':'none'}
+    div_general_figure10 = {'display':'none'}    
+    if boton == 0 or entrada == None:
+        return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9, dash_general_graph10, div_general_figure10
+    
+
+    return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9, dash_general_graph10, div_general_figure10
