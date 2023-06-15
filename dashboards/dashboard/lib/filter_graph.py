@@ -211,6 +211,35 @@ def get_codigo_grupo(nombre):
     codigo=gruplac_basico[gruplac_basico['nombre']==nombre]['idgruplac'].iloc[0]
     return codigo
 
+#PARA OBTENER UN DATAFRAME CON LOS INDICADORES DE TODOS LOS GRUPOS EN TODOS LOS ELEMENTOS O PRODUCTOS
+def get_indicadores_gruplac_general(grupos):
+    dic={'idgruplac':[],'consistencia':[],'ppa':[],'ppua':[],'pg':[]}
+    list_series=[]
+    for grupo in grupos:
+        consistency,apy,pdly,pc,x =get_indicadores(grupo)
+        dic['idgruplac'].append(grupo)
+        dic['consistencia'].append(consistency)
+        dic['ppa'].append(apy)
+        dic['ppua'].append(pdly)
+        dic['pg'].append(pc)
+        list_series.append(x)
+    indicadores_grupos_general= pd.DataFrame.from_dict(dic)
+    return indicadores_grupos_general, list_series
+
+#PARA OBTENER UN DATAFRAME CON LOS INDICADORES DE TODOS LOS GRUPOS EN UN ELEMENTO RELATIVO
+def get_indicadores_gruplac_relativo(grupos,elemento):
+    dic={'idgruplac':[],'consistencia':[],'ppa':[],'ppua':[],'pg':[]}
+    list_series=[]
+    for grupo in grupos:
+        consistency,apy,pdly,pc,x =get_indicadores_relativos(grupo,elemento)
+        dic['idgruplac'].append(grupo)
+        dic['consistencia'].append(consistency)
+        dic['ppa'].append(apy)
+        dic['ppua'].append(pdly)
+        dic['pg'].append(pc)
+        list_series.append(x)
+    indicadores_grupos_relativo= pd.DataFrame.from_dict(dic)
+    return indicadores_grupos_relativo, list_series
 ###############################################################################
 #FIGURE FUNCTIONS
 ############################################################################
