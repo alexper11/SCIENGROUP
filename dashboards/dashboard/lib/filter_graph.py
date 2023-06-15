@@ -406,7 +406,229 @@ def pie_editorial_element(datain): #solo para elementos con columna "editorial" 
     return fig_pie
 
 #GRUPLAC GENERAL: TODOS LOS PRODUCTOS
+def time_series_all_general(series,grupos, elemento): #recibe time_series y grupos_nombres
+    df=pd.DataFrame()
+    if elemento=='Todos':
+        title_label='<b>Productos Anuales Generados: Todos</b>'
+    else:
+        title_label='<b>Productos Anuales Generados: '+elemento+'</b>'
+    for i,serie in enumerate(series):
+        if i==0:
+            df['fecha']=serie.index
+            df[grupos[i]]=serie.values
+        else:
+            df_aux=pd.DataFrame(serie,columns=[grupos[i]])
+            df_aux['fecha']=serie.index
+            df=pd.merge(df, df_aux, on="fecha",how='outer').sort_values(by='fecha').fillna(0)
+            df['fecha']=pd.to_datetime(df.fecha, format='%Y').dt.year
+    fig = px.line(df, x="fecha", y=df.columns,
+                  labels={
+                          "fecha":"Años",
+                          "value":'Cantidad de Productos'})
+    fig.update_layout(legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="left",
+        x=0.01,
+        title='Grupos',
+        font=dict(size=11)),
+        title={
+              'text':title_label,
+              'xanchor':'center',
+              'x':0.5,
+              'yanchor':'top',
+              'automargin':True},
+              font=dict(size=12),
+              margin=dict(t=20, b=20))
+    fig.update_traces(line_width=1.5)
+    fig.update_layout(height=650)#############
+    return fig
 
+def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codigos y grupos_codigos
+    df=pd.DataFrame(columns=['grupo','producto','count'])
+    for i,codigo in enumerate(codigos):
+        dic={'grupo':[],'producto':[],'count':[]}
+        for key in list(set(fuente_dic['GRUPLAC'].keys())-set(['Institución','Líneas de Investigación','Datos Básicos'])):
+            data=fuente_dic['GRUPLAC'][key]
+            dic['grupo'].append(nombres[i])
+            dic['count'].append(data[data['idgruplac']==codigo]['idgruplac'].count())
+            dic['producto'].append(key)
+        df_aux=pd.DataFrame.from_dict(dic)
+        df_aux=df_aux[df_aux['count']>0]
+        df=pd.concat([df, df_aux], ignore_index=True)
+    df['grupo']=df['grupo'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    fig = px.bar(df, x="grupo", y="count", color='producto',
+                 labels={
+                 "grupo":"Grupo de Investigación",
+                 "count":"Cantidad de Productos"},color_discrete_sequence=px.colors.sequential.Viridis)#paleta de colores
+    fig.update_layout(
+                legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                #x=0.02,
+                y=1.02,
+                title='Productos',
+                font=dict(size=11)),
+                title={
+                'text':"<b>Productos Generados por los Grupos de Investigación</b>",
+                'xanchor':'center',
+                'x':0.5,
+                'yanchor':'top',
+                'automargin':True},
+                yaxis={'categoryorder': 'total ascending'},
+                font=dict(size=11),
+                margin=dict(t=10, b=10))
+    fig.update_xaxes(tickangle=90)
+    fig.update_layout(height=650)##############
+    fig.update_yaxes(automargin=True)
+    return fig
+
+def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y grupos_nombres
+    df=indicadores.rename(columns={'idgruplac':'gruplac'})
+    if elemento=='Todos':
+        title_label="<b>Indicador de Consistencia para Todos los Productos</b>"
+    else:
+        title_label="<b>Indicador de Consistencia para "+elemento+"</b>"
+    df['gruplac']=grupos
+    categories_con=[]
+    for i,name in enumerate(df['gruplac'].to_list()):
+        categories_con.append({"name":df['gruplac'].loc[i],"value":float(df['consistencia'].loc[i])})
+    fig_con = go.Figure(
+        data=[go.Bar(
+            x=[d.get('value') for d in categories_con], 
+            y=[d.get('name') for d in categories_con],
+            orientation='h',
+            texttemplate="%{x:}",
+            hovertemplate="%{x},%{y}<extra></extra>"
+        ),
+        go.Bar(
+            x=[0] * len(categories_con), 
+            y=[d.get('name') for d in categories_con],
+            orientation='h',
+            texttemplate="%{y}",
+            textposition="outside"
+        )],
+        layout={
+            'barmode': 'group',
+            'height': 600, 
+            'yaxis':{'visible': False},
+            'showlegend': False,
+            'title':title_label
+        }
+    )
+    return fig_con
+
+def bar_ppa(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombres
+    df=indicadores.rename(columns={'idgruplac':'gruplac'})
+    if elemento=='Todos':
+        title_label="<b>PPA Promedio de Productos por Año (Todos)</b>"
+    else:
+        title_label="<b>PPA Promedio de Productos por Año ("+elemento+")</b>"
+    df['gruplac']=grupos
+    categories_ppa=[]
+    for i,name in enumerate(df['gruplac'].to_list()):
+        categories_ppa.append({"name":df['gruplac'].loc[i],"value":float(df['ppa'].loc[i])})
+    fig_ppa = go.Figure(
+        data=[go.Bar(
+            x=[d.get('value') for d in categories_ppa], 
+            y=[d.get('name') for d in categories_ppa],
+            orientation='h',
+            texttemplate="%{x:}",
+            hovertemplate="%{x},%{y}<extra></extra>"
+        ),
+        go.Bar(
+            x=[0] * len(categories_ppa), 
+            y=[d.get('name') for d in categories_ppa],
+            orientation='h',
+            texttemplate="%{y}",
+            textposition="outside",
+
+        )],
+        layout={
+            'barmode': 'group',
+            'height': 600, 
+            'yaxis':{'visible': False},
+            'showlegend': False,
+            'title':title_label,
+        }
+    )
+    fig_ppa.data[0].marker.color='orangered'
+    return fig_ppa
+
+def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombres
+    df=indicadores.rename(columns={'idgruplac':'gruplac'})
+    if elemento=='Todos':
+        title_label="<b>PPUA Porcentaje de Productos en los Ultimos Años (Todos)</b>"
+    else:
+        title_label="<b>PPUA Porcentaje de Productos en los Ultimos Años ("+elemento+")</b>"
+    df['gruplac']=grupos
+    categories_ppua=[]
+    for i,name in enumerate(df['gruplac'].to_list()):
+        categories_ppua.append({"name":df['gruplac'].loc[i],"value":float(df['ppua'].loc[i])})
+    fig_ppua = go.Figure(
+        data=[go.Bar(
+            x=[d.get('value') for d in categories_ppua], 
+            y=[d.get('name') for d in categories_ppua],
+            orientation='h',
+            texttemplate="%{x}%",
+            hovertemplate="%{x}%,%{y}<extra></extra>"
+        ),
+        go.Bar(
+            x=[0] * len(categories_ppua), 
+            y=[d.get('name') for d in categories_ppua],
+            orientation='h',
+            texttemplate="%{y}",
+            textposition="outside",
+
+        )],
+        layout={
+            'barmode': 'group',
+            'height': 600, 
+            'yaxis':{'visible': False},
+            'showlegend': False,
+            'title':title_label,
+        }
+    )
+    fig_ppua.data[0].marker.color='purple'
+    return fig_ppua
+
+def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombres
+    df=indicadores.rename(columns={'idgruplac':'gruplac'})
+    if elemento=='Todos':
+        title_label="<b>PG Productos Generados (Todos)</b>"
+    else:
+        title_label="<b>PG Productos Generados ("+elemento+")</b>"
+    df['gruplac']=grupos
+    categories_pg=[]
+    for i,name in enumerate(df['gruplac'].to_list()):
+        categories_pg.append({"name":name,"value":float(df['pg'].iloc[i])})
+    fig_pg = go.Figure(
+        data=[go.Bar(
+            x=[d.get('value') for d in categories_pg], 
+            y=[d.get('name') for d in categories_pg],
+            orientation='h',
+            texttemplate="%{x}",
+            hovertemplate="%{x},%{y}<extra></extra>"
+        ),
+        go.Bar(
+            x=[0] * len(categories_pg), 
+            y=[d.get('name') for d in categories_pg],
+            orientation='h',
+            texttemplate="%{y}",
+            textposition="outside",
+
+        )],
+        layout={
+            'barmode': 'group',
+            'height': 600, 
+            'yaxis':{'visible': False},
+            'showlegend': False,
+            'title':title_label,
+        }
+    )
+    fig_pg.data[0].marker.color='green'
+    return fig_pg
 
 #GRUPLAC GENERAL: ELEMENTO
 
