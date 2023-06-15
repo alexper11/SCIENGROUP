@@ -428,21 +428,22 @@ def time_series_all_general(series,grupos, elemento): #recibe time_series y grup
     fig.update_layout(legend=dict(
         orientation="h",
         yanchor="bottom",
-        y=1.02,
+        y=1.1,
         xanchor="left",
         x=0.01,
         title='Grupos',
-        font=dict(size=11)),
+        font=dict(size=9)),
         title={
               'text':title_label,
               'xanchor':'center',
               'x':0.5,
               'yanchor':'top',
-              'automargin':True},
-              font=dict(size=12),
-              margin=dict(t=20, b=20))
+              'automargin':True,
+              },
+        font=dict(size=10),
+        margin=dict(t=1, b=1))
     fig.update_traces(line_width=1.5)
-    fig.update_layout(height=650)#############
+    #fig.update_layout(height=600)#############
     return fig
 
 def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codigos y grupos_codigos
@@ -469,7 +470,7 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
                 #x=0.02,
                 y=1.02,
                 title='Productos',
-                font=dict(size=11)),
+                font=dict(size=9)),
                 title={
                 'text':"<b>Productos Generados por los Grupos de Investigación</b>",
                 'xanchor':'center',
@@ -478,9 +479,9 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
                 'automargin':True},
                 yaxis={'categoryorder': 'total ascending'},
                 font=dict(size=11),
-                margin=dict(t=10, b=10))
+                margin=dict(t=2, b=2))
     fig.update_xaxes(tickangle=90)
-    fig.update_layout(height=650)##############
+    fig.update_layout(height=600)##############
     fig.update_yaxes(automargin=True)
     return fig
 
@@ -493,7 +494,8 @@ def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y gru
     df['gruplac']=grupos
     categories_con=[]
     for i,name in enumerate(df['gruplac'].to_list()):
-        categories_con.append({"name":df['gruplac'].loc[i],"value":float(df['consistencia'].loc[i])})
+        categories_con.append({"name":name,"value":float(df['consistencia'].iloc[i])})
+        
     fig_con = go.Figure(
         data=[go.Bar(
             x=[d.get('value') for d in categories_con], 
@@ -511,7 +513,8 @@ def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y gru
         )],
         layout={
             'barmode': 'group',
-            'height': 600, 
+            #'height': 600,
+            #'width': 800,
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label
@@ -528,7 +531,7 @@ def bar_ppa(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nomb
     df['gruplac']=grupos
     categories_ppa=[]
     for i,name in enumerate(df['gruplac'].to_list()):
-        categories_ppa.append({"name":df['gruplac'].loc[i],"value":float(df['ppa'].loc[i])})
+        categories_ppa.append({"name":name,"value":float(df['ppa'].iloc[i])})
     fig_ppa = go.Figure(
         data=[go.Bar(
             x=[d.get('value') for d in categories_ppa], 
@@ -547,7 +550,7 @@ def bar_ppa(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nomb
         )],
         layout={
             'barmode': 'group',
-            'height': 600, 
+            #'height': 600, 
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label,
@@ -565,7 +568,7 @@ def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nom
     df['gruplac']=grupos
     categories_ppua=[]
     for i,name in enumerate(df['gruplac'].to_list()):
-        categories_ppua.append({"name":df['gruplac'].loc[i],"value":float(df['ppua'].loc[i])})
+        categories_ppua.append({"name":name,"value":float(df['ppua'].iloc[i])})
     fig_ppua = go.Figure(
         data=[go.Bar(
             x=[d.get('value') for d in categories_ppua], 
@@ -584,7 +587,7 @@ def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nom
         )],
         layout={
             'barmode': 'group',
-            'height': 600, 
+            #'height': 600, 
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label,
@@ -621,7 +624,7 @@ def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombr
         )],
         layout={
             'barmode': 'group',
-            'height': 600, 
+            #'height': 600, 
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label,
@@ -661,8 +664,9 @@ option_parameter = dcc.Dropdown(
 option_value = dcc.Dropdown(
         id='filter_value',
         options = [],
-        value = None,  # Valor inicial seleccionado
-        disabled= True
+        value = [],  # Valor inicial seleccionado
+        disabled= True,
+        multi=True
     )
 option_element_gruplac_general = dcc.Dropdown(
         id='filter_element_gruplac_general',
@@ -881,15 +885,38 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
     if boton == 0 or elemento == None:
         return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9, dash_general_graph10, div_general_figure10
     grupos_codigos, grupos_nombres=filtro_gruplac_valor_general(parametro,valor)
+    
     if elemento == 'Todos':
         df_indicadores, time_series = get_indicadores_gruplac_general(grupos_codigos)
-        div_general_figure1 = {'display':'block'}
-        div_general_figure2 = {'display':'block'}
+        if df_indicadores['idgruplac'].count()>10:
+            df_indicadores=df_indicadores.sort_values(by='pg',ascending=False).iloc[:10].sort_index()
+            indices_top=list(df_indicadores.index.astype('int64'))
+            time_series=[time_series[x] for x in indices_top]
+            grupos_codigos=df_indicadores['idgruplac'].to_list()
+            grupos_nombres=[gruplac_basico[gruplac_basico['idgruplac'].str.contains(x)]['nombre'].iloc[0] for x in grupos_codigos]
+            indices_top=0
+        dash_general_graph1 = time_series_all_general(time_series,grupos_nombres,elemento)
+        dash_general_graph2 = bar_general_all(grupos_codigos,grupos_nombres)
+        dash_general_graph3 = bar_consistencia(df_indicadores,grupos_nombres,elemento)
+        dash_general_graph4 = bar_ppa(df_indicadores,grupos_nombres,elemento)
+        dash_general_graph5 = bar_ppua(df_indicadores,grupos_nombres,elemento)
+        dash_general_graph6 = bar_pg(df_indicadores,grupos_nombres,elemento)
+        div_general_figure1 = {'display':'block', 'max-heigth':'1000px'}
+        div_general_figure2 = {'display':'block', 'max-heigth':'1000px', 'margin-top':'10px'}
         div_general_figure3 = {'display':'inline-block'}
         div_general_figure4 = {'display':'inline-block'}
         div_general_figure5 = {'display':'inline-block'}
         div_general_figure6 = {'display':'inline-block'}
     else:
+        df_indicadores, time_series = get_indicadores_gruplac_relativo(grupos_codigos,elemento)
+        if df_indicadores['idgruplac'].count()>10:
+            df_indicadores=df_indicadores.sort_values(by='pg',ascending=False).iloc[:10].sort_index()
+            indices_top=list(df_indicadores.index.astype('int64'))
+            time_series=[time_series[x] for x in indices_top]
+            grupos_codigos=df_indicadores['idgruplac'].to_list()
+            grupos_nombres=[gruplac_basico[gruplac_basico['idgruplac'].str.contains(x)]['nombre'].iloc[0] for x in grupos_codigos]
+            indices_top=0
+        data=filtro_gruplac_elemento_general(grupos_codigos,elemento)
         div_general_figure1 = {'display':'block'}
         div_general_figure2 = {'display':'block'}
         div_general_figure3 = {'display':'inline-block'}
