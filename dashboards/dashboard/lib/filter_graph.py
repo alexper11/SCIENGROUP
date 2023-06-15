@@ -634,7 +634,102 @@ def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombr
     return fig_pg
 
 #GRUPLAC GENERAL: ELEMENTO
+def bar_general_element(data, elemento): #retorna dos graficas, recibe grupos_codigos y grupos_codigos
+    df=data.rename(columns={'idgruplac':'grupo'})
+    df['grupo']=df['grupo'].apply(lambda x: gruplac_basico[gruplac_basico['idgruplac']==x]['nombre'].iloc[0])
+    df['grupo']=df['grupo'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    df=df['grupo'].value_counts()
+    fig = px.bar(df, x=df.index, y=df, color=df.index,
+                 labels={
+                 "index":"Grupo de Investigación",
+                 "y":"Cantidad de Productos"},
+                 orientation='v',color_discrete_sequence=px.colors.sequential.thermal)#paleta de colores
+    fig.update_layout(
+                title={
+                'text':"<b>Productos Generados por los Grupos de Investigación: "+elemento+"</b>",
+                'xanchor':'center',
+                'x':0.5,
+                'yanchor':'top',
+                'automargin':True},
+                yaxis={'categoryorder': 'total ascending'},
+                font=dict(size=11),
+                margin=dict(t=10, b=10))
+    fig.update(layout_showlegend=False)
+    fig.update_xaxes(tickangle=90)
+    #fig.update_layout(height=550)##############
+    fig.update_yaxes(automargin=True)
+    return fig
 
+def pie_journal_element_general(datain,condition): #recibe dataset filtrado y ocndicion 'editorial' o 'revista'
+    data=datain.copy()
+    data[condition]=data[condition].str.wrap(40,break_long_words=False).str.replace('\n','<br>')
+    if condition=='editorial':
+        title_label="<b>Publicaciones por Editoriales</b>"
+    else:
+        title_label="<b>Publicaciones en Revistas</b>"
+    if data[condition].value_counts().shape[0]>30:
+        data_aux=data[condition].value_counts().iloc[:30]
+    else:
+        data_aux=data[condition].value_counts()
+    fig_pie = px.pie(data_aux, values=data_aux, 
+                     names=data_aux.index, color_discrete_sequence=px.colors.cyclical.Edge,
+                     hole=.3)
+    fig_pie.update_layout(legend=dict(
+                orientation="v",
+                xanchor="left",
+                #x=0.02,
+                #y=1.02,
+                title=condition.capitalize(),
+                font=dict(size=11),
+                ),
+                title={
+               'text':title_label,
+               'xanchor':'center',
+               'x':0.5,
+               'yanchor':'top',
+               'automargin':True},
+               #margin=dict(r=10, l=10),
+               font=dict(size=12))
+    #fig_pie.update_yaxes(automargin=True)
+    #fig_pie.update_layout(height=650)
+    return fig_pie
+
+def tree_author_element_general(data, elemento): #sólo para aquellos elementos con la columna 'autores' existente, se filtra a top 30 si hay mas
+    warnings.filterwarnings(action='ignore', category=FutureWarning)#################
+    dataset_autores=data[['idgruplac','autores']].copy()
+    dataset_autores['autores']=dataset_autores['autores'].str.split(',')
+    dataset_autores=dataset_autores.explode('autores')
+    dataset_autores['autores']=dataset_autores['autores'].str.strip()
+    dataset_autores=dataset_autores['autores'].value_counts().reset_index().rename(columns={'index':'autores','autores':'count'})
+    dataset_autores['percents']=(dataset_autores['count']*100)/sum(dataset_autores['count'])
+    if dataset_autores['autores'].count()>30:
+        dataset_autores=dataset_autores.iloc[:30]
+    fig = px.treemap(dataset_autores, path=[px.Constant("Top Autores"),'autores'], values='count', 
+                     custom_data=['percents'])
+    fig.update_traces(root_color="white")
+    fig.data[0].texttemplate = "%{label}<br>"+elemento+":%{value}<br>%{customdata:.2f}%"
+    fig.data[0].hovertemplate = '%{label}<br>'+elemento+':%{value}<br>%{customdata:.2f}%'
+    fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
+                      title={
+                      'text':'<b>Participación de Autores</b>',
+                      'xanchor':'center',
+                      'x':0.5,
+                      'yanchor':'top'},
+                      font=dict(size=14))
+    warnings.filterwarnings(action='default', category=FutureWarning)##################
+    return fig
+
+def pie_type_element_general(data): #solo elementos con columna "tipo" existente
+    fig_pie = px.pie(data, values=data['tipo'].value_counts(), 
+                     names=data['tipo'].value_counts().index, color_discrete_sequence=px.colors.qualitative.Dark2,
+                     hole=.3)
+    fig_pie.update_layout(title={
+               'text':"<b>Publicaciones por Tipo</b>",
+               'xanchor':'center',
+               'x':0.5,
+               'yanchor':'top'},
+               font=dict(size=12))
+    return fig_pie
 
 ####################################################################################
 # Add the dash_Img
