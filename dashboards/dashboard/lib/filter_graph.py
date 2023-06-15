@@ -257,7 +257,8 @@ def time_series_all(series):
                   'xanchor':'center',
                   'x':0.5,
                   'yanchor':'top'},
-                  font=dict(size=12))
+                  font=dict(size=12),
+                  height=500)
     fig.update_traces(line_color='#0000ff', line_width=2)
     return fig
 
@@ -281,7 +282,8 @@ def bar_pie_all(grupo): #retorna dos graficas, recibe codigo de grupo
                'x':0.5,
                'yanchor':'top'},
                 xaxis={'categoryorder': 'total descending'},
-               font=dict(size=8))
+                height= 450, 
+               font=dict(size=10))
     fig_bar=fig
     fig_pie = px.pie(df, values='count', names='producto', color_discrete_sequence=px.colors.sequential.Aggrnyl,
                      hole=.3)
@@ -290,8 +292,9 @@ def bar_pie_all(grupo): #retorna dos graficas, recibe codigo de grupo
                'xanchor':'center',
                'x':0.5,
                'yanchor':'top'},
-               font=dict(size=12))
-    fig_pie.update_layout( legend = {"xanchor": "right", "x": 1})
+                height= 450,
+               font=dict(size=10))
+    fig_pie.update_layout( legend = {"xanchor": "right"})
     return fig_bar, fig_pie
 
 #GRUPLAC INDIVIDUAL: ELEMENTO
@@ -907,9 +910,9 @@ def callback_filter_individual(grupo, elemento, boton):
         kpi5 = str(ac)       
         dash_individual_graph1 = time_series_all(series_gruplac)
         dash_individual_graph2, dash_individual_graph3 = bar_pie_all(grupo_cod)
-        div_group_figure1 = {'display':'block'}
-        div_group_figure2 = {'display':'inline-block'}
-        div_group_figure3 = {'display':'inline-block'}
+        div_group_figure1 = {'display':'block', 'max-height':'700px'}
+        div_group_figure2 = {'display':'inline-block', 'max-height':'600px'}
+        div_group_figure3 = {'display':'inline-block', 'max-height':'600px'}
     else:
         consistencia, ppa,ppua,pc, series_gruplac = get_indicadores_relativos(grupo_cod, elemento)
         kpi1 = str(consistencia)
