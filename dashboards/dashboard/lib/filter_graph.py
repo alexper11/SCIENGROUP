@@ -428,14 +428,8 @@ def time_series_all_general(series,grupos, elemento): #recibe time_series y grup
                   labels={
                           "fecha":"Años",
                           "value":'Cantidad de Productos'})
-    fig.update_layout(legend=dict(
-        orientation="h",
-        yanchor="bottom",
-        y=1.05,
-        xanchor="left",
-        x=0.01,
-        title='Grupos',
-        font=dict(size=9)),
+    fig.update_traces(line_width=1.5)
+    fig.update_layout(
         title={
               'text':title_label,
               'xanchor':'center',
@@ -444,8 +438,16 @@ def time_series_all_general(series,grupos, elemento): #recibe time_series y grup
               'automargin':True,
               },
         font=dict(size=10),
-        margin=dict(t=1, b=1))
-    fig.update_traces(line_width=1.5)
+        margin=dict(t=1, b=1),
+        legend=dict(
+            orientation="h",
+            y=1.05,
+            yanchor="bottom",
+            xanchor="left",
+            x=0.01,
+            title='Grupos',
+            font=dict(size=9)),
+        height=650)
     #fig.update_layout(height=600)#############
     return fig
 
@@ -470,25 +472,34 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
     fig.update_layout(
                 legend=dict(
                 orientation="h",
-                yanchor="bottom",
-                #x=0.02,
+                x=0.02,
                 y=1.02,
+                yanchor="bottom",
+                xanchor="left",
                 title='Productos',
-                font=dict(size=9)),
+                font=dict(size=9),
+                #legend_itemclick="toggleothers",
+                #legend_itemdoubleclick="toggle",
+                #
+                ),
                 title={
                 'text':"<b>Productos Generados por los Grupos de Investigación</b>",
                 'xanchor':'center',
                 'x':0.5,
                 'yanchor':'top',
-                'automargin':True
+                'automargin':True,
+                'font': {'size': 12},
                 },
                 yaxis={'categoryorder': 'total ascending'},
-                font=dict(size=11),
-                margin=dict(t=10, b=2))
+                font=dict(size=10),
+                margin=dict(t=2, b=2),
+                height=650
+                )
     if df['grupo'].nunique()>1:
         fig.update_xaxes(tickangle=90)
-    fig.update_layout(height=500)##############
-    fig.update_yaxes(automargin=True)
+    #fig.update_layout(legend_x=0.02, legend_y=1.02)
+    #fig.update_yaxes(automargin=True)
+    #fig.update_traces(visible='legendonly')
     return fig
 
 def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y grupos_nombres
@@ -519,7 +530,7 @@ def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y gru
         )],
         layout={
             'barmode': 'group',
-            #'height': 600,
+            'height': 500,
             #'width': 800,
             'yaxis':{'visible': False},
             'showlegend': False,
@@ -556,7 +567,7 @@ def bar_ppa(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nomb
         )],
         layout={
             'barmode': 'group',
-            #'height': 600, 
+            'height': 500, 
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label,
@@ -593,7 +604,7 @@ def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nom
         )],
         layout={
             'barmode': 'group',
-            #'height': 600, 
+            'height': 500, 
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label,
@@ -630,7 +641,7 @@ def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombr
         )],
         layout={
             'barmode': 'group',
-            #'height': 600, 
+            'height': 500, 
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label,
@@ -645,6 +656,7 @@ def bar_general_element(data, elemento): #retorna dos graficas, recibe grupos_co
     df['grupo']=df['grupo'].apply(lambda x: gruplac_basico[gruplac_basico['idgruplac']==x]['nombre'].iloc[0])
     if df['grupo'].nunique()>1:
         df['grupo']=df['grupo'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    temp_df=df.copy()
     df=df['grupo'].value_counts()
     fig = px.bar(df, x=df.index, y=df, color=df.index,
                  labels={
@@ -662,10 +674,10 @@ def bar_general_element(data, elemento): #retorna dos graficas, recibe grupos_co
                 font=dict(size=11),
                 margin=dict(t=2, b=2))
     fig.update(layout_showlegend=False)
-    if df['grupo'].nunique()>1:
+    if temp_df['grupo'].nunique()>1:
         fig.update_xaxes(tickangle=90)
     fig.update_layout(height=600)##############
-    fig.update_yaxes(automargin=True)
+    #fig.update_yaxes(automargin=True)
     return fig
 
 def pie_journal_element_general(datain,condition): #recibe dataset filtrado y ocndicion 'editorial' o 'revista'
