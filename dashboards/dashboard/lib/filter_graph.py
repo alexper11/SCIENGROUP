@@ -638,11 +638,13 @@ def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombr
 
 #GRUPLAC GENERAL: ELEMENTO
 def bar_general_element(data, elemento): #retorna dos graficas, recibe grupos_codigos y grupos_codigos
-    df=data.rename(columns={'idgruplac':'grupo'})
+    
+    df=data.rename(columns={'idgruplac':'grupo'}).copy()
     df['grupo']=df['grupo'].apply(lambda x: gruplac_basico[gruplac_basico['idgruplac']==x]['nombre'].iloc[0])
     if df['grupo'].nunique()>1:
         df['grupo']=df['grupo'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
-    df=df['grupo'].value_counts()
+    temp_df=df.copy()
+    df=df['grupo'].value_counts()    
     fig = px.bar(df, x=df.index, y=df, color=df.index,
                  labels={
                  "index":"Grupo de Investigación",
@@ -659,7 +661,7 @@ def bar_general_element(data, elemento): #retorna dos graficas, recibe grupos_co
                 font=dict(size=11),
                 margin=dict(t=2, b=2))
     fig.update(layout_showlegend=False)
-    if df['grupo'].nunique()>1:
+    if temp_df['grupo'].nunique()>1:
         fig.update_xaxes(tickangle=90)
     fig.update_layout(height=600)##############
     fig.update_yaxes(automargin=True)
@@ -1015,7 +1017,7 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
             time_series=[time_series[x] for x in indices_top]
             grupos_codigos=df_indicadores['idgruplac'].to_list()
             grupos_nombres=[gruplac_basico[gruplac_basico['idgruplac'].str.contains(x)]['nombre'].iloc[0] for x in grupos_codigos]
-            indices_top=0            
+            indices_top=0
         data=filtro_gruplac_elemento_general(grupos_codigos,elemento)
         dash_general_graph1 = time_series_all_general(time_series, grupos_nombres,elemento)
         div_general_figure1 = {'display':'block','max-height':'1000px','padding-bottom':'10px'}

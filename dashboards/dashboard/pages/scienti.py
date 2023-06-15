@@ -17,6 +17,7 @@ layout = html.Div([
             ],id="div_gruplac",
         ),        
         sidebar_graph,
+        html.Img(src="/assets/img/filter.png",id="boton_filter_flex"),
     ],className="dash-body-graph", style={"color": "black"},
 ) 
 
