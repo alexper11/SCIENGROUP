@@ -658,11 +658,7 @@ def bar_general_element(data, elemento): #retorna dos graficas, recibe grupos_co
     if df['grupo'].nunique()>1:
         df['grupo']=df['grupo'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
     temp_df=df.copy()
-<<<<<<< HEAD
-    df=df['grupo'].value_counts()
-=======
     df=df['grupo'].value_counts()    
->>>>>>> e98dc8baa80cbf7113beacbd2ed3dae2eae47355
     fig = px.bar(df, x=df.index, y=df, color=df.index,
                  labels={
                  "index":"Grupo de Investigación",
