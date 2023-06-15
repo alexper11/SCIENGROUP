@@ -13,8 +13,14 @@ from lib.filter_graph import sidebar_graph
 
 layout = html.Div([
         html.Div(
-            children=[
-            ],id="div_gruplac",
+            children=dcc.Loading(
+            id="loading",
+            children=[],
+            type="cube",
+            fullscreen=False,
+            style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"}
+            ),id="div_gruplac",
+            # children=[html.H2("Información filtrado individual (eliminar msj)", className="title_graph_main"),                
         ),        
         sidebar_graph,
         html.Img(src="/assets/img/filter.png",id="boton_filter_flex"),
@@ -24,14 +30,11 @@ layout = html.Div([
 #-----------------------------------Callbacks ---------------------------------
 
 @callback(
-    Output('div_gruplac', 'children'),
+    Output('loading', 'children'),
     Input('tabs_filter_scienti', 'value'))
 def render_content(tab):
     if tab == 'tab_individual':
-        return dcc.Loading(
-            id="loading2",
-            # children=[html.H2("Información filtrado individual (eliminar msj)", className="title_graph_main"),                
-                children=[html.Div([                    
+        return [html.Div([                    
                     html.H1(children="Indicadores para grupos de investigación: ", id="indicators_group", className="group_graph_info"),
                     html.H1(children="Por favor selecciones elementos a filtrar",id="products_element_group", className="group_graph_info"),
                     html.Div([
@@ -60,13 +63,9 @@ def render_content(tab):
                 html.Div([
                     dcc.Graph(figure={}, id='dash_individual_graph4',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_group_figure4', className='card-graph card-body col-graph-big', style={'display':'none'}),
-            ], type="cube", fullscreen=False, style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"}
-        )
+            ]
     else:
-        return dcc.Loading(
-            id="loading1",
-            #children=[html.H2("Indicadores General", className="title_graph_main"),
-            children=[html.Div([
+        return [html.Div([
                 html.Div([
                     dcc.Graph(figure={}, id='dash_general_graph1',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_general_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),
@@ -100,5 +99,4 @@ def render_content(tab):
                         dcc.Graph(figure={}, id='dash_general_graph9',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_general_figure9', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                 ],className='col-graph-father'),
-            ])],type="cube", fullscreen=False, style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"},
-        )
+            ])]

@@ -714,6 +714,7 @@ def pie_journal_element_general(datain,condition): #recibe dataset filtrado y oc
                font=dict(size=12))
     #fig_pie.update_yaxes(automargin=True)
     #fig_pie.update_layout(height=650)
+    fig_pie.update_traces(textposition='inside', textinfo='percent')
     return fig_pie
 
 def tree_author_element_general(data, elemento): #sólo para aquellos elementos con la columna 'autores' existente, se filtra a top 30 si hay mas
