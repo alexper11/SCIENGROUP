@@ -285,10 +285,10 @@ img.brand {
   flex: 1 1 33%;
   margin-left: 1rem;
 }
-.col-graph-big {
+/*.col-graph-big {
   flex: 1 1 60rem;
   margin-left: 1rem;
-}
+}*/
 .color {
   color: #353535;
   max-width: 100%;
@@ -451,8 +451,9 @@ H1, P {
 .card-body {
   /* display: flex; */
   /* flex-direction: column;
-  justify-content: space-around; */
-  align-items: center;
+  justify-content: space-around; 
+  */
+  align-items: stretch;
 }
 
 .group_graph_info{

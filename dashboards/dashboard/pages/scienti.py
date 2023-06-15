@@ -75,7 +75,7 @@ def render_content(tab):
                 html.Div([
                     html.Div([                        
                         dcc.Graph(figure={}, id='dash_general_graph3',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
-                    ],id='div_general_figure3', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
+                    ],id='div_general_figure3', className='card-graph_middle col-graph-middle', style={'display':'none'}),
                     html.Div([
                         dcc.Graph(figure={}, id='dash_general_graph4',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_general_figure4', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
