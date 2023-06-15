@@ -21,17 +21,18 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 elementos_gruplac_general=elementos_gruplac_individual
-
+options_general_element=elementos_gruplac_general[:]
+options_general_element.append('Todos')
 #################################################################
 #Funciones de filtros
 ############################################################
 def filtro_gruplac_grupo_individual(grupo): #retorna opciones de elemento
     idgruplac=gruplac_basico[gruplac_basico['nombre']==grupo]['idgruplac'].iloc[0]
     opc_elementos=[]
-    for elemento in elementos_gruplac_individual:
-        data=fuente_dic['GRUPLAC'][elemento].dropna(subset='idgruplac')
+    for elementox in elementos_gruplac_individual:
+        data=fuente_dic['GRUPLAC'][elementox].dropna(subset='idgruplac').copy()
         if idgruplac in data['idgruplac'].values:
-            opc_elementos.append(elemento)
+            opc_elementos.append(elementox)
     #data=pd.DataFrame()
     return opc_elementos#, data
 
@@ -414,7 +415,7 @@ option_value = dcc.Dropdown(
     )
 option_element_gruplac_general = dcc.Dropdown(
         id='filter_element_gruplac_general',
-        options = elementos_gruplac_general,
+        options = options_general_element,
         value = None,  # Valor inicial seleccionado
         disabled=True
     )
@@ -500,7 +501,7 @@ def callback_value(parameter, disable_value, value):
     elif (value == None) or (parameter == None):
         return True, None
     else:        
-        return False, None
+        return False, 'Todos'
 
 @callback(
     [
@@ -605,7 +606,7 @@ def callback_filter_individual(grupo, elemento, boton):
     [State('filter_parameter', 'value'), State('filter_value', 'value'), State('filter_element_gruplac_general', 'value'),
     Input('button_group_filter_group','n_clicks')]
  )
-def callback_filter_grupal(parametro, valor, entrada, boton):
+def callback_filter_grupal(parametro, valor, elemento, boton):
     dash_general_graph1 = {}
     dash_general_graph2 = {}
     dash_general_graph3 = {}
@@ -626,8 +627,27 @@ def callback_filter_grupal(parametro, valor, entrada, boton):
     div_general_figure8 = {'display':'none'}
     div_general_figure9 = {'display':'none'}
     div_general_figure10 = {'display':'none'}    
-    if boton == 0 or entrada == None:
+    if boton == 0 or elemento == None:
         return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9, dash_general_graph10, div_general_figure10
-    
+    grupos_codigos, grupos_nombres=filtro_gruplac_valor_general(parametro,valor)
+    if elemento == 'Todos':
+        df_indicadores, time_series = get_indicadores_gruplac_general(grupos_codigos)
+        div_general_figure1 = {'display':'block'}
+        div_general_figure2 = {'display':'block'}
+        div_general_figure3 = {'display':'inline-block'}
+        div_general_figure4 = {'display':'inline-block'}
+        div_general_figure5 = {'display':'inline-block'}
+        div_general_figure6 = {'display':'inline-block'}
+    else:
+        div_general_figure1 = {'display':'block'}
+        div_general_figure2 = {'display':'block'}
+        div_general_figure3 = {'display':'inline-block'}
+        div_general_figure4 = {'display':'inline-block'}
+        div_general_figure5 = {'display':'inline-block'}
+        div_general_figure6 = {'display':'inline-block'}
+        div_general_figure7 = {'display':'block'}
+        div_general_figure8 = {'display':'inline-block'}
+        div_general_figure9 = {'display':'inline-block'}
+        div_general_figure10 = {'display':'block'}
 
     return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9, dash_general_graph10, div_general_figure10
