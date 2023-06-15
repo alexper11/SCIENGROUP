@@ -99,8 +99,5 @@ def render_content(tab):
                         dcc.Graph(figure={}, id='dash_general_graph9',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_general_figure9', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                 ],className='col-graph-father'),
-                html.Div([
-                    dcc.Graph(figure={}, id='dash_general_graph10',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
-                ],id='div_general_figure10', className='card-graph card-body col-graph-big', style={'display':'none'}),
             ])],type="cube", fullscreen=False, style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"},
         )
