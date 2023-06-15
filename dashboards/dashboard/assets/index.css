@@ -36,7 +36,7 @@ header {
   grid-area: header;
   background-color: #08469b;
   border-bottom: 9px solid #9f0002;
-  height: 9rem;
+  height: 7rem;
   position: fixed;
   width: 100%;
   z-index: 100;
@@ -85,7 +85,7 @@ footer {
 
 #div_gruplac{
   overflow-y: auto;
-  max-width: 74vw;
+  /* max-width: 74vw; */
   height: 100% !important;
 }
 
@@ -273,22 +273,23 @@ img.brand {
 .col-graph-big {
   flex: 1 1 100%;
   margin-left: 1rem;
-  width: 95%;
+  width: 98%;
 }
 
 .col-graph-middle {
   display: inline-block;
   vertical-align: middle;
-  width: 47%;
+  width: 48%;
 }
-.col-graph_three {
+/* .col-graph_three {
   flex: 1 1 33%;
   margin-left: 1rem;
 }
 /*.col-graph-big {
   flex: 1 1 60rem;
   margin-left: 1rem;
-}*/
+} */
+
 .color {
   color: #353535;
   max-width: 100%;
@@ -352,10 +353,26 @@ img.brand {
   border-radius:2em;
   padding-bottom: 25px;
 }
-.dash-body {
-  margin-left: 24%;
-  margin-right: 2rem;
+.dash-sidebar-graph {
+  margin-top: 8rem;
+  position:fixed;
+  top: 1rem;
+  left: 0;
+  bottom: 0;
+  margin-left: 1rem;
+  width: 20%;
+  height: max-content;
   padding: 2rem 1rem;
+  background-color: #08469b;
+  box-shadow: 3px 3px 6px rgb(88, 88, 88);
+  opacity: 0.9;
+  border-radius:2em;
+  padding-bottom: 25px;
+}
+.dash-body {
+  /* margin-left: 24%;
+  margin-right: 1rem; */
+  /* padding: 2rem 1rem; */
   display:grid;
   background-color: #F8F9F9;
   height: 95%;
@@ -371,14 +388,19 @@ img.brand {
 }
 
 .dash-body-graph {
-  margin-left: 24%;
-  margin-right: 2rem;
+  /* margin-left: 24%; */
+  margin-right: 1rem;
   /* width: 20rem; */
   padding: 2rem 1rem;
   display:grid;
   background-color: #F8F9F9;
 }
-
+#boton_filter_flex{
+  height: 5rem;
+  padding-top: 0;
+  padding: 0;
+  position: fixed;
+}
 /*************************************************************************/
 /******************************** Cards *********************************/
 /*************************************************************************/
@@ -428,9 +450,9 @@ H1, P {
 .card-score-targets {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
   border-radius: 0.5rem;
-  width: 70vw;
+  /* width: 70vw; */
   max-width: 100%;
   margin: 1rem 1rem;  
   color: black !important;
@@ -440,7 +462,8 @@ H1, P {
   flex-wrap: wrap;
   justify-content: space-around; */
   border-radius: 0.5rem;
-  width: 70vw;
+  /* width: 70vw; */
+  justify-items: center;
   max-width: 100%;
   margin: 1rem 1rem;
   box-shadow: 0 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.6),
