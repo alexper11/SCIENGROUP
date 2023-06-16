@@ -6,6 +6,8 @@ import pandas as pd
 import numpy as np
 import re
 
+from dash import no_update
+
 # Dash Bootstrap Components
 import dash_bootstrap_components as dbc
 
@@ -313,7 +315,9 @@ def time_series_element(series, elemento):
                   'xanchor':'center',
                   'x':0.5,
                   'yanchor':'top'},
-                  font=dict(size=12))
+                  font=dict(size=12),
+                  #height=600,
+                  )
     fig.update_traces(line_color='#0000ff', line_width=2)
     return fig
 
@@ -375,11 +379,16 @@ def pie_journal_element(datain): #solo para elementos con columna "revista" exis
     data['revista']=data['revista'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
     if data['revista'].value_counts().shape[0]>30:
         data_aux=data['revista'].value_counts().iloc[:30]
+        data_aux=data_aux.rename_axis('index').reset_index(name='values')
+        data_aux['percents']=(data_aux['values']*100)/data_aux['values'].sum()
     else:
         data_aux=data['revista'].value_counts()
-    fig_pie = px.pie(data_aux, values=data_aux, 
-                     names=data_aux.index, color_discrete_sequence=px.colors.cyclical.Edge,
-                     hole=.3)
+        data_aux=data_aux.rename_axis('index').reset_index(name='values')
+        data_aux['percents']=data['revista'].value_counts(normalize=True).values*100
+    
+    fig_pie = px.pie(data_aux, values=data_aux['values'], 
+                     names=data_aux['index'], color_discrete_sequence=px.colors.cyclical.Edge,
+                     hole=.3, custom_data=['percents'])
     fig_pie.update_layout(title={
                'text':"<b>Publicaciones en Revistas</b>",
                'xanchor':'center',
@@ -387,6 +396,7 @@ def pie_journal_element(datain): #solo para elementos con columna "revista" exis
                'yanchor':'top'},
                font=dict(size=10))
     fig_pie.update_layout( legend = {"xanchor": "left", "x": -0.08})
+    fig_pie.data[0].hovertemplate = '%{label}<br>'+'count'+':%{value}<br>%{customdata:.2f}%'
     return fig_pie
 
 def pie_editorial_element(datain): #solo para elementos con columna "editorial" existente, se filtra a top 30 si hay mas
@@ -394,11 +404,15 @@ def pie_editorial_element(datain): #solo para elementos con columna "editorial" 
     data['editorial']=data['editorial'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
     if data['editorial'].value_counts().shape[0]>30:
         data_aux=data['editorial'].value_counts().iloc[:30]
+        data_aux=data_aux.rename_axis('index').reset_index(name='values')
+        data_aux['percents']=(data_aux['values']*100)/data_aux['values'].sum()
     else:
         data_aux=data['editorial'].value_counts()
+        data_aux=data_aux.rename_axis('index').reset_index(name='values')
+        data_aux['percents']=data['editorial'].value_counts(normalize=True).values*100
     fig_pie = px.pie(data_aux, values=data_aux, 
                      names=data_aux.index, color_discrete_sequence=px.colors.cyclical.Edge,
-                     hole=.3)
+                     hole=.3,custom_data=['percents'])
     fig_pie.update_layout(title={
                'text':"<b>Publicaciones por Editoriales</b>",
                'xanchor':'center',
@@ -406,6 +420,7 @@ def pie_editorial_element(datain): #solo para elementos con columna "editorial" 
                'yanchor':'top'},
                font=dict(size=12))
     fig_pie.update_layout( legend = {"xanchor": "right", "x": 1.08})
+    fig_pie.data[0].hovertemplate = '%{label}<br>'+'count'+':%{value}<br>%{customdata:.2f}%'
     return fig_pie
 
 #GRUPLAC GENERAL: TODOS LOS PRODUCTOS
@@ -437,17 +452,18 @@ def time_series_all_general(series,grupos, elemento): #recibe time_series y grup
               'yanchor':'top',
               'automargin':True,
               },
-        font=dict(size=10),
+        font=dict(size=12),
         margin=dict(t=1, b=1),
         legend=dict(
             orientation="h",
-            y=1.05,
+            y=1.02,
             yanchor="bottom",
             xanchor="left",
             x=0.01,
             title='Grupos',
-            font=dict(size=9)),
-        height=650)
+            font=dict(size=11)),
+        #height=650,
+        )
     #fig.update_layout(height=600)#############
     return fig
 
@@ -488,18 +504,19 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
                 'x':0.5,
                 'yanchor':'top',
                 'automargin':True,
-                'font': {'size': 12},
+                'font': {'size': 16},
                 },
                 yaxis={'categoryorder': 'total ascending'},
                 font=dict(size=10),
                 margin=dict(t=2, b=2),
-                height=650
+                #height=650
                 )
     if df['grupo'].nunique()>1:
         fig.update_xaxes(tickangle=90)
     #fig.update_layout(legend_x=0.02, legend_y=1.02)
     #fig.update_yaxes(automargin=True)
     #fig.update_traces(visible='legendonly')
+
     return fig
 
 def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y grupos_nombres
@@ -519,7 +536,7 @@ def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y gru
             y=[d.get('name') for d in categories_con],
             orientation='h',
             texttemplate="%{x:}",
-            hovertemplate="%{x},%{y}<extra></extra>"
+            hovertemplate="%{x},%{y}<extra></extra>",
         ),
         go.Bar(
             x=[0] * len(categories_con), 
@@ -530,13 +547,23 @@ def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y gru
         )],
         layout={
             'barmode': 'group',
+            'autosize':True,
             'height': 500,
-            #'width': 800,
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label
         }
     )
+    fig_con.update_layout(
+        title={
+            #'y':0.8,
+            #'x':0,
+            #'xanchor': 'center',
+            #'yanchor': 'bottom',
+            'font':{'size':12}},
+        #font_size=14,
+        )
+    
     return fig_con
 
 def bar_ppa(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombres
@@ -567,21 +594,30 @@ def bar_ppa(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nomb
         )],
         layout={
             'barmode': 'group',
-            'height': 500, 
+            #'height': 800,
+            'autosize':True,
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label,
         }
     )
     fig_ppa.data[0].marker.color='orangered'
+    fig_ppa.update_layout(
+        title={
+            #'y':0.8,
+            #'x':0,
+            #'xanchor': 'center',
+            #'yanchor': 'bottom',
+            'font':{'size':12}})
+    
     return fig_ppa
 
 def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombres
     df=indicadores.rename(columns={'idgruplac':'gruplac'})
     if elemento=='Todos':
-        title_label="<b>PPUA Porcentaje de Productos en los Ultimos Años (Todos)</b>"
+        title_label="<b>PPUA Porcentaje de Productos en <br> los Ultimos Años (Todos)</b>"
     else:
-        title_label="<b>PPUA Porcentaje de Productos en los Ultimos Años ("+elemento+")</b>"
+        title_label="<b>PPUA Porcentaje de Productos en <br> los Ultimos Años ("+elemento+")</b>"
     df['gruplac']=grupos
     categories_ppua=[]
     for i,name in enumerate(df['gruplac'].to_list()):
@@ -604,13 +640,22 @@ def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nom
         )],
         layout={
             'barmode': 'group',
-            'height': 500, 
+            #'height': 800, 
+            'autosize':True,
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label,
         }
     )
     fig_ppua.data[0].marker.color='purple'
+    
+    fig_ppua.update_layout(
+        title={
+            #'y':0.8,
+            #'x':0,
+            #'xanchor': 'center',
+            #'yanchor': 'bottom',
+            'font':{'size':12}})
     return fig_ppua
 
 def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombres
@@ -641,13 +686,22 @@ def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombr
         )],
         layout={
             'barmode': 'group',
-            'height': 500, 
+            #'height': 800, 
+            'autosize':True,
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label,
         }
     )
     fig_pg.data[0].marker.color='green'
+    fig_pg.update_layout(
+        title={
+            #'y':0.8,
+            #'x':0,
+            #'xanchor': 'center',
+            #'yanchor': 'bottom',
+            'font':{'size':12}})
+    
     return fig_pg
 
 #GRUPLAC GENERAL: ELEMENTO
@@ -665,20 +719,23 @@ def bar_general_element(data, elemento): #retorna dos graficas, recibe grupos_co
                  "y":"Cantidad de Productos"},
                  orientation='v',color_discrete_sequence=px.colors.sequential.thermal)#paleta de colores
     fig.update_layout(
+                font=dict(size=10),
                 title={
                 'text':"<b>Productos Generados por los Grupos de Investigación: "+elemento+"</b>",
                 'xanchor':'center',
                 'x':0.5,
                 'yanchor':'top',
-                'automargin':True},
+                'automargin':True,
+                'font': {'size': 14}},
                 yaxis={'categoryorder': 'total ascending'},
-                font=dict(size=11),
                 margin=dict(t=2, b=2))
     fig.update(layout_showlegend=False)
     if temp_df['grupo'].nunique()>1:
         fig.update_xaxes(tickangle=90)
-    fig.update_layout(height=600)##############
+    #fig.update_layout(height='600')##############
     #fig.update_yaxes(automargin=True)
+    #fig.update_xaxes(tickangle=0)
+    fig.update_layout(xaxis = dict(tickfont = dict(size=11)))
     return fig
 
 def pie_journal_element_general(datain,condition): #recibe dataset filtrado y ocndicion 'editorial' o 'revista'
@@ -690,11 +747,22 @@ def pie_journal_element_general(datain,condition): #recibe dataset filtrado y oc
         title_label="<b>Publicaciones en Revistas</b>"
     if data[condition].value_counts().shape[0]>30:
         data_aux=data[condition].value_counts().iloc[:30]
+        data_aux=data_aux.rename_axis('index').reset_index(name='values')
+        data_aux['percents']=(data_aux['values']*100)/data_aux['values'].sum()
     else:
         data_aux=data[condition].value_counts()
-    fig_pie = px.pie(data_aux, values=data_aux, 
-                     names=data_aux.index, color_discrete_sequence=px.colors.cyclical.Edge,
-                     hole=.3)
+        data_aux=data_aux.rename_axis('index').reset_index(name='values')
+        data_aux['percents']=data[condition].value_counts(normalize=True).values*100
+        
+    print(data_aux['percents'])
+    #print(data_aux['percents'])
+        
+    fig_pie = px.pie(data_aux, values=data_aux['values'], 
+                     names=data_aux['index'], color_discrete_sequence=px.colors.cyclical.Edge,
+                     hole=.3, custom_data=['percents'])
+
+    fig_pie.data[0].hovertemplate = '%{label}<br>'+'count'+':%{value}<br>%{customdata:.2f}%'
+    
     fig_pie.update_layout(legend=dict(
                 orientation="v",
                 xanchor="left",
@@ -708,7 +776,7 @@ def pie_journal_element_general(datain,condition): #recibe dataset filtrado y oc
                'xanchor':'center',
                'x':0.5,
                'yanchor':'top',
-               #'automargin':True,
+               'automargin':True,
                },
                #margin=dict(r=10, l=10),
                font=dict(size=12))
@@ -738,7 +806,8 @@ def tree_author_element_general(data, elemento): #sólo para aquellos elementos 
                       'xanchor':'center',
                       'x':0.5,
                       'yanchor':'top'},
-                      font=dict(size=14))
+                      font=dict(size=12))
+    #fig.update_layout(height='600')
     warnings.filterwarnings(action='default', category=FutureWarning)##################
     return fig
 
@@ -866,17 +935,23 @@ def callback_parameter(parametro):
     
 @callback(
     [Output('filter_element_gruplac_general', 'disabled'),Output('filter_element_gruplac_general', 'value')],
-    [State('filter_parameter', 'value'), Input('filter_value', 'disabled'),
+    [State('filter_parameter', 'value'),
+    State('filter_element_gruplac_general', 'value'),
+    Input('filter_value', 'disabled'),
     Input('filter_value', 'value')])
-def callback_value(parameter, disable_value, value):
+def callback_value(parameter, state, disable_value, value):
     if disable_value == True:
         return True, None
     if (value == None) and (parameter == None):
         return True, None
-    elif (value == None) or (parameter == None):
+    elif (value == None) or (parameter == None) or (value == []) or (parameter == []):
         return True, None
-    else:        
+    elif (state!=None) and (state!='Todos'):        
+        return False, no_update 
+    else:
         return False, 'Todos'
+    
+    
 
 @callback(
     [
@@ -932,9 +1007,9 @@ def callback_filter_individual(grupo, elemento, boton):
         kpi5 = str(ac)       
         dash_individual_graph1 = time_series_all(series_gruplac)
         dash_individual_graph2, dash_individual_graph3 = bar_pie_all(grupo_cod)
-        div_group_figure1 = {'display':'block', 'max-height':'700px'}
-        div_group_figure2 = {'display':'inline-block', 'max-height':'600px'}
-        div_group_figure3 = {'display':'inline-block', 'max-height':'600px'}
+        div_group_figure1 = {'display':'block', 'max-height':'60vh'}
+        div_group_figure2 = {'display':'inline-block', 'max-height':'60vh'}
+        div_group_figure3 = {'display':'inline-block', 'max-height':'50vh'}
     else:
         consistencia, ppa,ppua,pc, series_gruplac = get_indicadores_relativos(grupo_cod, elemento)
         kpi1 = str(consistencia)
@@ -1018,12 +1093,12 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
         dash_general_graph4 = bar_ppa(df_indicadores,grupos_nombres,elemento)
         dash_general_graph5 = bar_ppua(df_indicadores,grupos_nombres,elemento)
         dash_general_graph6 = bar_pg(df_indicadores,grupos_nombres,elemento)
-        div_general_figure1 = {'display':'block', 'max-heigth':'1000px'}
-        div_general_figure2 = {'display':'block', 'max-heigth':'1000px', 'margin-top':'10px'}
-        div_general_figure3 = {'display':'inline-block'}
-        div_general_figure4 = {'display':'inline-block'}
-        div_general_figure5 = {'display':'inline-block'}
-        div_general_figure6 = {'display':'inline-block'}
+        div_general_figure1 = {'display':'block', 'height':'75vh', 'max-height':'85vh','margin-top':'10px','padding-bottom':'10px','padding-top':'15px'}
+        div_general_figure2 = {'display':'block', 'height':'75vh', 'max-height':'85vh','margin-top':'10px','padding-top':'10px','padding-bottom':'5px'}
+        div_general_figure3 = {'display':'inline-block', 'max-height':'70vh'}
+        div_general_figure4 = {'display':'inline-block', 'max-height':'70vh'}
+        div_general_figure5 = {'display':'inline-block', 'max-height':'70vh'}
+        div_general_figure6 = {'display':'inline-block', 'max-height':'70vh'}
     else:
         df_indicadores, time_series = get_indicadores_gruplac_relativo(grupos_codigos,elemento)
         if df_indicadores['idgruplac'].count()>10:
@@ -1035,20 +1110,20 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
             indices_top=0
         data=filtro_gruplac_elemento_general(grupos_codigos,elemento)
         dash_general_graph1 = time_series_all_general(time_series, grupos_nombres,elemento)
-        div_general_figure1 = {'display':'block','max-height':'1000px','padding-bottom':'10px'}
+        div_general_figure1 = {'display':'block', 'height':'75vh','max-height':'85vh','margin-top':'10px','padding-bottom':'10px','padding-top':'15px'}
         dash_general_graph2 = bar_general_element(data,elemento)
-        div_general_figure2 = {'display':'block','max-height':'1000px','margin-top':'10px','padding-top':'15px'}
+        div_general_figure2 = {'display':'block', 'width':'60vw', 'height':'75vh','max-height':'85vh','margin-top':'10px','padding-top':'15px','padding-bottom':'10px'}
         dash_general_graph3 = bar_consistencia(df_indicadores,grupos_nombres,elemento)
-        div_general_figure3 = {'display':'inline-block'}
+        div_general_figure3 = {'display':'inline-block', 'max-height':'90vh'}
         dash_general_graph4 = bar_ppa(df_indicadores,grupos_nombres,elemento)
-        div_general_figure4 = {'display':'inline-block'}
+        div_general_figure4 = {'display':'inline-block', 'max-height':'90vh'}
         dash_general_graph5 = bar_ppua(df_indicadores,grupos_nombres,elemento)
-        div_general_figure5 = {'display':'inline-block'}
+        div_general_figure5 = {'display':'inline-block', 'max-height':'90vh'}
         dash_general_graph6 = bar_pg(df_indicadores,grupos_nombres,elemento)
-        div_general_figure6 = {'display':'inline-block'}
+        div_general_figure6 = {'display':'inline-block', 'max-height':'90vh'}
         if 'autores' in data:
             dash_general_graph7 = tree_author_element_general(data, elemento)
-            div_general_figure7 = {'display':'block'}
+            div_general_figure7 = {'display':'block', 'height':'75vh','max-height':'80vh'}
 
         if ('revista' in data) and ('tipo' in data):
             dash_general_graph8 = pie_journal_element_general(data,'revista')
