@@ -132,7 +132,7 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
     if type(valor_entrada) == str:
         filter =  dcc.Input(id='filter_inputs', placeholder='', type='text', value='')
     elif type(valor_entrada) == list:
-        filter = dcc.Dropdown(id="filter_inputs", options= opciones_entrada, multi=True)
+        filter = dcc.Dropdown(id="filter_inputs", options= opciones_entrada, multi=True, optionHeight=45)#,maxHeight=100)
     elif type(valor_entrada) == tuple:
         #year_today = date.today().year
         option_drop = list(range(1975,date.today().year+1))
