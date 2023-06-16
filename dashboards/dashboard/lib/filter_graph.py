@@ -820,7 +820,7 @@ sidebar_graph = html.Div([
         option_element_gruplac_general,
         html.Button('Filtrar2', id='button_group_filter_group', n_clicks=0),
     ],id="filtro_grupal",style={}),        
-],id="menu_filter_flex",className="dash-sidebar",    
+],id="menu_filter_flex",className="dash-sidebar-graph",    
 )
 
 #  ---------------------callback---------------
