@@ -791,6 +791,7 @@ option_value = dcc.Dropdown(
 option_element_gruplac_general = dcc.Dropdown(
         id='filter_element_gruplac_general',
         options = options_general_element,
+        style={'maxHeight': 'auto'},
         value = None,  # Valor inicial seleccionado
         disabled=True
     )
@@ -798,18 +799,18 @@ option_element_gruplac_general = dcc.Dropdown(
 # Sidebar Layout
 #############################################################################
 sidebar_graph = html.Div([
-    html.H1('Opciones de filtrado',className="text_filter"),
+    # html.H1('Opciones de filtrado',className="text_filter"),
     html.Hr(),  # Add an horizontal line
     dcc.Tabs(id="tabs_filter_scienti", value='tab_individual', 
     children=[dcc.Tab(label='Individual', value='tab_individual'),
         dcc.Tab(label='General', value='tab_general'),
-    ]),    
+    ]),       
     html.Div([
         html.H5("Grupo:",className="text_filter"),
         option_group,
         html.H5("Elemento:",className="text_filter"),
         option_element,
-        html.Button('Filtrar1', id='button_group_filter_indiv', n_clicks=0),
+        html.Button('Filtrar', id='button_group_filter_indiv', n_clicks=0),
     ],id="filtro_individual",style={}),
     html.Div([
         html.H5("Parametro:",className="text_filter"),
@@ -818,7 +819,7 @@ sidebar_graph = html.Div([
         option_value,
         html.H5("Elemento:",className="text_filter"),
         option_element_gruplac_general,
-        html.Button('Filtrar2', id='button_group_filter_group', n_clicks=0),
+        html.Button('Filtrar', id='button_group_filter_group', n_clicks=0),
     ],id="filtro_grupal",style={}),        
 ],id="menu_filter_flex",className="dash-sidebar-graph",    
 )
