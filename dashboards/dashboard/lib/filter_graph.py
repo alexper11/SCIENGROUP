@@ -261,7 +261,8 @@ def time_series_all(series):
                   #'yanchor':'top'
                   },
                   font=dict(size=12),
-                  height=500)
+                  #height=700
+                  )
     fig.update_traces(line_color='#0000ff', line_width=2)
     return fig
 
@@ -1097,7 +1098,7 @@ def callback_filter_individual(grupo, elemento, boton):
         dash_individual_graph2.update_layout(title={'text':None})
         titulo_individual3 = get_fig_title(dash_individual_graph3)
         dash_individual_graph3.update_layout(title={'text':None})
-        div_group_figure1 = {'display':'block', 'height':'75vh', 'max-height':'90vh','margin-top':'5px','padding-top':'5px'}
+        div_group_figure1 = {'display':'block', 'height':'75vh', 'max-height':'75vh','margin-top':'5px','padding-top':'5px'}
         div_group_figure2 = {'display':'inline-block', 'max-height':'75vh', 'margin-bottom':'5px','padding-bottom':'5px'}
         div_group_figure3 = {'display':'inline-block', 'max-height':'75vh','margin-bottom':'5px','padding-bottom':'5px'}
     else:
