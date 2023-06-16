@@ -959,7 +959,7 @@ sidebar_graph = html.Div([
         html.H5("Elemento:",className="text_filter"),
         option_element,
         html.Button('Filtrar', id='button_group_filter_indiv', n_clicks=0),
-    ],id="filtro_individual",style={}),
+    ],id="filtro_individual"),
     html.Div([
         html.H5("Parametro:",className="text_filter"),
         option_parameter,
@@ -968,7 +968,7 @@ sidebar_graph = html.Div([
         html.H5("Elemento:",className="text_filter"),
         option_element_gruplac_general,
         html.Button('Filtrar', id='button_group_filter_group', n_clicks=0),
-    ],id="filtro_grupal",style={}),        
+    ],id="filtro_grupal"),        
 ],id="menu_filter_flex",className="dash-sidebar-graph",    
 )
 
