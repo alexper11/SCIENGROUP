@@ -60,9 +60,10 @@ def render_content(tab):
         return [html.Div([
                     dbc.Alert(
                         html.P(children='', id="msj_alert_individual",),
-                        id="alert-fade-individual",
+                        id="fade-alert-individual",
                         dismissable=True,
                         is_open=False,
+                        style={'text-align':'center'}
                     ),
                     html.H1(children="Indicadores para grupos de investigación: ", id="indicators_group", className="group_graph_info"),
                     html.H1(children="Por favor selecciones elementos a filtrar",id="products_element_group", className="group_graph_info"),
@@ -79,17 +80,21 @@ def render_content(tab):
                 ],id="kpi_all" ,className='card-score-container', style={'display':'none'}),
                 #Charts or Graphs
                 html.Div([
+                    html.H1(children='probando', id='title_individual_graph1'),
                     dcc.Graph(figure={}, id='dash_individual_graph1',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_group_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),             
                 html.Div([
-                    html.Div([                        
+                    html.Div([      
+                        html.H1(children='', id='title_individual_graph2'),                  
                         dcc.Graph(figure={}, id='dash_individual_graph2',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_group_figure2', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                     html.Div([
+                        html.H1(children='', id='title_individual_graph3'),
                         dcc.Graph(figure={}, id='dash_individual_graph3',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_group_figure3', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                 ],className='col-graph-father'),
                 html.Div([
+                    html.H1(children='', id='title_individual_graph4'),
                     dcc.Graph(figure={}, id='dash_individual_graph4',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_group_figure4', className='card-graph card-body col-graph-big', style={'display':'none'}),
             ]
@@ -97,40 +102,50 @@ def render_content(tab):
         return [html.Div([
                 dbc.Alert(
                     html.P(children='', id="msj_alert_general",),
-                    id="alert-fade-general",
+                    id="fade-alert-general",
                     dismissable=True,
                     is_open=False,
+                    style={'text-align':'center'}
                 ),
                 html.Div([
+                    html.H1(children='', id='title_general_graph1'),
                     dcc.Graph(figure={}, id='dash_general_graph1',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_general_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),
                 html.Div([
+                    html.H1(children='', id='title_general_graph2'),
                     dcc.Graph(figure={}, id='dash_general_graph2',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_general_figure2', className='card-graph card-body col-graph-big', style={'display':'none'}),            
                 html.Div([
-                    html.Div([                        
+                    html.Div([
+                        html.H1(children='', id='title_general_graph3'),                      
                         dcc.Graph(figure={}, id='dash_general_graph3',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_general_figure3', className='card-graph_middle col-graph-middle', style={'display':'none'}),
                     html.Div([
+                        html.H1(children='', id='title_general_graph4'),
                         dcc.Graph(figure={}, id='dash_general_graph4',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_general_figure4', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                 ],className='col-graph-father'),
                 html.Div([
                     html.Div([                        
+                        html.H1(children='', id='title_general_graph5'),
                         dcc.Graph(figure={}, id='dash_general_graph5',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_general_figure5', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                     html.Div([
+                        html.H1(children='', id='title_general_graph6'),
                         dcc.Graph(figure={}, id='dash_general_graph6',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_general_figure6', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                 ],className='col-graph-father'),
                 html.Div([
+                    html.H1(children='', id='title_general_graph7'),
                     dcc.Graph(figure={}, id='dash_general_graph7',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_general_figure7', className='card-graph card-body col-graph-big', style={'display':'none'}),
                 html.Div([
-                    html.Div([                        
+                    html.Div([
+                        html.H1(children='', id='title_general_graph8'),        
                         dcc.Graph(figure={}, id='dash_general_graph8',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_general_figure8', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                     html.Div([
+                        html.H1(children='', id='title_general_graph9'),
                         dcc.Graph(figure={}, id='dash_general_graph9',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                     ],id='div_general_figure9', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                 ],className='col-graph-father'),
