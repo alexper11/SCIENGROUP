@@ -339,8 +339,8 @@ img.brand {
 }
 
 .dash-sidebar {
-  position:absolute;
-  top: 1rem;
+  position:fixed;
+  top: 10rem;
   left: 0;
   bottom: 0;
   margin-left: 1rem;
@@ -352,7 +352,18 @@ img.brand {
   opacity: 0.9;
   border-radius:2em;
   padding-bottom: 25px;
+  z-index: 1;
 }
+
+#boton_filter_flex{  
+  top: 8rem;
+  height: 5rem;
+  left: 0;
+  padding: 0;
+  position: fixed;
+  z-index: 2;
+}
+
 .dash-sidebar-graph {
   margin-top: 8rem;
   position:fixed;
@@ -368,6 +379,12 @@ img.brand {
   opacity: 0.9;
   border-radius:2em;
   padding-bottom: 25px;
+}
+.offcanvas{
+  color: black;
+}
+.text_filter{
+  color: white;
 }
 .dash-body {
   /* margin-left: 24%;
@@ -395,12 +412,7 @@ img.brand {
   display:grid;
   background-color: #F8F9F9;
 }
-#boton_filter_flex{
-  height: 5rem;
-  padding-top: 0;
-  padding: 0;
-  position: fixed;
-}
+
 /*************************************************************************/
 /******************************** Cards *********************************/
 /*************************************************************************/
