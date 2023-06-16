@@ -58,10 +58,9 @@ app.layout = html.Div([
     #Here in main contet will be displayed all the different pages
     ,html.Main(
        id='main-content',
-    )
-    #defaul footer
-     ,
-     html.Footer(
+    ),
+    #defaul footer    
+    html.Footer(
          [
              html.H2(
                  "Dashboard para el análisis de de la producción científica"

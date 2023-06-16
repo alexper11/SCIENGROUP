@@ -790,10 +790,11 @@ option_value = dcc.Dropdown(
     )
 option_element_gruplac_general = dcc.Dropdown(
         id='filter_element_gruplac_general',
-        options = options_general_element,
-        style={'maxHeight': 'auto'},
+        options = options_general_element,        
         value = None,  # Valor inicial seleccionado
-        disabled=True
+        disabled=True,
+        maxHeight=160
+        # style = {"bottom": "100%", "transform": "translateY(-100%)"}
     )
 #############################################################################
 # Sidebar Layout
