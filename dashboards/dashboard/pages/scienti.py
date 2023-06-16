@@ -57,7 +57,13 @@ def toggle_offcanvas(n1, is_open):
     Input('tabs_filter_scienti', 'value'))
 def render_content(tab):
     if tab == 'tab_individual':
-        return [html.Div([                    
+        return [html.Div([
+                    dbc.Alert(
+                        html.P(children='', id="msj_alert_individual",),
+                        id="alert-fade-individual",
+                        dismissable=True,
+                        is_open=False,
+                    ),
                     html.H1(children="Indicadores para grupos de investigación: ", id="indicators_group", className="group_graph_info"),
                     html.H1(children="Por favor selecciones elementos a filtrar",id="products_element_group", className="group_graph_info"),
                     html.Div([
@@ -89,6 +95,12 @@ def render_content(tab):
             ]
     else:
         return [html.Div([
+                dbc.Alert(
+                    html.P(children='', id="msj_alert_general",),
+                    id="alert-fade-general",
+                    dismissable=True,
+                    is_open=False,
+                ),
                 html.Div([
                     dcc.Graph(figure={}, id='dash_general_graph1',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_general_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),
