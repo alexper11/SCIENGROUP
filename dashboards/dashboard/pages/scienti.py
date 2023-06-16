@@ -30,13 +30,13 @@ layout = html.Div([
             is_open=True,            
         ),
         html.Img(src="/assets/img/filter.png",id="boton_filter_flex"),
-        dbc.Popover(
-            "Botón para ocultar y mostrar los filtros",
-            target="boton_filter_flex",
-            body=True,
-            trigger="hover",
-            style={'color':'black'}
-        ),
+        # dbc.Popover(
+        #     "Botón para ocultar y mostrar los filtros",
+        #     target="boton_filter_flex",
+        #     body=True,
+        #     trigger="hover",
+        #     style={'color':'black'}
+        # ),
     ],className="dash-body-graph", style={"color": "black"},
 ) 
 
