@@ -447,7 +447,7 @@ img.brand {
 .title_graph{
   text-align: center;
   color: #08469b;
-  padding-top: 0;
+  padding-top: 0.5rem;
   padding-bottom: 0;
   font-weight: bold;
 }
