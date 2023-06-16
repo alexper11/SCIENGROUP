@@ -468,7 +468,7 @@ def time_series_all_general(series,grupos, elemento): #recibe time_series y grup
     return fig
 
 def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codigos y grupos_codigos
-    df=pd.DataFrame(columns=['grupo','producto','count'])
+    df=pd.DataFrame(columns=['grupo','producto','count']).copy()
     for i,codigo in enumerate(codigos):
         dic={'grupo':[],'producto':[],'count':[]}
         for key in list(set(fuente_dic['GRUPLAC'].keys())-set(['Institución','Líneas de Investigación','Datos Básicos'])):
@@ -502,6 +502,7 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
                 'text':"<b>Productos Generados por los Grupos de Investigación</b>",
                 'xanchor':'center',
                 'x':0.5,
+                'xref':'paper',
                 'yanchor':'top',
                 'automargin':True,
                 'font': {'size': 16},
@@ -520,12 +521,16 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
     return fig
 
 def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y grupos_nombres
-    df=indicadores.rename(columns={'idgruplac':'gruplac'})
+    df=indicadores.rename(columns={'idgruplac':'gruplac'}).copy()
     if elemento=='Todos':
         title_label="<b>Indicador de Consistencia para Todos los Productos</b>"
     else:
         title_label="<b>Indicador de Consistencia para "+elemento+"</b>"
     df['gruplac']=grupos
+    
+    locs=df[df['gruplac'].str.len()>65].index.tolist()
+    df['gruplac'].loc[locs]=df['gruplac'].loc[locs].str.slice(stop=65)+'...'
+    
     categories_con=[]
     for i,name in enumerate(df['gruplac'].to_list()):
         categories_con.append({"name":name,"value":float(df['consistencia'].iloc[i])})
@@ -547,8 +552,9 @@ def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y gru
         )],
         layout={
             'barmode': 'group',
-            'autosize':True,
-            'height': 500,
+            #'autosize':True,
+            'height': 550,
+            #'width':650,
             'yaxis':{'visible': False},
             'showlegend': False,
             'title':title_label
@@ -557,7 +563,8 @@ def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y gru
     fig_con.update_layout(
         title={
             #'y':0.8,
-            #'x':0,
+            'xref':'paper',
+            'x':0,
             #'xanchor': 'center',
             #'yanchor': 'bottom',
             'font':{'size':12}},
@@ -573,6 +580,12 @@ def bar_ppa(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nomb
     else:
         title_label="<b>PPA Promedio de Productos por Año ("+elemento+")</b>"
     df['gruplac']=grupos
+    df['gruplac']=grupos
+    
+    locs=df[df['gruplac'].str.len()>65].index.tolist()
+    df['gruplac'].loc[locs]=df['gruplac'].loc[locs].str.slice(stop=65)+'...'
+    
+    
     categories_ppa=[]
     for i,name in enumerate(df['gruplac'].to_list()):
         categories_ppa.append({"name":name,"value":float(df['ppa'].iloc[i])})
@@ -594,22 +607,26 @@ def bar_ppa(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nomb
         )],
         layout={
             'barmode': 'group',
-            #'height': 800,
-            'autosize':True,
+            #'autosize':True,
+            'height': 550,
+            #'width':650,
             'yaxis':{'visible': False},
             'showlegend': False,
-            'title':title_label,
+            'title':title_label
         }
     )
-    fig_ppa.data[0].marker.color='orangered'
     fig_ppa.update_layout(
         title={
             #'y':0.8,
-            #'x':0,
+            'xref':'paper',
+            'x':0,
             #'xanchor': 'center',
             #'yanchor': 'bottom',
-            'font':{'size':12}})
-    
+            'font':{'size':12}},
+        #font_size=14,
+        )
+    fig_ppa.data[0].marker.color='orangered'
+
     return fig_ppa
 
 def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombres
@@ -619,6 +636,10 @@ def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nom
     else:
         title_label="<b>PPUA Porcentaje de Productos en <br> los Ultimos Años ("+elemento+")</b>"
     df['gruplac']=grupos
+    locs=df[df['gruplac'].str.len()>65].index.tolist()
+    df['gruplac'].loc[locs]=df['gruplac'].loc[locs].str.slice(stop=65)+'...'
+    
+    
     categories_ppua=[]
     for i,name in enumerate(df['gruplac'].to_list()):
         categories_ppua.append({"name":name,"value":float(df['ppua'].iloc[i])})
@@ -640,22 +661,26 @@ def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nom
         )],
         layout={
             'barmode': 'group',
-            #'height': 800, 
-            'autosize':True,
+            #'autosize':True,
+            'height': 550,
+            #'width':650,
             'yaxis':{'visible': False},
             'showlegend': False,
-            'title':title_label,
+            'title':title_label
         }
     )
-    fig_ppua.data[0].marker.color='purple'
-    
     fig_ppua.update_layout(
         title={
             #'y':0.8,
-            #'x':0,
+            'xref':'paper',
+            'x':0,
             #'xanchor': 'center',
             #'yanchor': 'bottom',
-            'font':{'size':12}})
+            'font':{'size':12}},
+        #font_size=14,
+        )
+    fig_ppua.data[0].marker.color='purple'
+
     return fig_ppua
 
 def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombres
@@ -665,6 +690,10 @@ def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombr
     else:
         title_label="<b>PG Productos Generados ("+elemento+")</b>"
     df['gruplac']=grupos
+    locs=df[df['gruplac'].str.len()>65].index.tolist()
+    df['gruplac'].loc[locs]=df['gruplac'].loc[locs].str.slice(stop=65)+'...'
+    
+    
     categories_pg=[]
     for i,name in enumerate(df['gruplac'].to_list()):
         categories_pg.append({"name":name,"value":float(df['pg'].iloc[i])})
@@ -686,22 +715,26 @@ def bar_pg(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombr
         )],
         layout={
             'barmode': 'group',
-            #'height': 800, 
-            'autosize':True,
+            #'autosize':True,
+            'height': 550,
+            #'width':650,
             'yaxis':{'visible': False},
             'showlegend': False,
-            'title':title_label,
+            'title':title_label
         }
     )
-    fig_pg.data[0].marker.color='green'
     fig_pg.update_layout(
         title={
             #'y':0.8,
-            #'x':0,
+            'xref':'paper',
+            'x':0,
             #'xanchor': 'center',
             #'yanchor': 'bottom',
-            'font':{'size':12}})
-    
+            'font':{'size':12}},
+        #font_size=14,
+        )
+    fig_pg.data[0].marker.color='green'
+
     return fig_pg
 
 #GRUPLAC GENERAL: ELEMENTO
