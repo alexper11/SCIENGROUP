@@ -1097,7 +1097,7 @@ def callback_filter_individual(grupo, elemento, boton):
         dash_individual_graph2.update_layout(title={'text':None})
         titulo_individual3 = get_fig_title(dash_individual_graph3)
         dash_individual_graph3.update_layout(title={'text':None})
-        div_group_figure1 = {'display':'block', 'height':'max-content', 'max-height':'90vh','margin-top':'5px','padding-top':'5px'}
+        div_group_figure1 = {'display':'block', 'height':'75vh', 'max-height':'90vh','margin-top':'5px','padding-top':'5px'}
         div_group_figure2 = {'display':'inline-block', 'max-height':'75vh', 'margin-bottom':'5px','padding-bottom':'5px'}
         div_group_figure3 = {'display':'inline-block', 'max-height':'75vh','margin-bottom':'5px','padding-bottom':'5px'}
     else:
@@ -1144,7 +1144,7 @@ def callback_filter_individual(grupo, elemento, boton):
             dash_individual_graph4 = tree_author_element(data, elemento)  
             titulo_individual4 = get_fig_title(dash_individual_graph4)
             dash_individual_graph4.update_layout(title={'text':None})      
-            div_group_figure4 = {'display':'block','width':'max-content','height':'max-content','max-height':'80vh','margin-bottom':'5px','margin-top':'5px','padding-top':'5px'}
+            div_group_figure4 = {'display':'block','height':'max-content','max-height':'80vh','margin-bottom':'5px','margin-top':'5px','padding-top':'5px'}
 
     return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4, titulo_individual1, titulo_individual2, titulo_individual3, titulo_individual4, msj_alert_individual, fade_alert_individual
     
@@ -1240,9 +1240,9 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
         dash_general_graph6 = bar_pg(df_indicadores,grupos_nombres,elemento)
         titulo_general6 = get_fig_title(dash_general_graph6)
         dash_general_graph6.update_layout(title={'text':None})
-        div_general_figure1 = {'display':'block', 'height':'max-content', 'max-height':'90vh','margin-top':'5px','padding-bottom':'5px','padding-top':'5px'}
+        div_general_figure1 = {'display':'block', 'height':'75vh', 'max-height':'90vh','margin-top':'5px','padding-bottom':'5px','padding-top':'5px'}
         wdg2=str(len(grupos_codigos)*7)+'vw'
-        div_general_figure2 = {'display':'block', 'margin-left':'auto', 'margin-right':'auto','min-width':'40vw','width':wdg2, 'height':'max-content','max-height':'85vh','margin-top':'5px','padding-top':'5px','padding-bottom':'5px'}
+        div_general_figure2 = {'display':'block', 'margin-left':'auto', 'margin-right':'auto','min-width':'40vw','width':wdg2, 'height':'75vh','max-height':'90vh','margin-top':'5px','padding-top':'5px','padding-bottom':'5px'}
         div_general_figure3 = {'display':'inline-block', 'max-height':'max-content'}
         div_general_figure4 = {'display':'inline-block', 'max-height':'max-content'}
         div_general_figure5 = {'display':'inline-block', 'max-height':'max-content'}
@@ -1266,12 +1266,12 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
         dash_general_graph1 = time_series_all_general(time_series, grupos_nombres,elemento)
         titulo_general1 = get_fig_title(dash_general_graph1)
         dash_general_graph1.update_layout(title={'text':None})
-        div_general_figure1 = {'display':'block', 'height':'max-content','max-height':'83vh','margin-top':'10px','padding-bottom':'10px','padding-top':'15px'}
+        div_general_figure1 = {'display':'block', 'height':'75vh','max-height':'83vh','margin-top':'10px','padding-bottom':'10px','padding-top':'15px'}
         dash_general_graph2 = bar_general_element(data,elemento)
         titulo_general2 = get_fig_title(dash_general_graph2)
         dash_general_graph2.update_layout(title={'text':None})
         wdg2=str(len(grupos_codigos)*7)+'vw'
-        div_general_figure2 = {'display':'block', 'margin-left':'auto', 'margin-right':'auto', 'min-width':'40vw','width':wdg2, 'height':'max-content','max-height':'85vh','margin-top':'5px','padding-top':'5px','padding-bottom':'5px'}
+        div_general_figure2 = {'display':'block', 'margin-left':'auto', 'margin-right':'auto', 'min-width':'40vw','width':wdg2, 'height':'75vh','max-height':'90vh','margin-top':'5px','padding-top':'5px','padding-bottom':'5px'}
         dash_general_graph3 = bar_consistencia(df_indicadores,grupos_nombres,elemento)
         titulo_general3 = get_fig_title(dash_general_graph3)
         dash_general_graph3.update_layout(title={'text':None})
@@ -1292,7 +1292,7 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
             dash_general_graph7 = tree_author_element_general(data, elemento)
             titulo_general7 = get_fig_title(dash_general_graph7)
             dash_general_graph7.update_layout(title={'text':None})
-            div_general_figure7 = {'display':'block', 'height':'max-content','max-height':'80vh'}
+            div_general_figure7 = {'display':'block', 'height':'60vh','max-height':'80vh'}
 
         if ('revista' in data) and ('tipo' in data):
             dash_general_graph8 = pie_journal_element_general(data,'revista')
