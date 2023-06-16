@@ -80,7 +80,7 @@ def render_content(tab):
                 #Charts or Graphs
                 html.Div([
                     html.H3(children='', id='title_individual_graph1', className='title_graph'),
-                    dcc.Graph(figure={}, id='dash_individual_graph1',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
+                    dcc.Graph(figure={}, id='dash_individual_graph1',style={'Width':'100%', "height":'90%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_group_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),             
                 html.Div([
                     html.Div([      
