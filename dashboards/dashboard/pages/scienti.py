@@ -21,20 +21,49 @@ layout = html.Div([
             style={'height':'100%', 'marginTop':'15rem','textAlign':'center', 'display':'flex', 'justifyContent':'space-around',"color":"black"}
             ),id="div_gruplac",
             # children=[html.H2("Información filtrado individual (eliminar msj)", className="title_graph_main"),                
-        ),        
-        sidebar_graph,
+        ),
+        dbc.Offcanvas(
+            sidebar_graph,
+            id="offcanvas",
+            keyboard = True,
+            close_button = False,
+            scrollable=True,
+            is_open=True,            
+        ),
         html.Img(src="/assets/img/filter.png",id="boton_filter_flex"),
+        dbc.Popover(
+            "Botón para ocultar y mostrar los filtros",
+            target="boton_filter_flex",
+            body=True,
+            trigger="hover",
+            style={'color':'black'}
+        ),
     ],className="dash-body-graph", style={"color": "black"},
 ) 
 
 #-----------------------------------Callbacks ---------------------------------
+@callback(
+    Output("offcanvas", "is_open"),
+    Input("boton_filter_flex", "n_clicks"),
+    [State("offcanvas", "is_open")],
+)
+def toggle_offcanvas(n1, is_open):
+    if n1:
+        return not is_open
+    return is_open
 
 @callback(
     Output('loading', 'children'),
     Input('tabs_filter_scienti', 'value'))
 def render_content(tab):
     if tab == 'tab_individual':
-        return [html.Div([                    
+        return [html.Div([
+                    dbc.Alert(
+                        html.P(children='', id="msj_alert_individual",),
+                        id="alert-fade-individual",
+                        dismissable=True,
+                        is_open=False,
+                    ),
                     html.H1(children="Indicadores para grupos de investigación: ", id="indicators_group", className="group_graph_info"),
                     html.H1(children="Por favor selecciones elementos a filtrar",id="products_element_group", className="group_graph_info"),
                     html.Div([
@@ -66,6 +95,12 @@ def render_content(tab):
             ]
     else:
         return [html.Div([
+                dbc.Alert(
+                    html.P(children='', id="msj_alert_general",),
+                    id="alert-fade-general",
+                    dismissable=True,
+                    is_open=False,
+                ),
                 html.Div([
                     dcc.Graph(figure={}, id='dash_general_graph1',style={'Width':'100%', "height":'100%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_general_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),
