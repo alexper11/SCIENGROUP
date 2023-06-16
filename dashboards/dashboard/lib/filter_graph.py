@@ -519,7 +519,7 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
                 yanchor="bottom",
                 xanchor="left",
                 title='Productos',
-                font=dict(size=9),
+                font=dict(size=10),
                 #legend_itemclick="toggleothers",
                 #legend_itemdoubleclick="toggle",
                 #
@@ -543,7 +543,7 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
     #fig.update_layout(legend_x=0.02, legend_y=1.02)
     #fig.update_yaxes(automargin=True)
     #fig.update_traces(visible='legendonly')
-
+    fig.update_layout(xaxis = dict(tickfont = dict(size=11)))
     return fig
 
 def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y grupos_nombres
@@ -1216,7 +1216,5 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
         elif ((('revista' in data) and ('editorial' in data)) != True) and ('tipo' in data):
             dash_general_graph9 = pie_type_element_general(data)
             div_general_figure9 = {'display':'block','width':'95%'}       
-        
-              
-
+    print(dash_general_graph3['layout']['title']['text'])
     return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9
