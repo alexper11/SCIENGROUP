@@ -444,9 +444,10 @@ img.brand {
   color:#410606;
 }
 
-.title_graph_main{
-  font-size: 2rem;
+.title_graph{
   text-align: center;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 H1, P {
