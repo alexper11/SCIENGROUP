@@ -300,7 +300,7 @@ def bar_pie_all(grupo): #retorna dos graficas, recibe codigo de grupo
                'yanchor':'top'},
                 height= 450,
                font=dict(size=10))
-    fig_pie.update_layout( legend = {"xanchor": "right"})
+    fig_pie.update_layout( legend = {"xanchor": "left"})
     return fig_bar, fig_pie
 
 #GRUPLAC INDIVIDUAL: ELEMENTO
@@ -1073,8 +1073,8 @@ def callback_filter_individual(grupo, elemento, boton):
         dash_individual_graph1 = time_series_all(series_gruplac)
         dash_individual_graph2, dash_individual_graph3 = bar_pie_all(grupo_cod)
         div_group_figure1 = {'display':'block', 'height':'75vh', 'max-height':'85vh','margin-top':'10px','padding-bottom':'10px','padding-top':'15px'}
-        div_group_figure2 = {'display':'inline-block', 'max-height':'65vh'}
-        div_group_figure3 = {'display':'inline-block', 'max-height':'65vh','margin-top':'10px','padding-top':'5px'}
+        div_group_figure2 = {'display':'inline-block', 'max-height':'75vh', 'margin-bottom':'10px','padding-bottom':'5px'}
+        div_group_figure3 = {'display':'inline-block', 'max-height':'75vh','margin-top':'10px','padding-top':'10px','margin-bottom':'10px','padding-bottom':'5px'}
     else:
         consistencia, ppa,ppua,pc, series_gruplac = get_indicadores_relativos(grupo_cod, elemento)
         kpi1 = str(consistencia)
@@ -1094,19 +1094,19 @@ def callback_filter_individual(grupo, elemento, boton):
         if ('revista' in data) and ('tipo' in data):
             dash_individual_graph2 = pie_journal_element(data)
             dash_individual_graph3 = pie_type_element(data)
-            div_group_figure2 = {'display':'inline-block', 'max-height':'65vh'}
-            div_group_figure3 = {'display':'inline-block', 'max-height':'65vh','margin-top':'10px','padding-top':'5px'}
+            div_group_figure2 = {'display':'inline-block', 'max-height':'75vh', 'margin-bottom':'10px','padding-bottom':'5px'}
+            div_group_figure3 = {'display':'inline-block', 'max-height':'75vh','margin-top':'10px','padding-top':'10px', 'margin-bottom':'10px','padding-bottom':'5px'}
         elif ('editorial' in data) and ('tipo' in data):
             dash_individual_graph2 = pie_editorial_element(data)
             dash_individual_graph3 = pie_type_element(data)
-            div_group_figure2 = {'display':'inline-block', 'max-height':'65vh'}
-            div_group_figure3 = {'display':'inline-block', 'max-height':'65vh','margin-top':'10px','padding-top':'5px'}
+            div_group_figure2 = {'display':'inline-block', 'max-height':'75vh', 'margin-bottom':'10px','padding-bottom':'5px'}
+            div_group_figure3 = {'display':'inline-block', 'max-height':'75vh','margin-top':'10px','padding-top':'10px', 'margin-bottom':'10px','padding-bottom':'5px'}
         elif ((('revista' in data) and ('editorial' in data)) != True) and ('tipo' in data):
             dash_individual_graph3 = pie_type_element(data)
-            div_group_figure3 = {'display':'block', 'max-height':'65vh','margin-top':'10px','padding-top':'5px'}
+            div_group_figure3 = {'display':'block', 'max-height':'75vh','margin-top':'10px','padding-top':'10px', 'margin-bottom':'10px','padding-bottom':'5px'}
         if 'autores' in data:
             dash_individual_graph4 = tree_author_element(data, elemento)        
-            div_group_figure4 = {'display':'block','height':'65vh','max-height':'70vh','margin-bottom':'10px'}
+            div_group_figure4 = {'display':'block','height':'75vh','max-height':'80vh','margin-bottom':'10px','margin-top':'10px','padding-top':'10px'}
 
     return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4
 
@@ -1207,14 +1207,14 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
             dash_general_graph8 = pie_journal_element_general(data,'revista')
             dash_general_graph9 = pie_type_element_general(data)
             div_general_figure8 = {'display':'inline-block','max-height':'700px','padding-top':'10px'}
-            div_general_figure9 = {'display':'inline-block','max-height':'700px'}
+            div_general_figure9 = {'display':'inline-block','max-height':'700px','padding-top':'10px'}
         elif ('editorial' in data) and ('tipo' in data):
             dash_general_graph8 = pie_journal_element_general(data,'editorial')
             dash_general_graph9 = pie_type_element_general(data)
-            div_general_figure8 = {'display':'inline-block','max-height':'700px'}
-            div_general_figure9 = {'display':'inline-block','max-height':'700px'}
+            div_general_figure8 = {'display':'inline-block','max-height':'700px','padding-top':'10px'}
+            div_general_figure9 = {'display':'inline-block','max-height':'700px','padding-top':'10px'}
         elif ((('revista' in data) and ('editorial' in data)) != True) and ('tipo' in data):
             dash_general_graph9 = pie_type_element_general(data)
-            div_general_figure9 = {'display':'block','width':'95%'}       
+            div_general_figure9 = {'display':'block','width':'95%','max-height':'700px','padding-top':'10px'}       
     print(dash_general_graph3['layout']['title']['text'])
     return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9
