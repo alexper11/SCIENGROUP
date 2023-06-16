@@ -1034,6 +1034,7 @@ def callback_value(parameter, state, disable_value, value):
     Output('dash_individual_graph2','figure'),Output('div_group_figure2','style'),
     Output('dash_individual_graph3','figure'),Output('div_group_figure3','style'),
     Output('dash_individual_graph4','figure'),Output('div_group_figure4','style'),
+    Output('msj_alert_individual','children'),Output('fade-alert-individual','is_open'),
     #titulo
     Output('title_individual_graph1','children'),
     Output('title_individual_graph2','children'),
@@ -1067,8 +1068,10 @@ def callback_filter_individual(grupo, elemento, boton):
     titulo_individual3=''
     titulo_individual4=''
     
+    msj_alert_individual = ''
+    fade_alert_individual = False
     if boton == 0 or elemento == None:
-        return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4, titulo_individual1, titulo_individual2, titulo_individual3, titulo_individual4
+        return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4, msj_alert_individual, fade_alert_individual, titulo_individual1, titulo_individual2, titulo_individual3, titulo_individual4
     
     kpi_all = {'display':'block'}
     #indicadores    
@@ -1107,10 +1110,9 @@ def callback_filter_individual(grupo, elemento, boton):
         div_group_figure1 = {'display':'block', 'height':'75vh', 'max-height':'85vh','margin-top':'10px','padding-bottom':'10px','padding-top':'15px'}
         data = filtro_gruplac_elemento_individual(grupo, elemento)
         if data.shape[0]==0:
-            ###############################
-            #HACER FUNCION DE MOSTRAR MENSAJE: NO HAY DATOS DISPONIBLES
-            #############################
-           return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4
+            msj_alert_individual = 'No existen datos'
+            fade_alert_individual = True
+            return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4, msj_alert_individual, fade_alert_individual
 
         if ('revista' in data) and ('tipo' in data):
             dash_individual_graph2 = pie_journal_element(data)
@@ -1141,7 +1143,7 @@ def callback_filter_individual(grupo, elemento, boton):
             dash_individual_graph4.update_layout(title={'text':None})      
             div_group_figure4 = {'display':'block','height':'75vh','max-height':'80vh','margin-bottom':'10px','margin-top':'10px','padding-top':'10px'}
 
-    return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4
+    return kpi_all, indicators_group, products_element_group, url_group_grouplac, group_minciencias, kpi1, kpi2, kpi3, kpi4, kpi5, dash_individual_graph1, div_group_figure1, dash_individual_graph2, div_group_figure2, dash_individual_graph3, div_group_figure3, dash_individual_graph4, div_group_figure4, msj_alert_individual, fade_alert_individual
 
 @callback(
     [    
@@ -1153,7 +1155,7 @@ def callback_filter_individual(grupo, elemento, boton):
     Output('dash_general_graph6','figure'),Output('div_general_figure6','style'),
     Output('dash_general_graph7','figure'),Output('div_general_figure7','style'),
     Output('dash_general_graph8','figure'),Output('div_general_figure8','style'),
-    Output('dash_general_graph9','figure'),Output('div_general_figure9','style'),    
+    Output('dash_general_graph9','figure'),Output('div_general_figure9','style'),
     #titulos
     Output('title_general_graph1','children'),
     Output('title_general_graph2','children'),
@@ -1164,6 +1166,7 @@ def callback_filter_individual(grupo, elemento, boton):
     Output('title_general_graph7','children'),
     Output('title_general_graph8','children'),
     Output('title_general_graph9','children'),
+    Output('msj_alert_general','children'),Output('fade-alert-general','is_open'),   
     ],
     [State('filter_parameter', 'value'), State('filter_value', 'value'), State('filter_element_gruplac_general', 'value'),
     Input('button_group_filter_group','n_clicks')]
@@ -1186,7 +1189,7 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
     div_general_figure6 = {'display':'none'}
     div_general_figure7 = {'display':'none'}
     div_general_figure8 = {'display':'none'}
-    div_general_figure9 = {'display':'none'}       
+    div_general_figure9 = {'display':'none'}
     titulo_general1=''
     titulo_general2=''
     titulo_general3=''
@@ -1197,10 +1200,14 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
     titulo_general8=''
     titulo_general9=''
     
+    msj_alert_general = ''
+    fade_alert_general = False      
     if boton == 0 or elemento == None:
-        return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9,titulo_general1,titulo_general2,titulo_general3,titulo_general4,titulo_general5,titulo_general6,titulo_general7,titulo_general8,titulo_general9
+        return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9, msj_alert_general, fade_alert_general,titulo_general1,titulo_general2,titulo_general3,titulo_general4,titulo_general5,titulo_general6,titulo_general7,titulo_general8,titulo_general9
     grupos_codigos, grupos_nombres=filtro_gruplac_valor_general(parametro,valor)
-    
+    cantidad_grupos=len(grupos_codigos)
+    msj_alert_general = f'Para el análisis se filtraron {cantidad_grupos} grupos de investigación'
+    fade_alert_general = True
     if elemento == 'Todos':
         df_indicadores, time_series = get_indicadores_gruplac_general(grupos_codigos)
         if df_indicadores['idgruplac'].count()>10:
@@ -1247,11 +1254,10 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
             indices_top=0
         data=filtro_gruplac_elemento_general(grupos_codigos,elemento)
         if data.shape[0]==0:
-            ###############################
-            #HACER FUNCION DE MOSTRAR MENSAJE: NO HAY DATOS DISPONIBLES
-            #############################
+            msj_alert_general = 'No existen datos'
+            fade_alert_general = True
             return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9,titulo_general1,titulo_general2,titulo_general3,titulo_general4,titulo_general5,titulo_general6,titulo_general7,titulo_general8,titulo_general9
-    
+   , msj_alert_general, fade_alert_general
         dash_general_graph1 = time_series_all_general(time_series, grupos_nombres,elemento)
         titulo_general1 = get_fig_title(dash_general_graph1)
         dash_general_graph1.update_layout(title={'text':None})
@@ -1306,5 +1312,5 @@ def callback_filter_grupal(parametro, valor, elemento, boton):
             titulo_general9 = get_fig_title(dash_general_graph9)
             dash_general_graph9.update_layout(title={'text':None})
             div_general_figure9 = {'display':'block','width':'95%','max-height':'700px','padding-top':'10px'}       
-    return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9,titulo_general1,titulo_general2,titulo_general3,titulo_general4,titulo_general5,titulo_general6,titulo_general7,titulo_general8,titulo_general9
+    return dash_general_graph1,div_general_figure1, dash_general_graph2, div_general_figure2, dash_general_graph3,div_general_figure3, dash_general_graph4, div_general_figure4, dash_general_graph5, div_general_figure5, dash_general_graph6, div_general_figure6, dash_general_graph7, div_general_figure7, dash_general_graph8, div_general_figure8, dash_general_graph9, div_general_figure9, msj_alert_general, fade_alert_general,titulo_general1,titulo_general2,titulo_general3,titulo_general4,titulo_general5,titulo_general6,titulo_general7,titulo_general8,titulo_general9
     
