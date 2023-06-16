@@ -476,7 +476,7 @@ H1, P {
   /* flex-direction: column;
   justify-content: space-around; 
   */
-  align-items: stretch;
+  align-items: center;
 }
 
 .group_graph_info{
