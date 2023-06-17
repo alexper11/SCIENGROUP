@@ -186,6 +186,8 @@ button.small {
   height: 100vh;
   width: 30rem;
   background-color: #51647e;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
   right: 0;
   top: 100%;
   transform: translateX(30rem);
@@ -202,9 +204,7 @@ button.small {
   top: 5rem;
   padding-left: 1rem;
 }
-.userAside {
-  visibility: hidden;
-}
+
 .asideMenuActivator {
   cursor: pointer;
   width: 10rem;
@@ -353,16 +353,6 @@ img.brand {
   border-radius:2em;
   padding-bottom: 25px;
 }
-
-#boton_filter_flex{  
-  top: 0;
-  height: 5rem;
-  left: 1;
-  padding: 0;
-  position: absolute;
-  z-index: 2;
-}
-
 .dash-sidebar-graph {
   position:absolute;
   top: 8rem;
@@ -375,7 +365,7 @@ img.brand {
   width: 25%;
   /* height: max-content; */
   padding: 5rem 1rem;
-  background-color: #08469b;
+  /* background-color: #08469b; */
   box-shadow: 3px 3px 6px rgb(88, 88, 88);
   opacity: 0.9;
   border-radius:2em;
@@ -383,19 +373,40 @@ img.brand {
   z-index: 1;
 }
 
-.select-menu-outer{
-  /* height: 100vh;
-  max-height: 100vh; */
-  height: 1%;
+#boton_filter_flex_scopus{  
+  top: 0;
+  height: 5rem;
+  left: 1;
+  padding: 0;
+  position: absolute;
+  z-index: 2;
+}
+#boton_filter_flex{  
+  top: 0;
+  height: 5rem;
+  left: 1;
+  padding: 0;
+  position: absolute;
+  z-index: 2;
 }
 
 .offcanvas{
   color: black;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
+  /* overflow-y: scroll;
+  scroll-behavior: smooth; */
 }
+.offcanvas_scopus{
+  color: black;
+  /* overflow-y: scroll;
+  scroll-behavior: smooth; */
+}
+
 .text_filter{
   color: white;
+}
+.text_filter_scopus{
+  color: #29180c;
+  font-weight: bold;
 }
 .dash-body {
   margin-left: 24%;

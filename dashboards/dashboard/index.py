@@ -47,8 +47,14 @@ app.layout = html.Div([
                 html.Aside([
                     html.Div([
                         # Información sobre el dash
-                        html.H1('Este dashboard es una herramienta muy útil que permite presentar y analizar métricas clave,como el número de publicaciones, citas, índices de impacto, colaboraciones, etc.'),
-                        html.H1('Permite Visualización clara de los datos, Fácil identificación de áreas de mejora, Seguimiento del progreso a lo largo del tiempo, Identificación de oportunidades de colaboración'),
+                        html.H1('Instrucciones'),
+                        html.Hr(),
+                        html.H3('Explorador de datos'),
+                        html.P('Para hacer uso del explorador de datos, utilice el filtro en el que puede elegir la fuente de los datos, de acuerdo a su elección puede seleccionar el producto a analizar y filtrar los datos con el botón filtrar. Si quiere realizar un nivel más profundo en el filtrado, elija la caracteristica del producto y su valor. La opción General permite realizar un análisis de datos de muchos grupos de investigación, elija el ingreso manual para elejir manualmente los grupos de investigación a analizar, '),
+                        html.Hr(),
+                        html.H3('Análisis GrupLAC'),
+                        html.P('Para realizar el análisis de los datos de GrupLAC, utilice el filtro de acuerdo a sus necesidades, la opción "Individual" permite realizar un análisis de un único grupo de investigación, elija el grupo y el producto científico.'),
+                        
                         dcc.Link("Desarroladores", href='/about_us', className='nav-link')
                     ],className='asideMenu-content')
                 ], className='asideMenu')

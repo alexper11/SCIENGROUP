@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 
 
 # LOAD THE DIFFERENT FILES
-from lib.filter_graph import sidebar_graph
+from lib.filter_gruplac import sidebar_gruplac
 
 layout = html.Div([
         html.Div(
@@ -22,7 +22,7 @@ layout = html.Div([
             ),id="div_gruplac",                          
         ),
         dbc.Offcanvas(
-            sidebar_graph,
+            sidebar_gruplac,
             id="offcanvas",
             keyboard = True,
             close_button = False,
