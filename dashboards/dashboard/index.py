@@ -50,11 +50,14 @@ app.layout = html.Div([
                         html.H1('Instrucciones'),
                         html.Hr(),
                         html.H3('Explorador de datos'),
-                        html.P('Para hacer uso del explorador de datos, utilice el filtro en el que puede elegir la fuente de los datos, de acuerdo a su elección puede seleccionar el producto a analizar y filtrar los datos con el botón filtrar. Si quiere realizar un nivel más profundo en el filtrado, elija la caracteristica del producto y su valor. La opción General permite realizar un análisis de datos de muchos grupos de investigación, elija el ingreso manual para elejir manualmente los grupos de investigación a analizar, '),
+                        html.P('Para hacer uso del explorador de datos, utilice el filtro en el que puede elegir la fuente de los datos, de acuerdo a su elección puede seleccionar el producto a analizar y filtrar los datos con el botón filtrar. Si quiere realizar un nivel más profundo en el filtrado, elija la caracteristica del producto y su valor. La opción General permite realizar un análisis de datos de un conjunto de grupos de investigación, permite elejir entre filtrar por intituciones, por la clasificación, las áreas, y las líneas de investigación de los grupos, o ingreso manual para elejir los grupos de investigación a analizar manualmente por nombre'),
                         html.Hr(),
                         html.H3('Análisis GrupLAC'),
                         html.P('Para realizar el análisis de los datos de GrupLAC, utilice el filtro de acuerdo a sus necesidades, la opción "Individual" permite realizar un análisis de un único grupo de investigación, elija el grupo y el producto científico.'),
-                        
+                        html.Hr(),
+                        html.H3('Siglas utilizadas'),
+                        html.P('PPA= Productos Por Año, PPUA= Porcentaje de productos  PG= Productos Generados'),
+
                         dcc.Link("Desarroladores", href='/about_us', className='nav-link')
                     ],className='asideMenu-content')
                 ], className='asideMenu')
