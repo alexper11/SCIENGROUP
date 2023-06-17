@@ -237,3 +237,6 @@ productos_ano=productos_ano.reindex(list(range(productos_ano.index.min(),product
 opciones_parametro_general=['Ingreso Manual','Institución','Clasificación','Áreas','Líneas de Investigación']
 
 opciones_grupo=gruplac_basico['nombre'].to_list()
+
+elementos_scopus=list(fuente_dic['SCOPUS'].keys())
+
