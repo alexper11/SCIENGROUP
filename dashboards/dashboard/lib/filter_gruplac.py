@@ -26,7 +26,7 @@ elementos_gruplac_general=elementos_gruplac_individual
 options_general_element=elementos_gruplac_general[:]
 options_general_element.append('Todos')
 #################################################################
-#Funciones de filtros
+#Funciones de filtross
 ############################################################
 def filtro_gruplac_grupo_individual(grupo): #retorna opciones de elemento
     idgruplac=gruplac_basico[gruplac_basico['nombre']==grupo]['idgruplac'].iloc[0]
