@@ -946,7 +946,7 @@ option_element_gruplac_general = dcc.Dropdown(
 #############################################################################
 # Sidebar Layout
 #############################################################################
-sidebar_graph = html.Div([
+sidebar_gruplac = html.Div([
     # html.H1('Opciones de filtrado',className="text_filter"),
     html.Hr(),  # Add an horizontal line
     dcc.Tabs(id="tabs_filter_scienti", value='tab_individual', 
@@ -968,13 +968,13 @@ sidebar_graph = html.Div([
         html.H5("Elemento:",className="text_filter"),
         option_element_gruplac_general,
         html.Button('Filtrar', id='button_group_filter_group', n_clicks=0),
-    ],id="filtro_grupal"),        
-],id="menu_filter_flex",className="dash-sidebar-graph",    
+    ],id="filtro_general"),        
+],id="menu_filter_flex",className="dash-sidebar-graph",style={'background-color':'#08469b'},    
 )
 
 #  ---------------------callback---------------
 @callback(
-    [Output('filtro_individual', 'hidden'),Output('filtro_grupal', 'hidden')],
+    [Output('filtro_individual', 'hidden'),Output('filtro_general', 'hidden')],
     Input('tabs_filter_scienti', 'value'))
 def render_content(tab):
     if tab == 'tab_individual':
@@ -993,7 +993,7 @@ def callback_element(grupo):
         option_elements= filtro_gruplac_grupo_individual(grupo)
         option_elements.append('Todos')
         return 'Todos', False, option_elements
-#-----------------grupal
+#-----------------general
 @callback(
     [Output('filter_value', 'value'),Output('filter_value', 'disabled'),Output('filter_value', 'options')],
     Input('filter_parameter', 'value'))
@@ -1080,8 +1080,8 @@ def callback_filter_individual(grupo, elemento, boton):
     ac=get_author_count(grupo_cod)  
     url_group_grouplac = 'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro='+grupo_cod
     group_minciencias = get_perfil_minciencias(grupo_cod)
-    indicators_group = grupo
-    products_element_group = elemento
+    indicators_group = 'Grupo: '+grupo
+    products_element_group ='Indicadores analizados para: '+elemento
     if elemento == 'Todos':
         consistencia, ppa,ppua,pc, series_gruplac = get_indicadores(grupo_cod)        
         kpi1 = str(consistencia)
@@ -1175,7 +1175,7 @@ def callback_filter_individual(grupo, elemento, boton):
     [State('filter_parameter', 'value'), State('filter_value', 'value'), State('filter_element_gruplac_general', 'value'),
     Input('button_group_filter_group','n_clicks')]
  )
-def callback_filter_grupal(parametro, valor, elemento, boton):
+def callback_filter_general(parametro, valor, elemento, boton):
     dash_general_graph1 = {}
     dash_general_graph2 = {}
     dash_general_graph3 = {}
