@@ -457,10 +457,11 @@ img.brand {
 
 .title_graph{
   text-align: center;
-  color: #08469b;
+  color: #0c1a15;
   padding-top: 0.5rem;
-  padding-bottom: 0;
+  padding-bottom: 0.5rem;
   font-weight: bold;
+  font-size: medium;
 }
 
 H1, P {
