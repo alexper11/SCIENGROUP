@@ -14,7 +14,7 @@ import dash_bootstrap_components as dbc
 # Data
 import json
 from datetime import datetime as dt
-from functions.csv_importer import gruplac_basico, scopus_productos, elementos_scopus, opciones_grupo_scopus, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
+from functions.csv_importer import gruplac_basico, scopus_productos, scopus_autores, elementos_scopus, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
 
 # Plotly
 import plotly.express as px
@@ -30,7 +30,126 @@ opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus))))
 #######################################
 #FUNCIONES DE FILTRADO
 ########################################
+#INDICADORES
+
+def citation_output(idgruplac):
+    scopus_productos_aux=scopus_productos.dropna(subset='idgruplac')
+    mean=scopus_productos_aux[scopus_productos_aux['idgruplac'].str.contains(idgruplac)]['citado'].mean()
+    return round(mean,2)
+
+def citation_output_relativo(idgruplac,elemento):
+    scopus_productos_aux=fuente_dic['SCOPUS'][elemento].dropna(subset='idgruplac')
+    mean=scopus_productos_aux[scopus_productos_aux['idgruplac'].str.contains(idgruplac)]['citado'].astype('int64').mean()
+    return round(mean,2)
+
+def citation_count(idgruplac):
+    scopus_productos_aux=scopus_productos.dropna(subset='idgruplac')
+    count=scopus_productos_aux[scopus_productos_aux['idgruplac'].str.contains(idgruplac)]['citado'].sum()
+    return count
+
+def citation_count_relativo(idgruplac,elemento):
+    scopus_productos_aux=fuente_dic['SCOPUS'][elemento].dropna(subset='idgruplac')
+    #scopus_productos_aux=scopus_productos_aux.astype(scopus_productos[scopus_productos_aux.columns.to_list()].dtypes.to_dict())
+    count=scopus_productos_aux[scopus_productos_aux['idgruplac'].str.contains(idgruplac)]['citado'].astype('int64').sum()
+    return count
+
+def products_count(idgruplac):
+    scopus_productos_aux=scopus_productos.dropna(subset='idgruplac')
+    count=scopus_productos_aux[scopus_productos_aux['idgruplac'].str.contains(idgruplac)]['idgruplac'].count()
+    return count
+
+def products_count_relativo(idgruplac, elemento):
+    scopus_productos_aux=fuente_dic['SCOPUS'][elemento].dropna(subset='idgruplac')
+    count=scopus_productos_aux[scopus_productos_aux['idgruplac'].str.contains(idgruplac)]['idgruplac'].count()
+    return count
+
+def authors_count(idgruplac):
+    scopus_autores_aux=scopus_autores.dropna(subset='idgruplac')
+    count=scopus_autores_aux[scopus_autores_aux['idgruplac'].str.contains(idgruplac)]['idgruplac'].count()
+    return count
+
+def get_h1_index(idgruplac):
+    scopus_productos_aux=scopus_productos.dropna(subset='idgruplac')
+    scopus_productos_aux=sorted(scopus_productos_aux[scopus_productos_aux['idgruplac'].str.contains(idgruplac)]['citado'].astype('int64').to_list(),reverse=True)
+    if len(scopus_productos_aux)==0:
+        return 0
+    else:
+        for idx, item in enumerate(scopus_productos_aux, 1):
+            if item < idx:
+                break
+        return idx - 1
+    
+def get_h1_index_relativo(idgruplac,elemento):
+    scopus_productos_aux=fuente_dic['SCOPUS'][elemento].dropna(subset='idgruplac')
+    scopus_productos_aux=sorted(scopus_productos_aux[scopus_productos_aux['idgruplac'].str.contains(idgruplac)]['citado'].astype('int64').to_list(),reverse=True)
+    if len(scopus_productos_aux)==0:
+        return 0
+    else:
+        for idx, item in enumerate(scopus_productos_aux, 1):
+            if item < idx:
+                break
+        return idx - 1
+
+def get_h2_index(idgruplac):
+    scopus_autores_aux=scopus_autores.dropna(subset='idgruplac')
+    scopus_autores_aux=sorted(scopus_autores_aux[scopus_autores_aux['idgruplac'].str.contains(idgruplac)]['h_index'].astype('int64').to_list(),reverse=True)
+    if len(scopus_autores_aux)==0:
+        return 0
+    else:
+        for idx, item in enumerate(scopus_autores_aux, 1):
+            if item < idx:
+                break
+        return idx - 1
+
+def get_series_scopus(idgruplac,elemento='Todos'):
+    serie_fechas=pd.Series([],dtype='float64')
+    serie_fechas= pd.concat([serie_fechas,pd.to_datetime(pd.Series([pmax]),format='%Y').dt.to_period('m')])
+    
+    data=scopus_productos.dropna(subset='idgruplac').copy()
+    if elemento!='Todos':
+        data=elementos_scopus[elemento].dropna(subset='idgruplac').copy()
+    data['fecha_publicacion']=pd.to_datetime(data.fecha_publicacion, format='%Y-%m').dt.to_period('m')
+    serie_fechas= pd.concat([serie_fechas,data[data['idgruplac'].str.contains(idgruplac)]['fecha_publicacion'].dropna()])
+    #serie_fechas= pd.concat([serie_fechas,gruplac_basico[gruplac_basico['idgruplac']==idgruplac]['fecha_formacion'].dropna().dt.year])
+    serie_fechas=serie_fechas.astype('object')
+    serie_fechas=serie_fechas.value_counts().sort_index().astype('float64')
+    #serie_fechas.iloc[0]=serie_fechas.iloc[0]-1 #fecha_formación
+    serie_fechas.iloc[-1]=serie_fechas.iloc[-1]-1
+    serie_fechas.index=serie_fechas.index.to_timestamp().to_period('m')
+    serie_fechas=serie_fechas.reindex(pd.period_range(start=min(serie_fechas.index),end=max(serie_fechas.index)).to_list(),fill_value=0)
+    return serie_fechas
+
+def get_indicadores_scopus_general(grupos):
+    #PARA OBTENER UN DATAFRAME CON LOS INDICADORES DE TODOS LOS GRUPOS EN SCOPUS
+    dic={'idgruplac':[],'cit_output':[],'citations':[],'h1_index':[],'h2_index':[],'PC':[]}
+    list_series=[]
+    for grup in grupos:
+        dic['idgruplac'].append(grup)
+        dic['cit_output'].append(citation_output(grup))
+        dic['citations'].append(citation_count(grup))
+        dic['h1_index'].append(get_h1_index(grup))
+        dic['h2_index'].append(get_h2_index(grup))
+        dic['PC'].append(products_count(grup))
+        list_series.append(get_series_scopus(grup))
+    indicadores_grupos_scopus= pd.DataFrame.from_dict(dic).sort_values(by='h2_index',ascending=False)
+    return indicadores_grupos_scopus, list_series
+
+def get_indicadores_scopus_relativo(grupos,elemento):
+    #PARA OBTENER UN DATAFRAME CON LOS INDICADORES DE TODOS LOS GRUPOS EN SCOPUS
+    dic={'idgruplac':[],'cit_output':[],'citations':[],'h1_index':[],'PC':[]}
+    list_series=[]
+    for grup in grupos:
+        dic['idgruplac'].append(grup)
+        dic['cit_output'].append(citation_output_relativo(grup,elemento))
+        dic['citations'].append(citation_count_relativo(grup,elemento))
+        dic['h1_index'].append(get_h1_index_relativo(grup,elemento))
+        dic['PC'].append(products_count_relativo(grup,elemento))
+        list_series.append(get_series_scopus(grup,elemento))
+    indicadores_grupos_scopus= pd.DataFrame.from_dict(dic).sort_values(by='PC',ascending=False)
+    return indicadores_grupos_scopus, list_series
+
 #INDIVIDUAL
+
 def filtro_scopus_grupo_individual(grupo):
     idgruplac=gruplac_basico[gruplac_basico['nombre']==grupo]['idgruplac'].iloc[0]
     opc_elementos=[]
