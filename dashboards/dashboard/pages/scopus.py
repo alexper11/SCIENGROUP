@@ -68,15 +68,13 @@ def render_content(tab):
                     html.H1(children="Indicadores para grupos de investigación: ", id="indicators_group_scopus", className="group_graph_info"),
                     html.H1(children="Por favor selecciones elementos a filtrar",id="products_element_group_scopus", className="group_graph_info"),
                     html.Div([
-                        html.Div([html.H1("Consistencia", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus-1',className='badge')], className='score-card'),
-                        html.Div([html.H1("PPA", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus-2',className='badge')], className='score-card'),
-                        html.Div([html.H1("PPUA", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus-3',className='badge')], className='score-card'),
-                        html.Div([html.H1("PG", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus-4',className='badge')], className='score-card'),
-                        html.Div([html.H1("Autores", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus-5',className='badge')], className='score-card'),
-                    ],className='card-score-targets'),
-                    html.H1(html.Span(dcc.Link("Abrir enlace del grupo en GrupLac", href="", id="url_group_scopus",target="_blank", className="group_graph_url", style={"color":"#08469b"}))),
-                    html.H1(html.Span(dcc.Link("Abrir indicadores del grupo en Minciencias", id="group_minciencias_scopus", href="", target="_blank", className="group_graph_url",style={"color":"#08469b"}))),
-
+                        html.Div([html.H1("H1 index", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_1',className='badge')], className='score-card'),
+                        html.Div([html.H1("H2 index", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_2',className='badge')], className='score-card'),
+                        html.Div([html.H1("AC", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_3',className='badge')], className='score-card'),
+                        html.Div([html.H1("PC", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_4',className='badge')], className='score-card'),
+                        html.Div([html.H1("CC", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_5',className='badge')], className='score-card'),
+                        html.Div([html.H1("CO", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_6',className='badge')], className='score-card'),
+                    ],className='card-score-targets'),                  
                 ],id="kpi_all_scopus" ,className='card-score-container', style={'display':'none'}),
                 #Charts or Graphs
                 html.Div([
