@@ -246,5 +246,5 @@ opciones_parametro_general=['Ingreso Manual','Institución','Clasificación','Á
 
 opciones_grupo=gruplac_basico['nombre'].to_list()
 
-elementos_scopus=list(fuente_dic['SCOPUS'].keys())
+elementos_scopus_lista=list(fuente_dic['SCOPUS'].keys())
 
