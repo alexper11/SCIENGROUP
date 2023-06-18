@@ -14,7 +14,7 @@ import dash_bootstrap_components as dbc
 # Data
 import json
 from datetime import datetime as dt
-from functions.csv_importer import gruplac_basico, scopus_productos, scopus_autores, elementos_scopus, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
+from functions.csv_importer import gruplac_basico, scopus_productos, scopus_autores, elementos_scopus_lista, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
 
 # Plotly
 import plotly.express as px
@@ -111,7 +111,7 @@ def get_series_scopus(idgruplac,elemento='Todos'):
     
     data=scopus_productos.dropna(subset='idgruplac').copy()
     if elemento!='Todos':
-        data=elementos_scopus[elemento].dropna(subset='idgruplac').copy()
+        data=fuente_dic['SCOPUS'][elemento].dropna(subset='idgruplac').copy()
     data['fecha_publicacion']=pd.to_datetime(data.fecha_publicacion, format='%Y-%m').dt.to_period('m')
     serie_fechas= pd.concat([serie_fechas,data[data['idgruplac'].str.contains(idgruplac)]['fecha_publicacion'].dropna()])
     #serie_fechas= pd.concat([serie_fechas,gruplac_basico[gruplac_basico['idgruplac']==idgruplac]['fecha_formacion'].dropna().dt.year])
@@ -157,7 +157,7 @@ def get_indicadores_scopus_relativo(grupos,elemento):
 def filtro_scopus_grupo_individual(grupo):
     idgruplac=gruplac_basico[gruplac_basico['nombre']==grupo]['idgruplac'].iloc[0]
     opc_elementos=[]
-    for elemento in elementos_scopus:
+    for elemento in elementos_scopus_lista:
         data=fuente_dic['SCOPUS'][elemento].dropna(subset='idgruplac')
         if data['idgruplac'].str.contains(idgruplac).shape[0] > 1:
             opc_elementos.append(elemento)
