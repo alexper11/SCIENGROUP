@@ -151,6 +151,7 @@ def get_indicadores_scopus_relativo(grupos,elemento):
 #INDIVIDUAL
 
 def filtro_scopus_grupo_individual(grupo):
+    grupo=grupo.strip()
     idgruplac=gruplac_basico[gruplac_basico['nombre']==grupo]['idgruplac'].iloc[0]
     opc_elementos=[]
     for elemento in elementos_scopus_lista:
@@ -161,6 +162,7 @@ def filtro_scopus_grupo_individual(grupo):
     return opc_elementos
 
 def filtro_scopus_elemento_individual(grupo,elemento):
+    grupo=grupo.strip()
     idgruplac=gruplac_basico[gruplac_basico['nombre']==grupo]['idgruplac'].iloc[0]
     if elemento=='Todos':
         data=scopus_productos.dropna(subset='idgruplac').copy()
@@ -235,6 +237,7 @@ def filtro_scopus_valor_general(parametro,valor): #grupos e suna lista de grupos
     nombre_grupos=gruplac_basico[gruplac_basico['idgruplac'].isin(idgruplacs)]['nombre'].to_list()
     nombre_grupos=list(set(opciones_grupo_scopus).intersection(set(nombre_grupos))) #Solo grupos visibles en Scopus
     nombre_grupos=list(map(str.strip, list(set(nombre_grupos))))
+    idgruplacs=[gruplac_basico[gruplac_basico['nombre']==nombre_grupo]['idgruplac'].iloc[0] for nombre_grupo in nombre_grupos]
     
     #data=pd.DataFrame()
     #elemento_general_seleccionado_scopus='Todos'
