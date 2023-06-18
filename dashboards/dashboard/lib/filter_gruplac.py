@@ -109,6 +109,9 @@ def filtro_gruplac_valor_general(parametro,valor): #grupos es una lista de grupo
         idgruplacs=aux_data[aux_data['lineas'].str.contains(pattern)]['idgruplac'].drop_duplicates(keep='first').to_list()
     
     nombre_grupos=gruplac_basico[gruplac_basico['idgruplac'].isin(idgruplacs)]['nombre'].to_list()
+    nombre_grupos=list(map(str.strip, list(set(nombre_grupos))))
+    idgruplacs=[gruplac_basico[gruplac_basico['nombre']==nombre_grupo]['idgruplac'].iloc[0] for nombre_grupo in nombre_grupos]
+    
     #data=pd.DataFrame()
     #elemento_general_seleccionado='Todos'
     return idgruplacs, nombre_grupos#, data
