@@ -14,7 +14,7 @@ import dash_bootstrap_components as dbc
 # Data
 import json
 from datetime import datetime as dt
-from functions.csv_importer import gruplac_basico, scopus_productos, elementos_scopus, opciones_grupo_scopus, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
+from functions.csv_importer import gruplac_basico, scopus_productos, elementos_scopus, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
 
 # Plotly
 import plotly.express as px
@@ -26,6 +26,10 @@ from plotly.subplots import make_subplots
 opciones_grupo_scopus=[]
 scopus_productos['nombre_grupo'].dropna().str.split(';').apply(lambda x: opciones_grupo_scopus.extend(x)) #variable para opciones del filtro de grupo
 opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus))))
+
+elementos_scopus_general=elementos_scopus
+options_general_element_scopus=elementos_scopus_general[:]
+options_general_element_scopus.append('Todos')
 
 #######################################
 #FUNCIONES DE FILTRADO
@@ -164,7 +168,7 @@ option_value_scopus = dcc.Dropdown(
     )
 option_element_scopus_general = dcc.Dropdown(
         id='filter_element_scopus_general',
-        options = [],        
+        options = options_general_element_scopus,        
         value = None,  # Valor inicial seleccionado
         disabled=True,
         maxHeight=160
@@ -208,3 +212,43 @@ def render_content(tab):
         return False, True
     else:
         return True, False
+
+#----------------------individual
+@callback(
+    [Output('filter_element_scopus', 'value'),Output('filter_element_scopus', 'disabled'),Output('filter_element_scopus', 'options')],
+    Input('filter_group_scopus', 'value'))
+def callback_element(grupo):
+    if grupo == None:
+        return None, True, []
+    else:
+        option_elements= filtro_scopus_grupo_individual(grupo)
+        option_elements.append('Todos')
+        return 'Todos', False, option_elements
+#-----------------general
+@callback(
+    [Output('filter_value_scopus', 'value'),Output('filter_value_scopus', 'disabled'),Output('filter_value_scopus', 'options')],
+    Input('filter_parameter_scopus', 'value'))
+def callback_parameter(parametro):
+    if parametro == None:
+        return None, True, []
+    else:
+        option_elements= filtro_scopus_parametro_general(parametro)
+        return None, False, option_elements
+    
+@callback(
+    [Output('filter_element_scopus_general', 'disabled'),Output('filter_element_scopus_general', 'value')],
+    [State('filter_parameter_scopus', 'value'),
+    State('filter_element_scopus_general', 'value'),
+    Input('filter_value_scopus', 'disabled'),
+    Input('filter_value_scopus', 'value')])
+def callback_value(parameter, state, disable_value, value):
+    if disable_value == True:
+        return True, None
+    if (value == None) and (parameter == None):
+        return True, None
+    elif (value == None) or (parameter == None) or (value == []) or (parameter == []):
+        return True, None
+    elif (state!=None) and (state!='Todos'):        
+        return False, no_update 
+    else:
+        return False, 'Todos'
