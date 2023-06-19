@@ -245,21 +245,20 @@ def filtro_scopus_valor_general(parametro,valor): #grupos e suna lista de grupos
     nombre_grupos=list(set(opciones_grupo_scopus).intersection(set(nombre_grupos))) #Solo grupos visibles en Scopus
     nombre_grupos=list(map(str.strip, list(set(nombre_grupos))))
     idgruplacs=[gruplac_basico[gruplac_basico['nombre']==nombre_grupo]['idgruplac'].iloc[0] for nombre_grupo in nombre_grupos]
-    
     #data=pd.DataFrame()
     #elemento_general_seleccionado_scopus='Todos'
     return idgruplacs, nombre_grupos#, data
 
 def filtro_scopus_elemento_general(idgruplacs, elemento):
-    #if elemento=='Todos':
-    #    data=pd.DataFrame()
-    #else:
-    data=fuente_dic['SCOPUS'][elemento].dropna(subset='idgruplac').copy()
+    if elemento=='Todos':
+        data=scopus_productos.copy() 
+    else:
+        data=fuente_dic['SCOPUS'][elemento].dropna(subset='idgruplac').copy()
     data_aux=data.copy()
     data_aux['id']=data_aux.index
     indexes=[]
     data_aux[['id','idgruplac']].dropna(subset='idgruplac').apply(lambda x: indexes.append(x['id']) if len(set(x['idgruplac'].split(';')).intersection(set(idgruplacs)))>=1 else None,axis=1)
-    data=data.loc[indexes].astype(globals()[str(referencias['SCOPUS'][elemento])][data.columns.to_list()].dtypes.to_dict())
+    data=data.loc[indexes]#.astype(globals()[str(referencias['SCOPUS'][elemento])][data.columns.to_list()].dtypes.to_dict())
     return data
 
 ########## graficas
@@ -291,6 +290,8 @@ def time_series_all_scopus(series, elemento='Todos'):
 def get_fig_title(fig):
     #fig.update_layout(title={'text':None})
     return fig['layout']['title']['text']
+
+
 
 #############################################################################
 # State Dropdown
