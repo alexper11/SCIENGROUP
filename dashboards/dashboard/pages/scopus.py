@@ -81,6 +81,10 @@ def render_content(tab):
                     dcc.Graph(figure={}, id='dash_individual_scopus_graph1',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_group_scopus_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),             
                 html.Div([
+                    html.P(children='', id='title_individual_scopus_graph5', className='title_graph'),
+                    dcc.Graph(figure={}, id='dash_individual_scopus_graph5',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
+                ],id='div_group_scopus_figure5', className='card-graph card-body col-graph-big', style={'display':'none'}),
+                html.Div([
                     html.Div([      
                         html.P(children='', id='title_individual_scopus_graph2', className='title_graph'),                  
                         dcc.Graph(figure={}, id='dash_individual_scopus_graph2',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
