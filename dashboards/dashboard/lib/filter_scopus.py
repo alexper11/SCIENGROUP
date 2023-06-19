@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import re
 
+
 from dash import no_update
 
 # Dash Bootstrap Components
@@ -261,7 +262,10 @@ def filtro_scopus_elemento_general(idgruplacs, elemento):
     data=data.loc[indexes]#.astype(globals()[str(referencias['SCOPUS'][elemento])][data.columns.to_list()].dtypes.to_dict())
     return data
 
-########## graficas
+########## GRAFICAS INDIVIDUAL
+
+##########TODOS
+
 def time_series_all_scopus(series, elemento='Todos'):
     series=series.to_frame().reset_index()
     series.columns=['fecha','productos']
@@ -301,33 +305,13 @@ def bar_all_scopus(grupo): #retorna dos graficas, recibe codigo de grupo
                  "count":"Cantidad de Productos"})
     fig.update(layout_showlegend=False)
     fig.update_layout(title={
-                'text':"Conteo de Productos",
+                'text':"<b>Conteo de Productos</b>",
                 #'xanchor':'center',
                 #'x':0.5,
                 #'yanchor':'top'
                 },
                 xaxis={'categoryorder': 'total descending'},
                font=dict(size=12))
-    return fig
-
-def boxplot_individual(codigo_grupo,datain,elemento='Todos'):
-    if elemento=='Todos':##########  
-        title_label='Distribución de Citaciones: Todos los Productos'
-    else:
-        title_label='Distribución de Citaciones: '+elemento
-    data=datain.dropna(subset='idgruplac')[['idgruplac','citado']].copy()
-    data['citado']=data['citado'].astype('int64')
-    data['idgruplac']=gruplac_basico[gruplac_basico['idgruplac']==codigo_grupo]['nombre'].iloc[0]
-    data['idgruplac']=data['idgruplac'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
-    fig = px.box(data, x="idgruplac", y="citado",color='idgruplac', points='all',hover_data = {'citado':True,'idgruplac':False})
-    if data['idgruplac'].nunique()>3:
-        fig.update_xaxes(tickangle = 90)
-    fig.update_layout(xaxis={'visible': False, 'showticklabels': False},yaxis_title="Citaciones",
-                      legend_title='Grupos de Investigación')
-    #fig.update_traces(orientation='h')
-    fig.update_layout(title={'text':title_label})
-    #maxrange=data.groupby('idgruplac').quantile(0.85).max().iloc[0]
-    #fig['layout']['yaxis'].update(range=[-0.1,maxrange])
     return fig
 
 def tree_author_all_scopus(data,elemento='Todos'): #sólo para aquellos elementos con la columna 'autores' existente, se filtra a top 30 si hay mas
@@ -352,7 +336,7 @@ def tree_author_all_scopus(data,elemento='Todos'): #sólo para aquellos elemento
     fig.data[0].hovertemplate = '%{label}<br>'+elemento+':%{value}<br>%{customdata:.2f}%'
     fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
                       title={
-                      'text':'Participación de Autores',
+                      'text':'<b>Participación de Autores</b>',
                       #'xanchor':'center',
                       #'x':0.5,
                       #'yanchor':'top'
@@ -362,11 +346,329 @@ def tree_author_all_scopus(data,elemento='Todos'): #sólo para aquellos elemento
     warnings.filterwarnings(action='default', category=FutureWarning)##################
     return fig
 
+def boxplot_individual(codigo_grupo,datain,elemento='Todos'):
+    if elemento=='Todos':##########  
+        title_label='Distribución de Citaciones: Todos los Productos'
+    else:
+        title_label='Distribución de Citaciones: '+elemento
+    data=datain.dropna(subset='idgruplac')[['idgruplac','citado']].copy()
+    data['citado']=data['citado'].astype('int64')
+    data['idgruplac']=gruplac_basico[gruplac_basico['idgruplac']==codigo_grupo]['nombre'].iloc[0]
+    data['idgruplac']=data['idgruplac'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    fig = px.box(data, x="idgruplac", y="citado",color='idgruplac', points='all',hover_data = {'citado':True,'idgruplac':False})
+    #if data['idgruplac'].nunique()>3:
+    #    fig.update_xaxes(tickangle = 90)
+    fig.update_layout(xaxis={'visible': False, 'showticklabels': False},yaxis_title="Citaciones",
+                      legend_title='Grupos de Investigación')
+    #fig.update_traces(orientation='h')
+    fig.update_layout(title={'text':title_label})
+    #maxrange=data.groupby('idgruplac').quantile(0.85).max().iloc[0]
+    #fig['layout']['yaxis'].update(range=[-0.1,maxrange])
+    return fig
+
 def get_fig_title(fig):
     #fig.update_layout(title={'text':None})
     return fig['layout']['title']['text']
 
+#ELEMENTO
 
+def pie_journal_element_scopus(datain,condition): #recibe dataset filtrado y ocndicion 'editorial' o 'revista'
+    data=datain.copy()
+    data[condition]=data[condition].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    if condition=='editorial':
+        title_label="<b>Publicaciones por Editoriales</b>"
+        legend_label='Editorial'
+    else:
+        title_label="<b>Publicaciones en Revistas</b>"
+        legend_label='Revista'
+    
+    if data[condition].value_counts().shape[0]>30:
+        data_aux=data[condition].value_counts().iloc[:30]
+        data_aux=data_aux.rename_axis('index').reset_index(name='values')
+        data_aux['percents']=(data_aux['values']*100)/data_aux['values'].sum()
+    else:
+        data_aux=data[condition].value_counts()
+        data_aux=data_aux.rename_axis('index').reset_index(name='values')
+        data_aux['percents']=data[condition].value_counts(normalize=True).values*100
+    
+    fig_pie = px.pie(data_aux, values=data_aux['values'], 
+                     names=data_aux['index'], color_discrete_sequence=px.colors.cyclical.Edge,
+                     hole=.3, custom_data=['percents'])
+    fig_pie.update_layout(legend=dict(
+                orientation="v",
+                xanchor="left",
+                #x=0.02,
+                #y=1.02,
+                title=legend_label,
+                font=dict(size=10),
+                ),
+                title={
+               'text':title_label,
+               #'xanchor':'center',
+               #'x':0.5,
+               #'yanchor':'top',
+               #'automargin':True
+               },
+               #margin=dict(r=10, l=10),
+               font=dict(size=10))
+    fig_pie.data[0].hovertemplate = '%{label}<br>'+'count'+':%{value}<br>%{customdata:.2f}%'
+    fig_pie.update_traces(textposition='inside', textinfo='percent')
+    return fig_pie
+
+def tree_topic_element_scopus(data, elemento): #sólo para aquellos elementos con la columna 'autores' existente, se filtra a top 30 si hay mas
+    warnings.filterwarnings(action='ignore', category=FutureWarning)#################
+    dataset_tema=data[['idgruplac','tema']].copy()
+    dataset_tema['tema']=dataset_tema['tema'].str.split(';')
+    dataset_tema=dataset_tema.explode('tema')
+    dataset_tema['tema']=dataset_tema['tema'].str.strip()
+    dataset_tema=dataset_tema['tema'].value_counts().reset_index().rename(columns={'index':'tema','tema':'count'})
+    dataset_tema['percents']=(dataset_tema['count']*100)/sum(dataset_tema['count'])
+    dataset_tema['tema']=dataset_tema['tema'].str.wrap(15,break_long_words=False).str.replace('\n','<br>')
+    if dataset_tema['tema'].count()>30:
+        dataset_tema=dataset_tema.iloc[:30]
+    fig = px.treemap(dataset_tema, path=[px.Constant('Top Temas'),'tema'], values='count', 
+                     custom_data=['percents'])
+    fig.update_traces(root_color="white")
+    fig.data[0].texttemplate = "%{label}<br>"+elemento+":%{value}<br>%{customdata:.2f}%"
+    fig.data[0].hovertemplate = '%{label}<br>'+elemento+':%{value}<br>%{customdata:.2f}%'
+    fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
+                      title={
+                      'text':'<b>Temas Trabajados</b>',
+                      #'xanchor':'center',
+                      #'x':0.5,
+                      #'yanchor':'top'
+                      },
+                      font=dict(size=14))
+    fig.update_layout(uniformtext=dict(minsize=16))
+    warnings.filterwarnings(action='default', category=FutureWarning)##################
+    return fig
+
+###############GRAFICAS GENERAL
+
+#TODOS
+
+def time_series_all_general_scopus(series,grupos,elemento='Todos'): #recibe time_series y grupos_nombres
+    df=pd.DataFrame()
+    if elemento=='Todos':
+        title_label='<b>Productos Anuales Generados: Todos</b>'
+        axis_label='Cantidad de Productos'
+    else:
+        title_label='<b>Productos Anuales Generados: '+elemento+'</b>'
+        axis_label='Cantidad de '+elemento
+    
+    for i,serie in enumerate(series):
+        serie=serie.to_frame().reset_index()
+        serie.columns=['fecha','productos']
+        #series['fecha']=series['fecha'].dt.to_timestamp(freq='M')
+        serie['fecha']=serie['fecha'].dt.strftime('%Y-%m') 
+        if i==0:
+            df['fecha']=serie['fecha']
+            df[grupos[i]]=serie['productos']
+        else:
+            df_aux=pd.DataFrame()
+            df_aux['fecha']=serie['fecha']
+            df_aux[grupos[i]]=serie['productos']
+            df=pd.merge(df, df_aux, on="fecha",how='outer').sort_values(by='fecha').fillna(0)
+            #df['fecha']=pd.to_datetime(df.fecha, format='%Y').dt.year
+    fig = px.line(df, x='fecha', y=df.columns, 
+                  labels={
+                      "fecha":"Años",
+                      "value":axis_label})
+    fig.update_layout(legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="left",
+        x=0.01,
+        title='Grupos',
+        font=dict(size=11)),
+        title={
+              'text':title_label,
+              #'xanchor':'center',
+              #'x':0.5,
+              #'yanchor':'top',
+              #'automargin':True
+              },
+              font=dict(size=12))
+              #margin=dict(t=20, b=20))
+    fig.update_traces(line_width=1.5)
+    #fig.update_layout(height=650)#############
+    return fig
+
+def bar_general_all_scopus(codigos, nombres): #retorna dos graficas, recibe grupos_codigos y grupos_codigos
+    df=pd.DataFrame(columns=['grupo','producto','count'])
+    for i,codigo in enumerate(codigos):
+        dic={'grupo':[],'producto':[],'count':[]}
+        for key in list(set(fuente_dic['SCOPUS'].keys())):
+            data=fuente_dic['SCOPUS'][key].dropna(subset='idgruplac').copy()
+            dic['grupo'].append(nombres[i])
+            dic['count'].append(data[data['idgruplac'].str.contains(codigo)]['idgruplac'].count())
+            dic['producto'].append(key)
+        df_aux=pd.DataFrame.from_dict(dic)
+        df_aux=df_aux[df_aux['count']>0]
+        df=pd.concat([df, df_aux], ignore_index=True)
+    if df['grupo'].nunique()>1:
+        df['grupo']=df['grupo'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    fig = px.bar(df, x="grupo", y="count", color='producto',
+                 labels={
+                 "grupo":"Grupo de Investigación",
+                 "count":"Cantidad de Productos"},color_discrete_sequence=px.colors.sequential.Viridis)#paleta de colores
+    fig.update_layout(
+                legend=dict(
+                orientation="h",
+                x=0.02,
+                y=1.02,
+                yanchor="bottom",
+                xanchor="left",
+                title='Productos',
+                font=dict(size=10),
+                #legend_itemclick="toggleothers",
+                #legend_itemdoubleclick="toggle",
+                #
+                ),
+                title={
+                'text':"Productos Generados por los Grupos de Investigación",
+                #'xanchor':'center',
+                #'x':0.5,
+                #'xref':'paper',
+                #'yanchor':'top',
+                #'automargin':True,
+                #'font': {'size': 15},
+                },
+                yaxis={'categoryorder': 'total ascending'},
+                font=dict(size=10),
+                margin=dict(t=2, b=2),
+                #height=650
+                )
+    if df['grupo'].nunique()>3:
+        fig.update_xaxes(tickangle=90)
+    #fig.update_layout(legend_x=0.02, legend_y=1.02)
+    #fig.update_yaxes(automargin=True)
+    #fig.update_traces(visible='legendonly')
+    fig.update_layout(xaxis = dict(tickfont = dict(size=9.6)))
+    return fig
+
+def radar_general_all(indicadores,elemento='Todos'):
+    warnings.filterwarnings(action='ignore', category=FutureWarning)
+    if elemento=='Todos':
+        title_label='Radar de Indicadores: Todos los Productos'
+    else:
+        title_label='Radar de Indicadores: '+elemento
+    aux_ind=indicadores[['idgruplac','cit_output','h1_index','h2_index']].copy()
+    aux_ind.columns=['Grupos','Citaciones por Producto','H1 Index','H2 Index(global)']
+    aux_ind['Grupos']=[gruplac_basico[gruplac_basico['idgruplac']==idg]['nombre'].iloc[0] for idg in aux_ind['Grupos'].to_list()]
+    aux_ind['Grupos']=aux_ind['Grupos'].str.wrap(20,break_long_words=False).str.replace("\n","<br>")
+    #aux_ind['id']=aux_ind.index
+    aux_ind=pd.melt(aux_ind, id_vars='Grupos', value_vars=['Citaciones por Producto','H1 Index','H2 Index(global)']).sort_values(by='Grupos')
+    fig = px.line_polar(aux_ind, r='value', color='Grupos', theta='variable', line_close=True)
+    #fig.update_traces(fill='toself')
+    fig.update_layout(title={'text':title_label})
+    fig.for_each_trace(lambda t: t.update(hoveron='points'))
+    warnings.filterwarnings(action='default', category=FutureWarning)
+    return fig
+
+def heatmap_general(codigos,nombres):
+    df=pd.DataFrame(columns=['grupo','tipo_producto','citaciones'])
+
+    for i,codigo in enumerate(codigos):
+        dic={'grupo':[],'tipo_producto':[],'citaciones':[]}
+        for key in list(set(fuente_dic['SCOPUS'].keys())):
+            data=fuente_dic['SCOPUS'][key].dropna(subset='idgruplac').copy()
+            dic['grupo'].append(nombres[i])
+            dic['citaciones'].append(data[data['idgruplac'].str.contains(codigo)]['citado'].astype('int64').sum())
+            dic['tipo_producto'].append(key)
+        df_aux=pd.DataFrame.from_dict(dic)
+        df_aux['citaciones']=df_aux['citaciones']#.astype('int64')
+        df_aux=df_aux[df_aux['citaciones']>0]
+        df=pd.concat([df, df_aux], ignore_index=True)
+    df['grupo']=df['grupo'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    df= df.pivot(index='grupo', columns='tipo_producto')['citaciones'].fillna(0)
+    fig = px.imshow(df, x=df.columns, y=df.index, color_continuous_scale='RdBu_r',text_auto=True,
+                   labels=dict(x="Tipo de Producto", y="Grupos de Investigación", color="Citaciones"))
+    fig.update_layout(xaxis = dict(tickfont = dict(size=11)))
+    fig.update_layout(yaxis = dict(tickfont = dict(size=11)),font=dict(size=10))
+    #fig.update_layout(width=500,height=500)
+    fig.update_layout(title={'text':'Grupos por Tipo de Producto: Citaciones'})
+    return fig
+
+def boxplot_general_all_scopus(codigos,nombres):
+    df=pd.DataFrame(columns=['idgruplac','citado'])
+    for i,codigo in enumerate(codigos):
+        data=scopus_productos.dropna(subset='idgruplac').copy()
+        data=data[data['idgruplac'].str.contains(codigo)][['idgruplac','citado']]
+        data['idgruplac']=nombres[i]
+        df=pd.concat([df, data], ignore_index=True)
+    df['idgruplac']=df['idgruplac'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    df['citado']=df['citado'].astype('int64')
+    fig = px.box(df, x="idgruplac", y="citado",color='idgruplac', points='all',hover_data = {'citado':True,'idgruplac':False})
+    #if df['idgruplac'].nunique()>3:
+    #    fig.update_xaxes(tickangle = 90)
+    fig.update_layout(xaxis={'visible': False, 'showticklabels': False},yaxis_title="Citaciones",
+                      legend_title='Grupos de Investigación')
+    #fig.update_traces(orientation='h')
+    fig.update_layout(title={'text':'Distribución de Citaciones: Todos los Productos'})
+    #maxrange=df.groupby('idgruplac').quantile(0.85).max().iloc[0]
+    #fig['layout']['yaxis'].update(range=[-0.3,maxrange])
+    return fig
+
+#ELEMENTO
+
+def bar_general_element_scopus(data, grupos,elemento): #retorna dos graficas, recibe grupos_codigos y grupos_codigos
+    df=data.rename(columns={'idgruplac':'grupo'}).copy()
+    df=df[['grupo']]
+    df['grupo']=df['grupo'].str.split(';')
+    df=df.explode('grupo')
+    df=df[df['grupo'].isin(grupos)]
+    df['grupo']=df['grupo'].apply(lambda x: gruplac_basico[gruplac_basico['idgruplac']==x.strip()]['nombre'].iloc[0])
+    if df['grupo'].nunique()>1:
+        df['grupo']=df['grupo'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    temp_df=df.copy()
+    df=df['grupo'].value_counts()    
+    fig = px.bar(df, x=df.index, y=df, color=df.index,
+                 labels={
+                 "index":"Grupo de Investigación",
+                 "y":"Cantidad de "+elemento},
+                 orientation='v',color_discrete_sequence=px.colors.sequential.thermal)#paleta de colores
+    fig.update_layout(
+                font=dict(size=10),
+                title={
+                'text':"Productos Generados por los Grupos de Investigación: "+elemento,
+                #'xanchor':'center',
+                #'xref':'paper',
+                #'x':0.5,
+                #'yanchor':'top',
+                #'automargin':True,
+                #'font': {'size': 14}
+                },
+                yaxis={'categoryorder': 'total ascending'},
+                margin=dict(t=10, b=2))
+    fig.update(layout_showlegend=False)
+    if temp_df['grupo'].nunique()>3:
+        fig.update_xaxes(tickangle=90)
+    #fig.update_layout(height='600')##############
+    #fig.update_yaxes(automargin=True)
+    #fig.update_xaxes(tickangle=0)
+    fig.update_layout(xaxis = dict(tickfont = dict(size=10)))
+    return fig
+
+def boxplot_general_element_scopus(data,codigos,elemento):
+    df=data[['idgruplac','citado']].copy()
+    df['idgruplac']=df['idgruplac'].str.split(';')
+    df=df.explode('idgruplac')
+    df=df[df['idgruplac'].isin(codigos)]
+    df['idgruplac']=df['idgruplac'].apply(lambda x: gruplac_basico[gruplac_basico['idgruplac']==x.strip()]['nombre'].iloc[0])
+    df['idgruplac']=df['idgruplac'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    df['citado']=df['citado'].astype('int64')
+    fig = px.box(df, x="idgruplac", y="citado",color='idgruplac', points='all',hover_data = {'citado':True,'idgruplac':False})
+    #if df['idgruplac'].nunique()>3:
+    #    fig.update_xaxes(tickangle = 90)
+    fig.update_layout(xaxis={'visible': False, 'showticklabels': False},yaxis_title="Citaciones",
+                      legend_title='Grupos de Investigación')
+    #fig.update_traces(orientation='h')
+    fig.update_layout(title={'text':'Distribución de Citaciones: '+elemento})
+    #maxrange=df.groupby('idgruplac').quantile(0.85).max().iloc[0]
+    #fig['layout']['yaxis'].update(range=[-0.3,maxrange])
+    return fig
 
 #############################################################################
 # State Dropdown
