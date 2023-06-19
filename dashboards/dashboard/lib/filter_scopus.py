@@ -269,10 +269,10 @@ def time_series_all_scopus(series, elemento='Todos'):
     #series['fecha']=series['fecha'].dt.to_timestamp(freq='M')
     series['fecha']=series['fecha'].dt.strftime('%Y-%m') 
     if elemento=='Todos':
-        title_label="<b>Productos Anuales Generados: Todos</b>"
+        title_label="Productos Anuales Generados: Todos"
         axis_label="Conteo de Productos"
     else:
-        title_label="<b>Productos Anuales Generados: "+elemento+"</b>"
+        title_label="Productos Anuales Generados: "+elemento
         axis_label="Conteo de "+elemento
     fig = px.line(series, x='fecha', y="productos", 
                   labels={
@@ -286,6 +286,81 @@ def time_series_all_scopus(series, elemento='Todos'):
                   },
                   font=dict(size=12))
     fig.update_traces(line_color='#0000ff', line_width=2)
+    return fig
+
+def bar_all_scopus(grupo): #retorna dos graficas, recibe codigo de grupo
+    dic={'producto':[],'count':[]}
+    for key in list(set(fuente_dic['SCOPUS'].keys())):
+        data=fuente_dic['SCOPUS'][key].dropna(subset='idgruplac').copy()
+        dic['count'].append(data[data['idgruplac'].str.contains(grupo)]['idgruplac'].count())
+        dic['producto'].append(key)
+    df=pd.DataFrame.from_dict(dic)
+    df=df[df['count']>0]
+    fig = px.bar(df, x="producto", y="count", color='producto',color_discrete_sequence=px.colors.sequential.Turbo,
+                 labels={
+                 "producto":"Tipo de Producto",
+                 "count":"Cantidad de Productos"})
+    fig.update(layout_showlegend=False)
+    fig.update_layout(title={
+                'text':"Conteo de Productos",
+                #'xanchor':'center',
+                #'x':0.5,
+                #'yanchor':'top'
+                },
+                xaxis={'categoryorder': 'total descending'},
+               font=dict(size=12))
+    return fig
+
+def boxplot_individual(codigo_grupo,datain,elemento='Todos'):
+    if elemento=='Todos':##########  
+        title_label='Distribución de Citaciones: Todos los Productos'
+    else:
+        title_label='Distribución de Citaciones: '+elemento
+    data=datain.dropna(subset='idgruplac')[['idgruplac','citado']].copy()
+    data['citado']=data['citado'].astype('int64')
+    data['idgruplac']=gruplac_basico[gruplac_basico['idgruplac']==codigo_grupo]['nombre'].iloc[0]
+    data['idgruplac']=data['idgruplac'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    fig = px.box(data, x="idgruplac", y="citado",color='idgruplac', points='all',hover_data = {'citado':True,'idgruplac':False})
+    if data['idgruplac'].nunique()>3:
+        fig.update_xaxes(tickangle = 90)
+    fig.update_layout(xaxis={'visible': False, 'showticklabels': False},yaxis_title="Citaciones",
+                      legend_title='Grupos de Investigación')
+    #fig.update_traces(orientation='h')
+    fig.update_layout(title={'text':title_label})
+    #maxrange=data.groupby('idgruplac').quantile(0.85).max().iloc[0]
+    #fig['layout']['yaxis'].update(range=[-0.1,maxrange])
+    return fig
+
+def tree_author_all_scopus(data,elemento='Todos'): #sólo para aquellos elementos con la columna 'autores' existente, se filtra a top 30 si hay mas
+    warnings.filterwarnings(action='ignore', category=FutureWarning)#################
+    if elemento=='Todos':
+        top_label="Top Autores: Todos los Productos"
+    else:
+        top_label="Top Autores: "+elemento
+    dataset_autores=data[['idgruplac','autores']].copy()
+    dataset_autores['autores']=dataset_autores['autores'].str.split(';')
+    dataset_autores=dataset_autores.explode('autores')
+    dataset_autores['autores']=dataset_autores['autores'].str.strip()
+    dataset_autores=dataset_autores['autores'].value_counts().reset_index().rename(columns={'index':'autores','autores':'count'})
+    dataset_autores['percents']=(dataset_autores['count']*100)/sum(dataset_autores['count'])
+    dataset_autores['autores']=dataset_autores['autores'].str.wrap(15,break_long_words=False).str.replace('\n','<br>')
+    if dataset_autores['autores'].count()>30:
+        dataset_autores=dataset_autores.iloc[:30]
+    fig = px.treemap(dataset_autores, path=[px.Constant(top_label),'autores'], values='count', 
+                     custom_data=['percents'])
+    fig.update_traces(root_color="white")
+    fig.data[0].texttemplate = "%{label}<br>"+elemento+":%{value}<br>%{customdata:.2f}%"
+    fig.data[0].hovertemplate = '%{label}<br>'+elemento+':%{value}<br>%{customdata:.2f}%'
+    fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
+                      title={
+                      'text':'Participación de Autores',
+                      #'xanchor':'center',
+                      #'x':0.5,
+                      #'yanchor':'top'
+                      },
+                      font=dict(size=14))
+    fig.update_layout(uniformtext=dict(minsize=16))
+    warnings.filterwarnings(action='default', category=FutureWarning)##################
     return fig
 
 def get_fig_title(fig):
@@ -462,27 +537,30 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
     products_element_group_scopus ='Indicadores analizados para: '+elemento
 
     if elemento == 'Todos':
-        print('codigo grupo:',grupo_cod_scopus)
-        series_scopus=get_series_scopus(grupo_cod_scopus)
-        print(series_scopus)             
+        series_scopus=get_series_scopus(grupo_cod_scopus)             
         kpi_scopus1 = str(get_h1_index(grupo_cod_scopus))
         kpi_scopus2 = str(get_h2_index(grupo_cod_scopus))
         kpi_scopus3 = str(authors_count(grupo_cod_scopus))
         kpi_scopus4 = str(products_count(grupo_cod_scopus))
         kpi_scopus5 = str(citation_count(grupo_cod_scopus))  
         kpi_scopus6 = str(citation_output(grupo_cod_scopus) )     
-        dash_individual_scopus_graph1 = time_series_all_scopus(series_scopus) #Grafica_hacer
+        dash_individual_scopus_graph1 = time_series_all_scopus(series_scopus)
         titulo_individual_scopus1 = get_fig_title(dash_individual_scopus_graph1)
         dash_individual_scopus_graph1.update_layout(title={'text':None})
-        dash_individual_scopus_graph2 = {} #Grafica_hacer
-        dash_individual_scopus_graph3 = {} #Grafica_hacer
-        #titulo_individual_scopus2 = get_fig_title(dash_individual_scopus_graph2)
-        #dash_individual_scopus_graph2.update_layout(title={'text':None})
-        #titulo_individual_scopus3 = get_fig_title(dash_individual_scopus_graph3)
-        #dash_individual_scopus_graph3.update_layout(title={'text':None})
+        dash_individual_scopus_graph2 = bar_all_scopus(grupo_cod_scopus)
+        titulo_individual_scopus2 = get_fig_title(dash_individual_scopus_graph2)
+        dash_individual_scopus_graph2.update_layout(title={'text':None})
+        data = filtro_scopus_elemento_individual(grupo,elemento) #corroborar 
+        dash_individual_scopus_graph3 = boxplot_individual(grupo_cod_scopus,data)  #corroborar        
+        titulo_individual_scopus3 = get_fig_title(dash_individual_scopus_graph3)
+        dash_individual_scopus_graph3.update_layout(title={'text':None})
+        dash_individual_scopus_graph4 = tree_author_all_scopus(data)    #corroborar     
+        titulo_individual_scopus4 = get_fig_title(dash_individual_scopus_graph4)
+        dash_individual_scopus_graph4.update_layout(title={'text':None})
         div_scopus_figure1 = {'display':'block', 'height':'70vh', 'max-height':'75vh','margin-top':'5px','padding-top':'5px','margin-left':'auto','margin-right':'auto','max-width':'80vw', 'margin-bottom':'7px'}
         div_scopus_figure2 = {'display':'inline-block', 'height':'70vh','max-height':'75vh', 'margin-bottom':'5vh','padding-bottom':'5px', 'margin-top':'7px','padding-top':'5px'}
         div_scopus_figure3 = {'display':'inline-block','height':'70vh', 'max-height':'75vh','margin-bottom':'5vh','padding-bottom':'5px', 'margin-top':'7px','padding-top':'5px'}
+        div_scopus_figure4 = {'display':'block', 'height':'70vh', 'max-height':'75vh','margin-top':'5px','padding-top':'5px','margin-left':'auto','margin-right':'auto','max-width':'80vw', 'margin-bottom':'7px'}
     else:
         series_scopus=get_series_scopus(grupo_cod_scopus,elemento) #OBTIENE LA SERIE RELATIVA AL ELEMENTO
         kpi_scopus1 = str(get_h1_index_relativo(grupo_cod_scopus,elemento))

@@ -63,7 +63,6 @@ def render_content(tab):
                         id="fade-alert-individual-scopus",
                         dismissable=True,
                         is_open=False,
-                        style={'text-align':'center'}
                     ),
                     html.H1(children="Indicadores para grupos de investigación: ", id="indicators_group_scopus", className="group_graph_info"),
                     html.H1(children="Por favor selecciones elementos a filtrar",id="products_element_group_scopus", className="group_graph_info"),
