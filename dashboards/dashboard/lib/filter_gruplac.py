@@ -564,8 +564,9 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
                 margin=dict(t=2, b=2),
                 #height=650
                 )
-    if df['grupo'].nunique()>1:
+    if df['grupo'].nunique()>3:
         fig.update_xaxes(tickangle=90)
+    #fig.update_xaxes(tickangle=0)
     #fig.update_layout(legend_x=0.02, legend_y=1.02)
     #fig.update_yaxes(automargin=True)
     #fig.update_traces(visible='legendonly')
