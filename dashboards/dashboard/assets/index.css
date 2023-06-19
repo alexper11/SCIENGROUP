@@ -89,6 +89,19 @@ footer {
   height: 100% !important;
 }
 
+#msj_alert_general{
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-align:center;
+  color: #08469b;
+}
+#msj_alert_general_scopus{
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-align:center;
+  color: #08469b;
+}
+
 /*************************************************************************/
 /******************************** Common *********************************/
 /*************************************************************************/
