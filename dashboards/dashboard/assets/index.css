@@ -101,6 +101,12 @@ footer {
   text-align:center;
   color: #08469b;
 }
+#msj_alert_individual_scopus{
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-align:center;
+  color: #08469b;
+}
 
 /*************************************************************************/
 /******************************** Common *********************************/

@@ -794,11 +794,13 @@ def callback_value(parameter, state, disable_value, value):
     Output('dash_individual_scopus_graph2','figure'),Output('div_group_scopus_figure2','style'),
     Output('dash_individual_scopus_graph3','figure'),Output('div_group_scopus_figure3','style'),
     Output('dash_individual_scopus_graph4','figure'),Output('div_group_scopus_figure4','style'),
+     Output('dash_individual_scopus_graph5','figure'),Output('div_group_scopus_figure5','style'),
     #titulo
     Output('title_individual_scopus_graph1','children'),
     Output('title_individual_scopus_graph2','children'),
     Output('title_individual_scopus_graph3','children'),
     Output('title_individual_scopus_graph4','children'),
+    Output('title_individual_scopus_graph5','children'),
     #
     Output('msj_alert_individual_scopus','children'),Output('fade-alert-individual-scopus','is_open'),
     ],
@@ -819,27 +821,31 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
     dash_individual_scopus_graph2 = {}
     dash_individual_scopus_graph3 = {}
     dash_individual_scopus_graph4 = {}
+    dash_individual_scopus_graph5 = {}
     div_scopus_figure1 = {'display':'none'}
     div_scopus_figure2 = {'display':'none'}
     div_scopus_figure3 = {'display':'none'}#,'width':'47%'}
     div_scopus_figure4 = {'display':'none'}
+    div_scopus_figure5 = {'display':'none'}
     titulo_individual_scopus1=''
     titulo_individual_scopus2=''
     titulo_individual_scopus3=''
-    titulo_individual_scopus4=''    
+    titulo_individual_scopus4=''
+    titulo_individual_scopus5=''   
     msj_alert_individual_scopus = ''
     fade_alert_individual_scopus = False
 
     if boton == 0 or elemento == None:
-        return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, msj_alert_individual_scopus, fade_alert_individual_scopus
+        return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, dash_individual_scopus_graph5, div_scopus_figure5, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, titulo_individual_scopus5, msj_alert_individual_scopus, fade_alert_individual_scopus
     
-    kpi_all_scopus = {'display':'block','width':'80vw', 'margin-left':'auto', 'margin-right':'auto'}
+    
     #indicadores    
     grupo_cod_scopus=get_codigo_grupo(grupo)    
     indicators_group_scopus = 'Grupo: '+grupo
     products_element_group_scopus ='Indicadores analizados para: '+elemento
-
+    data = filtro_scopus_elemento_individual(grupo,elemento) #corroborar   
     if elemento == 'Todos':
+        kpi_all_scopus = {'display':'block','width':'80vw', 'margin-left':'auto', 'margin-right':'auto'}
         series_scopus=get_series_scopus(grupo_cod_scopus)             
         kpi_scopus1 = str(get_h1_index(grupo_cod_scopus))
         kpi_scopus2 = str(get_h2_index(grupo_cod_scopus))
@@ -853,7 +859,6 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
         dash_individual_scopus_graph2 = bar_all_scopus(grupo_cod_scopus)
         titulo_individual_scopus2 = get_fig_title(dash_individual_scopus_graph2)
         dash_individual_scopus_graph2.update_layout(title={'text':None})
-        data = filtro_scopus_elemento_individual(grupo,elemento) #corroborar 
         dash_individual_scopus_graph3 = boxplot_individual(grupo_cod_scopus,data)  #corroborar        
         titulo_individual_scopus3 = get_fig_title(dash_individual_scopus_graph3)
         dash_individual_scopus_graph3.update_layout(title={'text':None})
@@ -865,6 +870,12 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
         div_scopus_figure3 = {'display':'inline-block','height':'70vh', 'max-height':'75vh','margin-bottom':'5vh','padding-bottom':'5px', 'margin-top':'7px','padding-top':'5px'}
         div_scopus_figure4 = {'display':'block', 'height':'70vh', 'max-height':'75vh','margin-top':'5px','padding-top':'5px','margin-left':'auto','margin-right':'auto','max-width':'80vw', 'margin-bottom':'7px'}
     else:
+        if data.shape[0]==0:
+            #arreglar
+            msj_alert_individual_scopus = 'No existen datos'
+            fade_alert_individual_scopus = True
+            return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, dash_individual_scopus_graph5, div_scopus_figure5, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, titulo_individual_scopus5, msj_alert_individual_scopus, fade_alert_individual_scopus
+        kpi_all_scopus = {'display':'block','width':'80vw', 'margin-left':'auto', 'margin-right':'auto'}
         series_scopus=get_series_scopus(grupo_cod_scopus,elemento) #OBTIENE LA SERIE RELATIVA AL ELEMENTO
         kpi_scopus1 = str(get_h1_index_relativo(grupo_cod_scopus,elemento))
         kpi_scopus2 = str(get_h2_index(grupo_cod_scopus))
@@ -872,43 +883,31 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
         kpi_scopus4 = str(products_count_relativo(grupo_cod_scopus,elemento))
         kpi_scopus5 = str(citation_count_relativo(grupo_cod_scopus,elemento))
         kpi_scopus6 = str(citation_output_relativo(grupo_cod_scopus,elemento))
-        dash_individual_scopus_graph1 = {} #Grafica_hacer
-        #titulo_individual_scopus1 = get_fig_title(dash_individual_scopus_graph1)
-        #dash_individual_scopus_graph1.update_layout(title={'text':None})
+        dash_individual_scopus_graph1 = time_series_all_scopus(series_scopus,elemento)
+        titulo_individual_scopus1 = get_fig_title(dash_individual_scopus_graph1)
+        dash_individual_scopus_graph1.update_layout(title={'text':None})
         div_scopus_figure1 = {'display':'block', 'height':'70vh', 'max-height':'80vh','margin-top':'5px','padding-top':'5px','margin-left':'auto','margin-right':'auto','max-width':'80vw', 'margin-bottom':'7px'}
-        data = filtro_scopus_elemento_individual(grupo,elemento)
-        if data.shape[0]==0:
-            msj_alert_individual_scopus = 'No existen datos'
-            fade_alert_individual_scopus = True
-            return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, msj_alert_individual_scopus, fade_alert_individual_scopus
-    
-        if ('revista' in data) and ('tipo' in data):
-            dash_individual_scopus_graph2 = {} #Grafica_hacer
-            #titulo_individual_scopus2 = get_fig_title(dash_individual_scopus_graph2)
-            #dash_individual_scopus_graph2.update_layout(title={'text':None})
-            dash_individual_scopus_graph3 = {} #Grafica_hacer
-            #titulo_individual_scopus3 = get_fig_title(dash_individual_scopus_graph3)
-            #dash_individual_scopus_graph3.update_layout(title={'text':None})
-            div_scopus_figure2 = {'display':'inline-block', 'height':'70vh','max-height':'75vh', 'margin-bottom':'5px','padding-bottom':'5px', 'margin-top':'7px'}
-            div_scopus_figure3 = {'display':'inline-block', 'height':'70vh','max-height':'75vh', 'margin-bottom':'5px','padding-bottom':'5px', 'margin-top':'7px'}
-        elif ('editorial' in data) and ('tipo' in data):
-            dash_individual_scopus_graph2 = {} #Grafica_hacer
-            #titulo_individual_scopus2 = get_fig_title(dash_individual_scopus_graph2)
-            #dash_individual_scopus_graph2.update_layout(title={'text':None})
-            dash_individual_scopus_graph3 = {} #Grafica_hacer
-            #titulo_individual_scopus3 = get_fig_title(dash_individual_scopus_graph3)
-            #dash_individual_scopus_graph3.update_layout(title={'text':None})
-            div_scopus_figure2 = {'display':'inline-block', 'height':'50vh','max-height':'65vh', 'margin-bottom':'5px','padding-bottom':'5px', 'margin-top':'7px'}
-            div_scopus_figure3 = {'display':'inline-block', 'height':'50vh','max-height':'65vh', 'margin-bottom':'5px','padding-bottom':'5px', 'margin-top':'7px'}
-        elif ((('revista' in data) and ('editorial' in data)) != True) and ('tipo' in data):
-            dash_individual_scopus_graph3 = {} #Grafica_hacer
-            #titulo_individual_scopus3 = get_fig_title(dash_individual_scopus_graph3)
-            #dash_individual_scopus_graph3.update_layout(title={'text':None})
-            div_scopus_figure3 = {'display':'inline-block', 'height':'63vh','max-height':'65vh', 'margin-bottom':'5px','padding-bottom':'5px', 'margin-left':'30vw', 'margin-right':'30vw','width':'40vw','margin-top':'7px'}
-        if 'autores' in data:
-            dash_individual_scopus_graph4 = {} #Grafica_hacer  
-            #titulo_individual_scopus4 = get_fig_title(dash_individual_scopus_graph4)
-            #dash_individual_scopus_graph4.update_layout(title={'text':None})      
-            div_scopus_figure4 = {'display':'block','height':'80vh','max-height':'83vh','margin-bottom':'5vh','margin-top':'7px','padding-top':'5px'}
+        
+        dash_individual_scopus_graph5 = tree_topic_element_scopus(data,elemento)
+        titulo_individual_scopus5 = get_fig_title(dash_individual_scopus_graph5)
+        dash_individual_scopus_graph5.update_layout(title={'text':None})
+        div_scopus_figure5 = {'display':'block', 'height':'70vh', 'max-height':'80vh','margin-top':'5px','padding-top':'5px','margin-left':'auto','margin-right':'auto','max-width':'80vw', 'margin-bottom':'7px'}
+        if (elemento == 'Libros') or elemento == 'Capítulos':
+            dash_individual_scopus_graph2 = pie_journal_element_scopus(data,'nombre_publicacion')
+        else:
+            dash_individual_scopus_graph2 = pie_journal_element_scopus(data,'editorial')
+        titulo_individual_scopus2 = get_fig_title(dash_individual_scopus_graph2)
+        dash_individual_scopus_graph2.update_layout(title={'text':None})
+        div_scopus_figure2 = {'display':'inline-block', 'height':'70vh','max-height':'75vh', 'margin-bottom':'5px','padding-bottom':'5px', 'margin-top':'7px'}
 
-    return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, msj_alert_individual_scopus, fade_alert_individual_scopus
+        dash_individual_scopus_graph3 = boxplot_individual(grupo_cod_scopus,data,elemento)
+        titulo_individual_scopus3 = get_fig_title(dash_individual_scopus_graph3)
+        dash_individual_scopus_graph3.update_layout(title={'text':None})
+        div_scopus_figure3 = {'display':'inline-block', 'height':'70vh','max-height':'75vh', 'margin-bottom':'5px','padding-bottom':'5px', 'margin-top':'7px'}
+
+        dash_individual_scopus_graph4 = tree_author_all_scopus(data,elemento) 
+        titulo_individual_scopus4 = get_fig_title(dash_individual_scopus_graph4)
+        dash_individual_scopus_graph4.update_layout(title={'text':None})      
+        div_scopus_figure4 = {'display':'block','height':'80vh','max-height':'83vh','margin-bottom':'5vh','margin-top':'7px','padding-top':'5px'}
+    
+    return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, dash_individual_scopus_graph5, div_scopus_figure5, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, titulo_individual_scopus5, msj_alert_individual_scopus, fade_alert_individual_scopus
