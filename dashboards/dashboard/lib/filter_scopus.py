@@ -146,16 +146,17 @@ def get_indicadores_scopus_general(grupos):
 
 def get_indicadores_scopus_relativo(grupos,elemento):
     #PARA OBTENER UN DATAFRAME CON LOS INDICADORES DE TODOS LOS GRUPOS EN SCOPUS
-    dic={'idgruplac':[],'cit_output':[],'citations':[],'h1_index':[],'PC':[]}
+    dic={'idgruplac':[],'cit_output':[],'citations':[],'h1_index':[],'h2_index':[],'pc':[]}
     list_series=[]
     for grup in grupos:
         dic['idgruplac'].append(grup)
         dic['cit_output'].append(citation_output_relativo(grup,elemento))
         dic['citations'].append(citation_count_relativo(grup,elemento))
         dic['h1_index'].append(get_h1_index_relativo(grup,elemento))
-        dic['PC'].append(products_count_relativo(grup,elemento))
+        dic['h2_index'].append(get_h2_index(grup))
+        dic['pc'].append(products_count_relativo(grup,elemento))
         list_series.append(get_series_scopus(grup,elemento))
-    indicadores_grupos_scopus= pd.DataFrame.from_dict(dic).sort_values(by='PC',ascending=False)
+    indicadores_grupos_scopus= pd.DataFrame.from_dict(dic)#.sort_values(by='pc',ascending=False)
     return indicadores_grupos_scopus, list_series
 
 #INDIVIDUAL
@@ -307,7 +308,7 @@ def bar_all_scopus(grupo): #retorna dos graficas, recibe codigo de grupo
                  "count":"Cantidad de Productos"})
     fig.update(layout_showlegend=False)
     fig.update_layout(title={
-                'text':"<b>Conteo de Productos</b>",
+                'text':"Conteo de Productos",
                 #'xanchor':'center',
                 #'x':0.5,
                 #'yanchor':'top'
@@ -338,7 +339,7 @@ def tree_author_all_scopus(data,elemento='Todos'): #sólo para aquellos elemento
     fig.data[0].hovertemplate = '%{label}<br>'+elemento+':%{value}<br>%{customdata:.2f}%'
     fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
                       title={
-                      'text':'<b>Participación de Autores</b>',
+                      'text':'Participación de Autores',
                       #'xanchor':'center',
                       #'x':0.5,
                       #'yanchor':'top'
@@ -378,10 +379,10 @@ def pie_journal_element_scopus(datain,condition): #recibe dataset filtrado y ocn
     data=datain.copy()
     data[condition]=data[condition].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
     if condition=='editorial':
-        title_label="<b>Publicaciones por Editoriales</b>"
+        title_label="Publicaciones por Editoriales"
         legend_label='Editorial'
     else:
-        title_label="<b>Publicaciones en Revistas</b>"
+        title_label="Publicaciones en Revistas"
         legend_label='Revista'
     
     if data[condition].value_counts().shape[0]>30:
@@ -435,7 +436,7 @@ def tree_topic_element_scopus(data, elemento): #sólo para aquellos elementos co
     fig.data[0].hovertemplate = '%{label}<br>'+elemento+':%{value}<br>%{customdata:.2f}%'
     fig.update_layout(margin = dict(t=50, l=25, r=25, b=25),
                       title={
-                      'text':'<b>Temas Trabajados</b>',
+                      'text':'Temas Trabajados',
                       #'xanchor':'center',
                       #'x':0.5,
                       #'yanchor':'top'
@@ -452,10 +453,10 @@ def tree_topic_element_scopus(data, elemento): #sólo para aquellos elementos co
 def time_series_all_general_scopus(series,grupos,elemento='Todos'): #recibe time_series y grupos_nombres
     df=pd.DataFrame()
     if elemento=='Todos':
-        title_label='<b>Productos Anuales Generados: Todos</b>'
+        title_label='Productos Anuales Generados: Todos'
         axis_label='Cantidad de Productos'
     else:
-        title_label='<b>Productos Anuales Generados: '+elemento+'</b>'
+        title_label='Productos Anuales Generados: '+elemento
         axis_label='Cantidad de '+elemento
     
     for i,serie in enumerate(series):
@@ -961,7 +962,7 @@ def callback_filter_general(parametro, valor, elemento, boton):
     if boton == 0 or elemento == None:
         return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
     
-    grupos_codigos_scopus, grupos_nombres=filtro_scopus_valor_general(parametro,valor)
+    grupos_codigos_scopus, grupos_nombres_scopus=filtro_scopus_valor_general(parametro,valor)
     cantidad_grupos=len(grupos_codigos_scopus)
     msj_alert_general_scopus = f'Para el análisis se filtraron {cantidad_grupos} grupos de investigación'
     fade_alert_general_scopus = True
@@ -997,13 +998,14 @@ def callback_filter_general(parametro, valor, elemento, boton):
         wdg2=str(len(grupos_codigos_scopus)*7.5)+'vw'
         div_general_scopus_figure2 = {'display':'block', 'margin-left':'auto', 'margin-right':'auto','min-width':'40vw','width':wdg2, 'height':'80vh','max-height':'83vh','margin-top':'8px','padding-top':'5px','padding-bottom':'5px','margin-bottom':'8px'}
         div_general_scopus_figure3 = {'display':'inline-block', 'max-height':'max-content', 'margin-top':'8px', 'margin-bottom':'8px'}
+        wdg2=str(len(grupos_codigos_scopus)*7)+'vw'
         div_general_scopus_figure4 = {'display':'inline-block', 'max-height':'max-content', 'margin-top':'8px', 'margin-bottom':'8px'}
         div_general_scopus_figure5 = {'display':'inline-block', 'max-height':'max-content', 'margin-top':'8px', 'margin-bottom':'5vh'}
         div_general_scopus_figure6 = {'display':'inline-block', 'max-height':'max-content', 'margin-top':'8px', 'margin-bottom':'5vh'}
     else:
         df_indicadores, series_scopus = get_indicadores_scopus_relativo(grupos_codigos_scopus,elemento)
         if df_indicadores['idgruplac'].count()>10:
-            df_indicadores=df_indicadores.sort_values(by='PC',ascending=False).iloc[:10].sort_index()
+            df_indicadores=df_indicadores.sort_values(by='pc',ascending=False).iloc[:10].sort_index()
             indices_top=list(df_indicadores.index.astype('int64'))
             series_scopus=[series_scopus[x] for x in indices_top]
             grupos_codigos_scopus=df_indicadores['idgruplac'].to_list()
