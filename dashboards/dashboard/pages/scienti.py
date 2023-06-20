@@ -103,7 +103,7 @@ def render_content(tab):
                     id="fade-alert-general",
                     dismissable=True,
                     is_open=False,
-                    style={'text-align':'center'}
+                    style={'textAlign':'center'}
                 ),
                 html.Div([
                     html.P(children='', id='title_general_graph1', className='title_graph'),
