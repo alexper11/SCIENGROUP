@@ -28,9 +28,11 @@ opciones_grupo_scopus=[]
 scopus_productos['nombre_grupo'].dropna().str.split(';').apply(lambda x: opciones_grupo_scopus.extend(x)) #variable para opciones del filtro de grupo
 opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus))))
 
-elementos_scopus_general=elementos_scopus_lista
-options_general_element_scopus=elementos_scopus_general[:]
-options_general_element_scopus.append('Todos')
+elementos_scopus_general=elementos_scopus_lista[:]
+if 'Todos' in elementos_scopus_general:
+    options_general_element_scopus=elementos_scopus_general[:]
+else:
+    options_general_element_scopus=[*elementos_scopus_general,'Todos']
 
 #######################################
 #FUNCIONES DE FILTRADO
