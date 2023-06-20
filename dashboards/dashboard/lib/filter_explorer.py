@@ -38,25 +38,6 @@ from functions.csv_importer import fuente_dic, referencias, caracteristicas, car
 #Opciones de fuentes a mostrar...
 opciones_fuente=list(fuente_dic.keys())
 
-#Opciones de elementos a mostrar...
-opciones_elemento=[] #Esto solo debe ocurrir al iniciar el dashboard
-
-#Opciones de caracteristicas a mostrar....
-opciones_caracteristica=[] #Esto solo debe ocurrir al iniciar el dashboard
-#Si opciones_caracteristica=['Todos']: entrada desaparece
-
-#Estado del filtro de entrada del usuario
-opciones_entrada=None
-valor_entrada=None
-
-#Selecciones o datos ingresados a los campos de los filtros
-fuente_seleccionada='CVLAC'
-#
-caracteristica_seleccionada=None
-entrada_seleccionada=None
-
-dataset=pd.DataFrame()
-
 
 def filtrar_fuente(fuente, condicion):
     data=fuente_dic[fuente]
@@ -174,7 +155,7 @@ option_source = dcc.Dropdown(
 )
 option_element = dcc.Dropdown(
     id='filter_element',
-    options = opciones_elemento,
+    options = [],
     value = None  # Valor inicial seleccionado
 )
 component_filters= html.Div(children=[html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
