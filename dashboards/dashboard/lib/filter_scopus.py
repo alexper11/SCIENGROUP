@@ -911,3 +911,138 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
         div_scopus_figure4 = {'display':'block','height':'80vh','max-height':'83vh','margin-bottom':'5vh','margin-top':'7px','padding-top':'5px'}
     
     return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, dash_individual_scopus_graph5, div_scopus_figure5, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, titulo_individual_scopus5, msj_alert_individual_scopus, fade_alert_individual_scopus
+
+@callback(
+    [    
+    Output('dash_general_scopus_graph1','figure'),Output('div_general_scopus_figure1','style'),
+    Output('dash_general_scopus_graph2','figure'),Output('div_general_scopus_figure2','style'),
+    Output('dash_general_scopus_graph3','figure'),Output('div_general_scopus_figure3','style'),
+    Output('dash_general_scopus_graph4','figure'),Output('div_general_scopus_figure4','style'),
+    Output('dash_general_scopus_graph5','figure'),Output('div_general_scopus_figure5','style'),
+    Output('dash_general_scopus_graph6','figure'),Output('div_general_scopus_figure6','style'),
+   
+    #titulos
+    Output('title_general_scopus_graph1','children'),
+    Output('title_general_scopus_graph2','children'),
+    Output('title_general_scopus_graph3','children'),
+    Output('title_general_scopus_graph4','children'),
+    Output('title_general_scopus_graph5','children'),
+    Output('title_general_scopus_graph6','children'),   
+    #
+    Output('msj_alert_general_scopus','children'),Output('fade-alert-general-scopus','is_open'),   
+    ],
+    [State('filter_parameter_scopus', 'value'), State('filter_value_scopus', 'value'), State('filter_element_scopus_general', 'value'),
+    Input('button_scopus_filter_group','n_clicks')]
+ )
+def callback_filter_general(parametro, valor, elemento, boton):
+    dash_general_scopus_graph1 = {}
+    dash_general_scopus_graph2 = {}
+    dash_general_scopus_graph3 = {}
+    dash_general_scopus_graph4 = {}
+    dash_general_scopus_graph5 = {}
+    dash_general_scopus_graph6 = {}
+    div_general_scopus_figure1 = {'display':'none'}
+    div_general_scopus_figure2 = {'display':'none'}
+    div_general_scopus_figure3 = {'display':'none'}
+    div_general_scopus_figure4 = {'display':'none'}
+    div_general_scopus_figure5 = {'display':'none'}
+    div_general_scopus_figure6 = {'display':'none'}
+    titulo_general_scopus1=''
+    titulo_general_scopus2=''
+    titulo_general_scopus3=''
+    titulo_general_scopus4=''
+    titulo_general_scopus5=''
+    titulo_general_scopus6=''
+    
+    msj_alert_general_scopus = ''
+    fade_alert_general_scopus = False      
+    if boton == 0 or elemento == None:
+        return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
+    
+    grupos_codigos_scopus, grupos_nombres=filtro_scopus_valor_general(parametro,valor)
+    cantidad_grupos=len(grupos_codigos_scopus)
+    msj_alert_general_scopus = f'Para el análisis se filtraron {cantidad_grupos} grupos de investigación'
+    fade_alert_general_scopus = True
+    if elemento == 'Todos':
+        df_indicadores, series_scopus = get_indicadores_scopus_general(grupos_codigos_scopus)
+        if df_indicadores['idgruplac'].count()>10:
+            df_indicadores=df_indicadores.sort_values(by='PC',ascending=False).iloc[:10].sort_index()
+            indices_top=list(df_indicadores.index.astype('int64'))
+            series_scopus=[series_scopus[x] for x in indices_top]
+            grupos_codigos_scopus=df_indicadores['idgruplac'].to_list()
+            grupos_nombres_scopus=[gruplac_basico[gruplac_basico['idgruplac'].str.contains(x)]['nombre'].iloc[0] for x in grupos_codigos_scopus]
+            indices_top=0
+        dash_general_scopus_graph1 = time_series_all_general_scopus(series_scopus,grupos_nombres_scopus)
+        titulo_general_scopus1 = get_fig_title(dash_general_scopus_graph1)
+        dash_general_scopus_graph1.update_layout(title={'text':None})
+        dash_general_scopus_graph2 = bar_general_all_scopus(grupos_codigos_scopus, grupos_nombres_scopus)
+        titulo_general_scopus2 = get_fig_title(dash_general_scopus_graph2)
+        dash_general_scopus_graph2.update_layout(title={'text':None})
+        dash_general_scopus_graph3 = radar_general_all(df_indicadores,elemento='Todos')
+        titulo_general_scopus3 = get_fig_title(dash_general_scopus_graph3)
+        dash_general_scopus_graph3.update_layout(title={'text':None})
+        dash_general_scopus_graph4 = heatmap_general(grupos_codigos_scopus,grupos_nombres_scopus)
+        titulo_general_scopus4 = get_fig_title(dash_general_scopus_graph4)
+        dash_general_scopus_graph4.update_layout(title={'text':None})
+        dash_general_scopus_graph5 = boxplot_general_all_scopus(grupos_codigos_scopus,grupos_nombres_scopus)
+        titulo_general_scopus5 = get_fig_title(dash_general_scopus_graph5)
+        dash_general_scopus_graph5.update_layout(title={'text':None})
+        data=filtro_scopus_elemento_general(grupos_codigos_scopus,elemento) #corroborar
+        dash_general_scopus_graph6 = tree_author_all_scopus(data,elemento)
+        titulo_general_scopus6 = get_fig_title(dash_general_scopus_graph6)
+        dash_general_scopus_graph6.update_layout(title={'text':None})
+        div_general_scopus_figure1 = {'display':'block', 'height':'83vh', 'max-height':'85vh','margin-top':'5px','padding-bottom':'5px','padding-top':'5px','margin-left':'auto','margin-right':'auto','max-width':'80vw', 'margin-bottom':'7px'}
+        wdg2=str(len(grupos_codigos_scopus)*7.5)+'vw'
+        div_general_scopus_figure2 = {'display':'block', 'margin-left':'auto', 'margin-right':'auto','min-width':'40vw','width':wdg2, 'height':'80vh','max-height':'83vh','margin-top':'8px','padding-top':'5px','padding-bottom':'5px','margin-bottom':'8px'}
+        div_general_scopus_figure3 = {'display':'inline-block', 'max-height':'max-content', 'margin-top':'8px', 'margin-bottom':'8px'}
+        div_general_scopus_figure4 = {'display':'inline-block', 'max-height':'max-content', 'margin-top':'8px', 'margin-bottom':'8px'}
+        div_general_scopus_figure5 = {'display':'inline-block', 'max-height':'max-content', 'margin-top':'8px', 'margin-bottom':'5vh'}
+        div_general_scopus_figure6 = {'display':'inline-block', 'max-height':'max-content', 'margin-top':'8px', 'margin-bottom':'5vh'}
+    else:
+        df_indicadores, series_scopus = get_indicadores_scopus_relativo(grupos_codigos_scopus,elemento)
+        if df_indicadores['idgruplac'].count()>10:
+            df_indicadores=df_indicadores.sort_values(by='PC',ascending=False).iloc[:10].sort_index()
+            indices_top=list(df_indicadores.index.astype('int64'))
+            series_scopus=[series_scopus[x] for x in indices_top]
+            grupos_codigos_scopus=df_indicadores['idgruplac'].to_list()
+            grupos_nombres_scopus=[gruplac_basico[gruplac_basico['idgruplac'].str.contains(x)]['nombre'].iloc[0] for x in grupos_codigos_scopus]
+            indices_top=0
+        data=filtro_scopus_elemento_general(grupos_codigos_scopus,elemento)
+        if data.shape[0]==0:
+            msj_alert_general_scopus = 'No existen datos'
+            fade_alert_general_scopus = True
+            return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
+    
+        dash_general_scopus_graph1 = time_series_all_general_scopus(series_scopus,grupos_nombres_scopus,elemento)
+        titulo_general_scopus1 = get_fig_title(dash_general_scopus_graph1)
+        dash_general_scopus_graph1.update_layout(title={'text':None})
+        div_general_scopus_figure1 = {'display':'block', 'height':'81vh','max-height':'83vh','margin-top':'8px','padding-bottom':'8px','padding-top':'5px','margin-left':'auto','margin-right':'auto','max-width':'80vw', 'margin-bottom':'8px'}
+        dash_general_scopus_graph2 = bar_general_element_scopus(data, grupos_codigos_scopus,elemento)
+        titulo_general_scopus2 = get_fig_title(dash_general_scopus_graph2)
+        dash_general_scopus_graph2.update_layout(title={'text':None})
+        wdg2=str(len(grupos_codigos_scopus)*7)+'vw'
+        div_general_scopus_figure2 = {'display':'block', 'margin-left':'auto', 'margin-right':'auto', 'min-width':'40vw','width':wdg2, 'height':'81vh','max-height':'90vh','margin-top':'8px','padding-top':'5px','padding-bottom':'5px','margin-bottom':'8px'}
+        dash_general_scopus_graph3 = radar_general_all(df_indicadores,elemento)
+        titulo_general_scopus3 = get_fig_title(dash_general_scopus_graph3)
+        dash_general_scopus_graph3.update_layout(title={'text':None})
+        div_general_scopus_figure3 = {'display':'inline-block', 'max-height':'90vh', 'margin-top':'8px', 'margin-bottom':'8px'}
+        if (elemento == 'Libros') or elemento == 'Capítulos':
+            dash_general_scopus_graph4 = pie_journal_element_scopus(data,'nombre_publicacion')
+        else:
+            dash_general_scopus_graph4 = pie_journal_element_scopus(data,'editorial')
+        titulo_general_scopus4 = get_fig_title(dash_general_scopus_graph4)
+        dash_general_scopus_graph4.update_layout(title={'text':None})
+        div_general_scopus_figure4 = {'display':'inline-block', 'max-height':'90vh', 'margin-top':'8px', 'margin-bottom':'8px'}
+        
+        dash_general_scopus_graph5 = boxplot_general_element_scopus(data,grupos_codigos_scopus,elemento)
+        titulo_general_scopus5 = get_fig_title(dash_general_scopus_graph5)
+        dash_general_scopus_graph5.update_layout(title={'text':None})
+        div_general_scopus_figure5 = {'display':'inline-block', 'max-height':'90vh', 'margin-top':'8px', 'margin-bottom':'8px'}
+
+        dash_general_scopus_graph6 = tree_author_all_scopus(data,elemento)
+        titulo_general_scopus6 = get_fig_title(dash_general_scopus_graph6)
+        dash_general_scopus_graph6.update_layout(title={'text':None})
+        div_general_scopus_figure6 = {'display':'inline-block', 'max-height':'90vh', 'margin-top':'8px', 'margin-bottom':'8px'}
+              
+    return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
+    

@@ -127,27 +127,11 @@ def render_content(tab):
                     ],id='div_general_scopus_figure4', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
                 ],className='col-graph-father'),
                 html.Div([
-                    html.Div([                        
-                        html.P(children='', id='title_general_scopus_graph5', className='title_graph'),
-                        dcc.Graph(figure={}, id='dash_general_scopus_graph5',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
-                    ],id='div_general_scopus_figure5', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
-                    html.Div([
-                        html.P(children='', id='title_general_scopus_graph6', className='title_graph'),
-                        dcc.Graph(figure={}, id='dash_general_scopus_graph6',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
-                    ],id='div_general_scopus_figure6', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
-                ],className='col-graph-father'),
+                    html.P(children='', id='title_general_scopus_graph5', className='title_graph'),
+                    dcc.Graph(figure={}, id='dash_general_scopus_graph5',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
+                ],id='div_general_scopus_figure5', className='card-graph card-body col-graph-big', style={'display':'none'}),
                 html.Div([
-                    html.P(children='', id='title_general_scopus_graph7', className='title_graph'),
-                    dcc.Graph(figure={}, id='dash_general_scopus_graph7',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
-                ],id='div_general_scopus_figure7', className='card-graph card-body col-graph-big', style={'display':'none'}),
-                html.Div([
-                    html.Div([
-                        html.P(children='', id='title_general_scopus_graph8', className='title_graph'),        
-                        dcc.Graph(figure={}, id='dash_general_scopus_graph8',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
-                    ],id='div_general_scopus_figure8', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
-                    html.Div([
-                        html.P(children='', id='title_general_scopus_graph9', className='title_graph'),
-                        dcc.Graph(figure={}, id='dash_general_scopus_graph9',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
-                    ],id='div_general_scopus_figure9', className='card-graph_middle card-body col-graph-middle', style={'display':'none'}),
-                ],className='col-graph-father'),
+                    html.P(children='', id='title_general_scopus_graph6', className='title_graph'),
+                    dcc.Graph(figure={}, id='dash_general_scopus_graph6',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
+                ],id='div_general_scopus_figure6', className='card-graph card-body col-graph-big', style={'display':'none'}),
             ])]
