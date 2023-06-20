@@ -196,7 +196,7 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         data=pd.DataFrame()
     print(data.shape[0])
     if data.shape[0]>=1:
-        data=globals()[str(referencias[fuente][elemento])].loc[list(data.index)].astype(str).fillna('No Aplica')
+        data=globals()[str(referencias[fuente][elemento])].copy().loc[list(data.index)].astype(str).fillna('No Aplica')
         if fuente=='SCOPUS':
             data=data.drop(['scopus_id','eid','issue','numero_articulo','pag_inicio','pag_fin','pag_count','affil_id','abstract','etapa_publicacion','autores_id'], axis=1, errors='ignore')
             locs=data[data['institucion'].str.len()>300].index.tolist()
