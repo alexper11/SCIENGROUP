@@ -24,9 +24,9 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 
-opciones_grupo_scopus=[]
-scopus_productos['nombre_grupo'].dropna().str.split(';').apply(lambda x: opciones_grupo_scopus.extend(x)) #variable para opciones del filtro de grupo
-opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus))))
+opciones_grupo_scopus_aux=[]
+scopus_productos['nombre_grupo'].dropna().str.split(';').apply(lambda x: opciones_grupo_scopus_aux.extend(x)) #variable para opciones del filtro de grupo
+opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus_aux[:]))))
 
 elementos_scopus_general=elementos_scopus_lista[:]
 if 'Todos' in elementos_scopus_general:
@@ -572,7 +572,6 @@ def radar_general_all(indicadores,elemento='Todos'):
 
 def heatmap_general(codigos,nombres):
     df=pd.DataFrame(columns=['grupo','tipo_producto','citaciones'])
-
     for i,codigo in enumerate(codigos):
         dic={'grupo':[],'tipo_producto':[],'citaciones':[]}
         for key in list(set(fuente_dic['SCOPUS'].keys())):
@@ -581,17 +580,23 @@ def heatmap_general(codigos,nombres):
             dic['citaciones'].append(data[data['idgruplac'].str.contains(codigo)]['citado'].astype('int64').sum())
             dic['tipo_producto'].append(key)
         df_aux=pd.DataFrame.from_dict(dic)
-        df_aux['citaciones']=df_aux['citaciones']#.astype('int64')
-        df_aux=df_aux[df_aux['citaciones']>0]
+        df_aux['citaciones']=df_aux['citaciones'].astype('int64')
+        if (df_aux['citaciones']==0).all(skipna=True):
+            pass
+        else:
+            df_aux=df_aux[df_aux['citaciones']>0]
         df=pd.concat([df, df_aux], ignore_index=True)
     df['grupo']=df['grupo'].str.wrap(20,break_long_words=False).str.replace('\n','<br>')
+    df['tipo_producto']=df['tipo_producto'].str.wrap(15,break_long_words=False).str.replace('\n','<br>')
     df= df.pivot(index='grupo', columns='tipo_producto')['citaciones'].fillna(0)
     fig = px.imshow(df, x=df.columns, y=df.index, color_continuous_scale='RdBu_r',text_auto=True,
                    labels=dict(x="Tipo de Producto", y="Grupos de Investigación", color="Citaciones"))
-    fig.update_layout(xaxis = dict(tickfont = dict(size=11)))
-    fig.update_layout(yaxis = dict(tickfont = dict(size=11)),font=dict(size=10))
+    fig.update_layout(xaxis = dict(tickfont = dict(size=9)))
+    fig.update_layout(yaxis = dict(tickfont = dict(size=9)),font=dict(size=10))
     #fig.update_layout(width=500,height=500)
     fig.update_layout(title={'text':'Grupos por Tipo de Producto: Citaciones'})
+    if len(df.columns)>3:
+        fig.update_xaxes(tickangle = 90)
     return fig
 
 def boxplot_general_all_scopus(codigos,nombres):
@@ -985,6 +990,7 @@ def callback_filter_general(parametro, valor, elemento, boton):
         titulo_general_scopus3 = get_fig_title(dash_general_scopus_graph3)
         dash_general_scopus_graph3.update_layout(title={'text':None})
         dash_general_scopus_graph4 = heatmap_general(grupos_codigos_scopus,grupos_nombres_scopus)
+        
         titulo_general_scopus4 = get_fig_title(dash_general_scopus_graph4)
         dash_general_scopus_graph4.update_layout(title={'text':None})
         dash_general_scopus_graph5 = boxplot_general_all_scopus(grupos_codigos_scopus,grupos_nombres_scopus)
