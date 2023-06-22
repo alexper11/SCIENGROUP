@@ -487,7 +487,7 @@ def collaboraton_network(grupo_nombre):
     G=nx.from_pandas_edgelist(net, 'from', 'to', edge_attr='weight', create_using=nx.DiGraph() )
     widths = nx.get_edge_attributes(G, 'weight')
     nodelist = G.nodes()
-    fig=plt.figure(figsize=(18,12))
+    fig=plt.figure(figsize=(13,7))
     #pos = nx.shell_layout(G)
     pos=nx.spring_layout(G)
     pos_nodes = nudge(pos, 0, 0.15)
@@ -516,7 +516,7 @@ def collaboraton_network(grupo_nombre):
     #plt.close(fig)
     path = pathlib.Path('./assets/img/').resolve() # Figures out the absolute path for you in case your working directory moves around.
     network_image = str(uuid.uuid4())+".PNG"
-    fig.savefig(os.path.join(path, network_image))  #DEFINIR DIRECTORIO
+    fig.savefig(os.path.join(path, network_image), bbox_inches='tight', pad_inches=0.0)  #DEFINIR DIRECTORIO
     return network_image
 ###############GRAFICAS GENERAL
 
@@ -929,8 +929,9 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
     products_element_group_scopus ='Indicadores analizados para: '+elemento
     data = filtro_scopus_elemento_individual(grupo,elemento) #corroborar
     url_red = './assets/img/'+str(collaboraton_network(grupo))
-    dash_individual_scopus_graph6 = html.Img(src=url_red,style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
-    div_scopus_figure6 = {'display':'block', 'height':'70vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px','textAlign':'center'}
+    dash_individual_scopus_graph6 = html.Img(src=url_red, id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
+    #div_scopus_figure6 = {'display':'block', 'height':'70vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px','textAlign':'center'}
+    div_scopus_figure6 = {'display':'block', 'height':'max-content','marginTop':'8px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
 
     if elemento == 'Todos':
         kpi_all_scopus = {'display':'block','width':'80vw', 'marginLeft':'auto', 'marginRight':'auto'}
@@ -1134,4 +1135,10 @@ def callback_filter_general(parametro, valor, elemento, boton):
         div_general_scopus_figure6 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'8px', 'marginBottom':'5vh'}
               
     return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
-    
+
+@callback(
+    Output('title_individual_scopus_graph6', 'children'),
+    Input('image_network_path', 'src'))
+def remove_image_network(image_url):
+    os.remove(image_url)
+    return no_update
