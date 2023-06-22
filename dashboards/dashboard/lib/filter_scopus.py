@@ -482,6 +482,9 @@ def collaboraton_network(grupo_nombre):
     net['to']=net['to'].apply(lambda x: gruplac_basico[gruplac_basico['idgruplac']==x]['nombre'].iloc[0].strip())
     net['from']=net['from'].str.wrap(20,break_long_words=False).copy()
     net['to']=net['to'].str.wrap(20,break_long_words=False).copy()
+    if net.shape[0]<1:
+        network_image='None'
+        return network_image
     ##net=net[(net['from']==grupo) | (net['to']==grupo)]
     #df = pd.DataFrame({ 'from':['DDDDDDDDDDDDDDDDDDDDD\nDDDDDDDDDDDDDDDDDDDDDD', 'A', 'B', 'C','A'], 'to':['A', 'DDDDDDDDDDDDDDDDDDDDD\nDDDDDDDDDDDDDDDDDDDDDD', 'A', 'E','C'], 'weight':['1', '5', '8', '3','20']})
     G=nx.from_pandas_edgelist(net, 'from', 'to', edge_attr='weight', create_using=nx.DiGraph() )
@@ -887,9 +890,9 @@ def callback_value(parameter, state, disable_value, value):
     Output('msj_alert_individual_scopus','children'),Output('fade-alert-individual-scopus','is_open'),
     ],
     [State('filter_group_scopus', 'value'), State('filter_element_scopus', 'value'),
-    Input('button_scopus_filter_indiv','n_clicks'),State('im', 'value')]
+    Input('button_scopus_filter_indiv','n_clicks'),State('image_network_path', 'src')]
  )
-def callback_filter_individual_scopus(grupo, elemento, boton):
+def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     kpi_all_scopus = {'display':'none'}
     indicators_group_scopus = ''
     products_element_group_scopus = ''    
@@ -918,8 +921,10 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
     titulo_individual_scopus5=''   
     msj_alert_individual_scopus = ''
     fade_alert_individual_scopus = False
-
-    if boton == 0 or elemento == None:
+    
+    print(grupo)
+    
+    if boton == 0 or elemento == None or grupo == None:
         return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, dash_individual_scopus_graph5, div_scopus_figure5, dash_individual_scopus_graph6, div_scopus_figure6, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, titulo_individual_scopus5, msj_alert_individual_scopus, fade_alert_individual_scopus
     
     
@@ -929,9 +934,13 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
     products_element_group_scopus ='Indicadores analizados para: '+elemento
     data = filtro_scopus_elemento_individual(grupo,elemento) #corroborar
     url_red = './assets/img/'+str(collaboraton_network(grupo))
-    dash_individual_scopus_graph6 = html.Img(src=url_red, id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
-    #div_scopus_figure6 = {'display':'block', 'height':'70vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px','textAlign':'center'}
-    div_scopus_figure6 = {'display':'block', 'height':'max-content','marginTop':'8px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
+    if url_red=='./assets/img/None':
+        dash_individual_scopus_graph6=html.Img(src='./assets/img/None.png', id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
+        div_scopus_figure6 = {'display':'block', 'height':'40vh','width':'40vw','marginTop':'8px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
+    else:
+        dash_individual_scopus_graph6 = html.Img(src=url_red, id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
+        #div_scopus_figure6 = {'display':'block', 'height':'70vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px','textAlign':'center'}
+        div_scopus_figure6 = {'display':'block', 'height':'max-content','marginTop':'8px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
 
     if elemento == 'Todos':
         kpi_all_scopus = {'display':'block','width':'80vw', 'marginLeft':'auto', 'marginRight':'auto'}
@@ -999,6 +1008,14 @@ def callback_filter_individual_scopus(grupo, elemento, boton):
         titulo_individual_scopus4 = get_fig_title(dash_individual_scopus_graph4)
         dash_individual_scopus_graph4.update_layout(title={'text':None})      
         div_scopus_figure4 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'5px', 'marginBottom':'5vh'}
+    
+    print(image_url)
+    try:
+        if image_url != './assets/img/init.png':
+            if image_url != './assets/img/None.png':
+                os.remove(image_url)
+    except:
+        pass
     
     return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, dash_individual_scopus_graph5, div_scopus_figure5, dash_individual_scopus_graph6, div_scopus_figure6, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, titulo_individual_scopus5, msj_alert_individual_scopus, fade_alert_individual_scopus
     
@@ -1136,9 +1153,9 @@ def callback_filter_general(parametro, valor, elemento, boton):
               
     return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
 
-@callback(
-    Output('title_individual_scopus_graph6', 'children'),
-    Input('image_network_path', 'src'))
-def remove_image_network(image_url):
-    os.remove(image_url)
-    return no_update
+# @callback(
+#     Output('title_individual_scopus_graph6', 'children'),
+#     Input('image_network_path', 'src'))
+# def remove_image_network(image_url):
+#     os.remove(image_url)
+#     return no_update
