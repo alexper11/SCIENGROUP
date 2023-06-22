@@ -93,21 +93,23 @@ footer {
   font-size: 1.6rem;
   font-weight: bold;
   text-align:center;
-  color: #08469b;
+  color: #9F0002;
 }
 #msj_alert_general_scopus{
   font-size: 1.6rem;
   font-weight: bold;
   text-align:center;
-  color: #08469b;
+  color: #9F0002;
 }
 #msj_alert_individual_scopus{
   font-size: 1.6rem;
   font-weight: bold;
   text-align:center;
-  color: #08469b;
+  color: #9F0002;
 }
-
+.network_img{
+  height: 2%;
+}
 /*************************************************************************/
 /******************************** Common *********************************/
 /*************************************************************************/
@@ -203,13 +205,13 @@ button.small {
 .asideMenu {
   position: absolute;
   height: 100vh;
-  width: 30rem;
+  width: 90vh;
   background-color: #51647e;
   overflow-y: scroll;
   scroll-behavior: smooth;
   right: 0;
   top: 100%;
-  transform: translateX(30rem);
+  transform: translateX(90vh);
   transition: all 0.5s ease-in-out;
 }
 
@@ -476,7 +478,7 @@ img.brand {
 
 .title_graph{
   text-align: center;
-  color: #0c1a15;
+  color: #062d63;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   font-weight: bold;
@@ -543,7 +545,7 @@ H1, P {
   display: flex;
   text-decoration: underline;
   justify-content: center;
-  
+  font-size: 1.5rem;
 }
 
 #filter_inputs {
@@ -720,4 +722,7 @@ p {
 
 .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.2);
+}
+.nav-link:visited {
+  background-color: #ffffff;
 }

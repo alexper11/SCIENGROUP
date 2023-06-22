@@ -72,7 +72,7 @@ app.layout = html.Div([
     html.Footer(
          [
              html.H2(
-                 "Dashboard para el análisis de de la producción científica"
+                 "Dashboard para el análisis de la producción científica"
              )
          ],
        id='footer',
