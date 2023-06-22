@@ -82,7 +82,7 @@ def render_content(tab):
                 ],id='div_group_scopus_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),             
                 html.Div([
                     html.P(children='Red de colaboración', id='title_individual_scopus_graph6', className='title_graph'),
-                    html.Div(children="", id='dash_individual_scopus_graph6',className='network_img',style={'Width':'100%', "height":'95%'})
+                    html.Div(children=html.Img(src='./assets/img/init.png', id='image_network_path'), id='dash_individual_scopus_graph6',className='network_img',style={'Width':'100%', "height":'95%'})
                 ],id='div_group_scopus_figure6', className='card-graph card-body col-graph-big', style={'display':'none'}), 
                 html.Div([
                     html.P(children='', id='title_individual_scopus_graph5', className='title_graph'),
