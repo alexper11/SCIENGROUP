@@ -505,7 +505,7 @@ def collaboraton_network(grupo_nombre):
     #nx.draw_networkx(G,pos)
     nx.draw_networkx_labels(G, pos=pos_nodes,
                             labels=dict(zip(nodelist,nodelist)),
-                            font_color='black',font_size=10)
+                            font_color='black',font_size=9)
     labels = nx.get_edge_attributes(G,'weight')
     nx.draw_networkx_edge_labels(G,pos,edge_labels=labels, font_size=10)
     #plt.box(False)
@@ -887,7 +887,7 @@ def callback_value(parameter, state, disable_value, value):
     Output('msj_alert_individual_scopus','children'),Output('fade-alert-individual-scopus','is_open'),
     ],
     [State('filter_group_scopus', 'value'), State('filter_element_scopus', 'value'),
-    Input('button_scopus_filter_indiv','n_clicks')]
+    Input('button_scopus_filter_indiv','n_clicks'),State('im', 'value')]
  )
 def callback_filter_individual_scopus(grupo, elemento, boton):
     kpi_all_scopus = {'display':'none'}
