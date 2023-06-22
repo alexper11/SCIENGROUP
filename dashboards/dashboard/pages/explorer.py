@@ -21,6 +21,7 @@ table_explorer= dcc.Loading([dbc.Toast(
             id="auto-toast",
             header="No hay datos disponibles",
             color='secondary',
+            style={"color":"#9F0002",'text-align': 'center'},
             # duration=4000,
             dismissable=True,
             is_open=False,

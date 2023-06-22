@@ -64,8 +64,8 @@ def render_content(tab):
                         dismissable=True,
                         is_open=False,
                     ),
-                    html.H1(children="Indicadores para grupos de investigación: ", id="indicators_group_scopus", className="group_graph_info"),
-                    html.H1(children="Por favor selecciones elementos a filtrar",id="products_element_group_scopus", className="group_graph_info"),
+                    html.H1(children=" ", id="indicators_group_scopus", className="group_graph_info"),
+                    html.H1(children=" ",id="products_element_group_scopus", className="group_graph_info"),
                     html.Div([
                         html.Div([html.H1("H1 index", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_1',className='badge')], className='score-card'),
                         html.Div([html.H1("H2 index", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_2',className='badge')], className='score-card'),
@@ -80,6 +80,10 @@ def render_content(tab):
                     html.P(children='', id='title_individual_scopus_graph1', className='title_graph'),
                     dcc.Graph(figure={}, id='dash_individual_scopus_graph1',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
                 ],id='div_group_scopus_figure1', className='card-graph card-body col-graph-big', style={'display':'none'}),             
+                html.Div([
+                    html.P(children='Red de colaboración', id='title_individual_scopus_graph6', className='title_graph'),
+                    html.Div(children="", id='dash_individual_scopus_graph6',className='network_img',style={'Width':'100%', "height":'95%'})
+                ],id='div_group_scopus_figure6', className='card-graph card-body col-graph-big', style={'display':'none'}), 
                 html.Div([
                     html.P(children='', id='title_individual_scopus_graph5', className='title_graph'),
                     dcc.Graph(figure={}, id='dash_individual_scopus_graph5',style={'Width':'100%', "height":'95%'}, config={"displaylogo":False, "displayModeBar":True})
