@@ -494,17 +494,17 @@ def collaboration_network(grupo_nombre):
     fig=plt.figure(figsize=(13,7))
     #pos = nx.shell_layout(G)
     pos=nx.spring_layout(G)
-    pos_nodes = nudge(pos, 0, 0.1)
+    pos_nodes = nudge(pos, 0, 0.05)
     nx.draw_networkx_nodes(G,pos,
                            nodelist=nodelist,
                            node_size=900,
                            node_color='black',
-                           alpha=0.7)
+                           alpha=0.5)
     nx.draw_networkx_edges(G,pos,
                            edgelist = widths.keys(),
                            width=list(widths.values()),
                            edge_color='orange',
-                           alpha=0.6)
+                           alpha=0.75)
     #pos=nx.spring_layout(G) # pos = nx.nx_agraph.graphviz_layout(G)
     #nx.draw_networkx(G,pos)
     nx.draw_networkx_labels(G, pos=pos_nodes,
@@ -825,6 +825,7 @@ sidebar_scopus = html.Div([
     [Output('filtro_individual_scopus', 'hidden'),Output('filtro_general_scopus', 'hidden')],
     Input('tabs_filter_scopus', 'value'), prevent_initial_call=True)
 def render_content(tab):
+    print('tabs: ',tab)
     if tab == 'tab_individual':
         return False, True
     else:
@@ -895,6 +896,7 @@ def callback_value(parameter, state, disable_value, value):
     Input('button_scopus_filter_indiv','n_clicks'),State('image_network_path', 'src')]
  , prevent_initial_call=True)
 def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
+    print('callback filter individual, boton: ',boton)
     kpi_all_scopus = {'display':'none'}
     indicators_group_scopus = ''
     products_element_group_scopus = ''    
@@ -1036,6 +1038,7 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     Input('button_scopus_filter_group','n_clicks')]
  , prevent_initial_call=True)
 def callback_filter_general(parametro, valor, elemento, boton):
+    print('callback filter general, boton: ',boton)
     dash_general_scopus_graph1 = {}
     dash_general_scopus_graph2 = {}
     dash_general_scopus_graph3 = {}
