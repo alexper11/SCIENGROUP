@@ -1,6 +1,6 @@
 beautifulsoup4==4.12.2
-dash==2.3.1
-dash_bootstrap_components==1.1.0
+dash==2.10.2
+dash_bootstrap_components==1.4.1
 dash_html_components==2.0.0
 dash_labs==1.2.0
 Flask==2.1.1
@@ -16,3 +16,5 @@ selenium==3.141.0
 SQLAlchemy==1.4.39
 SQLAlchemy_Utils==0.37.8
 WTForms==3.0.1
+matplotlib==3.5.1
+networkx
