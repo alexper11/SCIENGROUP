@@ -1120,8 +1120,8 @@ def callback_filter_individual(grupo, elemento, boton):
         titulo_individual3 = get_fig_title(dash_individual_graph3)
         dash_individual_graph3.update_layout(title={'text':None})
         div_group_figure1 = {'display':'block', 'height':'70vh', 'maxHeight':'75vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
-        div_group_figure2 = {'display':'inline-block', 'height':'70vh','maxHeight':'75vh', 'marginBottom':'5vh','paddingBottom':'5px', 'marginTop':'7px','paddingTop':'5px'}
-        div_group_figure3 = {'display':'inline-block','height':'70vh', 'maxHeight':'75vh','marginBottom':'5vh','paddingBottom':'5px', 'marginTop':'7px','paddingTop':'5px'}
+        div_group_figure2 = {'display':'inline-block', 'height':'78vh','maxHeight':'80vh', 'marginBottom':'5vh','paddingBottom':'5px', 'marginTop':'7px','paddingTop':'5px'}
+        div_group_figure3 = {'display':'inline-block','height':'78vh', 'maxHeight':'80vh','marginBottom':'5vh','paddingBottom':'5px', 'marginTop':'7px','paddingTop':'5px'}
     else:
         consistencia, ppa,ppua,pc, series_gruplac = get_indicadores_relativos(grupo_cod, elemento)
         kpi1 = str(consistencia)
@@ -1132,7 +1132,7 @@ def callback_filter_individual(grupo, elemento, boton):
         dash_individual_graph1 = time_series_element(series_gruplac, elemento)
         titulo_individual1 = get_fig_title(dash_individual_graph1)
         dash_individual_graph1.update_layout(title={'text':None})
-        div_group_figure1 = {'display':'block', 'height':'70vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
+        div_group_figure1 = {'display':'block', 'height':'75vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
         data = filtro_gruplac_elemento_individual(grupo, elemento)
         if data.shape[0]==0:
             msj_alert_individual = 'No existen datos'
@@ -1146,8 +1146,8 @@ def callback_filter_individual(grupo, elemento, boton):
             dash_individual_graph3 = pie_type_element(data)
             titulo_individual3 = get_fig_title(dash_individual_graph3)
             dash_individual_graph3.update_layout(title={'text':None})
-            div_group_figure2 = {'display':'inline-block', 'height':'70vh','maxHeight':'75vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
-            div_group_figure3 = {'display':'inline-block', 'height':'70vh','maxHeight':'75vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
+            div_group_figure2 = {'display':'inline-block', 'height':'78vh','maxHeight':'75vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
+            div_group_figure3 = {'display':'inline-block', 'height':'78vh','maxHeight':'75vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
         elif ('editorial' in data) and ('tipo' in data):
             dash_individual_graph2 = pie_editorial_element(data)
             titulo_individual2 = get_fig_title(dash_individual_graph2)
@@ -1155,13 +1155,13 @@ def callback_filter_individual(grupo, elemento, boton):
             dash_individual_graph3 = pie_type_element(data)
             titulo_individual3 = get_fig_title(dash_individual_graph3)
             dash_individual_graph3.update_layout(title={'text':None})
-            div_group_figure2 = {'display':'inline-block', 'height':'50vh','maxHeight':'65vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
-            div_group_figure3 = {'display':'inline-block', 'height':'50vh','maxHeight':'65vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
+            div_group_figure2 = {'display':'inline-block', 'height':'78vh','maxHeight':'80vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
+            div_group_figure3 = {'display':'inline-block', 'height':'78vh','maxHeight':'80vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
         elif ((('revista' in data) and ('editorial' in data)) != True) and ('tipo' in data):
             dash_individual_graph3 = pie_type_element(data)
             titulo_individual3 = get_fig_title(dash_individual_graph3)
             dash_individual_graph3.update_layout(title={'text':None})
-            div_group_figure3 = {'display':'inline-block', 'height':'63vh','maxHeight':'65vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginLeft':'30vw', 'marginRight':'30vw','width':'40vw','marginTop':'7px'}
+            div_group_figure3 = {'display':'inline-block', 'height':'75vh','maxHeight':'75vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginLeft':'30vw', 'marginRight':'30vw','width':'40vw','marginTop':'7px'}
         if 'autores' in data:
             dash_individual_graph4 = tree_author_element(data, elemento)  
             titulo_individual4 = get_fig_title(dash_individual_graph4)
@@ -1264,8 +1264,8 @@ def callback_filter_general(parametro, valor, elemento, boton):
         titulo_general6 = get_fig_title(dash_general_graph6)
         dash_general_graph6.update_layout(title={'text':None})
         div_general_figure1 = {'display':'block', 'height':'83vh', 'maxHeight':'85vh','marginTop':'5px','paddingBottom':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
-        wdg2=str(len(grupos_codigos)*7.5)+'vw'
-        div_general_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'40vw','width':wdg2, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'px'}
+        wdg2=str(len(grupos_codigos)*7.8)+'vw'
+        div_general_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'40vw','width':wdg2, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'7px'}
         div_general_figure3 = {'display':'inline-block', 'maxHeight':'max-content', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_figure4 = {'display':'inline-block', 'maxHeight':'max-content', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_figure5 = {'display':'inline-block', 'maxHeight':'max-content', 'marginTop':'8px', 'marginBottom':'5vh'}

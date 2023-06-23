@@ -177,9 +177,9 @@ def filtro_scopus_grupo_individual(grupo):
     grupo=grupo.strip()
     idgruplac=gruplac_basico[gruplac_basico['nombre']==grupo]['idgruplac'].iloc[0]
     opc_elementos=[]
-    for elemento in elementos_scopus_lista:
+    for elemento in elementos_scopus_lista:        
         data=fuente_dic['SCOPUS'][elemento].dropna(subset='idgruplac').copy()
-        if data['idgruplac'].str.contains(idgruplac).shape[0] >= 1:
+        if data[data['idgruplac'].str.contains(idgruplac)].shape[0] >= 1:
             opc_elementos.append(elemento)
     # data=pd.DataFrame()
     return opc_elementos
@@ -378,7 +378,7 @@ def boxplot_individual(codigo_grupo,datain,elemento='Todos'):
     #fig.update_traces(orientation='h')
     fig.update_layout(title={'text':title_label})
     maxrange=data.groupby('idgruplac').quantile(0.93).max().iloc[0]
-    fig['layout']['yaxis'].update(range=[-0.1,maxrange])
+    fig['layout']['yaxis'].update(range=[-0.15,maxrange])
     return fig
 
 def get_fig_title(fig):
@@ -1115,7 +1115,7 @@ def callback_filter_general(parametro, valor, elemento, boton):
         dash_general_scopus_graph6.update_layout(title={'text':None})
         div_general_scopus_figure1 = {'display':'block', 'height':'83vh', 'maxHeight':'85vh','marginTop':'5px','paddingBottom':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
         wdg2=str(len(grupos_codigos_scopus)*7.5)+'vw'
-        div_general_scopus_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'40vw','width':wdg2, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'px'}
+        div_general_scopus_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'40vw','width':wdg2, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'7px'}
         div_general_scopus_figure3 = {'display':'inline-block', 'height':'82vh','maxHeight':'83vh', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_scopus_figure4 = {'display':'inline-block', 'height':'82vh','maxHeight':'83vh', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_scopus_figure5 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'8px', 'marginBottom':'8px'}
