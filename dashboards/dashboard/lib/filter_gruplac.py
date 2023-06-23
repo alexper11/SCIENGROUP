@@ -1010,8 +1010,9 @@ def callback_element(grupo):
     if grupo == None:
         return None, True, []
     else:
-        option_elements= filtro_gruplac_grupo_individual(grupo)
-        option_elements.append('Todos')
+        #option_elements= filtro_gruplac_grupo_individual(grupo)
+        option_elements= [*filtro_gruplac_grupo_individual(grupo),'Todos']
+        # option_elements.append('Todos')
         return 'Todos', False, option_elements
 #-----------------general
 @callback(

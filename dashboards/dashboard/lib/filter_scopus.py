@@ -28,6 +28,8 @@ from itertools import combinations
 import networkx as nx
 #pip install networkx
 from matplotlib import pyplot as plt
+import matplotlib
+matplotlib.use('agg')
 import os
 import pathlib
 import uuid
@@ -516,7 +518,7 @@ def collaboraton_network(grupo_nombre):
     b,t = plt.ylim()
     plt.xlim(l-0.07,r+0.07)
     plt.ylim(b,t+0.1)
-    #plt.close(fig)
+    plt.close(fig)
     path = pathlib.Path('./assets/img/').resolve() # Figures out the absolute path for you in case your working directory moves around.
     network_image = str(uuid.uuid4())+".PNG"
     fig.savefig(os.path.join(path, network_image), bbox_inches='tight', pad_inches=0.0)  #DEFINIR DIRECTORIO
@@ -837,8 +839,9 @@ def callback_element(grupo):
     if grupo == None:
         return None, True, []
     else:
-        option_elements= filtro_scopus_grupo_individual(grupo)
-        option_elements.append('Todos')
+        #option_elements= filtro_scopus_grupo_individual(grupo)
+        option_elements= [*filtro_scopus_grupo_individual(grupo),'Todos']
+        #option_elements.append('Todos')
         return 'Todos', False, option_elements
 #-----------------general
 @callback(
@@ -921,8 +924,6 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     titulo_individual_scopus5=''   
     msj_alert_individual_scopus = ''
     fade_alert_individual_scopus = False
-    
-    print(grupo)
     
     if boton == 0 or elemento == None or grupo == None:
         return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, dash_individual_scopus_graph5, div_scopus_figure5, dash_individual_scopus_graph6, div_scopus_figure6, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, titulo_individual_scopus5, msj_alert_individual_scopus, fade_alert_individual_scopus
@@ -1009,13 +1010,7 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
         dash_individual_scopus_graph4.update_layout(title={'text':None})      
         div_scopus_figure4 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'5px', 'marginBottom':'5vh'}
     
-    print(image_url)
-    try:
-        if image_url != './assets/img/init.png':
-            if image_url != './assets/img/None.png':
-                os.remove(image_url)
-    except:
-        pass
+
     
     return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, dash_individual_scopus_graph5, div_scopus_figure5, dash_individual_scopus_graph6, div_scopus_figure6, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, titulo_individual_scopus5, msj_alert_individual_scopus, fade_alert_individual_scopus
     
@@ -1153,9 +1148,15 @@ def callback_filter_general(parametro, valor, elemento, boton):
               
     return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
 
-# @callback(
-#     Output('title_individual_scopus_graph6', 'children'),
-#     Input('image_network_path', 'src'))
-# def remove_image_network(image_url):
-#     os.remove(image_url)
-#     return no_update
+@callback(
+     Output('title_individual_scopus_graph6', 'children'),
+     Input('image_network_path', 'src'))
+def remove_image_network(image_url):
+    print(image_url)
+    try:
+        if image_url != './assets/img/init.png':
+            if image_url != './assets/img/None.png':
+                os.remove(image_url)
+    except:
+        pass
+    return no_update
