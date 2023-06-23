@@ -86,8 +86,8 @@ app.layout = html.Div([
 #This callback controls the paths to show every module
 @app.callback(
     Output('main-content','children'),
-    [Input('url', 'pathname')],
-prevent_initial_call=True)
+    [Input('url', 'pathname')]
+, prevent_initial_call=True)
 def loadpage(path_route):
     """
     Input: route in the path
