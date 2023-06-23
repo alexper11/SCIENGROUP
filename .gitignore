@@ -3,3 +3,4 @@ scopus/key.txt
 **/.vscode/
 *.csv
 extracted_data/
+dashboards/dashboard/assets/img/network_temp/
