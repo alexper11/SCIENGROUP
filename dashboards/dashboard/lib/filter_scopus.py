@@ -1,7 +1,7 @@
 # Basics Requirements
 import pathlib
 import os
-from dash import Dash, callback, html, dcc, Input, Output, State, MATCH, ALL
+from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
 import pandas as pd
 import numpy as np
 import re
@@ -16,11 +16,13 @@ import dash_bootstrap_components as dbc
 # Data
 import json
 from datetime import datetime as dt
-from functions.csv_importer import gruplac_basico, scopus_productos, scopus_autores, elementos_scopus_lista, fuente_dic, opciones_grupo_scopus,referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
+from functions.csv_importer import gruplac_basico, scopus_productos, scopus_autores, elementos_scopus_lista, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
 
 # Plotly
 import plotly.express as px
 import warnings
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 #red colaboracion
 from itertools import combinations
@@ -34,9 +36,9 @@ import pathlib
 import uuid
 
 
-#opciones_grupo_scopus_aux=[]
-#scopus_productos['nombre_grupo'].dropna().str.split(';').apply(lambda x: opciones_grupo_scopus_aux.extend(x)) #variable para opciones del filtro de grupo
-#opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus_aux[:]))))
+opciones_grupo_scopus_aux=[]
+scopus_productos['nombre_grupo'].dropna().str.split(';').apply(lambda x: opciones_grupo_scopus_aux.extend(x)) #variable para opciones del filtro de grupo
+opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus_aux[:]))))
 
 elementos_scopus_general=elementos_scopus_lista[:]
 if 'Todos' in elementos_scopus_general:
@@ -375,7 +377,7 @@ def boxplot_individual(codigo_grupo,datain,elemento='Todos'):
                       legend_title='Grupos de Investigación')
     #fig.update_traces(orientation='h')
     fig.update_layout(title={'text':title_label})
-    maxrange=data.groupby('idgruplac').quantile(0.85).max().iloc[0]
+    maxrange=data.groupby('idgruplac').quantile(0.93).max().iloc[0]
     fig['layout']['yaxis'].update(range=[-0.1,maxrange])
     return fig
 
@@ -456,7 +458,7 @@ def tree_topic_element_scopus(data, elemento): #sólo para aquellos elementos co
     warnings.filterwarnings(action='default', category=FutureWarning)##################
     return fig
 
-def collaboration_network(grupo_nombre):
+def collaboration_network(grupo_nombre,elemento='Todos'):
     def net_break(x):
         xlen=len(x)
         if xlen==2:
@@ -466,7 +468,10 @@ def collaboration_network(grupo_nombre):
     def nudge(pos, x_shift, y_shift):
         return {n:(x + x_shift, y + y_shift) for n,(x,y) in pos.items()}
     grupo=gruplac_basico[gruplac_basico['nombre']==grupo_nombre]['idgruplac'].iloc[0]
-    net=scopus_productos[['idgruplac']].dropna().copy()
+    if elemento=='Todos':
+        net=scopus_productos[['idgruplac']].dropna().copy()
+    else:
+        net=fuente_dic['SCOPUS'][elemento][['idgruplac']].dropna().copy()
     net=net[net['idgruplac'].str.contains(grupo)]
     net['idgruplac']=net['idgruplac'].str.split(';')
     net=net[net['idgruplac'].str.len()>1]
@@ -484,17 +489,17 @@ def collaboration_network(grupo_nombre):
     net['from']=net['from'].str.wrap(20,break_long_words=False).copy()
     net['to']=net['to'].str.wrap(20,break_long_words=False).copy()
     if net.shape[0]<1:
-        network_image='None.png'
+        network_image='None'
         return network_image
     ##net=net[(net['from']==grupo) | (net['to']==grupo)]
     #df = pd.DataFrame({ 'from':['DDDDDDDDDDDDDDDDDDDDD\nDDDDDDDDDDDDDDDDDDDDDD', 'A', 'B', 'C','A'], 'to':['A', 'DDDDDDDDDDDDDDDDDDDDD\nDDDDDDDDDDDDDDDDDDDDDD', 'A', 'E','C'], 'weight':['1', '5', '8', '3','20']})
     G=nx.from_pandas_edgelist(net, 'from', 'to', edge_attr='weight', create_using=nx.DiGraph() )
     widths = nx.get_edge_attributes(G, 'weight')
     nodelist = G.nodes()
-    fig=plt.figure(figsize=(13,7))
+    fig=plt.figure(figsize=(13,8))
     #pos = nx.shell_layout(G)
     pos=nx.spring_layout(G)
-    pos_nodes = nudge(pos, 0, 0.05)
+    pos_nodes = nudge(pos, 0, 0.15)
     nx.draw_networkx_nodes(G,pos,
                            nodelist=nodelist,
                            node_size=900,
@@ -504,7 +509,7 @@ def collaboration_network(grupo_nombre):
                            edgelist = widths.keys(),
                            width=list(widths.values()),
                            edge_color='orange',
-                           alpha=0.75)
+                           alpha=0.6)
     #pos=nx.spring_layout(G) # pos = nx.nx_agraph.graphviz_layout(G)
     #nx.draw_networkx(G,pos)
     nx.draw_networkx_labels(G, pos=pos_nodes,
@@ -516,7 +521,7 @@ def collaboration_network(grupo_nombre):
     l,r = plt.xlim()
     b,t = plt.ylim()
     plt.xlim(l-0.07,r+0.07)
-    plt.ylim(b,t+0.13)
+    plt.ylim(b,t+0.15)
     plt.close(fig)
     path = pathlib.Path('./assets/img/network_temp/').resolve() # Figures out the absolute path for you in case your working directory moves around.
     network_image = str(uuid.uuid4())+".PNG"
@@ -634,16 +639,17 @@ def radar_general_all(indicadores,elemento='Todos'):
     else:
         title_label='Radar de Indicadores: '+elemento
     aux_ind=indicadores[['idgruplac','cit_output','h1_index','h2_index']].copy()
-    aux_ind.columns=['Grupos','Citaciones por<br>Producto','H1 Index','H2 Index']
+    aux_ind.columns=['Grupos','Citaciones por<br>Producto','H1<br>Index','H2<br>Index']
     aux_ind['Grupos']=[gruplac_basico[gruplac_basico['idgruplac']==idg]['nombre'].iloc[0] for idg in aux_ind['Grupos'].to_list()]
     aux_ind['Grupos']=aux_ind['Grupos'].str.wrap(20,break_long_words=False).str.replace("\n","<br>")
     #aux_ind['id']=aux_ind.index
-    aux_ind=pd.melt(aux_ind, id_vars='Grupos', value_vars=['Citaciones por<br>Producto','H1 Index','H2 Index']).sort_values(by='Grupos')
+    aux_ind=pd.melt(aux_ind, id_vars='Grupos', value_vars=['Citaciones por<br>Producto','H1<br>Index','H2<br>Index']).sort_values(by='Grupos')
     fig = px.line_polar(aux_ind, r='value', color='Grupos', theta='variable', line_close=True)
     #fig.update_traces(fill='toself')
-    fig.update_layout(title={'text':title_label},font=dict(size=10))
+    fig.update_layout(title={'text':title_label},
+                      legend=dict(font=dict(size=9.5)),
+                      font=dict(size=10))
     fig.for_each_trace(lambda t: t.update(hoveron='points'))
-    
     warnings.filterwarnings(action='default', category=FutureWarning)
     return fig
 
@@ -663,11 +669,12 @@ def heatmap_general(codigos,nombres):
         else:
             df_aux=df_aux[df_aux['citaciones']>0]
         df=pd.concat([df, df_aux], ignore_index=True)
+    
     locs=df[df['grupo'].str.len()>40].index.tolist()
     locs_df=df['grupo'].loc[locs].copy()
     df.loc[locs,'grupo']=locs_df.str.slice(stop=40)+'...'
-    df['grupo']=df['grupo'].str.wrap(23,break_long_words=False).str.replace('\n','<br>')
-    df['tipo_producto']=df['tipo_producto'].str.wrap(13,break_long_words=False).str.replace('\n','<br>')
+    df['grupo']=df['grupo'].str.wrap(25,break_long_words=False).str.replace('\n','<br>')
+    df['tipo_producto']=df['tipo_producto'].str.wrap(15,break_long_words=False).str.replace('\n','<br>')
     df= df.pivot(index='grupo', columns='tipo_producto')['citaciones'].fillna(0)
     fig = px.imshow(df, x=df.columns, y=df.index, color_continuous_scale='RdBu_r',text_auto=True,
                    labels=dict(x="Tipo de Producto", y="Grupos de Investigación", color="Citaciones"))
@@ -696,7 +703,7 @@ def boxplot_general_all_scopus(codigos,nombres):
     #fig.update_traces(orientation='h')
     fig.update_layout(title={'text':'Distribución de Citaciones: Todos los Productos'})
     maxrange=df.groupby('idgruplac').quantile(0.85).max().iloc[0]
-    fig['layout']['yaxis'].update(range=[-0.3,maxrange])
+    fig['layout']['yaxis'].update(range=[-0.2,maxrange])
     return fig
 
 #ELEMENTO
@@ -754,8 +761,8 @@ def boxplot_general_element_scopus(data,codigos,elemento):
                       legend_title='Grupos de Investigación')
     #fig.update_traces(orientation='h')
     fig.update_layout(title={'text':'Distribución de Citaciones: '+elemento})
-    #maxrange=df.groupby('idgruplac').quantile(0.85).max().iloc[0]
-    #fig['layout']['yaxis'].update(range=[-0.3,maxrange])
+    maxrange=df.groupby('idgruplac').quantile(0.85).max().iloc[0]
+    fig['layout']['yaxis'].update(range=[-0.2,maxrange])
     return fig
 
 #############################################################################
@@ -829,7 +836,6 @@ sidebar_scopus = html.Div([
     [Output('filtro_individual_scopus', 'hidden'),Output('filtro_general_scopus', 'hidden')],
     Input('tabs_filter_scopus', 'value'), prevent_initial_call=True)
 def render_content(tab):
-    print('tabs: ',tab)
     if tab == 'tab_individual':
         return False, True
     else:
@@ -900,7 +906,7 @@ def callback_value(parameter, state, disable_value, value):
     Input('button_scopus_filter_indiv','n_clicks'),State('image_network_path', 'src')]
  , prevent_initial_call=True)
 def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
-    print('callback filter individual, boton: ',boton)
+    #print('prueba filtro scopus individual')
     kpi_all_scopus = {'display':'none'}
     indicators_group_scopus = ''
     products_element_group_scopus = ''    
@@ -939,15 +945,7 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     indicators_group_scopus = 'Grupo: '+grupo
     products_element_group_scopus ='Indicadores analizados para: '+elemento
     data = filtro_scopus_elemento_individual(grupo,elemento) #corroborar
-    url_red = './assets/img/network_temp/'+str(collaboration_network(grupo))    
-    if url_red=='./assets/img/network_temp/None':
-        dash_individual_scopus_graph6=html.Img(src='./assets/img/None.png', id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
-        div_scopus_figure6 = {'display':'block', 'height':'40vh','width':'40vw','marginTop':'8px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
-    else:
-        dash_individual_scopus_graph6 = html.Img(src=url_red, id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
-        #div_scopus_figure6 = {'display':'block', 'height':'70vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px','textAlign':'center'}
-        div_scopus_figure6 = {'display':'block', 'height':'max-content','marginTop':'8px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
-
+    
     if elemento == 'Todos':
         kpi_all_scopus = {'display':'block','width':'80vw', 'marginLeft':'auto', 'marginRight':'auto'}
         series_scopus=get_series_scopus(grupo_cod_scopus)             
@@ -969,6 +967,15 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
         dash_individual_scopus_graph4 = tree_author_all_scopus(data)    #corroborar     
         titulo_individual_scopus4 = get_fig_title(dash_individual_scopus_graph4)
         dash_individual_scopus_graph4.update_layout(title={'text':None})
+        url_red = './assets/img/network_temp/'+str(collaboration_network(grupo))    
+        if url_red=='./assets/img/network_temp/None':
+            dash_individual_scopus_graph6=html.Img(src='./assets/img/None.png', id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
+            div_scopus_figure6 = {'display':'block', 'height':'40vh','width':'40vw','marginTop':'3vh','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
+        else:
+            dash_individual_scopus_graph6 = html.Img(src=url_red, id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
+            #div_scopus_figure6 = {'display':'block', 'height':'70vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px','textAlign':'center'}
+            div_scopus_figure6 = {'display':'block', 'height':'max-content','marginTop':'3vh','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
+        
         div_scopus_figure1 = {'display':'block', 'height':'70vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
         div_scopus_figure2 = {'display':'inline-block', 'height':'70vh','maxHeight':'75vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
         div_scopus_figure3 = {'display':'inline-block', 'height':'70vh','maxHeight':'75vh', 'marginBottom':'5px','paddingBottom':'5px', 'marginTop':'7px'}
@@ -1014,8 +1021,15 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
         titulo_individual_scopus4 = get_fig_title(dash_individual_scopus_graph4)
         dash_individual_scopus_graph4.update_layout(title={'text':None})      
         div_scopus_figure4 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'5px', 'marginBottom':'5vh'}
-    
 
+        url_red = './assets/img/network_temp/'+str(collaboration_network(grupo, elemento))    
+        if url_red=='./assets/img/network_temp/None':
+            dash_individual_scopus_graph6=html.Img(src='./assets/img/None.png', id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
+            div_scopus_figure6 = {'display':'block', 'height':'40vh','width':'40vw','marginTop':'3vh','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
+        else:
+            dash_individual_scopus_graph6 = html.Img(src=url_red, id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
+            #div_scopus_figure6 = {'display':'block', 'height':'70vh', 'maxHeight':'80vh','marginTop':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px','textAlign':'center'}
+            div_scopus_figure6 = {'display':'block', 'height':'max-content','marginTop':'3vh','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
     
     return kpi_all_scopus, indicators_group_scopus, products_element_group_scopus, kpi_scopus1, kpi_scopus2, kpi_scopus3, kpi_scopus4, kpi_scopus5, kpi_scopus6, dash_individual_scopus_graph1, div_scopus_figure1, dash_individual_scopus_graph2, div_scopus_figure2, dash_individual_scopus_graph3, div_scopus_figure3, dash_individual_scopus_graph4, div_scopus_figure4, dash_individual_scopus_graph5, div_scopus_figure5, dash_individual_scopus_graph6, div_scopus_figure6, titulo_individual_scopus1, titulo_individual_scopus2, titulo_individual_scopus3, titulo_individual_scopus4, titulo_individual_scopus5, msj_alert_individual_scopus, fade_alert_individual_scopus
     
@@ -1042,7 +1056,7 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     Input('button_scopus_filter_group','n_clicks')]
  , prevent_initial_call=True)
 def callback_filter_general(parametro, valor, elemento, boton):
-    print('callback filter general, boton: ',boton)
+    #print('prueba filtro scopus general')
     dash_general_scopus_graph1 = {}
     dash_general_scopus_graph2 = {}
     dash_general_scopus_graph3 = {}
@@ -1102,8 +1116,8 @@ def callback_filter_general(parametro, valor, elemento, boton):
         div_general_scopus_figure1 = {'display':'block', 'height':'83vh', 'maxHeight':'85vh','marginTop':'5px','paddingBottom':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
         wdg2=str(len(grupos_codigos_scopus)*7.5)+'vw'
         div_general_scopus_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'40vw','width':wdg2, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'px'}
-        div_general_scopus_figure3 = {'display':'inline-block', 'height':'80vh', 'maxHeight':'82vh', 'marginTop':'8px', 'marginBottom':'8px'}
-        div_general_scopus_figure4 = {'display':'inline-block', 'height':'80vh', 'maxHeight':'82vh', 'marginTop':'8px', 'marginBottom':'8px'}
+        div_general_scopus_figure3 = {'display':'inline-block', 'height':'82vh','maxHeight':'83vh', 'marginTop':'8px', 'marginBottom':'8px'}
+        div_general_scopus_figure4 = {'display':'inline-block', 'height':'82vh','maxHeight':'83vh', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_scopus_figure5 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_scopus_figure6 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'8px', 'marginBottom':'5vh'}
     else:
@@ -1133,14 +1147,14 @@ def callback_filter_general(parametro, valor, elemento, boton):
         dash_general_scopus_graph3 = radar_general_all(df_indicadores,elemento)
         titulo_general_scopus3 = get_fig_title(dash_general_scopus_graph3)
         dash_general_scopus_graph3.update_layout(title={'text':None})
-        div_general_scopus_figure3 = {'display':'inline-block', 'height':'80vh', 'maxHeight':'82vh', 'marginTop':'8px', 'marginBottom':'8px'}
+        div_general_scopus_figure3 = {'display':'inline-block', 'height':'82vh','maxHeight':'83vh', 'marginTop':'8px', 'marginBottom':'8px'}
         if (elemento == 'Libros') or elemento == 'Capítulos':
             dash_general_scopus_graph4 = pie_journal_element_scopus(data,'nombre_publicacion')
         else:
             dash_general_scopus_graph4 = pie_journal_element_scopus(data,'editorial')
         titulo_general_scopus4 = get_fig_title(dash_general_scopus_graph4)
         dash_general_scopus_graph4.update_layout(title={'text':None})
-        div_general_scopus_figure4 = {'display':'inline-block', 'height':'80vh', 'maxHeight':'82vh', 'marginTop':'8px', 'marginBottom':'8px'}
+        div_general_scopus_figure4 = {'display':'inline-block', 'height':'82vh','maxHeight':'83vh', 'marginTop':'8px', 'marginBottom':'8px'}
         
         dash_general_scopus_graph5 = boxplot_general_element_scopus(data,grupos_codigos_scopus,elemento)
         titulo_general_scopus5 = get_fig_title(dash_general_scopus_graph5)

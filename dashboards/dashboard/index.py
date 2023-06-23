@@ -86,8 +86,8 @@ app.layout = html.Div([
 #This callback controls the paths to show every module
 @app.callback(
     Output('main-content','children'),
-    [Input('url', 'pathname')],
-prevent_initial_call=True)
+    [Input('url', 'pathname')]
+, prevent_initial_call=True)
 def loadpage(path_route):
     """
     Input: route in the path
@@ -108,4 +108,5 @@ def loadpage(path_route):
         return page404.layout
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=8051,debug=True)
+    #app.run_server(host='10.55.4.73', port=8051,debug=True)
+    app.run_server(host='localhost', port=8051,debug=True)
