@@ -108,4 +108,4 @@ def loadpage(path_route):
         return page404.layout
 
 if __name__ == '__main__':
-    app.run_server(host='localhost', port=8051,debug=True)
+    app.run_server(host='10.55.4.73', port=8051,debug=True)

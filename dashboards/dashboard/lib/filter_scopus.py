@@ -897,6 +897,7 @@ def callback_value(parameter, state, disable_value, value):
     Input('button_scopus_filter_indiv','n_clicks'),State('image_network_path', 'src')]
  , prevent_initial_call=True)
 def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
+    #print('prueba filtro scopus individual')
     kpi_all_scopus = {'display':'none'}
     indicators_group_scopus = ''
     products_element_group_scopus = ''    
@@ -1038,6 +1039,7 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     Input('button_scopus_filter_group','n_clicks')]
  , prevent_initial_call=True)
 def callback_filter_general(parametro, valor, elemento, boton):
+    #print('prueba filtro scopus general')
     dash_general_scopus_graph1 = {}
     dash_general_scopus_graph2 = {}
     dash_general_scopus_graph3 = {}

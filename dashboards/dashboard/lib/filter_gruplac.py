@@ -1067,6 +1067,7 @@ def callback_value(parameter, state, disable_value, value):
     Input('button_group_filter_indiv','n_clicks')]
   , prevent_initial_call=True)
 def callback_filter_individual(grupo, elemento, boton):
+    #print('prueba filtro gruplac individual')
     kpi_all = {'display':'none'}
     indicators_group = ''
     products_element_group = ''
@@ -1197,6 +1198,7 @@ def callback_filter_individual(grupo, elemento, boton):
     Input('button_group_filter_group','n_clicks')]
   , prevent_initial_call=True)
 def callback_filter_general(parametro, valor, elemento, boton):
+    #print('prueba filtro gruplac general')
     dash_general_graph1 = {}
     dash_general_graph2 = {}
     dash_general_graph3 = {}
