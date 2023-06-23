@@ -375,8 +375,8 @@ def boxplot_individual(codigo_grupo,datain,elemento='Todos'):
                       legend_title='Grupos de Investigación')
     #fig.update_traces(orientation='h')
     fig.update_layout(title={'text':title_label})
-    #maxrange=data.groupby('idgruplac').quantile(0.85).max().iloc[0]
-    #fig['layout']['yaxis'].update(range=[-0.1,maxrange])
+    maxrange=data.groupby('idgruplac').quantile(0.85).max().iloc[0]
+    fig['layout']['yaxis'].update(range=[-0.1,maxrange])
     return fig
 
 def get_fig_title(fig):
@@ -634,15 +634,16 @@ def radar_general_all(indicadores,elemento='Todos'):
     else:
         title_label='Radar de Indicadores: '+elemento
     aux_ind=indicadores[['idgruplac','cit_output','h1_index','h2_index']].copy()
-    aux_ind.columns=['Grupos','Citaciones por Producto','H1 Index','H2 Index(global)']
+    aux_ind.columns=['Grupos','Citaciones por<br>Producto','H1 Index','H2 Index']
     aux_ind['Grupos']=[gruplac_basico[gruplac_basico['idgruplac']==idg]['nombre'].iloc[0] for idg in aux_ind['Grupos'].to_list()]
     aux_ind['Grupos']=aux_ind['Grupos'].str.wrap(20,break_long_words=False).str.replace("\n","<br>")
     #aux_ind['id']=aux_ind.index
-    aux_ind=pd.melt(aux_ind, id_vars='Grupos', value_vars=['Citaciones por Producto','H1 Index','H2 Index(global)']).sort_values(by='Grupos')
+    aux_ind=pd.melt(aux_ind, id_vars='Grupos', value_vars=['Citaciones por<br>Producto','H1 Index','H2 Index']).sort_values(by='Grupos')
     fig = px.line_polar(aux_ind, r='value', color='Grupos', theta='variable', line_close=True)
     #fig.update_traces(fill='toself')
-    fig.update_layout(title={'text':title_label})
+    fig.update_layout(title={'text':title_label},font=dict(size=10))
     fig.for_each_trace(lambda t: t.update(hoveron='points'))
+    
     warnings.filterwarnings(action='default', category=FutureWarning)
     return fig
 
@@ -662,8 +663,11 @@ def heatmap_general(codigos,nombres):
         else:
             df_aux=df_aux[df_aux['citaciones']>0]
         df=pd.concat([df, df_aux], ignore_index=True)
-    df['grupo']=df['grupo'].str.wrap(30,break_long_words=False).str.replace('\n','<br>')
-    df['tipo_producto']=df['tipo_producto'].str.wrap(15,break_long_words=False).str.replace('\n','<br>')
+    locs=df[df['grupo'].str.len()>40].index.tolist()
+    locs_df=df['grupo'].loc[locs].copy()
+    df.loc[locs,'grupo']=locs_df.str.slice(stop=40)+'...'
+    df['grupo']=df['grupo'].str.wrap(23,break_long_words=False).str.replace('\n','<br>')
+    df['tipo_producto']=df['tipo_producto'].str.wrap(13,break_long_words=False).str.replace('\n','<br>')
     df= df.pivot(index='grupo', columns='tipo_producto')['citaciones'].fillna(0)
     fig = px.imshow(df, x=df.columns, y=df.index, color_continuous_scale='RdBu_r',text_auto=True,
                    labels=dict(x="Tipo de Producto", y="Grupos de Investigación", color="Citaciones"))
@@ -691,8 +695,8 @@ def boxplot_general_all_scopus(codigos,nombres):
                       legend_title='Grupos de Investigación')
     #fig.update_traces(orientation='h')
     fig.update_layout(title={'text':'Distribución de Citaciones: Todos los Productos'})
-    #maxrange=df.groupby('idgruplac').quantile(0.85).max().iloc[0]
-    #fig['layout']['yaxis'].update(range=[-0.3,maxrange])
+    maxrange=df.groupby('idgruplac').quantile(0.85).max().iloc[0]
+    fig['layout']['yaxis'].update(range=[-0.3,maxrange])
     return fig
 
 #ELEMENTO
@@ -1098,8 +1102,8 @@ def callback_filter_general(parametro, valor, elemento, boton):
         div_general_scopus_figure1 = {'display':'block', 'height':'83vh', 'maxHeight':'85vh','marginTop':'5px','paddingBottom':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
         wdg2=str(len(grupos_codigos_scopus)*7.5)+'vw'
         div_general_scopus_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'40vw','width':wdg2, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'px'}
-        div_general_scopus_figure3 = {'display':'inline-block', 'maxHeight':'max-content', 'marginTop':'8px', 'marginBottom':'8px'}
-        div_general_scopus_figure4 = {'display':'inline-block', 'maxHeight':'max-content', 'marginTop':'8px', 'marginBottom':'8px'}
+        div_general_scopus_figure3 = {'display':'inline-block', 'height':'80vh', 'maxHeight':'82vh', 'marginTop':'8px', 'marginBottom':'8px'}
+        div_general_scopus_figure4 = {'display':'inline-block', 'height':'80vh', 'maxHeight':'82vh', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_scopus_figure5 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_scopus_figure6 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'8px', 'marginBottom':'5vh'}
     else:
@@ -1129,14 +1133,14 @@ def callback_filter_general(parametro, valor, elemento, boton):
         dash_general_scopus_graph3 = radar_general_all(df_indicadores,elemento)
         titulo_general_scopus3 = get_fig_title(dash_general_scopus_graph3)
         dash_general_scopus_graph3.update_layout(title={'text':None})
-        div_general_scopus_figure3 = {'display':'inline-block', 'maxHeight':'90vh', 'marginTop':'8px', 'marginBottom':'8px'}
+        div_general_scopus_figure3 = {'display':'inline-block', 'height':'80vh', 'maxHeight':'82vh', 'marginTop':'8px', 'marginBottom':'8px'}
         if (elemento == 'Libros') or elemento == 'Capítulos':
             dash_general_scopus_graph4 = pie_journal_element_scopus(data,'nombre_publicacion')
         else:
             dash_general_scopus_graph4 = pie_journal_element_scopus(data,'editorial')
         titulo_general_scopus4 = get_fig_title(dash_general_scopus_graph4)
         dash_general_scopus_graph4.update_layout(title={'text':None})
-        div_general_scopus_figure4 = {'display':'inline-block', 'maxHeight':'90vh', 'marginTop':'8px', 'marginBottom':'8px'}
+        div_general_scopus_figure4 = {'display':'inline-block', 'height':'80vh', 'maxHeight':'82vh', 'marginTop':'8px', 'marginBottom':'8px'}
         
         dash_general_scopus_graph5 = boxplot_general_element_scopus(data,grupos_codigos_scopus,elemento)
         titulo_general_scopus5 = get_fig_title(dash_general_scopus_graph5)
