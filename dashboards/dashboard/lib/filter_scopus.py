@@ -1146,17 +1146,17 @@ def callback_filter_general(parametro, valor, elemento, boton):
               
     return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
 
-@callback(
-    Output('title_individual_scopus_graph6', 'children'),
-    [Input('button_scopus_filter_indiv','n_clicks'),State('image_network_path', 'src')])
-def remove_image_network(boton,image_url):
-    print(image_url)
-    try:
-        if image_url != './assets/img/init.png':
-            if image_url != './assets/img/None.png':
-                #os.remove(image_url)
-                pass
-    except Exception as e:
-        print('error en remove_image_network: ',e)
-        pass
-    return 'Red de colaboración'
+# @callback(
+#     Output('title_individual_scopus_graph6', 'children'),
+#     [Input('button_scopus_filter_indiv','n_clicks'),State('image_network_path', 'src')])
+# def remove_image_network(boton,image_url):
+#     print(image_url)
+#     try:
+#         if image_url != './assets/img/init.png':
+#             if image_url != './assets/img/None.png':
+#                 #os.remove(image_url)
+#                 pass
+#     except Exception as e:
+#         print('error en remove_image_network: ',e)
+#         pass
+#     return 'Red de colaboración'
