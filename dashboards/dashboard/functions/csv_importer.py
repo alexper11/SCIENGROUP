@@ -248,3 +248,6 @@ opciones_grupo=gruplac_basico['nombre'].to_list()
 
 elementos_scopus_lista=list(fuente_dic['SCOPUS'].keys())
 
+opciones_grupo_scopus_aux=[]
+scopus_productos['nombre_grupo'].dropna().str.split(';').apply(lambda x: opciones_grupo_scopus_aux.extend(x)) #variable para opciones del filtro de grupo
+opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus_aux[:]))))

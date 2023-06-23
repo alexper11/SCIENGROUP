@@ -29,7 +29,7 @@ layout = html.Div([
         scrollable=True,
         is_open=True,            
     ),
-    html.Img(src="/assets/img/filter_scopus.png",id="boton_filter_flex_scopus"),
+    html.Img(src="/assets/img/filter_scopus.png",id="boton_filter_flex_scopus", n_clicks=0),
     # dbc.Popover(
     #     "Botón para ocultar y mostrar los filtros",
     #     target="boton_filter_flex_scopus",

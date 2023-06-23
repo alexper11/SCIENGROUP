@@ -1,7 +1,7 @@
 # Basics Requirements
 import pathlib
 import os
-from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
+from dash import Dash, callback, html, dcc, Input, Output, State, MATCH, ALL
 import pandas as pd
 import numpy as np
 import re
@@ -15,13 +15,11 @@ import dash_bootstrap_components as dbc
 # Data
 import json
 from datetime import datetime as dt
-from functions.csv_importer import gruplac_basico, scopus_productos, scopus_autores, elementos_scopus_lista, fuente_dic, referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
+from functions.csv_importer import gruplac_basico, scopus_productos, scopus_autores, elementos_scopus_lista, fuente_dic, opciones_grupo_scopus,referencias, caracteristicas, caracteristicas_invertido, pmin, pmax, productos_ano, opciones_parametro_general
 
 # Plotly
 import plotly.express as px
 import warnings
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 
 #red colaboracion
 from itertools import combinations
@@ -35,9 +33,9 @@ import pathlib
 import uuid
 
 
-opciones_grupo_scopus_aux=[]
-scopus_productos['nombre_grupo'].dropna().str.split(';').apply(lambda x: opciones_grupo_scopus_aux.extend(x)) #variable para opciones del filtro de grupo
-opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus_aux[:]))))
+#opciones_grupo_scopus_aux=[]
+#scopus_productos['nombre_grupo'].dropna().str.split(';').apply(lambda x: opciones_grupo_scopus_aux.extend(x)) #variable para opciones del filtro de grupo
+#opciones_grupo_scopus=list(map(str.strip, list(set(opciones_grupo_scopus_aux[:]))))
 
 elementos_scopus_general=elementos_scopus_lista[:]
 if 'Todos' in elementos_scopus_general:
@@ -457,7 +455,7 @@ def tree_topic_element_scopus(data, elemento): #sólo para aquellos elementos co
     warnings.filterwarnings(action='default', category=FutureWarning)##################
     return fig
 
-def collaboraton_network(grupo_nombre):
+def collaboration_network(grupo_nombre):
     def net_break(x):
         xlen=len(x)
         if xlen==2:
@@ -485,7 +483,7 @@ def collaboraton_network(grupo_nombre):
     net['from']=net['from'].str.wrap(20,break_long_words=False).copy()
     net['to']=net['to'].str.wrap(20,break_long_words=False).copy()
     if net.shape[0]<1:
-        network_image='None'
+        network_image='None.png'
         return network_image
     ##net=net[(net['from']==grupo) | (net['to']==grupo)]
     #df = pd.DataFrame({ 'from':['DDDDDDDDDDDDDDDDDDDDD\nDDDDDDDDDDDDDDDDDDDDDD', 'A', 'B', 'C','A'], 'to':['A', 'DDDDDDDDDDDDDDDDDDDDD\nDDDDDDDDDDDDDDDDDDDDDD', 'A', 'E','C'], 'weight':['1', '5', '8', '3','20']})
@@ -495,10 +493,10 @@ def collaboraton_network(grupo_nombre):
     fig=plt.figure(figsize=(13,7))
     #pos = nx.shell_layout(G)
     pos=nx.spring_layout(G)
-    pos_nodes = nudge(pos, 0, 0.15)
+    pos_nodes = nudge(pos, 0, 0.1)
     nx.draw_networkx_nodes(G,pos,
                            nodelist=nodelist,
-                           node_size=1000,
+                           node_size=900,
                            node_color='black',
                            alpha=0.7)
     nx.draw_networkx_edges(G,pos,
@@ -517,7 +515,7 @@ def collaboraton_network(grupo_nombre):
     l,r = plt.xlim()
     b,t = plt.ylim()
     plt.xlim(l-0.07,r+0.07)
-    plt.ylim(b,t+0.1)
+    plt.ylim(b,t+0.13)
     plt.close(fig)
     path = pathlib.Path('./assets/img/').resolve() # Figures out the absolute path for you in case your working directory moves around.
     network_image = str(uuid.uuid4())+".PNG"
@@ -893,9 +891,9 @@ def callback_value(parameter, state, disable_value, value):
     Output('msj_alert_individual_scopus','children'),Output('fade-alert-individual-scopus','is_open'),
     ],
     [State('filter_group_scopus', 'value'), State('filter_element_scopus', 'value'),
-    Input('button_scopus_filter_indiv','n_clicks'),State('image_network_path', 'src')]
+    Input('button_scopus_filter_indiv','n_clicks')]
  )
-def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
+def callback_filter_individual_scopus(grupo, elemento, boton):
     kpi_all_scopus = {'display':'none'}
     indicators_group_scopus = ''
     products_element_group_scopus = ''    
@@ -934,8 +932,8 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     indicators_group_scopus = 'Grupo: '+grupo
     products_element_group_scopus ='Indicadores analizados para: '+elemento
     data = filtro_scopus_elemento_individual(grupo,elemento) #corroborar
-    url_red = './assets/img/'+str(collaboraton_network(grupo))
-    if url_red=='./assets/img/None':
+    url_red = './assets/img/'+str(collaboration_network(grupo))
+    if url_red=='./assets/img/None.png':
         dash_individual_scopus_graph6=html.Img(src='./assets/img/None.png', id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
         div_scopus_figure6 = {'display':'block', 'height':'40vh','width':'40vw','marginTop':'8px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
     else:
@@ -1149,14 +1147,16 @@ def callback_filter_general(parametro, valor, elemento, boton):
     return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
 
 @callback(
-     Output('title_individual_scopus_graph6', 'children'),
-     Input('image_network_path', 'src'))
-def remove_image_network(image_url):
+    Output('title_individual_scopus_graph6', 'children'),
+    [Input('button_scopus_filter_indiv','n_clicks'),State('image_network_path', 'src')])
+def remove_image_network(boton,image_url):
     print(image_url)
     try:
         if image_url != './assets/img/init.png':
             if image_url != './assets/img/None.png':
-                os.remove(image_url)
-    except:
+                #os.remove(image_url)
+                pass
+    except Exception as e:
+        print('error en remove_image_network: ',e)
         pass
-    return no_update
+    return 'Red de colaboración'

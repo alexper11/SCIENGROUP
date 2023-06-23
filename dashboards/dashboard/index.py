@@ -78,7 +78,7 @@ app.layout = html.Div([
        id='footer',
        className='footer'
     ),
-    dcc.Location(id='url', refresh=False),     
+    dcc.Location(id='url', refresh='callback-nav'),     
 ], className='grid-container')
 
 #-----------------------------------Callbacks ---------------------------------
@@ -108,4 +108,4 @@ def loadpage(path_route):
         return page404.layout
 
 if __name__ == '__main__':
-    app.run_server(host='localhost', port=8051,debug=True)
+    app.run_server(host='0.0.0.0', port=8051,debug=True)
