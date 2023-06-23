@@ -988,14 +988,14 @@ sidebar_gruplac = html.Div([
         html.H5("Elemento:",className="text_filter"),
         option_element_gruplac_general,
         html.Button('Filtrar', id='button_group_filter_group', n_clicks=0),
-    ],id="filtro_general"),        
+    ],id="filtro_general", hidden=True),        
 ],id="menu_filter_flex",className="dash-sidebar-graph",style={'background-color':'#08469b'},    
 )
 
 #  ---------------------callback---------------
 @callback(
     [Output('filtro_individual', 'hidden'),Output('filtro_general', 'hidden')],
-    Input('tabs_filter_scienti', 'value'))
+    Input('tabs_filter_scienti', 'value') , prevent_initial_call=True)
 def render_content(tab):
     if tab == 'tab_individual':
         return False, True
@@ -1065,7 +1065,7 @@ def callback_value(parameter, state, disable_value, value):
     ],
     [State('filter_group', 'value'), State('filter_element_gruplac', 'value'),
     Input('button_group_filter_indiv','n_clicks')]
- )
+  , prevent_initial_call=True)
 def callback_filter_individual(grupo, elemento, boton):
     kpi_all = {'display':'none'}
     indicators_group = ''
@@ -1195,7 +1195,7 @@ def callback_filter_individual(grupo, elemento, boton):
     ],
     [State('filter_parameter', 'value'), State('filter_value', 'value'), State('filter_element_gruplac_general', 'value'),
     Input('button_group_filter_group','n_clicks')]
- )
+  , prevent_initial_call=True)
 def callback_filter_general(parametro, valor, elemento, boton):
     dash_general_graph1 = {}
     dash_general_graph2 = {}
