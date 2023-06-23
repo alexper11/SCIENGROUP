@@ -8,6 +8,7 @@ import re
 
 
 from dash import no_update
+from dash.exceptions import PreventUpdate
 
 # Dash Bootstrap Components
 import dash_bootstrap_components as dbc
@@ -519,7 +520,7 @@ def collaboraton_network(grupo_nombre):
     plt.xlim(l-0.07,r+0.07)
     plt.ylim(b,t+0.1)
     plt.close(fig)
-    path = pathlib.Path('./assets/img/').resolve() # Figures out the absolute path for you in case your working directory moves around.
+    path = pathlib.Path('./assets/img/network_temp/').resolve() # Figures out the absolute path for you in case your working directory moves around.
     network_image = str(uuid.uuid4())+".PNG"
     fig.savefig(os.path.join(path, network_image), bbox_inches='tight', pad_inches=0.0)  #DEFINIR DIRECTORIO
     return network_image
@@ -817,14 +818,14 @@ sidebar_scopus = html.Div([
         html.H5("Elemento:",className="text_filter_scopus"),
         option_element_scopus_general,
         html.Button('Filtrar', id='button_scopus_filter_group', n_clicks=0),
-    ],id="filtro_general_scopus"),        
+    ],id="filtro_general_scopus", hidden=True),        
 ],id="menu_filter_flex_scopus",className="dash-sidebar-graph",style={'background-color':'#A8AAAC'},    
 )
 
 #  ---------------------callback---------------
 @callback(
     [Output('filtro_individual_scopus', 'hidden'),Output('filtro_general_scopus', 'hidden')],
-    Input('tabs_filter_scopus', 'value'))
+    Input('tabs_filter_scopus', 'value'), prevent_initial_call=True)
 def render_content(tab):
     if tab == 'tab_individual':
         return False, True
@@ -894,7 +895,7 @@ def callback_value(parameter, state, disable_value, value):
     ],
     [State('filter_group_scopus', 'value'), State('filter_element_scopus', 'value'),
     Input('button_scopus_filter_indiv','n_clicks'),State('image_network_path', 'src')]
- )
+ , prevent_initial_call=True)
 def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     kpi_all_scopus = {'display':'none'}
     indicators_group_scopus = ''
@@ -934,8 +935,8 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     indicators_group_scopus = 'Grupo: '+grupo
     products_element_group_scopus ='Indicadores analizados para: '+elemento
     data = filtro_scopus_elemento_individual(grupo,elemento) #corroborar
-    url_red = './assets/img/'+str(collaboraton_network(grupo))
-    if url_red=='./assets/img/None':
+    url_red = './assets/img/network_temp/'+str(collaboraton_network(grupo))    
+    if url_red=='./assets/img/network_temp/None':
         dash_individual_scopus_graph6=html.Img(src='./assets/img/None.png', id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
         div_scopus_figure6 = {'display':'block', 'height':'40vh','width':'40vw','marginTop':'8px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
     else:
@@ -1035,7 +1036,7 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
     ],
     [State('filter_parameter_scopus', 'value'), State('filter_value_scopus', 'value'), State('filter_element_scopus_general', 'value'),
     Input('button_scopus_filter_group','n_clicks')]
- )
+ , prevent_initial_call=True)
 def callback_filter_general(parametro, valor, elemento, boton):
     dash_general_scopus_graph1 = {}
     dash_general_scopus_graph2 = {}
@@ -1148,15 +1149,15 @@ def callback_filter_general(parametro, valor, elemento, boton):
               
     return dash_general_scopus_graph1,div_general_scopus_figure1, dash_general_scopus_graph2, div_general_scopus_figure2, dash_general_scopus_graph3,div_general_scopus_figure3, dash_general_scopus_graph4, div_general_scopus_figure4, dash_general_scopus_graph5, div_general_scopus_figure5, dash_general_scopus_graph6, div_general_scopus_figure6,titulo_general_scopus1,titulo_general_scopus2,titulo_general_scopus3,titulo_general_scopus4,titulo_general_scopus5,titulo_general_scopus6, msj_alert_general_scopus, fade_alert_general_scopus
 
-@callback(
-     Output('title_individual_scopus_graph6', 'children'),
-     Input('image_network_path', 'src'))
-def remove_image_network(image_url):
-    print(image_url)
-    try:
-        if image_url != './assets/img/init.png':
-            if image_url != './assets/img/None.png':
-                os.remove(image_url)
-    except:
-        pass
-    return no_update
+# @callback(
+#      Output('title_individual_scopus_graph6', 'children'),
+#      Input('image_network_path', 'src'))
+# def remove_image_network(image_url):
+#     print(image_url)
+#     try:
+#         if image_url != './assets/img/init.png':
+#             if image_url != './assets/img/None.png':
+#                 os.remove(image_url)
+#     except:
+#         pass
+#     return no_update
