@@ -773,23 +773,28 @@ def boxplot_general_element_scopus(data,codigos,elemento):
 option_group_scopus = dcc.Dropdown(
         id='filter_group_scopus',
         options = opciones_grupo_scopus,
+        placeholder='Elija una opción',
         value = None  # Valor inicial seleccionado
     )
 option_element_scopus = dcc.Dropdown(
         id='filter_element_scopus',
         options = [],
+        placeholder='Grupo Requerido',
+        clearable = False,
         disabled=True,
         value = None  # Valor inicial seleccionado
     )
 option_parameter_scopus = dcc.Dropdown(
         id='filter_parameter_scopus',
         options = opciones_parametro_general,
+        placeholder='Elija una opción',
         value = None  # Valor inicial seleccionado
     )
 option_value_scopus = dcc.Dropdown(
         id='filter_value_scopus',
         options = [],
         value = [],  # Valor inicial seleccionado
+        placeholder='Elija una opción',
         disabled= True,
         multi=True
     )
@@ -797,7 +802,9 @@ option_element_scopus_general = dcc.Dropdown(
         id='filter_element_scopus_general',
         options = options_general_element_scopus,        
         value = None,  # Valor inicial seleccionado
+        placeholder='Valor Requerido',
         disabled=True,
+        clearable = False,
         maxHeight=160
         # style = {"bottom": "100%", "transform": "translateY(-100%)"}
     )
@@ -813,18 +820,18 @@ sidebar_scopus = html.Div([
         dcc.Tab(label='General', value='tab_general'),
     ]),       
     html.Div([
-        html.H5("Grupo:",className="text_filter_scopus"),
+        html.H5("Elija un grupo de investigación:",className="text_filter_scopus"),
         option_group_scopus,
-        html.H5("Elemento:",className="text_filter_scopus"),
+        html.H5("Elija el tipo de producto:",className="text_filter_scopus"),
         option_element_scopus,
         html.Button('Filtrar', id='button_scopus_filter_indiv', n_clicks=0),
     ],id="filtro_individual_scopus"),
     html.Div([
-        html.H5("Parametro:",className="text_filter_scopus"),
+        html.H5("Filtrar grupos por:",className="text_filter_scopus"),
         option_parameter_scopus,
-        html.H5("Valor:",className="text_filter_scopus"),
+        html.H5("Ingrese el valor:",className="text_filter_scopus"),
         option_value_scopus,
-        html.H5("Elemento:",className="text_filter_scopus"),
+        html.H5("Elija el tipo de producto:",className="text_filter_scopus"),
         option_element_scopus_general,
         html.Button('Filtrar', id='button_scopus_filter_group', n_clicks=0),
     ],id="filtro_general_scopus", hidden=True),        
@@ -969,7 +976,7 @@ def callback_filter_individual_scopus(grupo, elemento, boton, image_url):
         dash_individual_scopus_graph4.update_layout(title={'text':None})
         url_red = './assets/img/network_temp/'+str(collaboration_network(grupo))    
         if url_red=='./assets/img/network_temp/None':
-            dash_individual_scopus_graph6=html.Img(src='./assets/img/None.png', id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
+            dash_individual_scopus_graph6=html.Img(src='./assets/img/None.png', id='image_network_path',style={'width':'auto', "height":'90%', 'object-fit': 'contain', 'cursor': 'zoom-in'})
             div_scopus_figure6 = {'display':'block', 'height':'40vh','width':'40vw','marginTop':'3vh','paddingTop':'5px','marginLeft':'auto','marginRight':'auto', 'marginBottom':'7px','textAlign':'center'}
         else:
             dash_individual_scopus_graph6 = html.Img(src=url_red, id='image_network_path',style={'width':'auto', "height":'95%', 'object-fit': 'contain', 'cursor': 'zoom-in'})

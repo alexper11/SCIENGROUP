@@ -935,23 +935,28 @@ def get_fig_title(fig):
 option_group = dcc.Dropdown(
         id='filter_group',
         options = opciones_grupo,
+        placeholder='Elija una opción',
         value = None  # Valor inicial seleccionado
     )
 option_element = dcc.Dropdown(
         id='filter_element_gruplac',
         options = [],
+        placeholder='Grupo Requerido',
         disabled=True,
+        clearable = False,
         value = None  # Valor inicial seleccionado
     )
 option_parameter = dcc.Dropdown(
         id='filter_parameter',
         options = opciones_parametro_general,
+        placeholder='Elija una opción',
         value = None  # Valor inicial seleccionado
     )
 option_value = dcc.Dropdown(
         id='filter_value',
         options = [],
         value = [],  # Valor inicial seleccionado
+        placeholder='Elija una opción',
         disabled= True,
         multi=True
     )
@@ -959,7 +964,9 @@ option_element_gruplac_general = dcc.Dropdown(
         id='filter_element_gruplac_general',
         options = options_general_element,        
         value = None,  # Valor inicial seleccionado
+        placeholder='Valor requerido',
         disabled=True,
+        clearable = False,
         maxHeight=160
         # style = {"bottom": "100%", "transform": "translateY(-100%)"}
     )
@@ -974,18 +981,18 @@ sidebar_gruplac = html.Div([
         dcc.Tab(label='General', value='tab_general'),
     ]),       
     html.Div([
-        html.H5("Grupo:",className="text_filter"),
+        html.H5("Elija un grupo de investigación:",className="text_filter"),
         option_group,
-        html.H5("Elemento:",className="text_filter"),
+        html.H5("Elija el tipo de producto:",className="text_filter"),
         option_element,
         html.Button('Filtrar', id='button_group_filter_indiv', n_clicks=0),
     ],id="filtro_individual"),
     html.Div([
-        html.H5("Parametro:",className="text_filter"),
+        html.H5("Filtrar grupos por:",className="text_filter"),
         option_parameter,
-        html.H5("Valor:",className="text_filter"),
+        html.H5("Ingrese el valor:",className="text_filter"),
         option_value,
-        html.H5("Elemento:",className="text_filter"),
+        html.H5("Elija el tipo de producto:",className="text_filter"),
         option_element_gruplac_general,
         html.Button('Filtrar', id='button_group_filter_group', n_clicks=0),
     ],id="filtro_general", hidden=True),        
