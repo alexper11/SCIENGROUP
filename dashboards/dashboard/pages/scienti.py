@@ -69,7 +69,7 @@ def render_content(tab):
                         html.Div([html.H1("Consistencia", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi-1',className='badge')], className='score-card'),
                         html.Div([html.H1("PPA", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi-2',className='badge')], className='score-card'),
                         html.Div([html.H1("PPUA", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi-3',className='badge')], className='score-card'),
-                        html.Div([html.H1("PG", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi-4',className='badge')], className='score-card'),
+                        html.Div([html.H1("Productos Generados", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi-4',className='badge')], className='score-card'),
                         html.Div([html.H1("Autores", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi-5',className='badge')], className='score-card'),
                     ],className='card-score-targets'),
                     html.H1(html.Span(dcc.Link("Abrir enlace del grupo en GrupLac", href="", id="url_group_grouplac",target="_blank", className="group_graph_url", style={"color":"#1970eb"}))),

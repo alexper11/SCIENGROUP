@@ -8,7 +8,8 @@ layout = html.Div(
         'background-image': 'url(/assets/img/home.png)',
         'background-size': 'contain',
         'background-repeat': 'no-repeat',
-        'background-position': 'center',
+        'background-position': 'center center',
+        'background-origin': 'content-box',
         'height': '100vh'
     },
     children=[

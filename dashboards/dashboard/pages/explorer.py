@@ -78,17 +78,17 @@ def actualizar_fuente_seleccionada(fuente):
 )
 def actualizar_elemento_seleccionado(elemento, fuente): 
     if elemento == None:
-        div_component= [html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
+        div_component= [html.H5("Elija una característica a filtrar:",className="title_white",style={"color":"white"}),
         html.Div(
             dcc.Dropdown(
                 id='filter_feature',
                 options = [],
                 disabled =True,
                 value = None,
-                placeholder='Elemento Requerido'
+                placeholder='Tipo Requerido'
             ),
         id='div_feature'),
-        html.H5("Entrada:",className="title_white",style={"color":"white"}),
+        html.H5("Ingrese el valor de la característica:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
                 id='filter_inputs',
@@ -100,15 +100,16 @@ def actualizar_elemento_seleccionado(elemento, fuente):
             id='div_input')]
     else:
         opciones_caracteristica=filtrar_elemento(elemento, fuente,'option')
-        div_component = [html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
+        div_component = [html.H5("Elija una característica a filtrar:",className="title_white",style={"color":"white"}),
         html.Div(
             dcc.Dropdown(
                 id='filter_feature',
+                placeholder='Elija una característica',
                 options = opciones_caracteristica,
                 value = None,             
             ),
         id='div_feature'),
-        html.H5("Entrada:",className="title_white",style={"color":"white"}),
+        html.H5("Ingrese el valor de la característica:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
                 id='filter_inputs',
@@ -131,9 +132,9 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
         valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
     
     if type(valor_entrada) == str:
-        filter =  dcc.Input(id='filter_inputs', placeholder='', type='text', value='')
+        filter =  dcc.Input(id='filter_inputs', placeholder='Ingrese el valor', type='text', value='')
     elif type(valor_entrada) == list:
-        filter = dcc.Dropdown(id="filter_inputs", options= opciones_entrada, multi=True, optionHeight=45)#,maxHeight=100)
+        filter = dcc.Dropdown(id="filter_inputs", placeholder='Elija el valor', options= opciones_entrada, multi=True, optionHeight=45)#,maxHeight=100)
     elif type(valor_entrada) == tuple:
         #year_today = date.today().year
         option_drop = list(range(1975,date.today().year+1))

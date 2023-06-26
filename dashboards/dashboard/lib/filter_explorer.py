@@ -155,10 +155,11 @@ option_source = dcc.Dropdown(
 )
 option_element = dcc.Dropdown(
     id='filter_element',
+    placeholder='Elija un tipo',
     options = [],
     value = None  # Valor inicial seleccionado
 )
-component_filters= html.Div(children=[html.H5("Caracteristica:",className="title_white",style={"color":"white"}),
+component_filters= html.Div(children=[html.H5("Elija una característica:",className="title_white",style={"color":"white"}),
         html.Div(
             dcc.Dropdown(
                 id='filter_feature',
@@ -167,7 +168,7 @@ component_filters= html.Div(children=[html.H5("Caracteristica:",className="title
                 value = None
             ),
         id='div_feature'),
-        html.H5("Entrada:",className="title_white",style={"color":"white"}),
+        html.H5("Ingrese el valor de la característica:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
                 id='filter_inputs',
@@ -183,14 +184,14 @@ id='component_filters')
 #############################################################################
 sidebar_explorer = html.Div(
     [
-        html.P("Filtros para explorar los datos.",style={"color":"white"} ),   
+        html.H2("Filtro para la exploración de los datos a analizar",style={"color":"white","text-align":"center"} ),   
         html.Hr(),  
         ####################################################
         # Layout static here
         ####################################################
-        html.H5("Fuente:",className="title_white",style={"color":"white"}),
+        html.H5("Elija la fuente de los datos:",className="title_white",style={"color":"white"}),
         option_source,
-        html.H5("Elemento:",className="title_white",style={"color":"white"}),
+        html.H5("Elija el tipo de producción científica:",className="title_white",style={"color":"white"}),
         option_element,
         ####################################################
         # Layout dynamic here
