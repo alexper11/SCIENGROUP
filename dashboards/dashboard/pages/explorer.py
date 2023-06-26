@@ -129,8 +129,10 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
     if (elemento == None) or (caracteristica == None):
         valor_entrada = None
     else:
-        valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
-    
+        try:
+            valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
+        except KeyError:
+            valor_entrada = None
     if type(valor_entrada) == str:
         filter =  dcc.Input(id='filter_inputs', placeholder='Ingrese el valor', type='text', value='')
     elif type(valor_entrada) == list:
