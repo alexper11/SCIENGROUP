@@ -46,7 +46,7 @@ header button {
   background-color: transparent;
 }
 #button_state {
-  background-color: #d2d1dd;
+  background-color: #7c72eb;
   padding: 10px 20px;
   justify-content: center;
   align-items: center;
@@ -54,7 +54,7 @@ header button {
 }
 
 #button_state:active {
-  background-color: #526ad3;
+  background-color: #9bd352;
 }
 
 header img {
@@ -205,13 +205,13 @@ button.small {
 .asideMenu {
   position: absolute;
   height: 100vh;
-  width: 90vh;
+  width: 70vh;
   background-color: #51647e;
   overflow-y: scroll;
   scroll-behavior: smooth;
   right: 0;
   top: 100%;
-  transform: translateX(90vh);
+  transform: translateX(70vh);
   transition: all 0.5s ease-in-out;
 }
 
