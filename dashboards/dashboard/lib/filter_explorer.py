@@ -184,14 +184,14 @@ id='component_filters')
 #############################################################################
 sidebar_explorer = html.Div(
     [
-        html.H2("Filtro para la exploración de los datos a analizar",style={"color":"white","text-align":"center"} ),   
+        html.H2("Filtro para la exploración de los datos",style={"color":"white","text-align":"center"} ),   
         html.Hr(),  
         ####################################################
         # Layout static here
         ####################################################
         html.H5("Elija la fuente de los datos:",className="title_white",style={"color":"white"}),
         option_source,
-        html.H5("Elija el tipo de producción científica:",className="title_white",style={"color":"white"}),
+        html.H5("Elija el tipo de producto:",className="title_white",style={"color":"white"}),
         option_element,
         ####################################################
         # Layout dynamic here

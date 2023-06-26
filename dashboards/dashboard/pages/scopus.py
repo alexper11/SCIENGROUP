@@ -72,7 +72,7 @@ def render_content(tab):
                         html.Div([html.H1("Autores", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_3',className='badge')], className='score-card'),
                         html.Div([html.H1("Conteo Productos", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_4',className='badge')], className='score-card'),
                         html.Div([html.H1("Conteo Citaciones", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_5',className='badge')], className='score-card'),
-                        html.Div([html.H1("CO", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_6',className='badge')], className='score-card'),
+                        html.Div([html.H1("Citaciones por Producto", style={'fontSize':'1.3rem'}),html.P(children='0', id='kpi_scopus_6',className='badge')], className='score-card'),
                     ],className='card-score-targets'),                  
                 ],id="kpi_all_scopus" ,className='card-score-container', style={'display':'none'}),
                 #Charts or Graphs
