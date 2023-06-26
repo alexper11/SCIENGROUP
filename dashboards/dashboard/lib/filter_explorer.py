@@ -129,7 +129,7 @@ def filtrar_entrada(entrada,caracteristica,elemento,fuente):
         data=data.replace(to_replace={'\(':'','\)':''},regex=True)
         #grupos=dataset[dataset[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(entrada)]['idgruplac'].drop_duplicates(keep='first').to_list()
         data=data.dropna(subset=caracteristicas_invertido[caracteristica])
-        data=data[data[caracteristicas_invertido[caracteristica]].str.contains(entrada)]
+        data=data[data[caracteristicas_invertido[caracteristica]].str.contains(entrada,case=False)]
     
     else:
         data = data.dropna(subset=caracteristicas_invertido[caracteristica])

@@ -129,8 +129,10 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
     if (elemento == None) or (caracteristica == None):
         valor_entrada = None
     else:
-        valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
-    
+        try:
+            valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
+        except KeyError:
+            valor_entrada = None
     if type(valor_entrada) == str:
         filter =  dcc.Input(id='filter_inputs', placeholder='Ingrese el valor', type='text', value='')
     elif type(valor_entrada) == list:
@@ -138,7 +140,7 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
     elif type(valor_entrada) == tuple:
         #year_today = date.today().year
         option_drop = list(range(1975,date.today().year+1))
-        print('drop: ',option_drop)   
+        #print('drop: ',option_drop)   
         #filter = dbc.Input(id="date_start", type="number", min=1975, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_inputs', style={'display': 'none'})
         filter = dcc.Dropdown(id="date_start", placeholder='Año inicial', options = option_drop, value=None), dcc.Dropdown(id="date_end", options= [],disabled = True, placeholder='Año final', value= None), dcc.Input(id='filter_inputs', style={'display': 'none'})
 
@@ -196,7 +198,7 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         data = filtrar_elemento(elemento,fuente,'data')
     else:
         data=pd.DataFrame()
-    print(data.shape[0])
+    print('data shape',data.shape[0])
     if data.shape[0]>=1:
         data=globals()[str(referencias[fuente][elemento])].copy().loc[list(data.index)].astype(str).fillna('No Aplica')
         if fuente=='SCOPUS':
