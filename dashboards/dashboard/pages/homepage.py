@@ -4,18 +4,18 @@ from dash import dcc
 #Homepage layout with the cards of modules
 
 layout = html.Div(
-    style={
-        'background-image': 'url(/assets/img/home.png)',
-        'background-size': 'contain',
-        'background-repeat': 'no-repeat',
-        'background-position': 'center center',
-        'background-origin': 'content-box',
-        'height': '100vh'
-    },
+    # style={
+    #     'background-image': 'url(/assets/img/home.png)',
+    #     'background-size': 'contain',
+    #     'background-repeat': 'no-repeat',
+    #     'background-position': 'center center',
+    #     'background-origin': 'content-box',
+    #     'height': '100vh'
+    # },
     children=[
         html.Div(
             style={
-                'background-color': 'rgba(255, 255, 255, 0.8)',
+                'background-color': 'rgba(255, 255, 255, 0.9)',
                 'padding': '3em',
                 'border-radius': '1em',
                 'margin': '5vh auto',
@@ -31,8 +31,8 @@ layout = html.Div(
                     }
                 ),
                 html.P([
-                    'Este dashboard es una herramienta muy útil que permite presentar y analizar métricas clave, como el número de publicaciones, citas, índices de impacto, colaboraciones, etc. Permite Visualización clara de los datos, Fácil identificación de áreas de mejora, Seguimiento del progreso a lo largo del tiempo, Identificación de oportunidades de colaboración. Este dashboard es una herramienta muy útil que permite presentar y analizar métricas clave,como el número de publicaciones, citas, índices de impacto, colaboraciones, etc. Permite Visualización clara de los datos, Fácil identificación de áreas de mejora, Seguimiento del progreso a lo largo del tiempo, Identificación de oportunidades de colaboración. Este dashboard es una herramienta muy útil que permite presentar y analizar métricas clave,como el número de publicaciones, citas, índices de impacto, colaboraciones, etc. Permite Visualización clara de los datos, Fácil identificación de áreas de mejora, Seguimiento del progreso a lo largo del tiempo, Identificación de oportunidades de colaboración ',
-                    'Ecosistema de Ciencia, Tecnología e Innovación del Cauca” reúnen actores del SRCTI del Cauca para aportar valor a la sociedad a partir del conocimiento'],
+                    'Esta herramienta es un Dashboard para el análisis y visualización de datos bibliográficos de la producción científica de los grupos de investigación en el departamento del Cauca. Contiene una sección para la exploración de datos previamente obtenidos por medio de dos sistemas de extracción para las plataformas CvLAC y GrupLAC pertenecientes a ScienTI Colombia, y para la plataforma Scopus perteneciente a Elsevier.Se integra dos secciones para el análisis y visualización de los datos provenientes de GrupLAC y Scopus. El dashboard está desarrollado para en el contexto del trabajo de grado llamado “Dashboard para el análisis y visualización bibliométrica dentro del ámbito de los grupos de investigación en el departamento del Cauca” . ',
+                    'Los usuarios sugeridos son los actores del SRCTI del Cauca, pertenecientes al Ecosistema de Ciencia, Tecnología e Innovación del Cauca, los cuales se muestran a continuación:'],
                     style={
                         'color': 'black',
                         'font-size': '1.3em',
