@@ -174,7 +174,7 @@ def filter_inputs_contructor(inicial, final):
             State('filter_fuente', 'value'),
             State('filter_element', 'value'),
             State('filter_feature', 'value'),
-            State('filter_inputs','value')])
+            State('filter_inputs','value')], prevent_initial_call=True)
 def display(boton,fuente, elemento, caracteristica, entrada):
     try:
         if (entrada != None) and (entrada!=''):
