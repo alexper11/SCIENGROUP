@@ -1128,8 +1128,13 @@ def callback_filter_general(parametro, valor, elemento, boton):
         titulo_general_scopus6 = get_fig_title(dash_general_scopus_graph6)
         dash_general_scopus_graph6.update_layout(title={'text':None})
         div_general_scopus_figure1 = {'display':'block', 'height':'83vh', 'maxHeight':'85vh','marginTop':'5px','paddingBottom':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
-        wdg2=str(len(grupos_codigos_scopus)*7.5)+'vw'
-        div_general_scopus_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'40vw','width':wdg2, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'7px'}
+        #wdg2=str(len(grupos_codigos_scopus)*7.5)+'vw'
+        wdg2=len(grupos_codigos)
+        if wdg2 >= 5:
+            widthdiv='80vw'
+        else:
+            widthdiv='50vw'
+        div_general_scopus_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'50vw','width':widthdiv, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'7px'}
         div_general_scopus_figure3 = {'display':'inline-block', 'height':'82vh','maxHeight':'83vh', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_scopus_figure4 = {'display':'inline-block', 'height':'82vh','maxHeight':'83vh', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_scopus_figure5 = {'display':'block', 'height':'82vh','maxHeight':'85vh', 'marginTop':'8px', 'marginBottom':'8px'}
@@ -1156,8 +1161,13 @@ def callback_filter_general(parametro, valor, elemento, boton):
         dash_general_scopus_graph2 = bar_general_element_scopus(data, grupos_codigos_scopus,elemento)
         titulo_general_scopus2 = get_fig_title(dash_general_scopus_graph2)
         dash_general_scopus_graph2.update_layout(title={'text':None})
-        wdg2=str(len(grupos_codigos_scopus)*7)+'vw'
-        div_general_scopus_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto', 'minWidth':'40vw','width':wdg2, 'height':'81vh','maxHeight':'90vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'8px'}
+        #wdg2=str(len(grupos_codigos_scopus)*7)+'vw'
+        wdg2=len(grupos_codigos)
+        if wdg2 >= 5:
+            widthdiv='80vw'
+        else:
+            widthdiv='50vw'
+        div_general_scopus_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto', 'minWidth':'50vw','width':widthdiv, 'height':'81vh','maxHeight':'90vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'8px'}
         dash_general_scopus_graph3 = radar_general_all(df_indicadores,elemento)
         titulo_general_scopus3 = get_fig_title(dash_general_scopus_graph3)
         dash_general_scopus_graph3.update_layout(title={'text':None})

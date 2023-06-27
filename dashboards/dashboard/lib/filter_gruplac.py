@@ -1277,8 +1277,13 @@ def callback_filter_general(parametro, valor, elemento, boton):
         titulo_general6 = get_fig_title(dash_general_graph6)
         dash_general_graph6.update_layout(title={'text':None})
         div_general_figure1 = {'display':'block', 'height':'83vh', 'maxHeight':'85vh','marginTop':'5px','paddingBottom':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
-        wdg2=str(len(grupos_codigos)*7.8)+'vw'
-        div_general_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'40vw','width':wdg2, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'7px'}
+        #wdg2=str(len(grupos_codigos)*7.8)+'vw'
+        wdg2=len(grupos_codigos)
+        if wdg2 >= 5:
+            widthdiv='80vw'
+        else:
+            widthdiv='50vw'
+        div_general_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'50vw','width':widthdiv, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'7px'}
         div_general_figure3 = {'display':'inline-block', 'maxHeight':'max-content', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_figure4 = {'display':'inline-block', 'maxHeight':'max-content', 'marginTop':'8px', 'marginBottom':'8px'}
         div_general_figure5 = {'display':'inline-block', 'maxHeight':'max-content', 'marginTop':'8px', 'marginBottom':'5vh'}
@@ -1306,8 +1311,13 @@ def callback_filter_general(parametro, valor, elemento, boton):
         dash_general_graph2 = bar_general_element(data,elemento)
         titulo_general2 = get_fig_title(dash_general_graph2)
         dash_general_graph2.update_layout(title={'text':None})
-        wdg2=str(len(grupos_codigos)*7)+'vw'
-        div_general_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto', 'minWidth':'40vw','width':wdg2, 'height':'81vh','maxHeight':'90vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'8px'}
+        #wdg2=str(len(grupos_codigos)*7)+'vw'
+        wdg2=len(grupos_codigos)
+        if wdg2 >= 5:
+            widthdiv='80vw'
+        else:
+            widthdiv='50vw'
+        div_general_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto', 'minWidth':'50vw','width':widthdiv, 'height':'81vh','maxHeight':'90vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'8px'}
         dash_general_graph3 = bar_consistencia(df_indicadores,grupos_nombres,elemento)
         titulo_general3 = get_fig_title(dash_general_graph3)
         dash_general_graph3.update_layout(title={'text':None})
