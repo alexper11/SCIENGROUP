@@ -129,13 +129,16 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
     if (elemento == None) or (caracteristica == None):
         valor_entrada = None
     else:
-        valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
-    
+        try:
+            valor_entrada, opciones_entrada=filtrar_caracteristica(caracteristica,elemento,fuente)
+        except KeyError:
+            valor_entrada = None
     if type(valor_entrada) == str:
         filter =  dcc.Input(id='filter_inputs', placeholder='Ingrese el valor', type='text', value='')
     elif type(valor_entrada) == list:
         filter = dcc.Dropdown(id="filter_inputs", placeholder='Elija el valor', options= opciones_entrada, multi=True, optionHeight=45)#,maxHeight=100)
     elif type(valor_entrada) == tuple:
+<<<<<<< HEAD
         if caracteristica == 'Citaciones':
             #year_today = date.today().year
             #option_drop = list(range(scopus_productos['citado'].astype('int64').min(),scopus_productos['citado'].astype('int64').max()))
@@ -151,6 +154,14 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
             filter = dcc.Dropdown(id="date_start", placeholder='Año inicial', options = option_drop, value=None), dcc.Dropdown(id="date_end", options= [],disabled = True, placeholder='Año final', value= None), dcc.Input(id='filter_inputs', style={'display': 'none'})
     elif (valor_entrada is None) and (caracteristica == 'Todos'):
         filter = dcc.Input(id='filter_inputs', placeholder='Todos', value='', disabled=True)
+=======
+        #year_today = date.today().year
+        option_drop = list(range(1975,date.today().year+1))
+        #print('drop: ',option_drop)   
+        #filter = dbc.Input(id="date_start", type="number", min=1975, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_inputs', style={'display': 'none'})
+        filter = dcc.Dropdown(id="date_start", placeholder='Año inicial', options = option_drop, value=None), dcc.Dropdown(id="date_end", options= [],disabled = True, placeholder='Año final', value= None), dcc.Input(id='filter_inputs', style={'display': 'none'})
+
+>>>>>>> 1c7fa4d7f219dba6fb77a9ee14446da76b997c4d
     else:
         filter = dcc.Input(id='filter_inputs', placeholder='Característica Requerida', value='', disabled=True)
     return filter
@@ -195,7 +206,7 @@ def filter_inputs_contructor(inicial, final, caracteristica):
             State('filter_fuente', 'value'),
             State('filter_element', 'value'),
             State('filter_feature', 'value'),
-            State('filter_inputs','value')])
+            State('filter_inputs','value')], prevent_initial_call=True)
 def display(boton,fuente, elemento, caracteristica, entrada):
     try:
         if (entrada != None) and (entrada!=''):
@@ -220,7 +231,7 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         data = filtrar_elemento(elemento,fuente,'data')
     else:
         data=pd.DataFrame()
-    print(data.shape[0])
+    print('data shape',data.shape[0])
     if data.shape[0]>=1:
         data=globals()[str(referencias[fuente][elemento])].copy().loc[list(data.index)].astype(str).fillna('No Aplica')
         if fuente=='SCOPUS':

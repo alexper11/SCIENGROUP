@@ -46,15 +46,44 @@ header button {
   background-color: transparent;
 }
 #button_state {
-  background-color: #7c72eb;
+  background-color: #a5a4ac;
   padding: 10px 20px;
   justify-content: center;
   align-items: center;
-  transition:1s;
+  transition:0.1s;
+  display: grid;
+  margin-left: auto;
+  margin-right: auto;
+}
+#button_group_filter_indiv{
+  background-color: #a5a4ac;
+  padding: 10px 20px;
+  justify-content: center;
+  align-items: center;
+  transition:0.1s;
+  display: grid;
+  margin-left: auto;
+  margin-right: auto;
+}
+#button_scopus_filter_indiv{
+  background-color: #6f6a91;
+  padding: 10px 20px;
+  justify-content: center;
+  align-items: center;
+  transition:0.1s;
+  display: grid;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #button_state:active {
-  background-color: #9bd352;
+  background-color: #6b6b6d;
+}
+#button_group_filter_indiv:active {
+  background-color: #6b6b6d;
+}
+#button_scopus_filter_indiv:active {
+  background-color: #444447;
 }
 
 header img {
@@ -81,6 +110,9 @@ footer {
 }
 #tabs_filter_scienti--selected {
   background-color: #2846cc;
+}
+.tab--selected {
+  background-color: #aeafb4;
 }
 
 #div_gruplac{
