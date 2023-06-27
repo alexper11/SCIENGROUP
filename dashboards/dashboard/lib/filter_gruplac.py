@@ -78,7 +78,10 @@ def filtro_gruplac_parametro_general(parametro): #retorna opciones de valor gene
 
 def filtro_gruplac_valor_general(parametro,valor): #grupos es una lista de grupos
     
-    if parametro=='Ingreso Manual':
+    if 'Todos' in valor:
+        idgruplacs=gruplac_basico['idgruplac'].drop_duplicates(keep='first').to_list()
+    
+    elif parametro=='Ingreso Manual':
         idgruplacs=gruplac_basico[gruplac_basico['nombre'].isin(valor)]['idgruplac'].drop_duplicates(keep='first').to_list()
     
     elif parametro=='Clasificación':
@@ -685,9 +688,9 @@ def bar_ppa(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nomb
 def bar_ppua(indicadores,grupos, elemento):  #recibe df_indicadores y grupos_nombres
     df=indicadores.rename(columns={'idgruplac':'gruplac'})
     if elemento=='Todos':
-        title_label="PPUA Porcentaje de Productos en <br> los Ultimos Años (Todos)"
+        title_label="PPUA Porcentaje de Productos en los Ultimos Años (Todos)"
     else:
-        title_label="PPUA Porcentaje de Productos en <br> los Ultimos Años ("+elemento+")"
+        title_label="PPUA Porcentaje de Productos en los Ultimos Años ("+elemento+")"
     df['gruplac']=grupos
     locs=df[df['gruplac'].str.len()>65].index.tolist()
     locs_df=df['gruplac'].loc[locs].copy()
@@ -1029,7 +1032,7 @@ def callback_parameter(parametro):
     if parametro == None:
         return None, True, []
     else:
-        option_elements= filtro_gruplac_parametro_general(parametro)
+        option_elements= [*filtro_gruplac_parametro_general(parametro),'Todos'] ###############agrega todos
         return None, False, option_elements
     
 @callback(
