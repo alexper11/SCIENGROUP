@@ -1129,7 +1129,7 @@ def callback_filter_general(parametro, valor, elemento, boton):
         dash_general_scopus_graph6.update_layout(title={'text':None})
         div_general_scopus_figure1 = {'display':'block', 'height':'83vh', 'maxHeight':'85vh','marginTop':'5px','paddingBottom':'5px','paddingTop':'5px','marginLeft':'auto','marginRight':'auto','maxWidth':'80vw', 'marginBottom':'7px'}
         #wdg2=str(len(grupos_codigos_scopus)*7.5)+'vw'
-        wdg2=len(grupos_codigos)
+        wdg2=len(grupos_codigos_scopus)
         if wdg2 >= 5:
             widthdiv='80vw'
         else:
@@ -1162,7 +1162,7 @@ def callback_filter_general(parametro, valor, elemento, boton):
         titulo_general_scopus2 = get_fig_title(dash_general_scopus_graph2)
         dash_general_scopus_graph2.update_layout(title={'text':None})
         #wdg2=str(len(grupos_codigos_scopus)*7)+'vw'
-        wdg2=len(grupos_codigos)
+        wdg2=len(grupos_codigos_scopus)
         if wdg2 >= 5:
             widthdiv='80vw'
         else:
