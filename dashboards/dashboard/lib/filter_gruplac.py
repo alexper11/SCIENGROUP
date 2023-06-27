@@ -981,18 +981,18 @@ sidebar_gruplac = html.Div([
         dcc.Tab(label='General', value='tab_general'),
     ]),       
     html.Div([
-        html.H5("Elija un grupo de investigación:",className="text_filter"),
+        html.H4("Elija un grupo de investigación:",className="text_filter"),
         option_group,
-        html.H5("Elija el tipo de producto:",className="text_filter"),
+        html.H4("Elija el tipo de producto:",className="text_filter"),
         option_element,
         html.Button('Filtrar', id='button_group_filter_indiv', n_clicks=0),
     ],id="filtro_individual"),
     html.Div([
-        html.H5("Filtrar grupos por:",className="text_filter"),
+        html.H4("Filtrar grupos por:",className="text_filter"),
         option_parameter,
-        html.H5("Ingrese el valor:",className="text_filter"),
+        html.H4("Ingrese el valor:",className="text_filter"),
         option_value,
-        html.H5("Elija el tipo de producto:",className="text_filter"),
+        html.H4("Elija el tipo de producto:",className="text_filter"),
         option_element_gruplac_general,
         html.Button('Filtrar', id='button_group_filter_group', n_clicks=0),
     ],id="filtro_general", hidden=True),        
@@ -1241,7 +1241,10 @@ def callback_filter_general(parametro, valor, elemento, boton):
     
     grupos_codigos, grupos_nombres=filtro_gruplac_valor_general(parametro,valor)
     cantidad_grupos=len(grupos_codigos)
-    msj_alert_general = f'Para el análisis se filtraron {cantidad_grupos} grupos de investigación'
+    if cantidad_grupos <= 10:
+        msj_alert_general = f'Para el análisis se filtraron {cantidad_grupos} grupos de investigación.'
+    else:
+        msj_alert_general = f'Para el análisis se filtraron {cantidad_grupos} grupos de investigación, para la visualización de datos se tiene en cuenta los 10 grupos con mayor cantidad de de datos, si desea analizar grupos específicos elija filtrar grupos por "Ingreso Manual".'
     fade_alert_general = True
     if elemento == 'Todos':
         df_indicadores, time_series = get_indicadores_gruplac_general(grupos_codigos)

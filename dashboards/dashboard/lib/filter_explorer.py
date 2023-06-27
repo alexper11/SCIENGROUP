@@ -159,7 +159,7 @@ option_element = dcc.Dropdown(
     options = [],
     value = None  # Valor inicial seleccionado
 )
-component_filters= html.Div(children=[html.H5("Elija una característica:",className="title_white",style={"color":"white"}),
+component_filters= html.Div(children=[html.H4("Elija una característica:",className="title_white",style={"color":"white"}),
         html.Div(
             dcc.Dropdown(
                 id='filter_feature',
@@ -168,7 +168,7 @@ component_filters= html.Div(children=[html.H5("Elija una característica:",class
                 value = None
             ),
         id='div_feature'),
-        html.H5("Ingrese el valor de la característica:",className="title_white",style={"color":"white"}),
+        html.H4("Ingrese el valor de la característica:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
                 id='filter_inputs',
@@ -189,9 +189,9 @@ sidebar_explorer = html.Div(
         ####################################################
         # Layout static here
         ####################################################
-        html.H5("Elija la fuente de los datos:",className="title_white",style={"color":"white"}),
+        html.H4("Elija la fuente de los datos:",className="title_white",style={"color":"white"}),
         option_source,
-        html.H5("Elija el tipo de producto:",className="title_white",style={"color":"white"}),
+        html.H4("Elija el tipo de producto:",className="title_white",style={"color":"white"}),
         option_element,
         ####################################################
         # Layout dynamic here

@@ -78,7 +78,7 @@ def actualizar_fuente_seleccionada(fuente):
 )
 def actualizar_elemento_seleccionado(elemento, fuente): 
     if elemento == None:
-        div_component= [html.H5("Elija una característica a filtrar:",className="title_white",style={"color":"white"}),
+        div_component= [html.H4("Elija una característica a filtrar:",className="title_white",style={"color":"white"}),
         html.Div(
             dcc.Dropdown(
                 id='filter_feature',
@@ -88,7 +88,7 @@ def actualizar_elemento_seleccionado(elemento, fuente):
                 placeholder='Tipo Requerido'
             ),
         id='div_feature'),
-        html.H5("Ingrese el valor de la característica:",className="title_white",style={"color":"white"}),
+        html.H4("Ingrese el valor de la característica:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
                 id='filter_inputs',
@@ -100,7 +100,7 @@ def actualizar_elemento_seleccionado(elemento, fuente):
             id='div_input')]
     else:
         opciones_caracteristica=filtrar_elemento(elemento, fuente,'option')
-        div_component = [html.H5("Elija una característica a filtrar:",className="title_white",style={"color":"white"}),
+        div_component = [html.H4("Elija una característica a filtrar:",className="title_white",style={"color":"white"}),
         html.Div(
             dcc.Dropdown(
                 id='filter_feature',
@@ -109,7 +109,7 @@ def actualizar_elemento_seleccionado(elemento, fuente):
                 value = None,             
             ),
         id='div_feature'),
-        html.H5("Ingrese el valor de la característica:",className="title_white",style={"color":"white"}),
+        html.H4("Ingrese el valor de la característica:",className="title_white",style={"color":"white"}),
         html.Div(children=[
             dcc.Input(
                 id='filter_inputs',
