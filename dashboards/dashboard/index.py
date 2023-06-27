@@ -25,7 +25,7 @@ APP_LOGO = "/assets/img/logo_dash.png"
 app.layout = html.Div([
     html.Header(        
             [html.Div([dcc.Link(html.Img(src=APP_LOGO, id='logo-icon'), href='/')]),
-            html.Div("Dashboard Analytics", className="rightOptions"),
+            html.Div("Dashboard Research Groups Analytics", className="rightOptions"),
             html.Div([
                 html.Ul([
                     html.Li([
@@ -49,23 +49,20 @@ app.layout = html.Div([
                         # Información sobre el dash
                         html.H1('Instrucciones'),
                         html.Hr(),
-                        html.H3('Explorador de datos'),
-                        html.P('Para hacer uso del explorador de datos, utilice el filtro en el que puede elegir la fuente de los datos, de acuerdo a su elección puede seleccionar el producto a analizar y filtrar los datos con el botón filtrar. Si quiere realizar un nivel más profundo en el filtrado, elija la caracteristica del producto y su valor. La opción General permite realizar un análisis de datos de un conjunto de grupos de investigación, permite elejir entre filtrar por intituciones, por la clasificación, las áreas, y las líneas de investigación de los grupos, o ingreso manual para elejir los grupos de investigación a analizar manualmente por nombre',style={"text-align": "justify"}),
+                        html.H3('Sección explorador de datos'),
+                        html.P('Utilice el filtro de exploración de datos para seleccionar la fuente de los datos. Luego, elija el producto que desea analizar y aplique el filtro haciendo clic en el botón "Filtrar". Si desea realizar un filtrado más detallado, elija la característica del producto y su valor.',style={"text-align": "justify"}),
                         html.Hr(),
-                        html.H3('Análisis GrupLAC'),
-                        html.P('Para realizar el análisis de los datos de GrupLAC, utilice el filtro de acuerdo a sus necesidades, la opción "Individual" permite realizar un análisis de un único grupo de investigación, elija el grupo y el producto científico.',style={"text-align": "justify"}),
+                        html.H3('Sección GrupLAC y Scopus'),
+                        html.P('Los filtros para las 2 secciones pueden oculatarse al dar click en el icono superior de cada menú de filtraje. Para analizar los datos tanto para GrupLAC como para Scopus, se presentan dos opciones. La opción "Individual" te permite analizar un único grupo de investigación. Puede elegir el grupo y el producto que desea analizar. La opción "General" permite realizar análisis de datos para un conjunto de grupos de investigación. Puede filtrar por instituciones, clasificación, áreas y líneas de investigación de los grupos de investigación. Si desea ingresar manualmente los nombres de los grupos de investigación utilice la opción “Ingreso Manual”.',style={"text-align": "justify"}),
                         html.Hr(),
-                        html.H3('Análisis Scopus'),
-                        html.P('Para realizar el análisis de los datos de Scopus, utilice el filtro de acuerdo a sus necesidades, la opción "Individual" permite realizar un análisis de un único grupo de investigación, elija el grupo y el producto científico.',style={"text-align": "justify"}),
-                        html.Hr(),
-                        html.H3('Indicadores bibliométricos GrupLAC'),
+                        html.H3('Indicadores bibliométricos GrupLAC', style={'color': '#062d63'}),
                         html.P([html.Span('Consistencia: ', style={'font-weight': 'bold'}),'Mide la actividad de un grupo de investigación según su consistencia generando productos nuevos a lo largo de un periodo de tiempo.'],style={"text-align": "justify"}),
                         html.P([html.Span('PPA (Promedio de productos por año): ', style={'font-weight': 'bold'}),'Indicador absoluto que representa la media de documentos publicados en un periodo de tiempo para un tema específico.'],style={"text-align": "justify"}),
                         html.P([html.Span('PPUA (Porcentaje de productos en los últimos años): ', style={'font-weight': 'bold'}),'Representa el porcentaje de la producción cientifica de un grupo en los últimos 3 años con respecto a la producción general de todos los grupos del departamento.'],style={"text-align": "justify"}),
                         html.P([html.Span('Productos generados: ', style={'font-weight': 'bold'}),'Muestra el número total de productos publicados en GrupLAC por un grupo de investigación.'],style={"text-align": "justify"}),
                         html.P([html.Span('Autores: ', style={'font-weight': 'bold'}),'Representa el número total de autores registrados en un grupo de investigación.'],style={"text-align": "justify"}),
                         html.Hr(),
-                        html.H3('Indicadores bibliométricos Scopus'),
+                        html.H3('Indicadores bibliométricos Scopus', style={'color': '#a84804'}),
                         html.P([html.Span('H1 index: ', style={'font-weight': 'bold'}),'H index de primer orden, indica que el grupo ha publicado H1 productos con al menos H1 citaciones. '],style={"text-align": "justify"}),
                         html.P([html.Span('H2 index: ', style={'font-weight': 'bold'}),'H index de segundo orden, indica que el grupo tiene al menos H2 investigadores, cada uno con un H index de Scopus de al menos H2.'],style={"text-align": "justify"}),
                         html.P([html.Span('Autores: ', style={'font-weight': 'bold'}),'Representa el número de autores de un grupo de investigación que fueron emparejados de GrupLAC y Scopus.'],style={"text-align": "justify"}),
@@ -74,16 +71,17 @@ app.layout = html.Div([
                         html.P([html.Span('Citaciones por producto: ', style={'font-weight': 'bold'}),'Promedio de citas que ha recibido una entidad hasta la fecha por cada salida. Una entidad puede ser una institución, un grupo de investigación o un investigador.'],style={"text-align": "justify"}),
                         html.Hr(),
                         html.H3('Herramientas para manipulación de gráficas'),
-                        html.P('1. Descargar gráfica en formato PNG.',style={"text-align": "left"}),
-                        html.P('2. Realizar zoom selectivo a la gráfica.',style={"text-align": "left"}),
-                        html.P('3. Mover la gráfica.',style={"text-align": "left"}),
-                        html.P('4. Selección de múltiples datos en forma rectangular',style={"text-align": "left"}),
-                        html.P('5. Selección de múltiples datos de manera libre',style={"text-align": "left"}),
-                        html.P('6. Aumentar zoom a la gráfica.',style={"text-align": "left"}),
-                        html.P('7. Disminuir zoom a la gráfica.',style={"text-align": "left"}),
-                        html.P('8. Autoescalar la gráfica para ver el total de los datos.',style={"text-align": "left"}),
-                        html.P('9. Resetear los ejes de la gráfica',style={"text-align": "left"}),                        
-                        html.Img(src='./assets/img/options_graph.png', id='options_graph',style={'width':'auto', "height":'8rem', "position":"static","padding-left":"27px"}),
+                        html.Img(src='./assets/img/options_graph.png', id='options_graph',style={'width':'auto', "height":'35rem', "position":"static","margin-bottom":"5rem"}),
+                        # html.P('1. Descargar gráfica en formato PNG.',style={"text-align": "left"}),
+                        # html.P('2. Realizar zoom selectivo a la gráfica.',style={"text-align": "left"}),
+                        # html.P('3. Mover la gráfica.',style={"text-align": "left"}),
+                        # html.P('4. Selección de múltiples datos en forma rectangular',style={"text-align": "left"}),
+                        # html.P('5. Selección de múltiples datos de manera libre',style={"text-align": "left"}),
+                        # html.P('6. Aumentar zoom a la gráfica.',style={"text-align": "left"}),
+                        # html.P('7. Disminuir zoom a la gráfica.',style={"text-align": "left"}),
+                        # html.P('8. Autoescalar la gráfica para ver el total de los datos.',style={"text-align": "left"}),
+                        # html.P('9. Resetear los ejes de la gráfica',style={"text-align": "left"}),                        
+                        # html.Img(src='./assets/img/options_graph.png', id='options_graph',style={'width':'auto', "height":'8rem', "position":"static","padding-left":"27px"}),
                         dcc.Link("Información sobre los desarrolladores", href='/about_us', className='nav-link')
                     ],className='asideMenu-content')
                 ], className='asideMenu')
@@ -134,5 +132,5 @@ def loadpage(path_route):
         return page404.layout
 
 if __name__ == '__main__':
-    app.run_server(host='10.55.4.73', port=8051,debug=True)
-    #app.run_server(host='localhost', port=8051,debug=True)
+    #app.run_server(host='10.55.4.73', port=8051,debug=False)
+    app.run_server(host='localhost', port=8051,debug=True)

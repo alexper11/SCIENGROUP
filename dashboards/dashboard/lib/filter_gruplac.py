@@ -980,8 +980,8 @@ sidebar_gruplac = html.Div([
     # html.H1('Opciones de filtrado',className="text_filter"),
     html.Hr(),  # Add an horizontal line
     dcc.Tabs(id="tabs_filter_scienti", value='tab_individual', 
-    children=[dcc.Tab(label='Individual', value='tab_individual'),
-        dcc.Tab(label='General', value='tab_general'),
+    children=[dcc.Tab(label='Individual', value='tab_individual',selected_style={'color':'white','background-color':'#1C8ADB','border-top': '2px solid #0f3c7b'}),
+        dcc.Tab(label='General', value='tab_general',selected_style={'color':'white','background-color':'#1C8ADB','border-top': '2px solid #0f3c7b'}),
     ]),       
     html.Div([
         html.H4("Elija un grupo de investigación:",className="text_filter"),

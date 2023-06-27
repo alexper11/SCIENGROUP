@@ -820,8 +820,8 @@ sidebar_scopus = html.Div([
     html.Hr(),  # Add an horizontal line
     html.H5("Los datos analizados reflejan únicamente la informacion emparejada entre GrupLAC y Scopus.",className="text_filter_scopus"),
     dcc.Tabs(id="tabs_filter_scopus", value='tab_individual', 
-    children=[dcc.Tab(label='Individual', value='tab_individual'),
-        dcc.Tab(label='General', value='tab_general'),
+    children=[dcc.Tab(label='Individual', value='tab_individual',selected_style={'color':'white','background-color':'#c65721','border-top': '2px solid #93330E'}),
+        dcc.Tab(label='General', value='tab_general',selected_style={'color':'white','background-color':'#c65721','border-top': '2px solid #93330E'}),
     ]),       
     html.Div([
         html.H4("Elija un grupo de investigación:",className="text_filter_scopus"),
