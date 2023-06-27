@@ -197,6 +197,7 @@ def filtro_scopus_elemento_individual(grupo,elemento):
     
 #GENERAL
 def filtro_scopus_parametro_general(parametro):
+    
     if parametro=='Ingreso Manual':
         opc_valor_general=opciones_grupo_scopus
     
@@ -225,7 +226,10 @@ def filtro_scopus_parametro_general(parametro):
     
 def filtro_scopus_valor_general(parametro,valor): #grupos e suna lista de grupos
     
-    if parametro=='Ingreso Manual':
+    if 'Todos' in valor:
+        idgruplacs=gruplac_basico['idgruplac'].drop_duplicates(keep='first').to_list()
+    
+    elif parametro=='Ingreso Manual':
         idgruplacs=gruplac_basico[gruplac_basico['nombre'].isin(valor)]['idgruplac'].drop_duplicates(keep='first').to_list()
         
     elif parametro=='Clasificación':
@@ -868,7 +872,7 @@ def callback_parameter(parametro):
     if parametro == None:
         return None, True, []
     else:
-        option_elements= filtro_scopus_parametro_general(parametro)
+        option_elements= [*filtro_scopus_parametro_general(parametro),'Todos']
         return None, False, option_elements
     
 @callback(

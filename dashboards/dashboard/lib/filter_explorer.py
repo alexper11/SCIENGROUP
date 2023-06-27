@@ -52,7 +52,7 @@ def filtrar_fuente(fuente, condicion):
 def filtrar_elemento(elemento,fuente,condicion):
     data=fuente_dic[fuente][elemento].drop(['autores'], axis=1, errors='ignore').copy()
     if condicion=='option':
-        data=data.drop(['nombre_grupo'], axis=1, errors='ignore')
+        data=data.drop(['activa','nacionalidad'], axis=1, errors='ignore')
         opc_caracteristica=pd.Series(data.columns).replace(caracteristicas).to_list()
         opc_caracteristica.append('Todos')
         return opc_caracteristica
@@ -70,17 +70,19 @@ def filtrar_caracteristica(caracteristica,elemento,fuente):
         entrada_new=None
         opc_entrada=[]
     #tags, en este caso la entrada es una lista de elementos
+    elif (caracteristica=='Nombre') and (elemento=='Institución'):
+        entrada_new=[]
+        opc_entrada=data[caracteristicas_invertido[caracteristica]].drop_duplicates(keep='first').to_list()
     elif caracteristica in ['Tipo','Lugar','Revista','ISSN','Editorial','Disponibilidad',
                           'Mercado','Aval','Programas','Idioma','Agencia Fundadora','Revista de Publicación',
                           'Verificado','Certificación','Clasificación','Categoría','Sexo',
                           'Área']:  
         entrada_new=[]
         opc_entrada=data[caracteristicas_invertido[caracteristica]].drop_duplicates(keep='first').to_list()
-        print(opc_entrada)
         
     elif caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
-                           'Líneas de Investigación','Institución','Palabras Clave','País',
-                           'Palabras Clave']:
+                           'Nombre de la Línea','Institución','Palabras Clave','País',
+                           'Palabras Clave','Nombre de Grupo']:
     
         entrada_new=[]
         new_list=[]
@@ -109,8 +111,8 @@ def filtrar_entrada(entrada,caracteristica,elemento,fuente):
         data = data.fillna('No Aplica')
         data=data.replace(to_replace={'\(':'','\)':''},regex=True)
         if caracteristica in ['Áreas','Temáticas','Palabras Clave de Autor','Palabras Clave Indizadas',
-                             'Líneas de Investigación','Institución','Palabras Clave','Sectores',
-                             'Palabras Clave','Código de GrupLAC']:
+                             'Nombre de la Línea','Institución','Palabras Clave','Sectores',
+                             'Palabras Clave','Código de GrupLAC','Nombre de Grupo']:
             if len(entrada)>1:
                 regex_entrada=re.compile('|'.join(entrada)).pattern
             else:
@@ -125,6 +127,7 @@ def filtrar_entrada(entrada,caracteristica,elemento,fuente):
         data=data[data[caracteristicas_invertido[caracteristica]].str.strip().str.contains(regex_entrada,regex=True)]
         
     elif type(entrada) == str:
+        
         data = data.fillna('No Aplica')
         data=data.replace(to_replace={'\(':'','\)':''},regex=True)
         #grupos=dataset[dataset[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(entrada)]['idgruplac'].drop_duplicates(keep='first').to_list()
@@ -132,9 +135,28 @@ def filtrar_entrada(entrada,caracteristica,elemento,fuente):
         data=data[data[caracteristicas_invertido[caracteristica]].str.contains(entrada,case=False)]
     
     else:
-        data = data.dropna(subset=caracteristicas_invertido[caracteristica])
-        data=data[(data[caracteristicas_invertido[caracteristica]].dt.year >= entrada[0]) & (data[caracteristicas_invertido[caracteristica]].dt.year <= entrada[1])]
-        data = data.sort_values(by=caracteristicas_invertido[caracteristica])
+        if caracteristica=='Citaciones':
+            try:
+                if ((entrada[0]==None) or (entrada[0]=='')) and ((entrada[1]!=None) and (entrada[1]!='')):
+                    data = data.dropna(subset=caracteristicas_invertido[caracteristica])
+                    data=data[data[caracteristicas_invertido[caracteristica]].astype('int64') <= int(entrada[1])]
+                    data = data.sort_values(by=caracteristicas_invertido[caracteristica],ascending=False)
+                elif ((entrada[1]==None) or (entrada[1]=='')) and ((entrada[0]!=None) and (entrada[0]!='')):
+                    data = data.dropna(subset=caracteristicas_invertido[caracteristica])
+                    data=data[data[caracteristicas_invertido[caracteristica]].astype('int64') >= int(entrada[0])]
+                    data = data.sort_values(by=caracteristicas_invertido[caracteristica],ascending=False)
+                elif int(entrada[0]) <= int(entrada[1]):
+                    data = data.dropna(subset=caracteristicas_invertido[caracteristica])
+                    data=data[(data[caracteristicas_invertido[caracteristica]].astype('int64') >= int(entrada[0])) & (data[caracteristicas_invertido[caracteristica]].astype('int64') <= int(entrada[1]))]
+                    data = data.sort_values(by=caracteristicas_invertido[caracteristica],ascending=False)
+                else:
+                    data=pd.DataFrame()
+            except Exception as e:
+                data=pd.DataFrame()
+        else:    
+            data = data.dropna(subset=caracteristicas_invertido[caracteristica])
+            data=data[(data[caracteristicas_invertido[caracteristica]].dt.year >= entrada[0]) & (data[caracteristicas_invertido[caracteristica]].dt.year <= entrada[1])]
+            data = data.sort_values(by=caracteristicas_invertido[caracteristica],ascending=False)
 
     return data
 

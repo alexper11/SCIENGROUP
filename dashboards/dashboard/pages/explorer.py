@@ -138,33 +138,65 @@ def actualizar_caractersitica_seleccionada(caracteristica,elemento,fuente):
     elif type(valor_entrada) == list:
         filter = dcc.Dropdown(id="filter_inputs", placeholder='Elija el valor', options= opciones_entrada, multi=True, optionHeight=45)#,maxHeight=100)
     elif type(valor_entrada) == tuple:
+<<<<<<< HEAD
+        if caracteristica == 'Citaciones':
+            #year_today = date.today().year
+            #option_drop = list(range(scopus_productos['citado'].astype('int64').min(),scopus_productos['citado'].astype('int64').max()))
+            #print('drop: ',option_drop)   
+            #filter = dbc.Input(id="date_start", type="number", min=1975, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_inputs', style={'display': 'none'})
+            filter = dcc.Input(id="date_start", placeholder='Número Mínimo de Citas', value=None), dcc.Input(id="date_end",disabled = True, placeholder='Número Máximo de Citas', value= None), dcc.Input(id='filter_inputs', style={'display': 'none'})
+            
+        else:
+            #year_today = date.today().year
+            option_drop = list(range(1975,date.today().year+1))
+            #print('drop: ',option_drop)   
+            #filter = dbc.Input(id="date_start", type="number", min=1975, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_inputs', style={'display': 'none'})
+            filter = dcc.Dropdown(id="date_start", placeholder='Año inicial', options = option_drop, value=None), dcc.Dropdown(id="date_end", options= [],disabled = True, placeholder='Año final', value= None), dcc.Input(id='filter_inputs', style={'display': 'none'})
+    elif (valor_entrada is None) and (caracteristica == 'Todos'):
+        filter = dcc.Input(id='filter_inputs', placeholder='Todos', value='', disabled=True)
+=======
         #year_today = date.today().year
         option_drop = list(range(1975,date.today().year+1))
         #print('drop: ',option_drop)   
         #filter = dbc.Input(id="date_start", type="number", min=1975, max=year_today, step=1, placeholder='Año inicial'), dcc.Input(id="date_end", type="number", min=0, max=year_today, step=1 , disabled = True, placeholder='Año final'), dcc.Input(id='filter_inputs', style={'display': 'none'})
         filter = dcc.Dropdown(id="date_start", placeholder='Año inicial', options = option_drop, value=None), dcc.Dropdown(id="date_end", options= [],disabled = True, placeholder='Año final', value= None), dcc.Input(id='filter_inputs', style={'display': 'none'})
 
+>>>>>>> 1c7fa4d7f219dba6fb77a9ee14446da76b997c4d
     else:
         filter = dcc.Input(id='filter_inputs', placeholder='Característica Requerida', value='', disabled=True)
     return filter
 
 @callback(
-     [Output('date_end', 'options'),Output('date_end','disabled')],
-     Input('date_start', 'value')
+     [Output('date_end', 'options'),Output('date_end','disabled'),Output('date_end','value')],
+     [Input('date_start', 'value'),State('filter_feature', 'value')]
  )
-def validate_date_end(minimo):
-    if minimo == None:
-        return [1975,date.today().year], True
-    return list(range(minimo,date.today().year+1)), False
+def validate_date_end(minimo,caracteristica):  
+    if ((minimo == None) or (minimo == '')) and (caracteristica != 'Citaciones'):
+        return [1975,date.today().year], True, None
+    try:
+        if caracteristica == 'Citaciones' :
+            return None, False, None
+        else:
+            return list(range(int(minimo),date.today().year+1)), False, None
+    except Exception as e:
+        return None, True, None
+        
 
 @callback(
     Output('filter_inputs', 'value'),
     State('date_start', 'value'),
-    Input('date_end','value')
+    Input('date_end','value'),
+    State('filter_feature', 'value')
  )
-def filter_inputs_contructor(inicial, final):
-    if final == None:
-        fechas = str((1975, date.today().year))
+def filter_inputs_contructor(inicial, final, caracteristica):
+    #print('i:',inicial,' f:',final)
+    if caracteristica!='Citaciones':
+        if (final == None) and ((inicial == None) or (inicial == '')):
+            fechas = str((1975, date.today().year))
+        elif (final == None) and ((inicial != None) and (inicial != '')):
+            fechas = str((inicial, date.today().year))
+        else:
+            fechas = str((inicial, final))
     else:
         fechas = str((inicial, final))
     return fechas
@@ -181,8 +213,8 @@ def display(boton,fuente, elemento, caracteristica, entrada):
             entrada_temp = eval(entrada)
             if type(entrada_temp) == tuple:
                 entrada = entrada_temp
-            else:
-                raise ValueError
+            #else:
+            #    raise ValueError
     except:
         pass
     if (elemento==None) and (caracteristica==None) and ((entrada==None) or (entrada=='')):
@@ -192,6 +224,7 @@ def display(boton,fuente, elemento, caracteristica, entrada):
         data = filtrar_elemento(elemento,fuente,'data')
         #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
     elif (elemento !=None) and (caracteristica != None) and ((entrada!=None) and (entrada!='')):
+        #print('filtrar entrada')
         data = filtrar_entrada(entrada,caracteristica,elemento,fuente)
         #tool_tip=[{str(column): {'value': str(value), 'type': 'text'} for column, value in row.items()} for row in data]
     elif (elemento!= None) and (caracteristica !=None) and ((entrada==None) or (entrada=='')):
@@ -209,6 +242,7 @@ def display(boton,fuente, elemento, caracteristica, entrada):
             data['autores'].loc[locs]=data['autores'].loc[locs].str.slice(stop=200)+'...'
             locs=data[data['pais'].str.len()>300].index.tolist()
             data['pais'].loc[locs]=data['pais'].loc[locs].str.slice(stop=300)+'...'
+            data=data.rename(columns={'nombre_publicacion':'revista'}).copy()
         else:
             data=data.drop(['volumen','fasciculo','paginas'], axis=1, errors='ignore')
         columns=[{'name': i, 'id': i} for i in data.columns]
