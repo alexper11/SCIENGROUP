@@ -134,11 +134,11 @@ elementos_scopus={'Artículos':scopus_productos[scopus_productos['tipo_documento
                   'Libros':scopus_productos[scopus_productos['tipo_documento']=='Book'].drop(columns=['scopus_id','eid','creador','isbn','volumen','issue','numero_articulo','pag_inicio','pag_fin','pag_count','doi','link','affil_id','abstract','tipo_fuente','tipo_documento','etapa_publicacion','autores_id','tipo_acceso'])}
 
 
-caracteristicas={'idgruplac':'Código de GrupLAC','verificado':'Verificado','tipo':'Tipo','nombre':'Nombre',
+caracteristicas={'idgruplac':'Código de GrupLAC','verificado':'Verificado','tipo':'Tipo','nombre':'Nombre','nombre_grupo':'Nombre de Grupo',
                  'lugar':'Lugar','revista':'Revista','issn':'ISSN','fecha':'Fecha','capitulo':'Nombre del Capítulo','libro':'Libro',
                  'editorial':'Editorial','curso':'Nombre del Curso','programa':'Nombre del Programa','disponibilidad':'Disponibilidad',
                  'institucion':'Institución','fecha_registro':'Fecha de Registro','mercado':'Mercado','aval':'Aval',
-                 'lineas':'Líneas de Investigación','fecha_formacion':'Fecha de Formación','certificacion':'Certificación',
+                 'lineas':'Nombre de la Línea','fecha_formacion':'Fecha de Formación','certificacion':'Certificación',
                  'clasificacion':'Clasificación','areas':'Áreas','programas':'Programas','nombre_comercial':'Nombre Comercial',
                  'titulo':'Título','fecha_publicacion':'Fecha de Publicación','idioma':'Idioma','citado':'Citaciones',
                  'tema':'Temáticas','palabras_clave_autor':'Palabras Clave de Autor','palabras_clave_index':'Palabras Clave Indizadas',
