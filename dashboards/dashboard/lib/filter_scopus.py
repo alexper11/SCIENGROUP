@@ -419,7 +419,7 @@ def pie_journal_element_scopus(datain,condition): #recibe dataset filtrado y ocn
                 #x=0.02,
                 #y=1.02,
                 title=legend_label,
-                font=dict(size=10),
+                font=dict(size=10.5),
                 ),
                 title={
                'text':title_label,
@@ -429,7 +429,7 @@ def pie_journal_element_scopus(datain,condition): #recibe dataset filtrado y ocn
                #'automargin':True
                },
                #margin=dict(r=10, l=10),
-               font=dict(size=10))
+               font=dict(size=11))
     fig_pie.data[0].hovertemplate = '%{label}<br>'+'count'+':%{value}<br>%{customdata:.2f}%'
     fig_pie.update_traces(textposition='inside', textinfo='percent')
     return fig_pie
@@ -633,7 +633,7 @@ def bar_general_all_scopus(codigos, nombres): #retorna dos graficas, recibe grup
     #fig.update_layout(legend_x=0.02, legend_y=1.02)
     #fig.update_yaxes(automargin=True)
     #fig.update_traces(visible='legendonly')
-    fig.update_layout(xaxis = dict(tickfont = dict(size=9.6)))
+    fig.update_layout(xaxis = dict(tickfont = dict(size=11)))
     return fig
 
 def radar_general_all(indicadores,elemento='Todos'):
@@ -651,7 +651,7 @@ def radar_general_all(indicadores,elemento='Todos'):
     fig = px.line_polar(aux_ind, r='value', color='Grupos', theta='variable', line_close=True)
     #fig.update_traces(fill='toself')
     fig.update_layout(title={'text':title_label},
-                      legend=dict(font=dict(size=9.5)),
+                      legend=dict(font=dict(size=10.7)),
                       font=dict(size=10))
     fig.for_each_trace(lambda t: t.update(hoveron='points'))
     warnings.filterwarnings(action='default', category=FutureWarning)
@@ -682,8 +682,8 @@ def heatmap_general(codigos,nombres):
     df= df.pivot(index='grupo', columns='tipo_producto')['citaciones'].fillna(0)
     fig = px.imshow(df, x=df.columns, y=df.index, color_continuous_scale='RdBu_r',text_auto=True,
                    labels=dict(x="Tipo de Producto", y="Grupos de Investigación", color="Citaciones"))
-    fig.update_layout(xaxis = dict(tickfont = dict(size=9)))
-    fig.update_layout(yaxis = dict(tickfont = dict(size=9)),font=dict(size=10))
+    fig.update_layout(xaxis = dict(tickfont = dict(size=11)))
+    fig.update_layout(yaxis = dict(tickfont = dict(size=11)),font=dict(size=10))
     #fig.update_layout(width=500,height=500)
     fig.update_layout(title={'text':'Grupos por Tipo de Producto: Citaciones'})
     if len(df.columns)>3:
@@ -747,7 +747,7 @@ def bar_general_element_scopus(data, grupos,elemento): #retorna dos graficas, re
     #fig.update_layout(height='600')##############
     #fig.update_yaxes(automargin=True)
     #fig.update_xaxes(tickangle=0)
-    fig.update_layout(xaxis = dict(tickfont = dict(size=10)))
+    fig.update_layout(xaxis = dict(tickfont = dict(size=11)))
     return fig
 
 def boxplot_general_element_scopus(data,codigos,elemento):
