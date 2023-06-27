@@ -132,7 +132,7 @@ def filtrar_entrada(entrada,caracteristica,elemento,fuente):
         data=data.replace(to_replace={'\(':'','\)':''},regex=True)
         #grupos=dataset[dataset[caracteristicas_invertido[caracteristica_seleccionada]].str.contains(entrada)]['idgruplac'].drop_duplicates(keep='first').to_list()
         data=data.dropna(subset=caracteristicas_invertido[caracteristica])
-        data=data[data[caracteristicas_invertido[caracteristica]].str.contains(entrada, case=False)]
+        data=data[data[caracteristicas_invertido[caracteristica]].str.contains(entrada,case=False)]
     
     else:
         if caracteristica=='Citaciones':
@@ -206,14 +206,14 @@ id='component_filters')
 #############################################################################
 sidebar_explorer = html.Div(
     [
-        html.H2("Filtro para la exploración de los datos a analizar",style={"color":"white","text-align":"center"} ),   
+        html.H2("Filtro para la exploración de los datos",style={"color":"white","text-align":"center"} ),   
         html.Hr(),  
         ####################################################
         # Layout static here
         ####################################################
         html.H5("Elija la fuente de los datos:",className="title_white",style={"color":"white"}),
         option_source,
-        html.H5("Elija el tipo de producción científica:",className="title_white",style={"color":"white"}),
+        html.H5("Elija el tipo de producto:",className="title_white",style={"color":"white"}),
         option_element,
         ####################################################
         # Layout dynamic here
