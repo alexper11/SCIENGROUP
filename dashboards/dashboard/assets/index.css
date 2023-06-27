@@ -45,8 +45,10 @@ header {
 header button {
   background-color: transparent;
 }
-#button_state {
-  background-color: #a5a4ac;
+#button_state,
+#button_group_filter_indiv,
+#button_group_filter_group{
+  background-color: #0a0185;
   padding: 10px 20px;
   justify-content: center;
   align-items: center;
@@ -55,18 +57,9 @@ header button {
   margin-left: auto;
   margin-right: auto;
 }
-#button_group_filter_indiv{
-  background-color: #a5a4ac;
-  padding: 10px 20px;
-  justify-content: center;
-  align-items: center;
-  transition:0.1s;
-  display: grid;
-  margin-left: auto;
-  margin-right: auto;
-}
-#button_scopus_filter_indiv{
-  background-color: #6f6a91;
+#button_scopus_filter_indiv,
+#button_scopus_filter_group{
+  background-color: #8d4009;
   padding: 10px 20px;
   justify-content: center;
   align-items: center;
@@ -76,14 +69,13 @@ header button {
   margin-right: auto;
 }
 
-#button_state:active {
-  background-color: #6b6b6d;
-}
-#button_group_filter_indiv:active {
-  background-color: #6b6b6d;
-}
-#button_scopus_filter_indiv:active {
-  background-color: #444447;
+#button_state:active,
+#button_group_filter_indiv:active,
+#button_group_filter_group:active,
+#button_scopus_filter_indiv:active,
+#button_scopus_filter_group:active {
+  background-color: white;
+  color: #1c0069;
 }
 
 header img {
@@ -188,16 +180,16 @@ input {
 } 
 
 button {
-  padding: 1rem;
+  padding: 0;
   border-radius: 10rem;
   border: none;
   font-family: "Itim", cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-button {
   position: relative;
-  margin: 0.2rem;
+  font-size: 1.7rem;
+  color: white;
+  margin: 1rem;
 }
 .tooltip::after {
   content: attr(name);

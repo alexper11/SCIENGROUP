@@ -820,18 +820,18 @@ sidebar_scopus = html.Div([
         dcc.Tab(label='General', value='tab_general'),
     ]),       
     html.Div([
-        html.H5("Elija un grupo de investigación:",className="text_filter_scopus"),
+        html.H4("Elija un grupo de investigación:",className="text_filter_scopus"),
         option_group_scopus,
-        html.H5("Elija el tipo de producto:",className="text_filter_scopus"),
+        html.H4("Elija el tipo de producto:",className="text_filter_scopus"),
         option_element_scopus,
         html.Button('Filtrar', id='button_scopus_filter_indiv', n_clicks=0),
     ],id="filtro_individual_scopus"),
     html.Div([
-        html.H5("Filtrar grupos por:",className="text_filter_scopus"),
+        html.H4("Filtrar grupos por:",className="text_filter_scopus"),
         option_parameter_scopus,
-        html.H5("Ingrese el valor:",className="text_filter_scopus"),
+        html.H4("Ingrese el valor:",className="text_filter_scopus"),
         option_value_scopus,
-        html.H5("Elija el tipo de producto:",className="text_filter_scopus"),
+        html.H4("Elija el tipo de producto:",className="text_filter_scopus"),
         option_element_scopus_general,
         html.Button('Filtrar', id='button_scopus_filter_group', n_clicks=0),
     ],id="filtro_general_scopus", hidden=True),        
@@ -1090,7 +1090,10 @@ def callback_filter_general(parametro, valor, elemento, boton):
     
     grupos_codigos_scopus, grupos_nombres_scopus=filtro_scopus_valor_general(parametro,valor)
     cantidad_grupos=len(grupos_codigos_scopus)
-    msj_alert_general_scopus = f'Para el análisis se filtraron {cantidad_grupos} grupos de investigación.'
+    if cantidad_grupos <= 10:
+        msj_alert_general_scopus = f'Para el análisis se filtraron {cantidad_grupos} grupos de investigación.'
+    else:
+        msj_alert_general_scopus = f'Para el análisis se filtraron {cantidad_grupos} grupos de investigación, para la visualización de datos se tiene en cuenta los 10 grupos con mayor cantidad de de datos, si desea analizar grupos específicos elija filtrar grupos por "Ingreso Manual".'
     fade_alert_general_scopus = True
     if elemento == 'Todos':
         df_indicadores, series_scopus = get_indicadores_scopus_general(grupos_codigos_scopus)
