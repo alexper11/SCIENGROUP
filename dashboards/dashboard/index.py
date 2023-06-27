@@ -25,7 +25,7 @@ APP_LOGO = "/assets/img/logo_dash.png"
 app.layout = html.Div([
     html.Header(        
             [html.Div([dcc.Link(html.Img(src=APP_LOGO, id='logo-icon'), href='/')]),
-            html.Div("Dashboard Research Groups Analytics", className="rightOptions"),
+            html.Div("Research Groups Analytics Dashboard", className="rightOptions"),
             html.Div([
                 html.Ul([
                     html.Li([
