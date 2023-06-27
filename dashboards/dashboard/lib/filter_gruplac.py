@@ -310,7 +310,7 @@ def bar_pie_all(grupo): #retorna dos graficas, recibe codigo de grupo
                 xaxis={'categoryorder': 'total descending'},
                 #height= 450, 
                font=dict(size=10))
-    fig.update_layout(xaxis = dict(tickfont = dict(size=11)))
+    fig.update_layout(xaxis = dict(tickfont = dict(size=12)))
     fig_bar=fig
     if df['producto'].nunique()>8:
         fig_bar.update_xaxes(tickangle=90)
@@ -407,7 +407,7 @@ def pie_type_element(data): #solo elementos con columna "tipo" existente
                #'yanchor':'top',
                #'automargin':True
                },
-               font=dict(size=12))
+               font=dict(size=13))
     #fig_pie.update_layout( legend = {"xanchor": "right", "x": 1.08})
     return fig_pie
 
@@ -473,7 +473,7 @@ def pie_editorial_element(datain): #solo para elementos con columna "editorial" 
                 #x=0.02,
                 #y=1.02,
                 title='Editoriales',
-                font=dict(size=10),
+                font=dict(size=10.9),
                 ))
     fig_pie.data[0].hovertemplate = '%{label}<br>'+'count'+':%{value}<br>%{customdata:.2f}%'
     fig_pie.update_traces(textposition='inside', textinfo='percent')
@@ -518,7 +518,7 @@ def time_series_all_general(series,grupos, elemento): #recibe time_series y grup
             xanchor="left",
             x=0.01,
             title='Grupos',
-            font=dict(size=10.5)),
+            font=dict(size=11)),
         #height=650,
         )
     #fig.update_layout(height=600)#############
@@ -550,7 +550,7 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
                 yanchor="bottom",
                 xanchor="left",
                 title='Productos',
-                font=dict(size=10),
+                font=dict(size=11),
                 #legend_itemclick="toggleothers",
                 #legend_itemdoubleclick="toggle",
                 #
@@ -565,7 +565,7 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
                 #'font': {'size': 15},
                 },
                 yaxis={'categoryorder': 'total ascending'},
-                font=dict(size=10),
+                font=dict(size=11),
                 margin=dict(t=2, b=2),
                 #height=650
                 )
@@ -575,7 +575,7 @@ def bar_general_all(codigos, nombres): #retorna dos graficas, recibe grupos_codi
     #fig.update_layout(legend_x=0.02, legend_y=1.02)
     #fig.update_yaxes(automargin=True)
     #fig.update_traces(visible='legendonly')
-    fig.update_layout(xaxis = dict(tickfont = dict(size=9.6)))
+    fig.update_layout(xaxis = dict(tickfont = dict(size=10.6)))
     return fig
 
 def bar_consistencia(indicadores,grupos, elemento): #recibe df_indicadores y grupos_nombres
@@ -826,7 +826,7 @@ def bar_general_element(data, elemento): #retorna dos graficas, recibe grupos_co
     #fig.update_layout(height='600')##############
     #fig.update_yaxes(automargin=True)
     #fig.update_xaxes(tickangle=0)
-    fig.update_layout(xaxis = dict(tickfont = dict(size=10)))
+    fig.update_layout(xaxis = dict(tickfont = dict(size=10.6)))
     return fig
 
 def pie_journal_element_general(datain,condition): #recibe dataset filtrado y ocndicion 'editorial' o 'revista'
@@ -857,7 +857,7 @@ def pie_journal_element_general(datain,condition): #recibe dataset filtrado y oc
                 #x=0.02,
                 #y=1.02,
                 title=condition.capitalize(),
-                font=dict(size=10),
+                font=dict(size=11),
                 ),
                 title={
                'text':title_label,
@@ -917,7 +917,7 @@ def pie_type_element_general(datain): #solo elementos con columna "tipo" existen
                #'yanchor':'top',
                #'automargin':True
                },
-               font=dict(size=12))
+               font=dict(size=13))
     return fig_pie
 
 def get_fig_title(fig):

@@ -71,7 +71,7 @@ app.layout = html.Div([
                         html.P([html.Span('Citaciones por producto: ', style={'font-weight': 'bold'}),'Promedio de citas que ha recibido una entidad hasta la fecha por cada salida. Una entidad puede ser una institución, un grupo de investigación o un investigador.'],style={"text-align": "justify"}),
                         html.Hr(),
                         html.H3('Herramientas para manipulación de gráficas'),
-                        html.Img(src='./assets/img/options_graph.png', id='options_graph',style={'width':'auto', "height":'35rem', "position":"static","margin-bottom":"5rem"}),
+                        html.Img(src='./assets/img/options_graph.png', id='options_graph',style={'width':'auto', "height":'35rem', "position":"static","margin-bottom":"5rem","margin-left":"auto","margin-right":"auto", "display":"grid"}),
                         # html.P('1. Descargar gráfica en formato PNG.',style={"text-align": "left"}),
                         # html.P('2. Realizar zoom selectivo a la gráfica.',style={"text-align": "left"}),
                         # html.P('3. Mover la gráfica.',style={"text-align": "left"}),

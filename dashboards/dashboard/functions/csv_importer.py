@@ -75,6 +75,7 @@ cvlac_innovaempresa['fecha']= pd.to_datetime(cvlac_innovaempresa['fecha']).dt.to
 cvlac_tecnologicos['fecha']= pd.to_datetime(cvlac_tecnologicos['fecha']).dt.to_period('Y')
 cvlac_prototipos['fecha']= pd.to_datetime(cvlac_prototipos['fecha']).dt.to_period('Y')
 cvlac_software['fecha']= pd.to_datetime(cvlac_software['fecha']).dt.to_period('Y')
+cvlac_reconocimiento['fecha']=pd.to_datetime(cvlac_reconocimiento['fecha']).dt.to_period('Y')
 #scopus_productos['fecha_publicacion']= pd.to_datetime(scopus_productos['fecha_publicacion']).dt.to_period('M')
 scopus_autores['documentos']=scopus_autores['documentos'].astype('int')
 scopus_autores['documentos_citados']=scopus_autores['documentos_citados'].astype('int')
