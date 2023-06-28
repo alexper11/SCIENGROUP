@@ -48,6 +48,7 @@ app.layout = html.Div([
                     html.Div([
                         # Información sobre el dash
                         html.H1('Instrucciones'),
+                        dcc.Link("Link video introductorio", href='https://youtu.be/tdp8FPcWMco',target="_blank", style={"color":"#1970eb"}),
                         html.Hr(),
                         html.H3('Sección explorador de datos'),
                         html.P('Utilice el filtro de exploración de datos para seleccionar la fuente de los datos. Luego, elija el producto que desea analizar y aplique el filtro haciendo clic en el botón "Filtrar". Si desea realizar un filtrado más detallado, elija la característica del producto y su valor.',style={"text-align": "justify"}),
@@ -73,7 +74,7 @@ app.layout = html.Div([
                         html.P([html.Span('Citaciones por producto: ', style={'font-weight': 'bold'}),'Promedio de citas que ha recibido una entidad hasta la fecha por cada salida. Una entidad puede ser una institución, un grupo de investigación o un investigador.'],style={"text-align": "justify"}),
                         html.Hr(),
                         html.H3('Herramientas para manipulación de gráficas'),
-                        html.Img(src='./assets/img/options_graph.png', id='options_graph',style={'width':'auto', "height":'35rem', "position":"static","margin-bottom":"5rem","margin-left":"auto","margin-right":"auto", "display":"grid"}),
+                        html.Img(src='./assets/img/options_graph.png', id='options_graph',style={'width':'auto', "height":'35rem', "position":"static","margin-bottom":"6rem","margin-left":"auto","margin-right":"auto", "display":"grid"}),
                         # html.P('1. Descargar gráfica en formato PNG.',style={"text-align": "left"}),
                         # html.P('2. Realizar zoom selectivo a la gráfica.',style={"text-align": "left"}),
                         # html.P('3. Mover la gráfica.',style={"text-align": "left"}),
@@ -83,8 +84,7 @@ app.layout = html.Div([
                         # html.P('7. Disminuir zoom a la gráfica.',style={"text-align": "left"}),
                         # html.P('8. Autoescalar la gráfica para ver el total de los datos.',style={"text-align": "left"}),
                         # html.P('9. Resetear los ejes de la gráfica',style={"text-align": "left"}),                        
-                        # html.Img(src='./assets/img/options_graph.png', id='options_graph',style={'width':'auto', "height":'8rem', "position":"static","padding-left":"27px"}),
-                        dcc.Link("Información sobre los desarrolladores", href='/about_us', className='nav-link')
+                        # html.Img(src='./assets/img/options_graph.png', id='options_graph',style={'width':'auto', "height":'8rem', "position":"static","padding-left":"27px"}),                        
                     ],className='asideMenu-content')
                 ], className='asideMenu')
                 ], className='asideMenuActivator'),
@@ -134,5 +134,5 @@ def loadpage(path_route):
         return page404.layout
 
 if __name__ == '__main__':
-    app.run_server(host='10.55.4.73', port=8051,debug=False)
-    #app.run_server(host='localhost', port=8051,debug=True)
+    #app.run_server(host='10.55.4.73', port=8051,debug=False)
+    app.run_server(host='localhost', port=8051,debug=True)
