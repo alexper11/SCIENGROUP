@@ -1280,7 +1280,7 @@ def callback_filter_general(parametro, valor, elemento, boton):
         #wdg2=str(len(grupos_codigos)*7.8)+'vw'
         wdg2=len(grupos_codigos)
         if wdg2 >= 5:
-            widthdiv='80vw'
+            widthdiv='83vw'
         else:
             widthdiv='50vw'
         div_general_figure2 = {'display':'block', 'marginLeft':'auto', 'marginRight':'auto','minWidth':'50vw','width':widthdiv, 'height':'83vh','maxHeight':'83vh','marginTop':'8px','paddingTop':'5px','paddingBottom':'5px','marginBottom':'7px'}
