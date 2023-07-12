@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import os
 import sys
+import shutil
 
 from cvlac.cvlac_models.DBmodel import create_cvlac_db
 from cvlac.cvlac_controllers.ActuacionController import ActuacionController
@@ -69,8 +70,8 @@ if __name__ == '__main__':
     
     sys.path.append(".")
     create_cvlac_db()
-    #create_gruplac_db()
-    #create_scopus_db()
+    create_gruplac_db()
+    create_scopus_db()
     print('Bases de datos creadas')
     
     ########################
@@ -82,8 +83,10 @@ if __name__ == '__main__':
     lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')
     
     try:
-        os.mkdir('extracted_data')
-    except:
+        shutil.rmtree('dashboard/assets/data/extracted_data')
+        os.mkdir('dashboard/assets/data/extracted_data')
+    except Exception as e:
+        print(e)
         pass
     
     ######################
@@ -97,19 +100,19 @@ if __name__ == '__main__':
     
     basico=BasicoController()
     aux_basico=Extractor.grup_basico.drop_duplicates(ignore_index=True)
-    aux_basico.to_csv('extracted_data/aux_basico.csv',index=False)
+    aux_basico.to_csv('dashboard/assets/data/extracted_data/aux_basico.csv',index=False)
     basico.insert_df(aux_basico)
     del basico
     
     articulos=ArticulosController()
     aux_articulos=Extractor.grup_articulos.drop_duplicates(ignore_index=True)
-    aux_articulos.to_csv('extracted_data/aux_articulos.csv',index=False)
+    aux_articulos.to_csv('dashboard/assets/data/extracted_data/aux_articulos.csv',index=False)
     articulos.insert_df(aux_articulos)
     del articulos
     
     actuacion = ActuacionController()
     aux_actuacion=Extractor.grup_actuacion.drop_duplicates(ignore_index=True)
-    aux_actuacion.to_csv('extracted_data/aux_actuacion.csv',index=False)
+    aux_actuacion.to_csv('dashboard/assets/data/extracted_data/aux_actuacion.csv',index=False)
     actuacion.insert_df(aux_actuacion)
     del actuacion
     
@@ -119,7 +122,7 @@ if __name__ == '__main__':
     
     identificadores=IdentificadoresController()
     aux_identificadores=Extractor.grup_identificadores.drop_duplicates(ignore_index=True)
-    aux_identificadores.to_csv('extracted_data/aux_identificadores.csv',index=False)
+    aux_identificadores.to_csv('dashboard/assets/data/extracted_data/aux_identificadores.csv',index=False)
     identificadores.insert_df(aux_identificadores)
     del identificadores
     
@@ -129,7 +132,7 @@ if __name__ == '__main__':
     
     investigacion=InvestigacionController()
     aux_investigacion=Extractor.grup_investiga.drop_duplicates(ignore_index=True)
-    aux_investigacion.to_csv('extracted_data/aux_investigacion.csv',index=False)
+    aux_investigacion.to_csv('dashboard/assets/data/extracted_data/aux_investigacion.csv',index=False)
     investigacion.insert_df(aux_investigacion)
     del investigacion
     
@@ -139,19 +142,19 @@ if __name__ == '__main__':
     
     libros=LibrosController()
     aux_libros=Extractor.grup_libros.drop_duplicates(ignore_index=True)
-    aux_libros.to_csv('extracted_data/aux_libros.csv',index=False)
+    aux_libros.to_csv('dashboard/assets/data/extracted_data/aux_libros.csv',index=False)
     libros.insert_df(aux_libros)
     del libros
     
     reconocimiento=ReconocimientoController()
     aux_reconocimiento=Extractor.grup_reconocimiento.drop_duplicates(ignore_index=True)
-    aux_reconocimiento.to_csv('extracted_data/aux_reconocimiento.csv',index=False)
+    aux_reconocimiento.to_csv('dashboard/assets/data/extracted_data/aux_reconocimiento.csv',index=False)
     reconocimiento.insert_df(aux_reconocimiento)
     del reconocimiento
     
     redes=RedesController()
     aux_redes=Extractor.grup_redes.drop_duplicates(ignore_index=True)
-    aux_redes.to_csv('extracted_data/aux_redes.csv',index=False)
+    aux_redes.to_csv('dashboard/assets/data/extracted_data/aux_redes.csv',index=False)
     redes.insert_df(aux_redes)
     del redes
     
@@ -169,37 +172,37 @@ if __name__ == '__main__':
     
     caplibros=CaplibrosController()
     aux_caplibros=Extractor.grup_caplibros.drop_duplicates(ignore_index=True)
-    aux_caplibros.to_csv('extracted_data/aux_caplibros.csv',index=False)
+    aux_caplibros.to_csv('dashboard/assets/data/extracted_data/aux_caplibros.csv',index=False)
     caplibros.insert_df(aux_caplibros)
     del caplibros
     
     empresatec=EmpresaTecnologicaController()
     aux_empresatec=Extractor.grup_empresa_tecnologica.drop_duplicates(ignore_index=True)
-    aux_empresatec.to_csv('extracted_data/aux_empresatec.csv',index=False)
+    aux_empresatec.to_csv('dashboard/assets/data/extracted_data/aux_empresatec.csv',index=False)
     empresatec.insert_df(aux_empresatec)
     del empresatec
     
     innovaempresa=InnovacionEmpresarialController()
     aux_innovaempresa=Extractor.grup_innovacion_empresarial.drop_duplicates(ignore_index=True)
-    aux_innovaempresa.to_csv('extracted_data/aux_innovaempresa.csv',index=False)
+    aux_innovaempresa.to_csv('dashboard/assets/data/extracted_data/aux_innovaempresa.csv',index=False)
     innovaempresa.insert_df(aux_innovaempresa)
     del innovaempresa
     
     prototipo=PrototipoController()
     aux_prototipo=Extractor.grup_prototipo.drop_duplicates(ignore_index=True)
-    aux_prototipo.to_csv('extracted_data/aux_prototipo.csv',index=False)
+    aux_prototipo.to_csv('dashboard/assets/data/extracted_data/aux_prototipo.csv',index=False)
     prototipo.insert_df(aux_prototipo)
     del prototipo
     
     software=SoftwareController()
     aux_software=Extractor.grup_software.drop_duplicates(ignore_index=True)
-    aux_software.to_csv('extracted_data/aux_software.csv',index=False)
+    aux_software.to_csv('dashboard/assets/data/extracted_data/aux_software.csv',index=False)
     software.insert_df(aux_software)
     del software
     
     tecnologicos=TecnologicosController()
     aux_tecnologicos=Extractor.grup_tecnologicos.drop_duplicates(ignore_index=True)
-    aux_tecnologicos.to_csv('extracted_data/aux_tecnologicos.csv',index=False)
+    aux_tecnologicos.to_csv('dashboard/assets/data/extracted_data/aux_tecnologicos.csv',index=False)
     tecnologicos.insert_df(aux_tecnologicos)
     del tecnologicos
     
@@ -216,43 +219,43 @@ if __name__ == '__main__':
     
     basicog=BasicoGController()
     aux_basicog=Extractor.perfil_basico
-    aux_basicog.to_csv('extracted_data/aux_basicog.csv',index=False)
+    aux_basicog.to_csv('dashboard/assets/data/extracted_data/aux_basicog.csv',index=False)
     basicog.insert_df(aux_basicog)
     del basicog
     
     articulosg=ArticulosGController()
     aux_articulosg=Extractor.perfil_articulos
-    aux_articulosg.to_csv('extracted_data/aux_articulosg.csv',index=False)
+    aux_articulosg.to_csv('dashboard/assets/data/extracted_data/aux_articulosg.csv',index=False)
     articulosg.insert_df(aux_articulosg)
     del articulosg
     
     instituciones=InstitucionesController()
     aux_instituciones=Extractor.perfil_instituciones
-    aux_instituciones.to_csv('extracted_data/aux_instituciones.csv',index=False)
+    aux_instituciones.to_csv('dashboard/assets/data/extracted_data/aux_instituciones.csv',index=False)
     instituciones.insert_df(aux_instituciones)
     del instituciones
     
     lineasg=LineasGController()
     aux_lineas=Extractor.perfil_lineas
-    aux_lineas.to_csv('extracted_data/aux_lineas.csv',index=False)
+    aux_lineas.to_csv('dashboard/assets/data/extracted_data/aux_lineas.csv',index=False)
     lineasg.insert_df(Extractor.perfil_lineas)
     del lineasg
     
     integrantes=IntegrantesController()
     aux_integrantes=Extractor.perfil_integrantes
-    aux_integrantes.to_csv('extracted_data/aux_integrantes.csv',index=False)
+    aux_integrantes.to_csv('dashboard/assets/data/extracted_data/aux_integrantes.csv',index=False)
     integrantes.insert_df(aux_integrantes)
     del integrantes
     
     pdoctorado=ProgramaDoctoradoController()
     aux_pdoctorado=Extractor.perfil_programa_doctorado
-    aux_pdoctorado.to_csv('extracted_data/aux_pdoctorado.csv',index=False)
+    aux_pdoctorado.to_csv('dashboard/assets/data/extracted_data/aux_pdoctorado.csv',index=False)
     pdoctorado.insert_df(aux_pdoctorado)
     del pdoctorado
     
     pmaestria=ProgramaMaestriaController()
     aux_pmaestria=Extractor.perfil_programa_maestria
-    aux_pmaestria.to_csv('extracted_data/aux_pmaestria.csv',index=False)
+    aux_pmaestria.to_csv('dashboard/assets/data/extracted_data/aux_pmaestria.csv',index=False)
     pmaestria.insert_df(aux_pmaestria)
     del pmaestria
     
@@ -262,79 +265,79 @@ if __name__ == '__main__':
     
     cdoctorado=CursoDoctoradoController()
     aux_cdoctorado=Extractor.perfil_curso_doctorado
-    aux_cdoctorado.to_csv('extracted_data/aux_cdoctorado.csv',index=False)
+    aux_cdoctorado.to_csv('dashboard/assets/data/extracted_data/aux_cdoctorado.csv',index=False)
     cdoctorado.insert_df(aux_cdoctorado)
     del cdoctorado
     
     cmaestria=CursoMaestriaController()
     aux_cmaestria=Extractor.perfil_curso_maestria
-    aux_cmaestria.to_csv('extracted_data/aux_cmaestria.csv',index=False)
+    aux_cmaestria.to_csv('dashboard/assets/data/extracted_data/aux_cmaestria.csv',index=False)
     cmaestria.insert_df(aux_cmaestria)
     del cmaestria
     
     librosg=LibrosGController()
     aux_librosg=Extractor.perfil_libros
-    aux_librosg.to_csv('extracted_data/aux_librosg.csv',index=False)
+    aux_librosg.to_csv('dashboard/assets/data/extracted_data/aux_librosg.csv',index=False)
     librosg.insert_df(aux_librosg)
     del librosg
     
     caplibrosg=CaplibrosGController()
     aux_caplibrosg=Extractor.perfil_caplibros
-    aux_caplibrosg.to_csv('extracted_data/aux_caplibrosg.csv',index=False)
+    aux_caplibrosg.to_csv('dashboard/assets/data/extracted_data/aux_caplibrosg.csv',index=False)
     caplibrosg.insert_df(aux_caplibrosg)
     del caplibrosg
     
     oarticulos=OtrosArticulosController()
     aux_oarticulos=Extractor.perfil_otros_articulos
-    aux_oarticulos.to_csv('extracted_data/aux_oarticulos.csv',index=False)
+    aux_oarticulos.to_csv('dashboard/assets/data/extracted_data/aux_oarticulos.csv',index=False)
     oarticulos.insert_df(aux_oarticulos)
     del oarticulos
     
     olibros=OtrosLibrosController()
     aux_olibros=Extractor.perfil_otros_libros
-    aux_olibros.to_csv('extracted_data/aux_olibros.csv',index=False)
+    aux_olibros.to_csv('dashboard/assets/data/extracted_data/aux_olibros.csv',index=False)
     olibros.insert_df(aux_olibros)
     del olibros
     
     disenoind=DisenoIndustrialGController()
     aux_disenoind=Extractor.perfil_diseno_industrial
-    aux_disenoind.to_csv('extracted_data/aux_disenoind.csv',index=False)
+    aux_disenoind.to_csv('dashboard/assets/data/extracted_data/aux_disenoind.csv',index=False)
     disenoind.insert_df(aux_disenoind)
     del disenoind
     
     otecnologicos=OtrosTecnologicosController()
     aux_otecnologicos=Extractor.perfil_otros_tecnologicos
-    aux_otecnologicos.to_csv('extracted_data/aux_otecnologicos.csv',index=False)
+    aux_otecnologicos.to_csv('dashboard/assets/data/extracted_data/aux_otecnologicos.csv',index=False)
     otecnologicos.insert_df(aux_otecnologicos)
     del otecnologicos
     
     prototiposg=PrototiposGController()
     aux_prototiposg=Extractor.perfil_prototipos
-    aux_prototiposg.to_csv('extracted_data/aux_prototiposg.csv',index=False)
+    aux_prototiposg.to_csv('dashboard/assets/data/extracted_data/aux_prototiposg.csv',index=False)
     prototiposg.insert_df(aux_prototiposg)
     del prototiposg
     
     softwareg=SoftwareGController()
     aux_softwareg=Extractor.perfil_software
-    aux_softwareg.to_csv('extracted_data/aux_softwareg.csv',index=False)
+    aux_softwareg.to_csv('dashboard/assets/data/extracted_data/aux_softwareg.csv',index=False)
     softwareg.insert_df(aux_softwareg)
     del softwareg
     
     empresatecg=EmpresaTecnologicaGController()
     aux_empresatecg=Extractor.perfil_empresa_tecnologica
-    aux_empresatecg.to_csv('extracted_data/aux_empresatecg.csv',index=False)
+    aux_empresatecg.to_csv('dashboard/assets/data/extracted_data/aux_empresatecg.csv',index=False)
     empresatecg.insert_df(aux_empresatecg)
     del empresatecg
     
     innovaempresag=InnovacionEmpresarialGController()
     aux_innovaempresag=Extractor.perfil_innovacion_empresarial
-    aux_innovaempresag.to_csv('extracted_data/aux_innovaempresag.csv',index=False)
+    aux_innovaempresag.to_csv('dashboard/assets/data/extracted_data/aux_innovaempresag.csv',index=False)
     innovaempresag.insert_df(aux_innovaempresag)
     del innovaempresag
     
     plantapilotog=PlantaPilotoGController()
     aux_plantapilotog=Extractor.perfil_planta_piloto
-    aux_plantapilotog.to_csv('extracted_data/aux_plantapilotog.csv',index=False)
+    aux_plantapilotog.to_csv('dashboard/assets/data/extracted_data/aux_plantapilotog.csv',index=False)
     plantapilotog.insert_df(aux_plantapilotog)
     del plantapilotog
     
@@ -404,13 +407,13 @@ if __name__ == '__main__':
     df_autores=ExtractorS.get_authors_df(authors_set)
     
     try:
-        df_autores.to_csv('extracted_data/aux_autores.csv',index=False)
+        df_autores.to_csv('dashboard/assets/data/extracted_data/aux_autores.csv',index=False)
     except:
         print(df_autores)
     
     df_productos=ExtractorS.get_articles_full(cauca_affiliations)
     df_productos = df_productos.astype(str)
-    df_productos.to_csv('extracted_data/aux_productos.csv',index=False)
+    df_productos.to_csv('dashboard/assets/data/extracted_data/aux_productos.csv',index=False)
     
     print('Extracción Scopus finalizada')
     
@@ -433,16 +436,16 @@ if __name__ == '__main__':
     #INTEGRACIÓN DE MODULOS PARA DATOS DE GRUPOS DE INVESTIGACIÓN
     #################################
     
-    aux_articulosg = pd.read_csv('extracted_data/aux_articulosg.csv', dtype = str)
-    aux_basicog = pd.read_csv('extracted_data/aux_basicog.csv', dtype = str)
-    aux_caplibrosg = pd.read_csv('extracted_data/aux_caplibrosg.csv', dtype = str)
-    aux_identificadores = pd.read_csv('extracted_data/aux_identificadores.csv', dtype = str)
-    aux_integrantes = pd.read_csv('extracted_data/aux_integrantes.csv', dtype = str)
-    aux_librosg = pd.read_csv('extracted_data/aux_librosg.csv', dtype = str) #pendiente de remplazo
-    aux_oarticulos = pd.read_csv('extracted_data/aux_oarticulos.csv', dtype = str)
-    aux_olibros = pd.read_csv('extracted_data/aux_olibros.csv', dtype = str)
-    df_autores = pd.read_csv('extracted_data/aux_autores.csv', dtype = str).drop(['idgruplac','nombre_grupo','idcvlac'], axis=1)
-    df_productos = pd.read_csv('extracted_data/aux_productos.csv', dtype = str).drop(['idgruplac','nombre_grupo'], axis=1)
+    aux_articulosg = pd.read_csv('dashboard/assets/data/extracted_data/aux_articulosg.csv', dtype = str)
+    aux_basicog = pd.read_csv('dashboard/assets/data/extracted_data/aux_basicog.csv', dtype = str)
+    aux_caplibrosg = pd.read_csv('dashboard/assets/data/extracted_data/aux_caplibrosg.csv', dtype = str)
+    aux_identificadores = pd.read_csv('dashboard/assets/data/extracted_data/aux_identificadores.csv', dtype = str)
+    aux_integrantes = pd.read_csv('dashboard/assets/data/extracted_data/aux_integrantes.csv', dtype = str)
+    aux_librosg = pd.read_csv('dashboard/assets/data/extracted_data/aux_librosg.csv', dtype = str) #pendiente de remplazo
+    aux_oarticulos = pd.read_csv('dashboard/assets/data/extracted_data/aux_oarticulos.csv', dtype = str)
+    aux_olibros = pd.read_csv('dashboard/assets/data/extracted_data/aux_olibros.csv', dtype = str)
+    df_autores = pd.read_csv('dashboard/assets/data/extracted_data/aux_autores.csv', dtype = str).drop(['idgruplac','nombre_grupo','idcvlac'], axis=1)
+    df_productos = pd.read_csv('dashboard/assets/data/extracted_data/aux_productos.csv', dtype = str).drop(['idgruplac','nombre_grupo'], axis=1)
 
     df_productos, df_autores=integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_integrantes,aux_librosg,aux_oarticulos,aux_olibros,df_autores,df_productos)
     
@@ -451,7 +454,7 @@ if __name__ == '__main__':
     try:
         print('insertando productos')
         productos.insert_df(df_productos)
-        df_productos.to_csv('extracted_data/aux_productos.csv',index=False)
+        df_productos.to_csv('dashboard/assets/data/extracted_data/aux_productos.csv',index=False)
     except:
         print('error en inserción de datos para productos de scopus')
         raise
@@ -460,7 +463,7 @@ if __name__ == '__main__':
     
     autores = AutoresController()
     autores.insert_df(df_autores)
-    df_autores.to_csv('extracted_data/aux_autores.csv',index=False)
+    df_autores.to_csv('dashboard/assets/data/extracted_data/aux_autores.csv',index=False)
     
     """
     try:
