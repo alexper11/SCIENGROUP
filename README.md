@@ -65,26 +65,17 @@ Para ejecutar la interfaz de usuario del extractor de CvLAC y Gruplac:
 ```bash
   python interfaz_extractor_scienti.py
 ```
-Abra el siguiente link en el navegador:
-```bash
-  127.0.0.1:5006
-```
+Abra el siguiente link en el navegador: `127.0.0.1:5006`
 Para ejecutar la interfaz de usuario del extractor de Scopus:
 ```bash
   python interfaz_extractor_scopus.py
 ```
-Abra el siguiente link en el navegador:
-```bash
-  127.0.0.1:5005
-```
+Abra el siguiente link en el navegador: `127.0.0.1:5005`
 Para ejecutar el dashboard ejecute el siguiente comando:
 ```bash
   python dashboard/index.py
 ```
-Abra el siguiente link en el navegador:
-```bash
-  localhost:8051
-```
+Abra el siguiente link en el navegador: `localhost:8051`
 
 ## Autores
 
