@@ -89,7 +89,7 @@ Abra el siguiente link en el navegador:
 ## Autores
 
 - [Jarby Daniel Salazar Galindez](https://www.github.com/jarbydaniel)
-- [Edison Alexander Perdomo Mosquera](https://www.github.com/alexper11)
+- [Edison Alexander Mosquera Perdomo](https://www.github.com/alexper11)
 
 ## License
 
