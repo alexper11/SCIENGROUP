@@ -728,7 +728,7 @@ b1=df['0'].tolist()
 c1 = [i for i in b1 if i in a1]
 
 afiliaciones_emparejadas_a=c1
-
+print("")
 print("**** MÁS ESTADÍSTICAS ****")
 print('Afiliaciones emparejadas en Scopus por autores: ',len(set(afiliaciones_emparejadas_a)))
 #print('Total de afiliaciones de Scopus en el Cauca: ',len(set(b1)))
@@ -852,8 +852,8 @@ b=df['0'].tolist()
 c = [i for i in b if i in a]
 afiliaciones_emparejadas_p=c
 
-print('Afiliaciones emparajadas en Scopus por productos: ',len(set(afiliaciones_emparejadas_p)))
-print('Total de afiliaciones de Scopus en el Cauca: ',len(set(b)))
+print('Total de afiliaciones en productos de Scopus: ',len(set(afiliaciones_emparejadas_p)))
+print('Total de afiliaciones identificada en Scopus tras limpieza: ',len(set(b)))
 print("Total de afiliaciones en Gruplac para el Cauca: ",gruplac_instituciones['nombre'].drop_duplicates().shape[0])
 a=0
 b=0
@@ -874,6 +874,7 @@ scopus_autores.to_csv('dashboard/assets/data/preprocessed_data/scopus_autores.cs
 scopus_productos.to_csv('dashboard/assets/data/preprocessed_data/scopus_productos.csv',index=False)
 
 #ESTADÍSTICAS
+print("")
 print("Total de autores en Scopus para el Cauca: ",scopus_autores.shape[0])
 print("Grupos visibles en Scopus a partir de autores: ",scopus_autores['idgruplac'].dropna().drop_duplicates(keep='first').shape[0])
 set_grupos=[]
@@ -881,9 +882,19 @@ scopus_productos['idgruplac'].dropna().str.split(';').apply(lambda x: set_grupos
 set_grupos=set(set_grupos)
 print("Grupos visibles en Scopus a partir de productos: ",len(set_grupos))
 print("")
+print("Total de autores en Scopus emparejados con grupos: ",scopus_autores[~scopus_autores['idgruplac'].isna()].shape[0], " de ",scopus_autores.shape[0])
+print("Total de productos en Scopus emparejados con grupos: ",scopus_productos[~scopus_productos['idgruplac'].isna()].shape[0], " de ",scopus_productos.shape[0])
+print("")
 print("Total de autores en Gruplac para el Cauca: ",gruplac_integrantes['url'].drop_duplicates().shape[0])
 print("Grupos en Gruplac: ",gruplac_basico.shape[0])
-
+print("")
+gruplac_lineas_copy=gruplac_lineas.copy()
+gruplac_lineas_copy['lineas']=gruplac_lineas_copy['lineas'].str.split(';')
+gruplac_lineas_copy=gruplac_lineas_copy.explode('lineas')
+gruplac_lineas_copy=gruplac_lineas_copy.groupby('lineas').size().reset_index(name='count').sort_values(by='count',ascending=False)
+print('Total de líneas de investigación entre los grupos del Cauca: ',gruplac_lineas_copy.shape[0])
+gruplac_lineas_copy=gruplac_lineas_copy[gruplac_lineas_copy['count']>1]
+print('Total de líneas de investigación compartidas entre los grupos: ',gruplac_lineas_copy.shape[0])
 print("**************PREPROCESAMIENTO FINALIZADO***************")
 
 

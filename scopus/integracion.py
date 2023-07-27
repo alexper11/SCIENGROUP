@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
-#from scopus.controllers.ProductosController import ProductosController  
-
+import warnings
+#from scopus.controllers.ProductosController import ProductosController 
+from pandas.core.common import SettingWithCopyWarning 
+warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
 ###############################
 #INTEGRACIÓN DE MODULOS PARA DATOS DE GRUPOS DE INVESTIGACIÓN
 #################################
@@ -291,7 +293,7 @@ def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_i
     df_productos_concat=pd.concat([df_productos_articulos,df_productos_libros,df_productos_otros])
     df_productos=df_productos.merge(df_productos_concat[['scopus_id','idgruplac','nombre_grupo']], how='inner', on='scopus_id')
     
-    print("*** ESTADÍSTICAS ***")
+    print("*** ESTADÍSTICAS PREVIAS A LIMPIEZA***")
     
     print('Productos Emparejados en SCOPUS: '+str(df_productos[~df_productos['idgruplac'].isna()].shape[0])+' de '+str(df_productos.shape[0]))
     df_autores=df_autores_final
