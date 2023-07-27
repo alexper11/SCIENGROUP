@@ -68,10 +68,12 @@ from scopus.controllers.MetaDBScoController import MetaDBScoController
 
 if __name__ == '__main__':
     
+    print("########### INICIO DE EXTRACCIÓN MASIVA DE DATOS ##########")
     sys.path.append(".")
     create_cvlac_db()
     create_gruplac_db()
     create_scopus_db()
+    print("")
     print('Bases de datos creadas')
     
     ########################
@@ -453,7 +455,6 @@ if __name__ == '__main__':
     #Inserción a base de datos de SCOPUS
     productos = ProductosController()
     try:
-        print('Insertando productos')
         productos.insert_df(df_productos)
         df_productos.to_csv('dashboard/assets/data/extracted_data/aux_productos.csv',index=False)
     except:
@@ -466,6 +467,7 @@ if __name__ == '__main__':
     autores.insert_df(df_autores)
     df_autores.to_csv('dashboard/assets/data/extracted_data/aux_autores.csv',index=False)
     
+    print("############# EXTRACCIÓN FINALIZADA ##############")
     """
     try:
         os.remove('aux_articulosg.csv')
@@ -499,10 +501,6 @@ if __name__ == '__main__':
     except:
         print('Error deleting csv files')
     """
-    
-    print('Integración finalizada')
-    
-    
     
     ###############################
     #SCIENTOPY

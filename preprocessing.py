@@ -10,6 +10,7 @@ import shutil
 import os
 
 try:
+    print("######### INICIO DE PREPROCESAMIENTO ############")
     shutil.rmtree('dashboard/assets/data/preprocessed_data')
     os.mkdir('dashboard/assets/data/preprocessed_data')
     print('preprocessed folder created')
@@ -22,6 +23,7 @@ try:
     ############################################
     #SELECCIÓN DE TABLAS EN BASES DE DATOS: OPCIÓN 1
     ###########################################
+    print("")
     print("RECUPERANDO TABLAS DE BASES DE DATOS...")
     #cvlac
     gruplac_articulos = pd.read_sql_query('SELECT * FROM articulos', gruplac_session.bind, dtype = str)
@@ -96,11 +98,12 @@ try:
     cvlac_identificadores=cvlac_identificadores.drop('id',axis=1)
     gruplac_duplicados={'articulos':[],'libros':[],'oarticulos':[],'libros':[],'olibros':[],'caplibros':[],'otecnologicos':[],'software':[],'prototipos':[]}
 except Exception as e:
-    raise
+    #raise
     print(e)
     ############################################
     #ENTRADA DE DATOS EXTRAIDOS: OPCION 2
     ############################################
+    print("")
     print("RECUPERANDO TABLAS LOCALES EXTRAIDAS...")
     gruplac_articulos = pd.read_csv('dashboard/assets/data/extracted_data/aux_articulosg.csv', dtype = str)
     gruplac_basico = pd.read_csv('dashboard/assets/data/extracted_data/aux_basicog.csv', dtype = str)
@@ -142,7 +145,7 @@ except Exception as e:
 ###########################################
 #PREPROCESSING
 ##########################################
-
+print("Limpiando datos...")
 #LIMPIEZA DE TABLAS CVLAC
 
 cvlac_basico['categoria']=cvlac_basico['categoria'].fillna('No Aplica').astype(str).str.extract(r'(^[^(]*)',expand=False).replace('','No Aplica')
@@ -524,8 +527,20 @@ l.extend(d[d['size']>1].drop_duplicates('idgruplac')['idgruplac'].tolist())
 gruplac_duplicados['articulos']=list(set(l))
 d=0
 l=0
+
+#ARTICULOS DUPLICADOS EN GRUPLAC POR NOMBRE Y DOI
+print("****PERFILES EN GRUPLAC CON ARTÍCULOS DUPLICADOS****")
+print("Grupos con artículos duplicados en general: ",c[c['size']>1].drop_duplicates('idgruplac').shape[0])
+c=gruplac_articulos[gruplac_articulos['verificado']=='True'].groupby(['idgruplac','nombre','doi']).size().reset_index(name="size").sort_values('size',ascending=False)
+print("Grupos con artículos verificados duplicados: ",c[c['size']>1].drop_duplicates('idgruplac').shape[0])
+articulos_totales=gruplac_articulos.shape[0]
+
 gruplac_articulos=gruplac_articulos.sort_values(['verificado'],ascending=False).drop_duplicates(['idgruplac','nombre','doi'],keep='first')
 gruplac_articulos=gruplac_articulos.drop_duplicates(['idgruplac','nombre','revista','fecha'],keep='first')
+
+dup_arts=articulos_totales-gruplac_articulos.shape[0]
+print("Artículos duplicados en los grupos del Cauca: ",dup_arts)
+
 c=gruplac_oarticulos.groupby(['idgruplac','nombre','revista','fecha']).size().reset_index(name="size").sort_values('size',ascending=False)
 gruplac_duplicados['oarticulos']=c[c['size']>1].drop_duplicates('idgruplac')['idgruplac'].tolist()
 gruplac_oarticulos=gruplac_oarticulos.sort_values(['verificado'],ascending=False).drop_duplicates(['idgruplac','nombre','revista','fecha'],keep='first')
@@ -714,8 +729,9 @@ c1 = [i for i in b1 if i in a1]
 
 afiliaciones_emparejadas_a=c1
 
-print('Afiliaciones emparejadas para autores: ',len(set(afiliaciones_emparejadas_a)))
-print('Total de afiliaciones en el Cauca: ',len(set(b1)))
+print("**** MÁS ESTADÍSTICAS ****")
+print('Afiliaciones emparejadas en Scopus por autores: ',len(set(afiliaciones_emparejadas_a)))
+#print('Total de afiliaciones de Scopus en el Cauca: ',len(set(b1)))
 a1=0
 b1=0
 c1=0
@@ -836,8 +852,9 @@ b=df['0'].tolist()
 c = [i for i in b if i in a]
 afiliaciones_emparejadas_p=c
 
-print('Afiliaciones emparajadas por productos: ',len(set(afiliaciones_emparejadas_p)))
-print('Total de afiliaciones en el Cauca: ',len(set(b)))
+print('Afiliaciones emparajadas en Scopus por productos: ',len(set(afiliaciones_emparejadas_p)))
+print('Total de afiliaciones de Scopus en el Cauca: ',len(set(b)))
+print("Total de afiliaciones en Gruplac para el Cauca: ",gruplac_instituciones['nombre'].drop_duplicates().shape[0])
 a=0
 b=0
 c=0
@@ -855,6 +872,17 @@ scopus_productos=scopus_productos.drop_duplicates(['institucion','editorial','do
 
 scopus_autores.to_csv('dashboard/assets/data/preprocessed_data/scopus_autores.csv',index=False)
 scopus_productos.to_csv('dashboard/assets/data/preprocessed_data/scopus_productos.csv',index=False)
+
+#ESTADÍSTICAS
+print("Total de autores en Scopus para el Cauca: ",scopus_autores.shape[0])
+print("Grupos visibles en Scopus a partir de autores: ",scopus_autores['idgruplac'].dropna().drop_duplicates(keep='first').shape[0])
+set_grupos=[]
+scopus_productos['idgruplac'].dropna().str.split(';').apply(lambda x: set_grupos.extend(x))
+set_grupos=set(set_grupos)
+print("Grupos visibles en Scopus a partir de productos: ",len(set_grupos))
+print("")
+print("Total de autores en Gruplac para el Cauca: ",gruplac_integrantes['url'].drop_duplicates().shape[0])
+print("Grupos en Gruplac: ",gruplac_basico.shape[0])
 
 print("**************PREPROCESAMIENTO FINALIZADO***************")
 

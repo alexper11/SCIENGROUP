@@ -7,6 +7,8 @@ import numpy as np
 #################################
 def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_integrantes,aux_librosg,aux_oarticulos,aux_olibros,df_autores,df_productos):
     #INTEGRACIÓN DE DATOS DE AUTORES
+    print("############# INICIO DE INTEGRACIÓN DE DATOS ############")
+    
     ident=aux_identificadores[(aux_identificadores['nombre']=='Autor ID (Scopus)') & (aux_identificadores['url'].str.contains(pat='https://www.scopus.com/authid'))]
     ident['author_id']=ident['url'].str.extract(r'([^=]*$)')
     ident=ident.drop_duplicates(subset=['url'])[['idcvlac','author_id']]
@@ -289,12 +291,13 @@ def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_i
     df_productos_concat=pd.concat([df_productos_articulos,df_productos_libros,df_productos_otros])
     df_productos=df_productos.merge(df_productos_concat[['scopus_id','idgruplac','nombre_grupo']], how='inner', on='scopus_id')
     
-    print("############### ESTADÍSTICAS ###############")
+    print("*** ESTADÍSTICAS ***")
     
-    print('Productos: Emparejados '+str(df_productos[~df_productos['idgruplac'].isna()].shape[0])+' de '+str(df_productos.shape[0]))
+    print('Productos Emparejados en SCOPUS: '+str(df_productos[~df_productos['idgruplac'].isna()].shape[0])+' de '+str(df_productos.shape[0]))
     df_autores=df_autores_final
-    print('Autores: Emparejados '+str(df_autores[~df_autores['idgruplac'].isna()].shape[0])+' de '+str(df_autores.shape[0]))
+    print('Autores Emparejados en SCOPUS: '+str(df_autores[~df_autores['idgruplac'].isna()].shape[0])+' de '+str(df_autores.shape[0]))
 
+    print("################ FINALIZACIÓN DE INTEGRACIÓN ###############")
     #Inserción a base de datos de SCOPUS   
     return df_productos, df_autores
 """
