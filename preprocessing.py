@@ -12,7 +12,7 @@ import os
 try:
     shutil.rmtree('dashboard/assets/data/preprocessed_data')
     os.mkdir('dashboard/assets/data/preprocessed_data')
-    print('preprocessed folder creeated')
+    print('preprocessed folder created')
 except Exception as e:
     os.mkdir('dashboard/assets/data/preprocessed_data')
     print(e)

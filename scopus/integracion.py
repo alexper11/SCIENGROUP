@@ -288,14 +288,14 @@ def integrar(aux_articulosg,aux_basicog,aux_caplibrosg,aux_identificadores,aux_i
 
     df_productos_concat=pd.concat([df_productos_articulos,df_productos_libros,df_productos_otros])
     df_productos=df_productos.merge(df_productos_concat[['scopus_id','idgruplac','nombre_grupo']], how='inner', on='scopus_id')
+    
+    print("############### ESTADÍSTICAS ###############")
+    
     print('Productos: Emparejados '+str(df_productos[~df_productos['idgruplac'].isna()].shape[0])+' de '+str(df_productos.shape[0]))
     df_autores=df_autores_final
     print('Autores: Emparejados '+str(df_autores[~df_autores['idgruplac'].isna()].shape[0])+' de '+str(df_autores.shape[0]))
 
-    #Inserción a base de datos de SCOPUS
-
-    print('integracion return')
-    
+    #Inserción a base de datos de SCOPUS   
     return df_productos, df_autores
 """
 aux_articulosg = pd.read_csv('aux_articulosg.csv', dtype = str)

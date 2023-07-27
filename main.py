@@ -93,10 +93,10 @@ if __name__ == '__main__':
     #Extraccion de tablas CVLAC
     ######################
     
-    print('setting grup attributes...')
+    print('Setting grup attributes...')
     Extractor.set_grup_attrs(lista_gruplac)
     
-    print('updating cvlacdb...')
+    print('Updating cvlacdb...')
     
     basico=BasicoController()
     aux_basico=Extractor.grup_basico.drop_duplicates(ignore_index=True)
@@ -212,10 +212,10 @@ if __name__ == '__main__':
     #Extraccion de tablas GRUPLAC
     ######################
     
-    print('setting perfil attributes')
+    print('Setting perfil attributes')
     Extractor.set_perfil_attrs(lista_gruplac)
     
-    print('updating gruplacdb...')
+    print('Updating gruplacdb...')
     
     basicog=BasicoGController()
     aux_basicog=Extractor.perfil_basico
@@ -409,7 +409,8 @@ if __name__ == '__main__':
     try:
         df_autores.to_csv('dashboard/assets/data/extracted_data/aux_autores.csv',index=False)
     except:
-        print(df_autores)
+        #print(df_autores)
+        print("erorr exportando dataframe autores")
     
     df_productos=ExtractorS.get_articles_full(cauca_affiliations)
     df_productos = df_productos.astype(str)
@@ -452,7 +453,7 @@ if __name__ == '__main__':
     #Inserción a base de datos de SCOPUS
     productos = ProductosController()
     try:
-        print('insertando productos')
+        print('Insertando productos')
         productos.insert_df(df_productos)
         df_productos.to_csv('dashboard/assets/data/extracted_data/aux_productos.csv',index=False)
     except:
