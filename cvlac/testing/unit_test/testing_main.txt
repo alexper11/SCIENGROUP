@@ -1,0 +1,211 @@
+**************************************
+***PRUEBAS DE VERIFICACIÓN DE CVLAC***
+**************************************
+******************************************
+Pruebas unitarias para tabla: tecnologicos
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: software
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: redes
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: reconocimiento
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: prototipo
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: libros
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: jurados
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: investigacion
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: innovacion_empresarial
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: idioma
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: identificadores
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: evaluador
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: estancias
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: empresa_tecnologica
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: complementaria
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: caplibros
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: basico
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: articulos
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: actuacion
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: academica
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+**************************************
+**PRUEBAS DE VERIFICACIÓN DE GRUPLAC**
+**************************************
+******************************************
+Pruebas unitarias para tabla: software
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: prototipos
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: programa_maestria
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: programa_doctorado
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: planta_piloto
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: otros_tecnologicos
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: otros_libros
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: otros_articulos
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: otro_programa
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: lineas
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: integrantes
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: instituciones
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: innovacion_empresarial
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: empresa_tecnologica
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: diseno_industrial
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: curso_maestria
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: curso_doctorado
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: caplibros
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: basico
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: articulos
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
+******************************************
+Pruebas unitarias para tabla: libros
+Prueba 1: None
+Prueba 2: None
+Prueba 3: None
