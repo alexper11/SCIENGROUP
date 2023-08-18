@@ -52,13 +52,16 @@ Se integran dos secciones para el análisis y visualización de los datos proven
 
 ## Instrucciones para ejecutar el proyecto
 
-Para extraer los datos de CvLAC, Gruplac de forma masiva (uso para administradores), ejecute los siguientes comados:
+Para extraer los datos de CvLAC, Gruplac y Scopus de forma masiva (uso para administradores), ejecute el siguiente comado:
 
 ```bash
-    python main.py
+    python main.py    
+```
+Luego de la extracción, se ejecuta el preprocesamiento de los datos con el siguiente comando:
+
+```bash
     python preprocessing.py
 ```
-
 Para extraer los datos de CvLAC, Gruplac y Scopus bajo demanda (con interfaz de usuario), siga los siguientes pasos:
 
 Para ejecutar la interfaz de usuario del extractor de CvLAC y Gruplac:
