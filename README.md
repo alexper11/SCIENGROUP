@@ -27,13 +27,13 @@ Dentro de la carpeta generada, ejecute el siguiente comando para instalar las li
 ```bash
     pip install -r requierements.txt
 ```
-    
+
+---
+
 ## Contenido
 - Extractor de datos de GrupLAC y CvLAC.
 - Extractor de datos de Scopus.
 - Dashboard (Tablero de análisis).
-
----
 
 ## Extractor de datos de GrupLAC y CvLAC.
 
