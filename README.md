@@ -12,7 +12,7 @@ Tiene las siguientes características principales:
 - Redes de colaboración.
 - Interfaces gráficas de usuario.
 
-
+---
 
 ## Instalación
 > [!IMPORTANT]
@@ -33,6 +33,7 @@ Dentro de la carpeta generada, ejecute el siguiente comando para instalar las li
 - Extractor de datos de Scopus.
 - Dashboard (Tablero de análisis).
 
+---
 
 ## Extractor de datos de GrupLAC y CvLAC.
 
@@ -49,6 +50,7 @@ Se integra una sección llamada “Explorar datos” con el objetivo de inspecci
  
 Se integran dos secciones para el análisis y visualización de los datos provenientes de GrupLAC y Scopus. El dashboard está desarrollado dentro del marco del trabajo de grado titulado “Dashboard para el análisis y visualización bibliométrica dentro del ámbito de los grupos de investigación en el departamento del Cauca” desarrollado en la Universidad del Cauca por los estudiantes Jarby Daniel Salazar Galindez y Edison Alexander Mosquera Perdomo. El dashboard busca ser un asistente para los actores del Sistema Regional de Ciencia, Tecnología e Innovación del Cauca.
 
+---
 
 ## Instrucciones para ejecutar el proyecto
 
@@ -82,6 +84,8 @@ Para ejecutar el dashboard ejecute el siguiente comando:
 ```
 Abra el siguiente link en el navegador: `localhost:8051`
 
+---
+
 Para verificar la consistencia entre los datos extraídos y los registrados en las plataformas de CvLAC y GrupLAC, ejecute el siguiente comando :
 
 ```bash
@@ -89,6 +93,7 @@ Para verificar la consistencia entre los datos extraídos y los registrados en l
 ```
 Tenga en cuenta que la verificación se hace con respecto a los archivos CSV que debe generar manualmente, para ello reemplace y siga la estructura de los archivos para [CvLAC](cvlac/testing/testing_cvlac)  y [GrupLAC.](cvlac/testing/testing_gruplac)
 
+---
 
 > [!NOTE]
 > Para expandir el uso del proyecto a otros departamentos de Colombia, utilice el [buscador de grupos por departamento](https://scienti.minciencias.gov.co/ciencia-war/BusquedaGrupoXDepartamento.do) de Minciencias para elegir el departamento de interés y reemplace la url utilizada en la línea 83 del archivo main.py
@@ -96,9 +101,12 @@ Ejemplo utilizado para el Departamento del Cauca:
 ```python
 [83] lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')    
 ```
+---
 
 > [!WARNING]
 >*Debido al gran volúmen de datos utilizado, para evitar problemas de caché se recomienda desplegar el proyecto desde un navegador privado*
+
+---
 
 ## Autores
 
