@@ -82,16 +82,19 @@ Para ejecutar el dashboard ejecute el siguiente comando:
 ```
 Abra el siguiente link en el navegador: `localhost:8051`
 
-Para realizar el test de verificación para la extracciòn de datos, utilice el siguiente comando:
+Para verificar la consistencia entre los datos extraídos y los registrados en las plataformas de CvLAC y GrupLAC, ejecute el siguiente comando :
 
 ```bash
   python testing_main.py
 ```
-> [!NOTE]
-> Para expandir el uso del proyecto a otros departamentos de Colombia, utilice el [buscador de grupos por departamento](https://scienti.minciencias.gov.co/ciencia-war/BusquedaGrupoXDepartamento.do) de minciencias para elegir el departamento de interés y reemplace la url utilizada en la linea 83 del archivo main.py
+Tenga en cuenta que la verificación se hace con respecto a los archivos CSV que debe generar manualmente, para ello reemplace y siga la estructura de los archivos para [CvLAC](cvlac/testing/testing_cvlac)  y [GrupLAC.](cvlac/testing/testing_gruplac)
 
+
+> [!NOTE]
+> Para expandir el uso del proyecto a otros departamentos de Colombia, utilice el [buscador de grupos por departamento](https://scienti.minciencias.gov.co/ciencia-war/BusquedaGrupoXDepartamento.do) de Minciencias para elegir el departamento de interés y reemplace la url utilizada en la línea 83 del archivo main.py
+Ejemplo utilizado para el Departamento del Cauca:
 ```python
-lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')    
+[83] lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')    
 ```
 
 > [!WARNING]
