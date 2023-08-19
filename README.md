@@ -12,6 +12,7 @@ Tiene las siguientes características principales:
 - Redes de colaboración.
 - Interfaces gráficas de usuario.
 
+Video instructivo: https://youtu.be/tdp8FPcWMco
 ---
 
 ## Instalación
@@ -46,9 +47,7 @@ Esta herramienta extrae datos de la plataforma Scopus. Para ello es necesario el
 
 ## Dashboard
 
-Se integra una sección llamada “Explorar datos” con el objetivo de inspeccionar los datos previamente obtenidos y preprocesados por medio los sistemas de extracción.
- 
-Se integran dos secciones para el análisis y visualización de los datos provenientes de GrupLAC y Scopus. El dashboard está desarrollado dentro del marco del trabajo de grado titulado “Dashboard para el análisis y visualización bibliométrica dentro del ámbito de los grupos de investigación en el departamento del Cauca” desarrollado en la Universidad del Cauca por los estudiantes Jarby Daniel Salazar Galindez y Edison Alexander Mosquera Perdomo. El dashboard busca ser un asistente para los actores del Sistema Regional de Ciencia, Tecnología e Innovación del Cauca.
+Se integra una sección llamada “Explorar datos” con el objetivo de inspeccionar los datos previamente obtenidos y preprocesados por medio de los sistemas de extracción, adicionalmente se integran dos secciones para el análisis y visualización de los datos provenientes de GrupLAC y Scopus. El dashboard está desarrollado dentro del marco del trabajo de grado titulado “Dashboard para el análisis y visualización bibliométrica dentro del ámbito de los grupos de investigación en el departamento del Cauca” desarrollado en la Universidad del Cauca por los estudiantes Jarby Daniel Salazar Galindez y Edison Alexander Mosquera Perdomo. El dashboard busca ser un asistente para los actores del Sistema Regional de Ciencia, Tecnología e Innovación del Cauca.
 
 ---
 
@@ -105,7 +104,7 @@ Ejemplo utilizado para el Departamento del Cauca:
 ---
 
 > [!WARNING]
->*Debido al gran volúmen de datos utilizado, para evitar problemas de caché se recomienda desplegar el proyecto desde un navegador privado*
+>*Debido al gran volúmen de datos utilizado, para evitar problemas de caché se recomienda desplegar el proyecto desde un navegador privado.*
 
 ---
 
