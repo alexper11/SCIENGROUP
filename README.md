@@ -16,7 +16,7 @@ Tiene las siguientes características principales:
 
 ## Instalación
 > [!IMPORTANT]
-> ***Para el funcionamiento de la herramienta, es obligatorio tener instalado el gestor de base de datos [PostgreSQL.](https://www.postgresql.org/download/) Si desea utilizar una herramienta gráfica para administrar PostgreSQL se recomienda instalar [PgAdmin 4.](https://www.pgadmin.org/download/)***
+> ***Para el funcionamiento de la herramienta, es obligatorio tener instalado el gestor de base de datos [PostgreSQL.](https://www.postgresql.org/download/)*** *Si desea utilizar una herramienta gráfica para administrar PostgreSQL se recomienda instalar [PgAdmin 4.](https://www.pgadmin.org/download/)*
 
 Para instalar el proyecto, realice una clonaciòn de la última versión del repositorio ejecutando el siguiente comando git:
 ```bash
