@@ -15,10 +15,10 @@ Tiene las siguientes características principales:
 
 
 ## Instalación
+> [!IMPORTANT]
+> ***Para el funcionamiento de la herramienta, es obligatorio tener instalado el gestor de base de datos [PostgreSQL.](https://www.postgresql.org/download/) Si desea utilizar una herramienta gráfica para administrar PostgreSQL se recomienda instalar [PgAdmin 4.](https://www.pgadmin.org/download/)***
 
-*Nota importante: para el funcionamiento de la herramienta, es obligatorio tener instalado [PostgreSQL.](https://www.postgresql.org/download/)*
-
-Para clonar directamente la última versión del repositorio ejecute el siguiente comando git:
+Para instalar el proyecto, realice una clonaciòn de la última versión del repositorio ejecutando el siguiente comando git:
 ```bash
     git clone https://github.com/alexper11/General.git
 ```
@@ -81,6 +81,21 @@ Para ejecutar el dashboard ejecute el siguiente comando:
   python dashboard/index.py
 ```
 Abra el siguiente link en el navegador: `localhost:8051`
+
+Para realizar el test de verificación para la extracciòn de datos, utilice el siguiente comando:
+
+```bash
+  python testing_main.py
+```
+> [!NOTE]
+> Para expandir el uso del proyecto a otros departamentos de Colombia, utilice el [buscador de grupos por departamento](https://scienti.minciencias.gov.co/ciencia-war/BusquedaGrupoXDepartamento.do) de minciencias para elegir el departamento de interés y reemplace la url utilizada en la linea 83 del archivo main.py
+
+```python
+lista_gruplac=Extractor.get_gruplac_list('https://scienti.minciencias.gov.co/ciencia-war/busquedaGrupoXDepartamentoGrupo.do?codInst=&sglPais=COL&sgDepartamento=CA&maxRows=15&grupos_tr_=true&grupos_p_=1&grupos_mr_=130')    
+```
+
+> [!WARNING]
+>*Debido al gran volúmen de datos utilizado, para evitar problemas de caché se recomienda desplegar el proyecto desde un navegador privado*
 
 ## Autores
 
