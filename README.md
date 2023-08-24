@@ -33,9 +33,17 @@ Dentro de la carpeta generada, ejecute el siguiente comando para instalar las li
 ---
 
 ## Contenido
+- Base de datos para CvLAC, GrupLAC y Scopus.
 - Extractor de datos de GrupLAC y CvLAC.
 - Extractor de datos de Scopus.
 - Dashboard (Tablero de análisis).
+
+## Base de datos para CvLAC, GrupLAC y Scopus.
+
+Los archivos generados en la extracción de datos usados en el dashboard se almacenan en el directorio `dashboard/assets/data/`.
+
+
+Adicionalmente se brindan las bases de datos de la información extraída de manera masiva para el Departamento del Cauca en Cvlac, GrupLAC y Scopus, estos se encuentran en el directorio `BD/`.
 
 ## Extractor de datos de GrupLAC y CvLAC.
 

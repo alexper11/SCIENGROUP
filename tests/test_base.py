@@ -19,24 +19,24 @@ class Maintest(TestCase):
     def test_app_in_test_mode(self):
         self.assertTrue(current_app.config['TESTING'])
     
-    #Prueba que index redirecciona a hello:
+    #Prueba que index redirecciona a test:
     def test_index_redirects(self):
         response = self.client.get(url_for('index'))
         
-        self.assertRedirects(response, url_for('hello'))
+        self.assertRedirects(response, url_for('test'))
     
-    #Prueba que hello regresa un 200 cuando se hace un get:
-    def test_hello_get(self):
-        response = self.client.get(url_for('hello'))
+    #Prueba que test regresa un 200 cuando se hace un get:
+    def test_get(self):
+        response = self.client.get(url_for('test'))
         
         self.assert200(response)
     
     #Prueba que el al hacer un POST se obtiene el redirect index
-    def test_hello_post(self):
+    def test_post(self):
         fake_form = {
-            'username' : 'fake',
-            'password' : 'fake-password'
+            'username' : 'usetTest',
+            'password' : 'userpassword'
         }
-        response = self.client.post(url_for('hello'), data=fake_form)
+        response = self.client.post(url_for('test'), data=fake_form)
         
         self.assertRedirects(response, url_for('index'))

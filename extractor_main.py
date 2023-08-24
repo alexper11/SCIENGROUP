@@ -74,7 +74,7 @@ import unittest
 app= Flask(__name__)
 bootstrap = Bootstrap(app)
 
-app.config['SECRET_KEY']='SUPER SECRETO' #No es la mejor practica
+app.config['SECRET_KEY']='SECRETO' #test
 
     
 class FieldFormCvlac(FlaskForm):
