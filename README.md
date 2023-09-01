@@ -54,6 +54,9 @@ Se recomienda que cualquier persona que utilice esta herramienta lea detenidamen
 
 Esta herramienta extrae datos de la plataforma Scopus. Para ello es necesario el registro de un Apikey suministrado por Scopus y un Token avalado por la institución.
 
+> [!NOTE]
+> Para llevar a cabo la extracción masiva de datos, coloque un archivo de texto llamado key.txt en el directorio `scopus/`. En la primera línea de este archivo, introduce el Apikey, y en la siguiente línea, introduce el Token correspondiente.
+
 ## Dashboard
 
 Se integra una sección llamada “Explorar datos” con el objetivo de inspeccionar los datos previamente obtenidos y preprocesados por medio de los sistemas de extracción, adicionalmente se integran dos secciones para el análisis y visualización de los datos provenientes de GrupLAC y Scopus. El dashboard está desarrollado dentro del marco del trabajo de grado titulado “Dashboard para el análisis y visualización bibliométrica dentro del ámbito de los grupos de investigación en el departamento del Cauca” desarrollado en la Universidad del Cauca por los estudiantes Jarby Daniel Salazar Galindez y Edison Alexander Mosquera Perdomo. El dashboard busca ser un asistente para los actores del Sistema Regional de Ciencia, Tecnología e Innovación del Cauca.
