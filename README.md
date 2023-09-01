@@ -40,10 +40,10 @@ Dentro de la carpeta generada, ejecute el siguiente comando para instalar las li
 
 ## Base de datos para CvLAC, GrupLAC y Scopus.
 
-Los archivos generados en la extracción de datos usados en el dashboard se almacenan en el directorio `dashboard/assets/data/`.
+Los archivos generados en la extracción de datos usados en el dashboard se almacenan en el directorio [dashboard/assets/data/](dashboard/assets/data/).
 
 
-Adicionalmente se brindan las bases de datos de la información extraída de manera masiva para el Departamento del Cauca en Cvlac, GrupLAC y Scopus, estos se encuentran en el directorio `BD/`.
+Adicionalmente se brindan las bases de datos de la información extraída de manera masiva para el Departamento del Cauca en Cvlac, GrupLAC y Scopus, estos se encuentran en el directorio [BD/](BD/).
 
 ## Extractor de datos de GrupLAC y CvLAC.
 
@@ -55,7 +55,7 @@ Se recomienda que cualquier persona que utilice esta herramienta lea detenidamen
 Esta herramienta extrae datos de la plataforma Scopus. Para ello es necesario el registro de un Apikey suministrado por Scopus y un Token avalado por la institución.
 
 > [!NOTE]
-> Para llevar a cabo la extracción masiva de datos, coloque un archivo de texto llamado key.txt en el directorio `scopus/`. En la primera línea de este archivo, introduce el Apikey, y en la siguiente línea, introduce el Token correspondiente.
+> Para llevar a cabo la extracción masiva de datos, coloque un archivo de texto llamado key.txt en el directorio [scopus/](scopus/). En la primera línea de este archivo, introduce el Apikey, y en la siguiente línea, introduce el Token correspondiente.
 
 ## Dashboard
 
