@@ -1,5 +1,7 @@
+![logo_ScienGroup](https://github.com/alexper11/General/assets/61321403/c335af6d-63a1-4adb-9722-0dc49cdd3f73)
 
-# Research Group Analitycs Dashboard
+# Research Group
+ Analitycs Dashboard
 
 Herramienta para el análisis y visualización bibliométrica de la producción científica de los grupos de investigación en el Departamento del Cauca.
 
