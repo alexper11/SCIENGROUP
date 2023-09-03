@@ -2,7 +2,7 @@
 
 # Research Group Analitycs Dashboard
 
-Herramienta para el análisis y visualización bibliométrica de la producción científica de los grupos de investigación en el Departamento del Cauca.
+Software para el análisis y visualización bibliométrica de la producción científica de los grupos de investigación en el Departamento del Cauca.
 
 Tiene las siguientes características principales:
 - Extrae datos de investigadores y grupos de investigación de las plataformas CvLAC, GrupLAC y Scopus, de manera masiva o bajo demanda.
